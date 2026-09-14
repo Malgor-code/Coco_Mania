@@ -3,6 +3,8 @@ using System.Collections;
 
 public class MacheteController : MonoBehaviour
 {
+    public static MacheteController Instance;
+
     [Header("Movimiento (seguir mouse)")]
     [Tooltip("Mas bajo = respuesta mas precisa/rapida. Mas alto = mas flotante.")]
     public float smoothTime = 0.05f;
@@ -11,6 +13,8 @@ public class MacheteController : MonoBehaviour
     [Header("Golpe automatico")]
     public float swingInterval = 1.2f;
     public float hitRadius = 1.5f;
+    [HideInInspector] public int damageOverride = 3;
+    [HideInInspector] public float swingStaminaCostOverride = 1f;
 
     [Header("Visual (hijo con la malla, para animar sin mover el ancla)")]
     public Transform visual;
@@ -18,10 +22,14 @@ public class MacheteController : MonoBehaviour
     private float timer;
     private Plane groundPlane;
     private Vector3 followVelocity;
-
     public float SwingProgress01 => Mathf.Clamp01(timer / swingInterval);
 
     public System.Action OnSwingImpact;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -71,11 +79,11 @@ public class MacheteController : MonoBehaviour
 
             if (Vector3.Distance(a, b) <= hitRadius)
             {
-                coco.TakeDamage(GameManager.Instance.damage);
+                coco.TakeDamage(damageOverride);
             }
         }
 
-        GameManager.Instance.UseStaminaForSwing();
+        GameManager.Instance.UseStaminaForSwing(swingStaminaCostOverride);
         OnSwingImpact?.Invoke();
     }
 

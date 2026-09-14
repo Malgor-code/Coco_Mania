@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8536657715251651504, guid: b011144ce282ff443a599efb477469bb, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8536657715251651504, guid: b011144ce282ff443a599efb477469bb, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -69,11 +69,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b011144ce282ff443a599efb477469bb, type: 3}
---- !u!1 &3889934395002751507 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1782313999194725684, guid: b011144ce282ff443a599efb477469bb, type: 3}
-  m_PrefabInstance: {fileID: 3262822313300825895}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4595292486273210941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1333661081655414042, guid: b011144ce282ff443a599efb477469bb, type: 3}
@@ -89,7 +84,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1037644908403272751, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1037644908403272751, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
       propertyPath: InitialModule.size3D
@@ -167,11 +162,6 @@ PrefabInstance:
 --- !u!4 &4845192272719573788 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8706800888018922653, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
-  m_PrefabInstance: {fileID: 4317071833062350721}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4893737703392403694 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8647858474310795119, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
   m_PrefabInstance: {fileID: 4317071833062350721}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7167320795656367554
@@ -292,8 +282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stunOnHit: 0
-  hitParticles: {fileID: 3889934395002751507}
-  deathParticles: {fileID: 4893737703392403694}
+  hitParticles: {fileID: 1782313999194725684, guid: b011144ce282ff443a599efb477469bb, type: 3}
+  deathParticles: {fileID: 8647858474310795119, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
   hp: 0
   hpMax: 0
 --- !u!114 &6205389778159658485
@@ -310,6 +300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1.5
   retargetInterval: 2.5
+  rotationSpeed: 8
 --- !u!135 &853628309523988849
 SphereCollider:
   m_ObjectHideFlags: 0

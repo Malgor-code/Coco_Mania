@@ -9,6 +9,7 @@ public class ParticleAutoDestroy : MonoBehaviour
 
         if (ps != null)
         {
+            ps.Play(true); 
             lifetime = ps.main.duration + ps.main.startLifetime.constantMax;
         }
 

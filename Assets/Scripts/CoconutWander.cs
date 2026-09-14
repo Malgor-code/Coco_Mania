@@ -5,6 +5,7 @@ public class CoconutWander : MonoBehaviour
 {
     public float speed = 1.5f;
     public float retargetInterval = 2.5f;
+    public float rotationSpeed = 8f; 
 
     private Vector3 targetPos;
     private float timer;
@@ -34,6 +35,7 @@ public class CoconutWander : MonoBehaviour
         boundsHalfExtents = halfExtents;
         PickNewTarget();
     }
+
     public void Stun(float duration)
     {
         stunTimer = Mathf.Max(stunTimer, duration);
@@ -65,6 +67,12 @@ public class CoconutWander : MonoBehaviour
         dir.y = 0f;
 
         rb.linearVelocity = dir.magnitude > 0.05f ? dir.normalized * speed : Vector3.zero;
+
+        if (dir.magnitude > 0.05f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
+        }
     }
 
     void PickNewTarget()
