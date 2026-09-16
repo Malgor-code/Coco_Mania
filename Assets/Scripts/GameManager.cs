@@ -5,14 +5,14 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public enum Phase { Hitting, Shop, PerkChoice }
+    public enum Phase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
 
     public static GameManager Instance;
 
     [Header("Fase actual")]
-    public Phase currentPhase = Phase.Hitting;
+    public Phase currentPhase = Phase.MainMenu;
 
-    [Header("Economia")]
+    [Header("Economia (se resetea en bancarrota)")]
     public int money = 0;
     public int daysLeft = 6;
     public int dayLimitBase = 6;
@@ -23,43 +23,28 @@ public class GameManager : MonoBehaviour
     [Header("Coco / dano")]
     public int coconutHpMaxBase = 10;
 
-    [Header("Progreso (para desbloquear tipos de coco)")]
+    [Header("Progreso permanente (para desbloquear tipos de coco)")]
     public int totalCoconutsKilled = 0;
+
+    [Header("Estadisticas de ESTA partida (se resetean al empezar de nuevo)")]
+    public int runCoconutsKilled = 0;
+    public int runMoneyEarned = 0;
 
     [Header("Energia (stamina)")]
     public float stamina = 20f;
     public float staminaMaxBase = 20f;
-
-    [Header("Niveles de mejora - combate (se resetean en bancarrota)")]
-    public int dmgLevel = 1;
-    public int stamLevel = 1;
-    public int efficiencyLevel = 1;
-    public int swingSpeedLevel = 1;
-    public int hitRadiusLevel = 1;
-
-    [Header("Niveles de mejora - cocos (se resetean en bancarrota)")]
-    public int extraCoconutLevel = 1;
-    public int spawnSpeedLevel = 1;
-
-    [Header("Balance economico (partidas largas, ~3 horas)")]
-    public int baseUpgradeCost = 12;
-    public float costGrowthRate = 1.42f;
-    public float globalCostGrowth = 1.015f;
-    public int totalUpgradesPurchased = 0;
 
     [Header("Ingresos por coco")]
     public int baseCoinsPerKill = 4;
     public int coinVariance = 4;
     public float billCycleIncomeBoost = 0.08f;
 
-    [Header("Machetes seleccionables (permanente)")]
+    [Header("Machete: progresion lineal (dinero, se resetea en bancarrota)")]
     public List<MacheteData> macheteOptions = new List<MacheteData>();
     public int equippedMacheteIndex = 0;
-    private HashSet<int> unlockedMachetes = new HashSet<int> { 0 };
 
-    [Header("Arbol de Habilidades (permanente, Puntos de Habilidad)")]
+    [Header("Arbol de Mejoras (dinero, ramificado, se resetea en bancarrota)")]
     public List<SkillNode> skillTree = new List<SkillNode>();
-    public int skillPoints = 0;
     private HashSet<string> unlockedSkillIds = new HashSet<string>();
 
     private float skillDamageBonus = 0f;
@@ -67,6 +52,7 @@ public class GameManager : MonoBehaviour
     private float skillSwingIntervalReduction = 0f;
     private float skillHitRadiusBonus = 0f;
     private float skillMoneyMultiplierBonus = 0f;
+    private float skillStaminaCostReduction = 0f;
 
     [Header("Perks (1 de 3 al pagar cada cuenta)")]
     public List<PerkOption> perkPool = new List<PerkOption>();
@@ -77,7 +63,7 @@ public class GameManager : MonoBehaviour
     private float perkMoneyMultiplierBonus = 0f;
     private float perkSwingIntervalReduction = 0f;
 
-    [Header("Legado (permanente, Puntos de Legado)")]
+    [Header("Legado (permanente, solo se gasta tras una bancarrota)")]
     public int legacyPoints = 0;
     public int totalLegacyPointsEarned = 0;
     public float legacyMultiplier = 1f;
@@ -88,45 +74,43 @@ public class GameManager : MonoBehaviour
     private float legacyStaminaBonus = 0f;
     private float legacyExtraMoneyMult = 0f;
 
-    // ---------------- UI ----------------
     [Header("UI - Gameplay (solo stamina)")]
     public GameObject gameplayUIPanel;
     public Slider staminaSlider;
 
-    [Header("UI - Tienda / Fin de energia")]
-    public GameObject shopUIPanel;
-    public TMP_Text shopMoneyText;
-    public TMP_Text shopDaysLeftText;
-    public TMP_Text shopBillText;
-    public Button payDebtButton;
+    [Header("UI - Recaudacion (hub: estadisticas + 3 botones)")]
+    public GameObject recaudacionPanel;
+    public TMP_Text runKillsText;
+    public TMP_Text runMoneyText;
+    public TMP_Text runCycleText;
     public Button continueButton;
 
-    [Header("UI - Panel de Mejoras")]
-    public GameObject upgradesPanel;
-    public TMP_Text dmgCostText;
-    public TMP_Text stamCostText;
-    public TMP_Text efficiencyCostText;
-    public TMP_Text extraCoconutCostText;
-    public TMP_Text spawnSpeedCostText;
-    public TMP_Text swingSpeedCostText;
-    public TMP_Text hitRadiusCostText;
+    [Header("UI - Panel del Arbol de Mejoras")]
+    public GameObject upgradeTreePanel;
 
-    [Header("UI - Panel de Machetes")]
-    public GameObject macheteSelectPanel;
+    [Header("UI - Panel de Tienda (machetes)")]
+    public GameObject tiendaPanel;
+    public TMP_Text macheteStatusText;
+    public TMP_Text macheteUpgradeCostText;
+    public Button macheteUpgradeButton;
 
-    [Header("UI - Panel de Habilidades")]
-    public GameObject skillTreePanel;
-    public TMP_Text skillPointsText;
-
-    [Header("UI - Panel de Legado")]
-    public GameObject legacyShopPanel;
-    public TMP_Text legacyPointsText;
+    [Header("UI - Panel de Deuda")]
+    public GameObject deudaPanel;
+    public TMP_Text deudaMoneyText;
+    public TMP_Text deudaDaysLeftText;
+    public TMP_Text deudaBillText;
+    public Button payDebtButton;
 
     [Header("UI - Eleccion de Perk")]
     public GameObject perkChoiceUIPanel;
     public TMP_Text perkOption1Name, perkOption1Desc;
     public TMP_Text perkOption2Name, perkOption2Desc;
     public TMP_Text perkOption3Name, perkOption3Desc;
+
+    [Header("UI - Entre partidas (SOLO aqui se gasta el Legado)")]
+    public GameObject betweenRunsPanel;
+    public TMP_Text legacyPointsText;
+    public TMP_Text bankruptcyMessageText;
 
     [Header("UI - Log")]
     public TMP_Text logText;
@@ -139,10 +123,15 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        daysLeft = dayLimitBase;
+        if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
+        if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (deudaPanel != null) deudaPanel.SetActive(false);
+        if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
+
         RecalculateAllStats();
-        ShowHittingUI();
-        RefreshAllUI();
     }
 
     void Update()
@@ -156,39 +145,49 @@ public class GameManager : MonoBehaviour
 
     public bool IsHittingPhase() => currentPhase == Phase.Hitting;
 
+    string Loc(string key) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : key;
+    string Loc(string key, params object[] args) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key, args) : key;
+
+    public void BeginNewGame()
+    {
+        daysLeft = dayLimitBase;
+        runCoconutsKilled = 0;
+        runMoneyEarned = 0;
+        RecalculateAllStats();
+        ShowHittingUI();
+        RefreshAllUI();
+    }
+
     public int GetCoconutHpMax()
     {
         return Mathf.RoundToInt(coconutHpMaxBase + billCycle * 3);
     }
+
     void RecalculateAllStats()
     {
-        MacheteData m = GetEquippedMachete();
+        MacheteData m = GetCurrentMachete();
         float baseDmg = m != null ? m.baseDamage : 3f;
         float baseSwing = m != null ? m.baseSwingInterval : 1.2f;
         float baseRadius = m != null ? m.baseHitRadius : 1.5f;
         float staminaCostMult = m != null ? m.staminaCostMultiplier : 1f;
 
-        int damage = Mathf.RoundToInt(baseDmg + (dmgLevel - 1) * 2 + skillDamageBonus + perkDamageBonus + legacyDamageBonus);
-
-        float efficiencyReduction = (efficiencyLevel - 1) * 0.1f;
-        float swingStaminaCost = Mathf.Max(0.3f, staminaCostMult - efficiencyReduction);
+        int damage = Mathf.RoundToInt(baseDmg + skillDamageBonus + perkDamageBonus + legacyDamageBonus);
+        float swingStaminaCost = Mathf.Max(0.3f, staminaCostMult - skillStaminaCostReduction);
 
         if (MacheteController.Instance != null)
         {
             MacheteController.Instance.damageOverride = damage;
             MacheteController.Instance.swingStaminaCostOverride = swingStaminaCost;
-            MacheteController.Instance.swingInterval = Mathf.Max(0.3f,
-                baseSwing - (swingSpeedLevel - 1) * 0.05f - skillSwingIntervalReduction - perkSwingIntervalReduction);
-            MacheteController.Instance.hitRadius = baseRadius + (hitRadiusLevel - 1) * 0.15f + skillHitRadiusBonus;
+            MacheteController.Instance.swingInterval = Mathf.Max(0.3f, baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction);
+            MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus;
         }
     }
 
     public float GetStaminaMax()
     {
-        return staminaMaxBase + (stamLevel - 1) * 5 + skillStaminaBonus + perkStaminaMaxBonus + legacyStaminaBonus;
+        return staminaMaxBase + skillStaminaBonus + perkStaminaMaxBonus + legacyStaminaBonus;
     }
 
-    // Llamado por MacheteController en cada golpe
     public void UseStaminaForSwing(float cost)
     {
         if (currentPhase != Phase.Hitting) return;
@@ -197,28 +196,32 @@ public class GameManager : MonoBehaviour
         if (stamina <= 0f)
         {
             stamina = 0f;
-            EnterShopPhase();
+            EnterRecaudacionPhase();
         }
     }
+
     public void OnCoconutDestroyed(float lootMultiplier = 1f)
     {
         totalCoconutsKilled++;
+        runCoconutsKilled++;
+
         float cycleBoost = 1f + (billCycle - 1) * billCycleIncomeBoost;
         float extraMult = 1f + skillMoneyMultiplierBonus + perkMoneyMultiplierBonus + legacyExtraMoneyMult;
         int earned = Mathf.RoundToInt((baseCoinsPerKill + Random.Range(0, coinVariance + 1)) * legacyMultiplier * lootMultiplier * cycleBoost * extraMult);
+
         money += earned;
-        Log("+$" + earned);
+        runMoneyEarned += earned;
+        Log(Loc("log_money_earned", earned));
     }
 
-    void EnterShopPhase()
+    void EnterRecaudacionPhase()
     {
         currentPhase = Phase.Shop;
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
-        if (shopUIPanel != null) shopUIPanel.SetActive(true);
-        if (upgradesPanel != null) upgradesPanel.SetActive(false);
-        if (macheteSelectPanel != null) macheteSelectPanel.SetActive(false);
-        if (skillTreePanel != null) skillTreePanel.SetActive(false);
-        if (legacyShopPanel != null) legacyShopPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
+        if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (deudaPanel != null) deudaPanel.SetActive(false);
         RefreshAllUI();
     }
 
@@ -226,8 +229,9 @@ public class GameManager : MonoBehaviour
     {
         currentPhase = Phase.Hitting;
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(true);
-        if (shopUIPanel != null) shopUIPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
 
         if (CoconutSpawner.Instance != null)
         {
@@ -235,24 +239,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ToggleUpgradesPanel()
+    public void ToggleUpgradeTreePanel()
     {
-        if (upgradesPanel != null) upgradesPanel.SetActive(!upgradesPanel.activeSelf);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(!upgradeTreePanel.activeSelf);
     }
 
-    public void ToggleMacheteSelectPanel()
+    public void ToggleTiendaPanel()
     {
-        if (macheteSelectPanel != null) macheteSelectPanel.SetActive(!macheteSelectPanel.activeSelf);
+        if (tiendaPanel != null) tiendaPanel.SetActive(!tiendaPanel.activeSelf);
     }
 
-    public void ToggleSkillTreePanel()
+    public void ToggleDeudaPanel()
     {
-        if (skillTreePanel != null) skillTreePanel.SetActive(!skillTreePanel.activeSelf);
-    }
-
-    public void ToggleLegacyShopPanel()
-    {
-        if (legacyShopPanel != null) legacyShopPanel.SetActive(!legacyShopPanel.activeSelf);
+        if (deudaPanel != null) deudaPanel.SetActive(!deudaPanel.activeSelf);
     }
 
     public void PayDebt()
@@ -260,7 +259,7 @@ public class GameManager : MonoBehaviour
         if (billPaid || money < billAmount) return;
         money -= billAmount;
         billPaid = true;
-        Log("Deuda pagada.");
+        Log(Loc("log_debt_paid"));
         RefreshAllUI();
     }
 
@@ -276,9 +275,10 @@ public class GameManager : MonoBehaviour
             if (paidSuccessfully)
             {
                 OfferPerkChoice();
-                RefreshAllUI();
-                return; 
             }
+
+            RefreshAllUI();
+            return;
         }
 
         stamina = GetStaminaMax();
@@ -294,8 +294,8 @@ public class GameManager : MonoBehaviour
             billAmount = Mathf.RoundToInt(billAmount * 1.6f);
             daysLeft = dayLimitBase + (billCycle - 1);
             billPaid = false;
-            skillPoints += 1; 
-            Log("Nuevo ciclo. Cuenta: $" + billAmount);
+            Log(Loc("log_new_cycle", billAmount));
+            RecalculateAllStats();
         }
         else
         {
@@ -310,14 +310,15 @@ public class GameManager : MonoBehaviour
             daysLeft = dayLimitBase;
             billPaid = false;
 
-            dmgLevel = 1;
-            stamLevel = 1;
-            efficiencyLevel = 1;
-            swingSpeedLevel = 1;
-            hitRadiusLevel = 1;
-            extraCoconutLevel = 1;
-            spawnSpeedLevel = 1;
-            totalUpgradesPurchased = 0;
+            unlockedSkillIds.Clear();
+            skillDamageBonus = 0f;
+            skillStaminaBonus = 0f;
+            skillSwingIntervalReduction = 0f;
+            skillHitRadiusBonus = 0f;
+            skillMoneyMultiplierBonus = 0f;
+            skillStaminaCostReduction = 0f;
+
+            equippedMacheteIndex = 0;
 
             perkDamageBonus = 0f;
             perkStaminaMaxBonus = 0f;
@@ -330,89 +331,31 @@ public class GameManager : MonoBehaviour
                 CoconutSpawner.Instance.spawnInterval = 5f;
             }
 
-            Log("Bancarrota. +" + gained + " puntos de legado.");
+            RecalculateAllStats();
+
+            if (bankruptcyMessageText != null)
+            {
+                bankruptcyMessageText.text = Loc("log_bankruptcy", gained);
+            }
+            Log(Loc("log_bankruptcy", gained));
+
+            EnterBetweenRunsPhase();
         }
-
-        RecalculateAllStats();
-    }
-    int CostFor(int level)
-    {
-        float perLevel = Mathf.Pow(costGrowthRate, level - 1);
-        float global = Mathf.Pow(globalCostGrowth, totalUpgradesPurchased);
-        return Mathf.RoundToInt(baseUpgradeCost * perLevel * global);
     }
 
-    public void BuyDamage()
+    void EnterBetweenRunsPhase()
     {
-        int c = CostFor(dmgLevel);
-        if (money < c) return;
-        money -= c; dmgLevel++; totalUpgradesPurchased++;
-        RecalculateAllStats();
-        Log("Machete mejorado.");
-        RefreshAllUI();
+        currentPhase = Phase.BetweenRuns;
+        if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
+        if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(true);
     }
 
-    public void BuyStaminaMax()
+    public void ContinueAfterBankruptcy()
     {
-        int c = CostFor(stamLevel);
-        if (money < c) return;
-        money -= c; stamLevel++; totalUpgradesPurchased++;
-        RecalculateAllStats();
-        Log("Energia maxima: " + GetStaminaMax());
-        RefreshAllUI();
-    }
-
-    public void BuyEfficiency()
-    {
-        int c = CostFor(efficiencyLevel);
-        if (money < c) return;
-        money -= c; efficiencyLevel++; totalUpgradesPurchased++;
-        RecalculateAllStats();
-        Log("Machete mas eficiente.");
-        RefreshAllUI();
-    }
-
-    public void BuySwingSpeed()
-    {
-        int c = CostFor(swingSpeedLevel);
-        if (money < c) return;
-        money -= c; swingSpeedLevel++; totalUpgradesPurchased++;
-        RecalculateAllStats();
-        Log("Golpes mas rapidos.");
-        RefreshAllUI();
-    }
-
-    public void BuyHitRadius()
-    {
-        int c = CostFor(hitRadiusLevel);
-        if (money < c) return;
-        money -= c; hitRadiusLevel++; totalUpgradesPurchased++;
-        RecalculateAllStats();
-        Log("Radio de golpe mas grande.");
-        RefreshAllUI();
-    }
-
-    public void BuyExtraCoconut()
-    {
-        int c = CostFor(extraCoconutLevel);
-        if (money < c) return;
-        money -= c; extraCoconutLevel++; totalUpgradesPurchased++;
-        if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += 1;
-        Log("Mas cocos al iniciar el dia.");
-        RefreshAllUI();
-    }
-
-    public void BuySpawnSpeed()
-    {
-        int c = CostFor(spawnSpeedLevel);
-        if (money < c) return;
-        money -= c; spawnSpeedLevel++; totalUpgradesPurchased++;
-        if (CoconutSpawner.Instance != null)
-        {
-            CoconutSpawner.Instance.spawnInterval = Mathf.Max(0.5f, CoconutSpawner.Instance.spawnInterval - 0.5f);
-        }
-        Log("Los cocos aparecen mas seguido.");
-        RefreshAllUI();
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
+        BeginNewGame();
     }
     public MacheteData GetMacheteData(int index)
     {
@@ -420,26 +363,19 @@ public class GameManager : MonoBehaviour
         return macheteOptions[index];
     }
 
-    public MacheteData GetEquippedMachete() => GetMacheteData(equippedMacheteIndex);
+    public MacheteData GetCurrentMachete() => GetMacheteData(equippedMacheteIndex);
+    public MacheteData GetNextMachete() => GetMacheteData(equippedMacheteIndex + 1);
 
-    public bool IsMacheteUnlocked(int index) => unlockedMachetes.Contains(index);
-
-    public void TrySelectMachete(int index)
+    public void BuyNextMachete()
     {
-        if (index < 0 || index >= macheteOptions.Count) return;
+        MacheteData next = GetNextMachete();
+        if (next == null) return;
 
-        if (!unlockedMachetes.Contains(index))
-        {
-            int cost = macheteOptions[index].unlockCost;
-            if (money < cost) return;
-            money -= cost;
-            unlockedMachetes.Add(index);
-            Log("Desbloqueaste: " + macheteOptions[index].macheteName);
-        }
-
-        equippedMacheteIndex = index;
+        if (money < next.unlockCost) return;
+        money -= next.unlockCost;
+        equippedMacheteIndex++;
         RecalculateAllStats();
-        Log("Equipado: " + macheteOptions[index].macheteName);
+        Log(Loc("log_new_machete", next.macheteName));
         RefreshAllUI();
     }
     public SkillNode GetSkillNode(string id) => skillTree.Find(n => n.id == id);
@@ -455,7 +391,7 @@ public class GameManager : MonoBehaviour
     bool CanUnlockSkill(SkillNode node)
     {
         if (unlockedSkillIds.Contains(node.id)) return false;
-        if (skillPoints < node.cost) return false;
+        if (money < node.cost) return false;
 
         if (node.prerequisiteIds != null)
         {
@@ -472,10 +408,10 @@ public class GameManager : MonoBehaviour
         SkillNode node = GetSkillNode(id);
         if (node == null || !CanUnlockSkill(node)) return;
 
-        skillPoints -= node.cost;
+        money -= node.cost;
         unlockedSkillIds.Add(id);
         ApplySkillEffect(node);
-        Log("Habilidad desbloqueada: " + node.nodeName);
+        Log(Loc("log_upgrade_bought", node.nodeName));
         RefreshAllUI();
     }
 
@@ -488,6 +424,7 @@ public class GameManager : MonoBehaviour
             case SkillEffect.SwingIntervalReduction: skillSwingIntervalReduction += node.effectValue; break;
             case SkillEffect.HitRadiusBonus: skillHitRadiusBonus += node.effectValue; break;
             case SkillEffect.MoneyMultiplierBonus: skillMoneyMultiplierBonus += node.effectValue; break;
+            case SkillEffect.StaminaCostReduction: skillStaminaCostReduction += node.effectValue; break;
             case SkillEffect.ExtraStartingCoconut:
                 if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(node.effectValue);
                 break;
@@ -498,32 +435,10 @@ public class GameManager : MonoBehaviour
         }
         RecalculateAllStats();
     }
-    public void ResetSkillTree()
-    {
-        int refund = 0;
-        foreach (var id in unlockedSkillIds)
-        {
-            SkillNode node = GetSkillNode(id);
-            if (node != null) refund += node.cost;
-        }
-
-        skillPoints += refund;
-        unlockedSkillIds.Clear();
-
-        skillDamageBonus = 0f;
-        skillStaminaBonus = 0f;
-        skillSwingIntervalReduction = 0f;
-        skillHitRadiusBonus = 0f;
-        skillMoneyMultiplierBonus = 0f;
-
-        RecalculateAllStats();
-        Log("Arbol de habilidades reiniciado.");
-        RefreshAllUI();
-    }
     void OfferPerkChoice()
     {
         currentPhase = Phase.PerkChoice;
-        if (shopUIPanel != null) shopUIPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(true);
 
         currentPerkChoices = PickRandomPerks(3);
@@ -547,11 +462,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            if (pool.Count == 0)
-            {
-                result[i] = null;
-                continue;
-            }
+            if (pool.Count == 0) { result[i] = null; continue; }
             int idx = Random.Range(0, pool.Count);
             result[i] = pool[idx];
             pool.RemoveAt(idx);
@@ -564,7 +475,7 @@ public class GameManager : MonoBehaviour
         if (index < 0 || index >= currentPerkChoices.Length || currentPerkChoices[index] == null) return;
 
         ApplyPerk(currentPerkChoices[index]);
-        Log("Perk elegido: " + currentPerkChoices[index].perkName);
+        Log(Loc("log_perk_chosen", currentPerkChoices[index].perkName));
 
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
 
@@ -593,6 +504,8 @@ public class GameManager : MonoBehaviour
 
     public void BuyLegacyItem(string itemName)
     {
+        if (currentPhase != Phase.BetweenRuns) return;
+
         LegacyItem item = GetLegacyItem(itemName);
         if (item == null) return;
         if (purchasedLegacyItems.Contains(itemName)) return;
@@ -601,7 +514,7 @@ public class GameManager : MonoBehaviour
         legacyPoints -= item.cost;
         purchasedLegacyItems.Add(itemName);
         ApplyLegacyEffect(item);
-        Log("Legado adquirido: " + item.itemName);
+        Log(Loc("log_legacy_bought", item.itemName));
         RefreshAllUI();
     }
 
@@ -619,6 +532,7 @@ public class GameManager : MonoBehaviour
         }
         RecalculateAllStats();
     }
+
     public void Log(string msg)
     {
         if (logText != null) logText.text = msg;
@@ -626,31 +540,42 @@ public class GameManager : MonoBehaviour
 
     void RefreshAllUI()
     {
-        if (shopMoneyText != null) shopMoneyText.text = "$" + money;
-        if (shopDaysLeftText != null) shopDaysLeftText.text = daysLeft + " dias para pagar";
-        if (shopBillText != null) shopBillText.text = billPaid ? "Pagada" : ("$" + billAmount);
+        if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", runCoconutsKilled);
+        if (runMoneyText != null) runMoneyText.text = Loc("collection_money_earned", runMoneyEarned);
+        if (runCycleText != null) runCycleText.text = Loc("collection_cycle", billCycle);
+
+        if (deudaMoneyText != null) deudaMoneyText.text = Loc("collection_current_money", money);
+        if (deudaDaysLeftText != null) deudaDaysLeftText.text = Loc("debt_days_left", daysLeft);
+        if (deudaBillText != null) deudaBillText.text = billPaid ? Loc("debt_paid_label") : Loc("debt_amount_pending", billAmount);
         if (payDebtButton != null) payDebtButton.interactable = !billPaid && money >= billAmount;
 
-        if (dmgCostText != null) dmgCostText.text = "$" + CostFor(dmgLevel);
-        if (stamCostText != null) stamCostText.text = "$" + CostFor(stamLevel);
-        if (efficiencyCostText != null) efficiencyCostText.text = "$" + CostFor(efficiencyLevel);
-        if (extraCoconutCostText != null) extraCoconutCostText.text = "$" + CostFor(extraCoconutLevel);
-        if (spawnSpeedCostText != null) spawnSpeedCostText.text = "$" + CostFor(spawnSpeedLevel);
-        if (swingSpeedCostText != null) swingSpeedCostText.text = "$" + CostFor(swingSpeedLevel);
-        if (hitRadiusCostText != null) hitRadiusCostText.text = "$" + CostFor(hitRadiusLevel);
+        MacheteData current = GetCurrentMachete();
+        MacheteData next = GetNextMachete();
+        if (macheteStatusText != null) macheteStatusText.text = Loc("shop_current_machete", current != null ? current.macheteName : "-");
+        if (next != null)
+        {
+            if (macheteUpgradeCostText != null) macheteUpgradeCostText.text = Loc("shop_next_machete", next.macheteName, next.unlockCost);
+            if (macheteUpgradeButton != null) macheteUpgradeButton.interactable = money >= next.unlockCost;
+        }
+        else
+        {
+            if (macheteUpgradeCostText != null) macheteUpgradeCostText.text = Loc("shop_max_machete");
+            if (macheteUpgradeButton != null) macheteUpgradeButton.interactable = false;
+        }
 
-        if (skillPointsText != null) skillPointsText.text = skillPoints + " Puntos de Habilidad";
-        if (legacyPointsText != null) legacyPointsText.text = legacyPoints + " Puntos de Legado";
+        if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
     }
+
     void EnsureDefaultData()
     {
         if (macheteOptions == null || macheteOptions.Count == 0)
         {
             macheteOptions = new List<MacheteData>
             {
-                new MacheteData { macheteName = "Machete de Palma", description = "Equilibrado. El de siempre.", baseDamage = 3f, baseSwingInterval = 1.2f, baseHitRadius = 1.5f, staminaCostMultiplier = 1f, unlockCost = 0 },
-                new MacheteData { macheteName = "Machete Pesado", description = "Mucho mas daño, pero golpea mas lento y cansa mas.", baseDamage = 6f, baseSwingInterval = 1.6f, baseHitRadius = 1.3f, staminaCostMultiplier = 1.3f, unlockCost = 250 },
-                new MacheteData { macheteName = "Machete Rapido", description = "Golpea muy seguido y en area amplia, pero pega menos fuerte.", baseDamage = 2f, baseSwingInterval = 0.7f, baseHitRadius = 1.8f, staminaCostMultiplier = 0.8f, unlockCost = 250 },
+                new MacheteData { macheteName = "Machete Oxidado", description = "El que ya tienes.", baseDamage = 3f, baseSwingInterval = 1.2f, baseHitRadius = 1.5f, staminaCostMultiplier = 1f, unlockCost = 0 },
+                new MacheteData { macheteName = "Machete Normal", description = "Mas daño, mas rapido, mas rango.", baseDamage = 5f, baseSwingInterval = 1.05f, baseHitRadius = 1.6f, staminaCostMultiplier = 0.95f, unlockCost = 300 },
+                new MacheteData { macheteName = "Machete de Acero", description = "Un salto grande de poder.", baseDamage = 8f, baseSwingInterval = 0.9f, baseHitRadius = 1.75f, staminaCostMultiplier = 0.9f, unlockCost = 1500 },
+                new MacheteData { macheteName = "Machete de Oro", description = "El mejor de todos.", baseDamage = 13f, baseSwingInterval = 0.75f, baseHitRadius = 1.9f, staminaCostMultiplier = 0.85f, unlockCost = 6000 },
             };
         }
 
@@ -658,12 +583,20 @@ public class GameManager : MonoBehaviour
         {
             skillTree = new List<SkillNode>
             {
-                new SkillNode { id = "fuerza_1", nodeName = "Mas Fuerza I", description = "+2 de dano", cost = 1, prerequisiteIds = new string[0], effect = SkillEffect.DamageFlatBonus, effectValue = 2f },
-                new SkillNode { id = "fuerza_2", nodeName = "Mas Fuerza II", description = "+3 de dano", cost = 2, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.DamageFlatBonus, effectValue = 3f },
-                new SkillNode { id = "velocidad_1", nodeName = "Manos Rapidas", description = "Golpea mas seguido", cost = 2, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.1f },
-                new SkillNode { id = "resistencia_1", nodeName = "Aguante I", description = "+5 de energia maxima", cost = 1, prerequisiteIds = new string[0], effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 5f },
-                new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+8 de energia maxima", cost = 2, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 8f },
-                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo", description = "+15% de dinero por coco", cost = 2, prerequisiteIds = new string[0], effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
+                new SkillNode { id = "fuerza_1", nodeName = "Mas Fuerza I", description = "+2 de dano. Abre el resto del arbol.", cost = 15, prerequisiteIds = new string[0], effect = SkillEffect.DamageFlatBonus, effectValue = 2f },
+                new SkillNode { id = "fuerza_2", nodeName = "Mas Fuerza II", description = "+3 de dano", cost = 45, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.DamageFlatBonus, effectValue = 3f },
+                new SkillNode { id = "fuerza_3", nodeName = "Mas Fuerza III", description = "+5 de dano", cost = 120, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.DamageFlatBonus, effectValue = 5f },
+                new SkillNode { id = "velocidad_1", nodeName = "Manos Rapidas I", description = "Golpea mas seguido", cost = 40, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.1f },
+                new SkillNode { id = "velocidad_2", nodeName = "Manos Rapidas II", description = "Golpea aun mas seguido", cost = 110, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.15f },
+                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo I", description = "+15% de dinero por coco", cost = 50, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
+                new SkillNode { id = "suerte_2", nodeName = "Buen Ojo II", description = "+20% de dinero por coco", cost = 140, prerequisiteIds = new [] { "suerte_1" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.2f },
+                new SkillNode { id = "radio_1", nodeName = "Golpe Amplio I", description = "Mas radio de golpe", cost = 35, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.2f },
+                new SkillNode { id = "radio_2", nodeName = "Golpe Amplio II", description = "Aun mas radio de golpe", cost = 95, prerequisiteIds = new [] { "radio_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.3f },
+                new SkillNode { id = "resistencia_1", nodeName = "Aguante I", description = "+5 de energia maxima", cost = 20, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 5f },
+                new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+8 de energia maxima", cost = 55, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 8f },
+                new SkillNode { id = "eficiencia_1", nodeName = "Golpe Eficiente", description = "Cada golpe gasta menos energia", cost = 30, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaCostReduction, effectValue = 0.15f },
+                new SkillNode { id = "cocos_1", nodeName = "Cosecha Inicial", description = "+1 coco al iniciar el dia", cost = 60, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 1f },
+                new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 45, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
             };
         }
 

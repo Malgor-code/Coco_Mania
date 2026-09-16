@@ -26,7 +26,7 @@ public class SkillNodeButton : MonoBehaviour
 
         if (label != null)
         {
-            label.text = unlocked ? node.nodeName + "\n(desbloqueado)" : node.nodeName + "\nCosto: " + node.cost;
+            label.text = unlocked ? node.nodeName + "\n(comprado)" : node.nodeName + "\n$" + node.cost;
         }
 
         if (lockedOverlay != null)

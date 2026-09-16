@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public enum SkillEffect
 {
     None,
@@ -8,6 +7,7 @@ public enum SkillEffect
     SwingIntervalReduction,
     HitRadiusBonus,
     MoneyMultiplierBonus,
+    StaminaCostReduction,
     ExtraStartingCoconut,
     SpawnIntervalReduction
 }
