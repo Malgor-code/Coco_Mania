@@ -3,9 +3,22 @@ using UnityEngine;
 
 public enum Language { Spanish, English }
 
+[DefaultExecutionOrder(-1000)]
 public class LocalizationManager : MonoBehaviour
 {
-    public static LocalizationManager Instance;
+    private static LocalizationManager _instance;
+    public static LocalizationManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<LocalizationManager>();
+            }
+            return _instance;
+        }
+        private set { _instance = value; }
+    }
 
     public Language currentLanguage = Language.Spanish;
 
@@ -30,7 +43,7 @@ public class LocalizationManager : MonoBehaviour
         {
             return currentLanguage == Language.Spanish ? entry.es : entry.en;
         }
-        return key; 
+        return key;
     }
 
     public string Get(string key, params object[] args)
@@ -75,7 +88,7 @@ public class LocalizationManager : MonoBehaviour
         Add("collection_shop_button", "Tienda", "Shop");
         Add("collection_debt_button", "Deuda", "Debt");
         Add("collection_continue_button", "Continuar", "Continue");
-
+        Add("collection_money", "${0}", "${0}");
         // ---------- Panel de Deuda ----------
         Add("debt_title", "Deuda", "Debt");
         Add("debt_days_left", "{0} dias para pagar", "{0} days left to pay");

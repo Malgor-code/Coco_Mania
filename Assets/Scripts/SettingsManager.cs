@@ -11,8 +11,10 @@ public class SettingsManager : MonoBehaviour
     [Header("Pantalla completa")]
     public Toggle fullscreenToggle;
 
-    [Header("Idioma (0 = Espanol, 1 = English)")]
+    [Header("Idioma (dropdown, mismo orden que el enum Language)")]
     public TMP_Dropdown languageDropdown;
+
+    private static readonly string[] LanguageNames = { "Español", "English" };
 
     private Resolution[] resolutions;
 
@@ -26,11 +28,21 @@ public class SettingsManager : MonoBehaviour
             fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
         }
 
-        if (languageDropdown != null)
-        {
-            languageDropdown.value = (LocalizationManager.Instance != null && LocalizationManager.Instance.currentLanguage == Language.English) ? 1 : 0;
-            languageDropdown.onValueChanged.AddListener(SetLanguageFromDropdown);
-        }
+        SetupLanguageDropdown();
+    }
+
+    void SetupLanguageDropdown()
+    {
+        if (languageDropdown == null) return;
+
+        languageDropdown.ClearOptions();
+        languageDropdown.AddOptions(new List<string>(LanguageNames));
+
+        int currentIndex = (LocalizationManager.Instance != null) ? (int)LocalizationManager.Instance.currentLanguage : 0;
+        languageDropdown.value = currentIndex;
+        languageDropdown.RefreshShownValue();
+
+        languageDropdown.onValueChanged.AddListener(SetLanguageFromDropdown);
     }
 
     void SetupResolutions()

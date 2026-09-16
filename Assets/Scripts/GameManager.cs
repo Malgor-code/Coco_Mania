@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
     public int baseCoinsPerKill = 4;
     public int coinVariance = 4;
     public float billCycleIncomeBoost = 0.08f;
-
     [Header("Machete: progresion lineal (dinero, se resetea en bancarrota)")]
     public List<MacheteData> macheteOptions = new List<MacheteData>();
     public int equippedMacheteIndex = 0;
@@ -53,7 +52,6 @@ public class GameManager : MonoBehaviour
     private float skillHitRadiusBonus = 0f;
     private float skillMoneyMultiplierBonus = 0f;
     private float skillStaminaCostReduction = 0f;
-
     [Header("Perks (1 de 3 al pagar cada cuenta)")]
     public List<PerkOption> perkPool = new List<PerkOption>();
     private PerkOption[] currentPerkChoices = new PerkOption[3];
@@ -62,7 +60,6 @@ public class GameManager : MonoBehaviour
     private float perkStaminaMaxBonus = 0f;
     private float perkMoneyMultiplierBonus = 0f;
     private float perkSwingIntervalReduction = 0f;
-
     [Header("Legado (permanente, solo se gasta tras una bancarrota)")]
     public int legacyPoints = 0;
     public int totalLegacyPointsEarned = 0;
@@ -73,10 +70,12 @@ public class GameManager : MonoBehaviour
     private float legacyDamageBonus = 0f;
     private float legacyStaminaBonus = 0f;
     private float legacyExtraMoneyMult = 0f;
-
     [Header("UI - Gameplay (solo stamina)")]
     public GameObject gameplayUIPanel;
     public Slider staminaSlider;
+
+    [Header("UI - Dinero actual (opcional, siempre visible en pantalla)")]
+    public TMP_Text moneyText;
 
     [Header("UI - Recaudacion (hub: estadisticas + 3 botones)")]
     public GameObject recaudacionPanel;
@@ -87,6 +86,23 @@ public class GameManager : MonoBehaviour
 
     [Header("UI - Panel del Arbol de Mejoras")]
     public GameObject upgradeTreePanel;
+
+    [Header("UI - Pan y Zoom del Arbol de Mejoras")]
+    [Tooltip("El RectTransform que contiene los nodos y se mueve/escala. Si tu panel tiene un Viewport + Content (con Mask/RectMask2D en el Viewport), asigna el Content aca. Si no tenes esa estructura, podes asignar el mismo RectTransform del upgradeTreePanel, pero entonces no se va a recortar el contenido que quede fuera del panel.")]
+    public RectTransform upgradeTreeContent;
+    [Tooltip("El Viewport que recorta el Content (el que tiene el Rect Mask 2D). Si lo asignas, el limite de paneo se calcula SOLO segun el tamano real del Content y del Viewport: nunca vas a poder alejarte tanto que se pierdan los botones de vista. Si lo dejas vacio, se usa el limite fijo 'Pan Limit' de abajo.")]
+    public RectTransform upgradeTreeViewport;
+    [Tooltip("Boton del mouse para arrastrar (pan). 2 = boton central (rueda).")]
+    public int panMouseButton = 2;
+    public float panSpeed = 1f;
+    [Tooltip("Se usa SOLO si no asignaste Upgrade Tree Viewport arriba.")]
+    public Vector2 panLimit = new Vector2(800f, 800f);
+    public float zoomSpeed = 0.1f;
+    public float minZoom = 0.5f;
+    public float maxZoom = 2f;
+
+    private bool isPanningTree = false;
+    private Vector2 lastPanMousePos;
 
     [Header("UI - Panel de Tienda (machetes)")]
     public GameObject tiendaPanel;
@@ -132,6 +148,7 @@ public class GameManager : MonoBehaviour
         if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
 
         RecalculateAllStats();
+        UpdateMoneyUI();
     }
 
     void Update()
@@ -141,6 +158,81 @@ public class GameManager : MonoBehaviour
             staminaSlider.maxValue = GetStaminaMax();
             staminaSlider.value = stamina;
         }
+
+        UpdateMoneyUI();
+        HandleUpgradeTreePanZoom();
+    }
+
+    void HandleUpgradeTreePanZoom()
+    {
+        if (upgradeTreeContent == null) return;
+
+        bool panelOpen = upgradeTreePanel != null && upgradeTreePanel.activeInHierarchy;
+        if (!panelOpen)
+        {
+            isPanningTree = false;
+            return;
+        }
+        if (Input.GetMouseButtonDown(panMouseButton))
+        {
+            isPanningTree = true;
+            lastPanMousePos = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(panMouseButton))
+        {
+            isPanningTree = false;
+        }
+
+        if (isPanningTree)
+        {
+            Vector2 currentMousePos = Input.mousePosition;
+            Vector2 delta = (currentMousePos - lastPanMousePos) * panSpeed;
+            Vector2 newPos = upgradeTreeContent.anchoredPosition + delta;
+            ClampContentPosition(ref newPos);
+            upgradeTreeContent.anchoredPosition = newPos;
+            lastPanMousePos = currentMousePos;
+        }
+        float scroll = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(scroll) > 0.01f)
+        {
+            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + scroll * zoomSpeed, minZoom, maxZoom);
+            upgradeTreeContent.localScale = new Vector3(newScale, newScale, upgradeTreeContent.localScale.z);
+            Vector2 clampedPos = upgradeTreeContent.anchoredPosition;
+            ClampContentPosition(ref clampedPos);
+            upgradeTreeContent.anchoredPosition = clampedPos;
+        }
+    }
+
+    void ClampContentPosition(ref Vector2 pos)
+    {
+        if (upgradeTreeViewport != null)
+        {
+            Vector2 contentSize = Vector2.Scale(upgradeTreeContent.rect.size, upgradeTreeContent.localScale);
+            Vector2 viewportSize = upgradeTreeViewport.rect.size;
+
+            float maxX = Mathf.Max(0f, (contentSize.x - viewportSize.x) / 2f);
+            float maxY = Mathf.Max(0f, (contentSize.y - viewportSize.y) / 2f);
+
+            pos.x = Mathf.Clamp(pos.x, -maxX, maxX);
+            pos.y = Mathf.Clamp(pos.y, -maxY, maxY);
+        }
+        else
+        {
+            pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
+            pos.y = Mathf.Clamp(pos.y, -panLimit.y, panLimit.y);
+        }
+    }
+
+    public void RecenterUpgradeTree()
+    {
+        if (upgradeTreeContent == null) return;
+        upgradeTreeContent.anchoredPosition = Vector2.zero;
+        upgradeTreeContent.localScale = Vector3.one;
+    }
+
+    void UpdateMoneyUI()
+    {
+        if (moneyText != null) moneyText.text = Loc("collection_current_money", money);
     }
 
     public bool IsHittingPhase() => currentPhase == Phase.Hitting;
@@ -242,16 +334,20 @@ public class GameManager : MonoBehaviour
     public void ToggleUpgradeTreePanel()
     {
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(!upgradeTreePanel.activeSelf);
+        if (upgradeTreePanel != null && upgradeTreePanel.activeSelf) RecenterUpgradeTree();
+        RefreshAllUI();
     }
 
     public void ToggleTiendaPanel()
     {
         if (tiendaPanel != null) tiendaPanel.SetActive(!tiendaPanel.activeSelf);
+        RefreshAllUI();
     }
 
     public void ToggleDeudaPanel()
     {
         if (deudaPanel != null) deudaPanel.SetActive(!deudaPanel.activeSelf);
+        RefreshAllUI();
     }
 
     public void PayDebt()
@@ -262,7 +358,6 @@ public class GameManager : MonoBehaviour
         Log(Loc("log_debt_paid"));
         RefreshAllUI();
     }
-
     public void ContinueToNextDay()
     {
         daysLeft--;
@@ -350,6 +445,7 @@ public class GameManager : MonoBehaviour
         if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
         if (betweenRunsPanel != null) betweenRunsPanel.SetActive(true);
+        RefreshAllUI();
     }
 
     public void ContinueAfterBankruptcy()
@@ -397,7 +493,8 @@ public class GameManager : MonoBehaviour
         {
             foreach (var pre in node.prerequisiteIds)
             {
-                if (!string.IsNullOrEmpty(pre) && !unlockedSkillIds.Contains(pre)) return false;
+                string trimmedPre = string.IsNullOrEmpty(pre) ? pre : pre.Trim();
+                if (!string.IsNullOrEmpty(trimmedPre) && !unlockedSkillIds.Contains(trimmedPre)) return false;
             }
         }
         return true;
@@ -435,6 +532,7 @@ public class GameManager : MonoBehaviour
         }
         RecalculateAllStats();
     }
+
     void OfferPerkChoice()
     {
         currentPhase = Phase.PerkChoice;
@@ -498,6 +596,7 @@ public class GameManager : MonoBehaviour
         }
         RecalculateAllStats();
     }
+
     public LegacyItem GetLegacyItem(string itemName) => legacyShop.Find(i => i.itemName == itemName);
 
     public bool IsLegacyItemPurchased(string itemName) => purchasedLegacyItems.Contains(itemName);
@@ -532,7 +631,6 @@ public class GameManager : MonoBehaviour
         }
         RecalculateAllStats();
     }
-
     public void Log(string msg)
     {
         if (logText != null) logText.text = msg;
@@ -540,6 +638,8 @@ public class GameManager : MonoBehaviour
 
     void RefreshAllUI()
     {
+        UpdateMoneyUI();
+
         if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", runCoconutsKilled);
         if (runMoneyText != null) runMoneyText.text = Loc("collection_money_earned", runMoneyEarned);
         if (runCycleText != null) runCycleText.text = Loc("collection_cycle", billCycle);
@@ -588,15 +688,16 @@ public class GameManager : MonoBehaviour
                 new SkillNode { id = "fuerza_3", nodeName = "Mas Fuerza III", description = "+5 de dano", cost = 120, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.DamageFlatBonus, effectValue = 5f },
                 new SkillNode { id = "velocidad_1", nodeName = "Manos Rapidas I", description = "Golpea mas seguido", cost = 40, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.1f },
                 new SkillNode { id = "velocidad_2", nodeName = "Manos Rapidas II", description = "Golpea aun mas seguido", cost = 110, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.15f },
-                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo I", description = "+15% de dinero por coco", cost = 50, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
+                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo I", description = "+15% de dinero por coco", cost = 50, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
                 new SkillNode { id = "suerte_2", nodeName = "Buen Ojo II", description = "+20% de dinero por coco", cost = 140, prerequisiteIds = new [] { "suerte_1" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.2f },
-                new SkillNode { id = "radio_1", nodeName = "Golpe Amplio I", description = "Mas radio de golpe", cost = 35, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.2f },
+                new SkillNode { id = "radio_1", nodeName = "Golpe Amplio I", description = "Mas radio de golpe", cost = 35, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.2f },
                 new SkillNode { id = "radio_2", nodeName = "Golpe Amplio II", description = "Aun mas radio de golpe", cost = 95, prerequisiteIds = new [] { "radio_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.3f },
                 new SkillNode { id = "resistencia_1", nodeName = "Aguante I", description = "+5 de energia maxima", cost = 20, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 5f },
                 new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+8 de energia maxima", cost = 55, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 8f },
-                new SkillNode { id = "eficiencia_1", nodeName = "Golpe Eficiente", description = "Cada golpe gasta menos energia", cost = 30, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaCostReduction, effectValue = 0.15f },
+                new SkillNode { id = "resistencia_3", nodeName = "Aguante III", description = "+10 de energia maxima", cost = 20, prerequisiteIds = new [] { "eficiencia_1", "cocos_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 10f },
+                new SkillNode { id = "eficiencia_1", nodeName = "Golpe Eficiente", description = "Cada golpe gasta menos energia", cost = 30, prerequisiteIds = new [] { "resistencia_2" }, effect = SkillEffect.StaminaCostReduction, effectValue = 0.15f },
                 new SkillNode { id = "cocos_1", nodeName = "Cosecha Inicial", description = "+1 coco al iniciar el dia", cost = 60, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 1f },
-                new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 45, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
+                new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 45, prerequisiteIds = new [] { "cocos_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
             };
         }
 
