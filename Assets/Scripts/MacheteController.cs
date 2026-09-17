@@ -13,6 +13,11 @@ public class MacheteController : MonoBehaviour
     [Header("Golpe automatico")]
     public float swingInterval = 1.2f;
     public float hitRadius = 1.5f;
+
+    [Header("Sonido de golpe (opcional)")]
+    public AudioClip[] swingSounds;
+    [Range(0f, 0.3f)] public float swingPitchVariation = 0.08f;
+    private AudioSource audioSource;
     [HideInInspector] public int damageOverride = 3;
     [HideInInspector] public float swingStaminaCostOverride = 1f;
 
@@ -22,6 +27,7 @@ public class MacheteController : MonoBehaviour
     private float timer;
     private Plane groundPlane;
     private Vector3 followVelocity;
+
     public float SwingProgress01 => Mathf.Clamp01(timer / swingInterval);
 
     public System.Action OnSwingImpact;
@@ -29,6 +35,9 @@ public class MacheteController : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
     }
 
     void Start()
@@ -43,10 +52,10 @@ public class MacheteController : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.IsHittingPhase())
         {
             timer += Time.deltaTime;
+
             if (timer >= swingInterval)
             {
-                timer = 0f;
-                Swing();
+                TrySwing();
             }
         }
     }
@@ -63,12 +72,12 @@ public class MacheteController : MonoBehaviour
         }
     }
 
-    void Swing()
+    void TrySwing()
     {
-        StopCoroutine(nameof(SwingAnim));
-        StartCoroutine(SwingAnim());
-
         if (CoconutSpawner.Instance == null || GameManager.Instance == null) return;
+
+        bool hitSomething = false;
+        bool killedSomething = false;
 
         foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
         {
@@ -79,12 +88,34 @@ public class MacheteController : MonoBehaviour
 
             if (Vector3.Distance(a, b) <= hitRadius)
             {
-                coco.TakeDamage(damageOverride);
+                bool killed = coco.TakeDamage(damageOverride);
+                hitSomething = true;
+                if (killed) killedSomething = true;
             }
         }
 
+        if (!hitSomething) return;
+
+        timer = 0f;
+        StopCoroutine(nameof(SwingAnim));
+        StartCoroutine(SwingAnim());
+
         GameManager.Instance.UseStaminaForSwing(swingStaminaCostOverride);
         OnSwingImpact?.Invoke();
+
+        PlaySwingSound();
+
+        if (JuiceManager.Instance != null)
+        {
+            JuiceManager.Instance.OnSwingConnect(killedSomething);
+        }
+    }
+
+    void PlaySwingSound()
+    {
+        if (swingSounds == null || swingSounds.Length == 0 || audioSource == null) return;
+        audioSource.pitch = 1f + Random.Range(-swingPitchVariation, swingPitchVariation);
+        audioSource.PlayOneShot(swingSounds[Random.Range(0, swingSounds.Length)]);
     }
 
     IEnumerator SwingAnim()

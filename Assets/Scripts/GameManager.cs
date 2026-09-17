@@ -21,7 +21,9 @@ public class GameManager : MonoBehaviour
     private bool billPaid = false;
 
     [Header("Coco / dano")]
-    public int coconutHpMaxBase = 10;
+    public int coconutHpMaxBase = 40;
+    [Tooltip("Cuanto se MULTIPLICA el HP de los cocos en cada ciclo de deuda nuevo (1.35 = +35% por ciclo). Crecimiento exponencial para acompañar el ritmo de precios/mejoras a lo largo de una partida larga.")]
+    public float coconutHpGrowthPerCycle = 1.35f;
 
     [Header("Progreso permanente (para desbloquear tipos de coco)")]
     public int totalCoconutsKilled = 0;
@@ -31,12 +33,12 @@ public class GameManager : MonoBehaviour
     public int runMoneyEarned = 0;
 
     [Header("Energia (stamina)")]
-    public float stamina = 20f;
-    public float staminaMaxBase = 20f;
+    public float stamina = 5f;
+    public float staminaMaxBase = 5f;
 
     [Header("Ingresos por coco")]
-    public int baseCoinsPerKill = 4;
-    public int coinVariance = 4;
+    public int baseCoinsPerKill = 1;
+    public int coinVariance = 1;
     public float billCycleIncomeBoost = 0.08f;
     [Header("Machete: progresion lineal (dinero, se resetea en bancarrota)")]
     public List<MacheteData> macheteOptions = new List<MacheteData>();
@@ -252,7 +254,7 @@ public class GameManager : MonoBehaviour
 
     public int GetCoconutHpMax()
     {
-        return Mathf.RoundToInt(coconutHpMaxBase + billCycle * 3);
+        return Mathf.RoundToInt(coconutHpMaxBase * Mathf.Pow(coconutHpGrowthPerCycle, billCycle - 1));
     }
 
     void RecalculateAllStats()
@@ -280,6 +282,11 @@ public class GameManager : MonoBehaviour
         return staminaMaxBase + skillStaminaBonus + perkStaminaMaxBonus + legacyStaminaBonus;
     }
 
+    public float GetSkillMoneyMultiplierBonusPercent()
+    {
+        return skillMoneyMultiplierBonus * 100f;
+    }
+
     public void UseStaminaForSwing(float cost)
     {
         if (currentPhase != Phase.Hitting) return;
@@ -292,7 +299,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnCoconutDestroyed(float lootMultiplier = 1f)
+    public int OnCoconutDestroyed(float lootMultiplier = 1f)
     {
         totalCoconutsKilled++;
         runCoconutsKilled++;
@@ -304,6 +311,7 @@ public class GameManager : MonoBehaviour
         money += earned;
         runMoneyEarned += earned;
         Log(Loc("log_money_earned", earned));
+        return earned;
     }
 
     void EnterRecaudacionPhase()
@@ -683,22 +691,25 @@ public class GameManager : MonoBehaviour
         {
             skillTree = new List<SkillNode>
             {
-                new SkillNode { id = "fuerza_1", nodeName = "Mas Fuerza I", description = "+2 de dano. Abre el resto del arbol.", cost = 15, prerequisiteIds = new string[0], effect = SkillEffect.DamageFlatBonus, effectValue = 2f },
-                new SkillNode { id = "fuerza_2", nodeName = "Mas Fuerza II", description = "+3 de dano", cost = 45, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.DamageFlatBonus, effectValue = 3f },
+               new SkillNode { id = "fuerza_1", nodeName = "Mas Fuerza I", description = "+2 de dano. Abre el resto del arbol.", cost = 1, prerequisiteIds = new string[0], effect = SkillEffect.DamageFlatBonus, effectValue = 2f },
+                new SkillNode { id = "fuerza_2", nodeName = "Mas Fuerza II", description = "+3 de dano", cost = 35, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.DamageFlatBonus, effectValue = 3f },
                 new SkillNode { id = "fuerza_3", nodeName = "Mas Fuerza III", description = "+5 de dano", cost = 120, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.DamageFlatBonus, effectValue = 5f },
-                new SkillNode { id = "velocidad_1", nodeName = "Manos Rapidas I", description = "Golpea mas seguido", cost = 40, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.1f },
-                new SkillNode { id = "velocidad_2", nodeName = "Manos Rapidas II", description = "Golpea aun mas seguido", cost = 110, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.15f },
-                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo I", description = "+15% de dinero por coco", cost = 50, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
+                new SkillNode { id = "velocidad_1", nodeName = "Manos Rapidas I", description = "Golpea mas seguido", cost = 10, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.1f },
+                new SkillNode { id = "velocidad_2", nodeName = "Manos Rapidas II", description = "Golpea aun mas seguido", cost = 55, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.SwingIntervalReduction, effectValue = 0.15f },
+                new SkillNode { id = "suerte_1", nodeName = "Buen Ojo I", description = "+15% de dinero por coco", cost = 20, prerequisiteIds = new [] { "fuerza_2" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.15f },
                 new SkillNode { id = "suerte_2", nodeName = "Buen Ojo II", description = "+20% de dinero por coco", cost = 140, prerequisiteIds = new [] { "suerte_1" }, effect = SkillEffect.MoneyMultiplierBonus, effectValue = 0.2f },
-                new SkillNode { id = "radio_1", nodeName = "Golpe Amplio I", description = "Mas radio de golpe", cost = 35, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.2f },
+                new SkillNode { id = "radio_1", nodeName = "Golpe Amplio I", description = "Mas radio de golpe", cost = 50, prerequisiteIds = new [] { "velocidad_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.2f },
                 new SkillNode { id = "radio_2", nodeName = "Golpe Amplio II", description = "Aun mas radio de golpe", cost = 95, prerequisiteIds = new [] { "radio_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.3f },
                 new SkillNode { id = "resistencia_1", nodeName = "Aguante I", description = "+5 de energia maxima", cost = 20, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 5f },
-                new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+8 de energia maxima", cost = 55, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 8f },
-                new SkillNode { id = "resistencia_3", nodeName = "Aguante III", description = "+10 de energia maxima", cost = 20, prerequisiteIds = new [] { "eficiencia_1", "cocos_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 10f },
+                new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+8 de energia maxima", cost = 60, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 8f },
+                new SkillNode { id = "resistencia_3", nodeName = "Aguante III", description = "+10 de energia maxima", cost = 105, prerequisiteIds = new [] { "eficiencia_1", "cocos_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 10f },
                 new SkillNode { id = "eficiencia_1", nodeName = "Golpe Eficiente", description = "Cada golpe gasta menos energia", cost = 30, prerequisiteIds = new [] { "resistencia_2" }, effect = SkillEffect.StaminaCostReduction, effectValue = 0.15f },
-                new SkillNode { id = "cocos_1", nodeName = "Cosecha Inicial", description = "+1 coco al iniciar el dia", cost = 60, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 1f },
-                new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 45, prerequisiteIds = new [] { "cocos_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
-            };
+                new SkillNode { id = "cocos_1", nodeName = "Cosecha Inicial", description = "+1 coco al iniciar el dia", cost = 15, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 1f },
+                new SkillNode { id = "cocos_2", nodeName = "Mejores vendedores", description = "+1 coco al iniciar el dia", cost = 40, prerequisiteIds = new [] { "aparicion_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 2f },
+                new SkillNode { id = "cocos_3", nodeName = "Cocos locos", description = "+1 coco al iniciar el dia", cost = 100, prerequisiteIds = new [] { "aparicion_2" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 3f },
+                new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 24, prerequisiteIds = new [] { "cocos_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
+                new SkillNode { id = "aparicion_2", nodeName = "Cosecha Papidisima", description = "Los cocos aparecen mas seguido", cost = 55, prerequisiteIds = new [] { "cocos_2" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.7f },
+                new SkillNode { id = "aparicion_3", nodeName = "Cosecha Veloz", description = "Los cocos aparecen mas seguido", cost = 120, prerequisiteIds = new [] { "cocos_3" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 1f },};
         }
 
         if (perkPool == null || perkPool.Count == 0)

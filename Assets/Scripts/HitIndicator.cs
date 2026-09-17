@@ -4,7 +4,7 @@ using UnityEngine;
 public class HitIndicator : MonoBehaviour
 {
     [Header("Referencias")]
-    public MacheteController machete; 
+    public MacheteController machete;
 
     [Header("Forma")]
     public int segments = 48;
@@ -16,8 +16,16 @@ public class HitIndicator : MonoBehaviour
     public Color impactColor = new Color(1f, 0.3f, 0.2f, 0.95f);
     public float impactFlashDuration = 0.12f;
 
+    [Header("Pulso al comprar rango")]
+    public Color radiusGrowColor = new Color(0.3f, 1f, 0.5f, 0.9f);
+    public float radiusGrowPulseDuration = 0.35f;
+    [Tooltip("Que tanto se pasa del tamano real durante el pulso (0.3 = 30% mas grande)")]
+    public float radiusGrowOvershoot = 0.3f;
+
     private LineRenderer lr;
     private float flashTimer;
+    private float radiusPulseTimer;
+    private float lastKnownRadius = -1f;
 
     void Awake()
     {
@@ -27,7 +35,7 @@ public class HitIndicator : MonoBehaviour
         lr.positionCount = segments;
         lr.widthMultiplier = lineWidth;
 
-        DrawCircle();
+        DrawCircle(machete != null ? machete.hitRadius : 1.5f);
     }
 
     void OnEnable()
@@ -44,8 +52,23 @@ public class HitIndicator : MonoBehaviour
     {
         if (machete == null) return;
 
-        // El radio del anillo siempre refleja el hitRadius real del machete
-        DrawCircle();
+        float realRadius = machete.hitRadius;
+
+        if (lastKnownRadius >= 0f && !Mathf.Approximately(realRadius, lastKnownRadius))
+        {
+            radiusPulseTimer = radiusGrowPulseDuration;
+        }
+        lastKnownRadius = realRadius;
+
+        float drawRadius = realRadius;
+        if (radiusPulseTimer > 0f)
+        {
+            radiusPulseTimer -= Time.deltaTime;
+            float t = Mathf.Clamp01(radiusPulseTimer / radiusGrowPulseDuration);
+            drawRadius = realRadius * (1f + radiusGrowOvershoot * t);
+        }
+
+        DrawCircle(drawRadius);
 
         if (flashTimer > 0f)
         {
@@ -55,14 +78,20 @@ public class HitIndicator : MonoBehaviour
             return;
         }
 
+        if (radiusPulseTimer > 0f)
+        {
+            lr.startColor = radiusGrowColor;
+            lr.endColor = radiusGrowColor;
+            return;
+        }
+
         Color c = Color.Lerp(idleColor, chargingColor, machete.SwingProgress01);
         lr.startColor = c;
         lr.endColor = c;
     }
 
-    void DrawCircle()
+    void DrawCircle(float radius)
     {
-        float radius = machete != null ? machete.hitRadius : 1.5f;
         for (int i = 0; i < segments; i++)
         {
             float angle = (i / (float)segments) * Mathf.PI * 2f;
