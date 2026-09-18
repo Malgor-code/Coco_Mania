@@ -2420,6 +2420,7 @@ GameObject:
   - component: {fileID: 252746835}
   - component: {fileID: 252746837}
   - component: {fileID: 252746838}
+  - component: {fileID: 252746839}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2527,7 +2528,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac94cfc2cef2f74c81c39b874ff0637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coconutPrefab: {fileID: 8049649540775743635, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+  coconutPrefab: {fileID: 7661746383814953141, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
   mapCenter: {fileID: 957557299}
   mapHalfExtents: {x: 8, y: 8}
   startingCoconuts: 4
@@ -2547,6 +2548,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLanguage: 0
+--- !u!114 &252746839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252746834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5635fab800a1ea4fbbfa139efbab541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 330585545}
+  hitStopDurationNormal: 0.02
+  hitStopDurationKill: 0.06
+  hitStopTimeScale: 0.02
+  shakeIntensityNormal: 0.06
+  shakeIntensityKill: 0.18
+  shakeDuration: 0.15
+  damageNumberPrefab: {fileID: 8546563487759570358, guid: c73b252ea23f7c94f81c15dbe01ee423, type: 3}
 --- !u!1 &264634546
 GameObject:
   m_ObjectHideFlags: 0
