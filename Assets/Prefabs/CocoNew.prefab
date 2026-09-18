@@ -152,28 +152,14 @@ MonoBehaviour:
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1
-  panicSounds: []
-  panicThreshold: 0.3
-  panicPitchMax: 0.35
-  crackStages: []
-  crackThresholds:
-  - 0.66
-  - 0.33
-  - 0.12
-  shiverWhenLowHp: 1
-  shiverAmount: 0.025
-  shiverSpeed: 22
   hitFeedbackDuration: 0.18
   squashAmount: 0.2
-  maxExtraSquash: 0.15
-  deathImpulseForce: 4
-  deathTorque: 6
-  deathFlingDelay: 0.6
   fragmentPrefabs: []
-  useFragmentsInsteadOfWholeBody: 0
   fragmentExplosionForce: 5
   fragmentTorque: 8
   fragmentLifetime: 3
+  animSpeedVariation: 0.2
+  maxSpawnStagger: 0.35
   hp: 0
   hpMax: 0
 --- !u!54 &2400966598480240970
@@ -237,8 +223,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.6001767
-  m_Center: {x: 0, y: 0.64255786, z: 0}
+  m_Radius: 1.2592684
+  m_Center: {x: 0, y: 1.3016495, z: 0}
 --- !u!1001 &7783956618350466544
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2242,7 +2242,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -27.52, y: 20.7}
+  m_AnchoredPosition: {x: -27.52002, y: 20.699951}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &231041582
@@ -2444,15 +2444,15 @@ MonoBehaviour:
   money: 0
   daysLeft: 6
   dayLimitBase: 6
-  billAmount: 40
+  billAmount: 10
   billCycle: 1
   coconutHpMaxBase: 10
   coconutHpGrowthPerCycle: 0
   totalCoconutsKilled: 0
   runCoconutsKilled: 0
   runMoneyEarned: 0
-  stamina: 5
-  staminaMaxBase: 5
+  stamina: 15
+  staminaMaxBase: 15
   baseCoinsPerKill: 1
   coinVariance: 1
   billCycleIncomeBoost: 0.08
@@ -2855,7 +2855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -27.440002, y: 3.600006}
+  m_AnchoredPosition: {x: -27.439941, y: 3.5999756}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &272285699
@@ -3230,7 +3230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -27.67, y: 35.5}
+  m_AnchoredPosition: {x: -27.670044, y: 35.5}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313051412
@@ -9455,7 +9455,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -27.44, y: -8.5}
+  m_AnchoredPosition: {x: -27.439941, y: -8.5}
   m_SizeDelta: {x: 60, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &824343021
