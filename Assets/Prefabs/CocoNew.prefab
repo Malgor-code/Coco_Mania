@@ -152,8 +152,28 @@ MonoBehaviour:
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1
+  panicSounds: []
+  panicThreshold: 0.3
+  panicPitchMax: 0.35
+  crackStages: []
+  crackThresholds:
+  - 0.66
+  - 0.33
+  - 0.12
+  shiverWhenLowHp: 1
+  shiverAmount: 0.025
+  shiverSpeed: 22
   hitFeedbackDuration: 0.18
   squashAmount: 0.2
+  maxExtraSquash: 0.15
+  deathImpulseForce: 4
+  deathTorque: 6
+  deathFlingDelay: 0.6
+  fragmentPrefabs: []
+  useFragmentsInsteadOfWholeBody: 0
+  fragmentExplosionForce: 5
+  fragmentTorque: 8
+  fragmentLifetime: 3
   hp: 0
   hpMax: 0
 --- !u!54 &2400966598480240970

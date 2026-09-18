@@ -74,35 +74,31 @@ public class MacheteController : MonoBehaviour
 
     void TrySwing()
     {
-        if (CoconutSpawner.Instance == null || GameManager.Instance == null) return;
+        timer = 0f;
 
-        bool hitSomething = false;
         bool killedSomething = false;
 
-        foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
+        if (CoconutSpawner.Instance != null)
         {
-            if (coco == null) continue;
-
-            Vector3 a = transform.position; a.y = 0f;
-            Vector3 b = coco.transform.position; b.y = 0f;
-
-            if (Vector3.Distance(a, b) <= hitRadius)
+            foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
             {
-                bool killed = coco.TakeDamage(damageOverride);
-                hitSomething = true;
-                if (killed) killedSomething = true;
+                if (coco == null) continue;
+
+                Vector3 a = transform.position; a.y = 0f;
+                Vector3 b = coco.transform.position; b.y = 0f;
+
+                if (Vector3.Distance(a, b) <= hitRadius)
+                {
+                    bool killed = coco.TakeDamage(damageOverride);
+                    if (killed) killedSomething = true;
+                }
             }
         }
 
-        if (!hitSomething) return;
-
-        timer = 0f;
         StopCoroutine(nameof(SwingAnim));
         StartCoroutine(SwingAnim());
 
-        GameManager.Instance.UseStaminaForSwing(swingStaminaCostOverride);
         OnSwingImpact?.Invoke();
-
         PlaySwingSound();
 
         if (JuiceManager.Instance != null)

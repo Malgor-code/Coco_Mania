@@ -20,17 +20,26 @@ public class CoconutTarget : MonoBehaviour
     public float hitFeedbackDuration = 0.18f;
     public float squashAmount = 0.2f;
 
+    [Header("Fragmentos al romperse (como los cerdos)")]
+    [Tooltip("Prefabs de los pedazos rotos del coco. Cada uno necesita un Collider y (opcional) un Rigidbody, se le agrega uno automaticamente si le falta. Se instancian TODOS al morir y salen disparados como una explosion. Mientras esto este vacio (tu artista todavia no te paso los pedazos), el coco simplemente desaparece al morir, sin salir volando.")]
+    public GameObject[] fragmentPrefabs;
+    public float fragmentExplosionForce = 5f;
+    public float fragmentTorque = 8f;
+    [Tooltip("Cuanto tiempo quedan los fragmentos en el suelo antes de desaparecer.")]
+    public float fragmentLifetime = 3f;
+
     public int hp;
     public int hpMax;
 
     private Vector3 originalScale;
-    private Vector3 typedScale; 
+    private Vector3 typedScale;
     private Color restColor = Color.white;
     private bool isDead = false;
     private CoconutWander wander;
     private CoconutTypeData currentType;
     private Renderer rend;
     private AudioSource audioSource;
+    private Animator animator;
 
     void Awake()
     {
@@ -38,19 +47,33 @@ public class CoconutTarget : MonoBehaviour
         typedScale = originalScale;
         wander = GetComponent<CoconutWander>();
         rend = GetComponentInChildren<Renderer>();
+        animator = GetComponentInChildren<Animator>();
 
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;
+
+        DesyncAnimation();
+    }
+
+    void DesyncAnimation()
+    {
+        if (animator == null) return;
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        animator.Play(state.fullPathHash, 0, Random.Range(0f, 1f));
+        animator.speed = Random.Range(0.9f, 1.1f);
     }
 
     public void ApplyType(CoconutTypeData type)
     {
         currentType = type;
+        isDead = false;
 
         int baseHp = GameManager.Instance != null ? GameManager.Instance.GetCoconutHpMax() : 10;
         hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * type.hpMultiplier));
         hp = hpMax;
+
         float sizeBoost = 1f + (type.hpMultiplier - 1f) * 0.25f;
         typedScale = originalScale * sizeBoost;
         transform.localScale = typedScale;
@@ -63,7 +86,10 @@ public class CoconutTarget : MonoBehaviour
             restColor = Color.Lerp(baseColor, toughColor, t);
             rend.material.color = restColor;
         }
+
+        if (rend != null) rend.enabled = true; 
     }
+
     public bool TakeDamage(int amount)
     {
         if (isDead) return false;
@@ -97,6 +123,16 @@ public class CoconutTarget : MonoBehaviour
     {
         isDead = true;
 
+        if (wander != null) wander.enabled = false;
+
+        bool hasFragments = fragmentPrefabs != null && fragmentPrefabs.Length > 0;
+
+        if (hasFragments)
+        {
+            SpawnFragments();
+            if (rend != null) rend.enabled = false; 
+        }
+
         if (deathParticles != null)
         {
             Instantiate(deathParticles, transform.position, Quaternion.identity);
@@ -120,7 +156,34 @@ public class CoconutTarget : MonoBehaviour
 
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.RemoveCoconut(this);
 
-        Destroy(gameObject);
+        Destroy(gameObject, 0.05f);
+    }
+
+    void SpawnFragments()
+    {
+        foreach (var prefab in fragmentPrefabs)
+        {
+            if (prefab == null) continue;
+            Vector3 worldPos = transform.TransformPoint(prefab.transform.localPosition);
+            Quaternion worldRot = transform.rotation * prefab.transform.localRotation;
+
+            GameObject frag = Instantiate(prefab, worldPos, worldRot);
+
+            float sizeRatio = originalScale.x > 0.0001f ? typedScale.x / originalScale.x : 1f;
+            frag.transform.localScale *= sizeRatio;
+
+            Rigidbody fragRb = frag.GetComponent<Rigidbody>();
+            if (fragRb == null) fragRb = frag.AddComponent<Rigidbody>();
+
+            Vector3 outDir = worldPos - transform.position;
+            if (outDir.sqrMagnitude < 0.0001f) outDir = Random.onUnitSphere;
+            outDir = (outDir.normalized + Vector3.up * 0.6f).normalized;
+
+            fragRb.AddForce(outDir * fragmentExplosionForce, ForceMode.Impulse);
+            fragRb.AddTorque(Random.insideUnitSphere * fragmentTorque, ForceMode.Impulse);
+
+            Destroy(frag, fragmentLifetime);
+        }
     }
 
     protected virtual void OnSpecialAbilityTrigger()
@@ -134,6 +197,7 @@ public class CoconutTarget : MonoBehaviour
         audioSource.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
         audioSource.PlayOneShot(clips[Random.Range(0, clips.Length)]);
     }
+
     IEnumerator HitFeedback()
     {
         if (rend != null) rend.material.color = Color.white;

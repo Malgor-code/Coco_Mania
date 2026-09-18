@@ -193,5 +193,5 @@ MonoBehaviour:
   label: {fileID: 5051492863686912611}
   riseSpeed: 1.5
   lifetime: 1
-  normalColor: {r: 1, g: 0.8509804, b: 0.2, a: 1}
+  normalColor: {r: 1, g: 0.8137255, b: 0, a: 1}
   bigColor: {r: 0.9622642, g: 0.046402372, b: 0.027233727, a: 1}
