@@ -234,8 +234,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stunOnHit: 0
-  hitParticles: {fileID: 1782313999194725684, guid: b011144ce282ff443a599efb477469bb, type: 3}
-  deathParticles: {fileID: 8647858474310795119, guid: 0008fdae3c1d7574c8c006584a739e87, type: 3}
+  hitParticles: {fileID: 5980502239318536123, guid: d6cb673a25662df409ba2177ec06df6e, type: 3}
+  deathParticles: {fileID: 1378310280763612009, guid: 0dd212a7025de2d4f90c4721db94138f, type: 3}
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1

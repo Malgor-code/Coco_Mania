@@ -12,21 +12,46 @@ public class GameManager : MonoBehaviour
     [Header("Fase actual")]
     public Phase currentPhase = Phase.MainMenu;
 
-    [Header("Economia (se resetea en bancarrota)")]
+    [Header("Dinero (para mejoras/tienda - NO es lo que se entrega en el pedido)")]
     public int money = 0;
+
+    [Header("Pedidos de agua de coco (reemplaza el viejo sistema de 'deuda en dinero')")]
+    [Tooltip("Cuanta agua de coco (en mL) llevas acumulada para el pedido actual")]
+    public float waterCurrentML = 0f;
+    [Tooltip("Cuanta agua de coco (en mL) pide el cliente este ciclo")]
+    public float waterTargetML = 2000f;
+    [Tooltip("Cuanto crece el pedido de agua en cada ciclo nuevo (1.6 = +60%)")]
+    public float waterTargetGrowth = 1.6f;
+    private bool orderFulfilled = false;
+
+    [Header("Cuanta agua suelta cada coco al morir")]
+    public float baseWaterPerKill = 150f;
+    public float waterVariance = 100f;
+
+    [Header("Dias / ciclos")]
     public int daysLeft = 6;
     public int dayLimitBase = 6;
-    public int billAmount = 10;
-    public int billCycle = 1;
-    private bool billPaid = false;
+    public int billCycle = 1; // ciclo de pedidos (nombre interno historico, sin efecto en el jugador)
 
     [Header("Coco / dano")]
+    [Tooltip("HP base de un coco 'Coco Verde' (tier inicial). Ya NO crece con los ciclos de pedido - la dificultad ahora viene 100% de los TIPOS de coco que se van desbloqueando (mas duros y mas rentables).")]
     public int coconutHpMaxBase = 40;
-    [Tooltip("Cuanto se MULTIPLICA el HP de los cocos en cada ciclo de deuda nuevo (1.35 = +35% por ciclo). Crecimiento exponencial para acompañar el ritmo de precios/mejoras a lo largo de una partida larga.")]
-    public float coconutHpGrowthPerCycle = 1.35f;
 
-    [Header("Progreso permanente (para desbloquear tipos de coco)")]
+    [Header("Progreso permanente (para desbloquear tipos de coco) - se resetea en bancarrota")]
     public int totalCoconutsKilled = 0;
+
+    [System.Serializable]
+    public class CoconutUnlockThreshold
+    {
+        public string coconutName;
+        [Tooltip("Imagen/silueta de este tipo de coco, para mostrar en el Panel de Recaudacion mientras esta bloqueado.")]
+        public Sprite icon;
+        [Tooltip("Cuantos cocos totales (de ESTA partida, se resetea en bancarrota) hay que matar para desbloquearlo.")]
+        public int killsRequired;
+    }
+
+    [Header("Umbrales de desbloqueo de tipos de coco (15 tiers, mismo orden que CoconutSpawner.coconutTypes)")]
+    public List<CoconutUnlockThreshold> coconutUnlocks = new List<CoconutUnlockThreshold>();
 
     [Header("Estadisticas de ESTA partida (se resetean al empezar de nuevo)")]
     public int runCoconutsKilled = 0;
@@ -36,7 +61,7 @@ public class GameManager : MonoBehaviour
     public float stamina = 15f;
     public float staminaMaxBase = 15f;
 
-    [Header("Ingresos por coco")]
+    [Header("Ingresos por coco (dinero)")]
     public int baseCoinsPerKill = 4;
     public int coinVariance = 4;
     public float billCycleIncomeBoost = 0.08f;
@@ -54,6 +79,7 @@ public class GameManager : MonoBehaviour
     private float skillHitRadiusBonus = 0f;
     private float skillMoneyMultiplierBonus = 0f;
     private float skillStaminaCostReduction = 0f;
+    private float skillWaterMultiplierBonus = 0f;
     [Header("Perks (1 de 3 al pagar cada cuenta)")]
     public List<PerkOption> perkPool = new List<PerkOption>();
     private PerkOption[] currentPerkChoices = new PerkOption[3];
@@ -83,21 +109,22 @@ public class GameManager : MonoBehaviour
     public GameObject recaudacionPanel;
     public TMP_Text runKillsText;
     public TMP_Text runMoneyText;
-    public TMP_Text runCycleText;
     public Button continueButton;
+
+    [Header("UI - Recaudacion: progreso de desbloqueo del proximo tipo de coco")]
+    [Tooltip("Imagen del proximo coco a desbloquear. Se muestra con alpha bajo y se va poniendo mas opaca a medida que te acercas al 100%.")]
+    public Image nextUnlockImage;
+    public TMP_Text nextUnlockPercentText;
+    [Range(0f, 1f)] public float lockedImageMinAlpha = 0.15f;
 
     [Header("UI - Panel del Arbol de Mejoras")]
     public GameObject upgradeTreePanel;
 
     [Header("UI - Pan y Zoom del Arbol de Mejoras")]
-    [Tooltip("El RectTransform que contiene los nodos y se mueve/escala. Si tu panel tiene un Viewport + Content (con Mask/RectMask2D en el Viewport), asigna el Content aca. Si no tenes esa estructura, podes asignar el mismo RectTransform del upgradeTreePanel, pero entonces no se va a recortar el contenido que quede fuera del panel.")]
     public RectTransform upgradeTreeContent;
-    [Tooltip("El Viewport que recorta el Content (el que tiene el Rect Mask 2D). Si lo asignas, el limite de paneo se calcula SOLO segun el tamano real del Content y del Viewport: nunca vas a poder alejarte tanto que se pierdan los botones de vista. Si lo dejas vacio, se usa el limite fijo 'Pan Limit' de abajo.")]
     public RectTransform upgradeTreeViewport;
-    [Tooltip("Boton del mouse para arrastrar (pan). 2 = boton central (rueda).")]
     public int panMouseButton = 2;
     public float panSpeed = 1f;
-    [Tooltip("Se usa SOLO si no asignaste Upgrade Tree Viewport arriba.")]
     public Vector2 panLimit = new Vector2(800f, 800f);
     public float zoomSpeed = 0.1f;
     public float minZoom = 0.5f;
@@ -112,12 +139,19 @@ public class GameManager : MonoBehaviour
     public TMP_Text macheteUpgradeCostText;
     public Button macheteUpgradeButton;
 
-    [Header("UI - Panel de Deuda")]
+    [Header("UI - Panel del Pedido (antes 'Deuda')")]
     public GameObject deudaPanel;
+    [Tooltip("Texto opcional para mostrar tu dinero actual dentro de este panel (informativo, ya no se gasta aqui)")]
     public TMP_Text deudaMoneyText;
-    public TMP_Text deudaDaysLeftText;
+    [Tooltip("Primer texto: cuantos litros/mL TE FALTAN para completar el pedido.")]
     public TMP_Text deudaBillText;
+    [Tooltip("Segundo texto: dias restantes. Si es el ULTIMO dia sin haber entregado, muestra un aviso urgente en vez del numero.")]
+    public TMP_Text deudaDaysLeftText;
+    [Tooltip("Antes 'Pagar Deuda', ahora entrega el agua acumulada si alcanza el pedido")]
     public Button payDebtButton;
+    [Tooltip("Color del texto de dias cuando es urgente (ultimo dia sin entregar).")]
+    public Color urgentColor = new Color(1f, 0.25f, 0.25f);
+    public Color normalDaysColor = Color.white;
 
     [Header("UI - Eleccion de Perk")]
     public GameObject perkChoiceUIPanel;
@@ -155,8 +189,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // La stamina se gasta por TIEMPO mientras se esta en la fase de golpear,
-        // sin importar si el machete conecta o no.
         if (currentPhase == Phase.Hitting)
         {
             stamina -= Time.deltaTime;
@@ -264,6 +296,13 @@ public class GameManager : MonoBehaviour
         if (moneyText != null) moneyText.text = Loc("collection_current_money", Mathf.RoundToInt(displayedMoney));
     }
 
+    // "1.2 L" / "850 mL" segun la cantidad, para que se lea natural
+    public static string FormatWater(float ml)
+    {
+        if (ml >= 1000f) return (ml / 1000f).ToString("0.0") + " L";
+        return Mathf.RoundToInt(ml) + " mL";
+    }
+
     public bool IsHittingPhase() => currentPhase == Phase.Hitting;
 
     string Loc(string key) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : key;
@@ -279,9 +318,11 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
     }
 
+    // Ya NO crece con billCycle: la dificultad viene de los TIPOS de coco
+    // (CoconutTypeData.hpMultiplier), no de un multiplicador por ciclo.
     public int GetCoconutHpMax()
     {
-        return Mathf.RoundToInt(coconutHpMaxBase * Mathf.Pow(coconutHpGrowthPerCycle, billCycle - 1));
+        return coconutHpMaxBase;
     }
 
     void RecalculateAllStats()
@@ -293,12 +334,10 @@ public class GameManager : MonoBehaviour
         float staminaCostMult = m != null ? m.staminaCostMultiplier : 1f;
 
         int damage = Mathf.RoundToInt(baseDmg + skillDamageBonus + perkDamageBonus + legacyDamageBonus);
-        float swingStaminaCost = Mathf.Max(0.3f, staminaCostMult - skillStaminaCostReduction);
 
         if (MacheteController.Instance != null)
         {
             MacheteController.Instance.damageOverride = damage;
-            MacheteController.Instance.swingStaminaCostOverride = swingStaminaCost;
             MacheteController.Instance.swingInterval = Mathf.Max(0.3f, baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction);
             MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus;
         }
@@ -314,11 +353,37 @@ public class GameManager : MonoBehaviour
         return skillMoneyMultiplierBonus * 100f;
     }
 
-    public void UseStaminaForSwing(float cost)
+    // Devuelve el proximo tipo de coco todavia NO desbloqueado (el de menor
+    // killsRequired entre los que superan totalCoconutsKilled). Null si ya
+    // los desbloqueaste todos.
+    public CoconutUnlockThreshold GetNextLockedCoconut()
     {
+        CoconutUnlockThreshold next = null;
+        if (coconutUnlocks == null) return null;
+
+        foreach (var u in coconutUnlocks)
+        {
+            if (u == null) continue;
+            if (totalCoconutsKilled < u.killsRequired)
+            {
+                if (next == null || u.killsRequired < next.killsRequired) next = u;
+            }
+        }
+        return next;
     }
 
-    public int OnCoconutDestroyed(float lootMultiplier = 1f)
+    // 0 a 1: que tan cerca estas de desbloquear GetNextLockedCoconut().
+    // 1 = ya se desbloqueo (o no hay mas tipos por desbloquear).
+    public float GetNextUnlockProgress01()
+    {
+        CoconutUnlockThreshold next = GetNextLockedCoconut();
+        if (next == null || next.killsRequired <= 0) return 1f;
+        return Mathf.Clamp01((float)totalCoconutsKilled / next.killsRequired);
+    }
+
+    // Llamado por CoconutTarget al morir un coco. Reparte DINERO (para
+    // mejoras) y AGUA DE COCO (para el pedido) por separado.
+    public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
     {
         totalCoconutsKilled++;
         runCoconutsKilled++;
@@ -329,8 +394,19 @@ public class GameManager : MonoBehaviour
 
         money += earned;
         runMoneyEarned += earned;
+
+        float waterExtraMult = 1f + skillWaterMultiplierBonus;
+        waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult;
+        waterCurrentML += waterGained;
+
         Log(Loc("log_money_earned", earned));
         return earned;
+    }
+
+    // Sobrecarga sin agua, por si algun script viejo todavia llama sin el "out"
+    public int OnCoconutDestroyed(float lootMultiplier = 1f)
+    {
+        return OnCoconutDestroyed(lootMultiplier, out _);
     }
 
     void EnterRecaudacionPhase()
@@ -377,24 +453,26 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
     }
 
+    // Antes "PayDebt": ahora entrega el agua acumulada si alcanza el pedido.
     public void PayDebt()
     {
-        if (billPaid || money < billAmount) return;
-        money -= billAmount;
-        billPaid = true;
-        Log(Loc("log_debt_paid"));
+        if (orderFulfilled || waterCurrentML < waterTargetML) return;
+        waterCurrentML -= waterTargetML;
+        orderFulfilled = true;
+        Log("Pedido entregado.");
         RefreshAllUI();
     }
+
     public void ContinueToNextDay()
     {
         daysLeft--;
 
         if (daysLeft <= 0)
         {
-            bool paidSuccessfully = billPaid;
-            ResolveBillDeadline();
+            bool fulfilledSuccessfully = orderFulfilled;
+            ResolveOrderDeadline();
 
-            if (paidSuccessfully)
+            if (fulfilledSuccessfully)
             {
                 OfferPerkChoice();
             }
@@ -408,19 +486,21 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
     }
 
-    void ResolveBillDeadline()
+    void ResolveOrderDeadline()
     {
-        if (billPaid)
+        if (orderFulfilled)
         {
             billCycle++;
-            billAmount = Mathf.RoundToInt(billAmount * 1.6f);
+            waterTargetML *= waterTargetGrowth;
             daysLeft = dayLimitBase + (billCycle - 1);
-            billPaid = false;
-            Log(Loc("log_new_cycle", billAmount));
+            orderFulfilled = false;
+            Log("Nuevo pedido: " + FormatWater(waterTargetML));
             RecalculateAllStats();
         }
         else
         {
+            // No se entrego el pedido a tiempo -> bancarrota, igual que antes
+            // pero ahora disparado por el AGUA, no por dinero.
             int gained = Mathf.Max(1, Mathf.RoundToInt(billCycle / 2f));
             legacyPoints += gained;
             totalLegacyPointsEarned += gained;
@@ -428,9 +508,14 @@ public class GameManager : MonoBehaviour
 
             money = 0;
             billCycle = 1;
-            billAmount = 10;
+            waterCurrentML = 0f;
+            waterTargetML = 2000f;
             daysLeft = dayLimitBase;
-            billPaid = false;
+            orderFulfilled = false;
+
+            // El progreso de desbloqueo de tipos de coco TAMBIEN se resetea:
+            // es progreso de ESTA partida, no permanente entre bancarrotas.
+            totalCoconutsKilled = 0;
 
             unlockedSkillIds.Clear();
             skillDamageBonus = 0f;
@@ -439,6 +524,7 @@ public class GameManager : MonoBehaviour
             skillHitRadiusBonus = 0f;
             skillMoneyMultiplierBonus = 0f;
             skillStaminaCostReduction = 0f;
+            skillWaterMultiplierBonus = 0f;
 
             equippedMacheteIndex = 0;
 
@@ -549,6 +635,7 @@ public class GameManager : MonoBehaviour
             case SkillEffect.HitRadiusBonus: skillHitRadiusBonus += node.effectValue; break;
             case SkillEffect.MoneyMultiplierBonus: skillMoneyMultiplierBonus += node.effectValue; break;
             case SkillEffect.StaminaCostReduction: skillStaminaCostReduction += node.effectValue; break;
+            case SkillEffect.WaterMultiplierBonus: skillWaterMultiplierBonus += node.effectValue; break;
             case SkillEffect.ExtraStartingCoconut:
                 if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(node.effectValue);
                 break;
@@ -669,12 +756,65 @@ public class GameManager : MonoBehaviour
 
         if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", runCoconutsKilled);
         if (runMoneyText != null) runMoneyText.text = Loc("collection_money_earned", runMoneyEarned);
-        if (runCycleText != null) runCycleText.text = Loc("collection_cycle", billCycle);
+
+        // Progreso de desbloqueo del proximo tipo de coco.
+        CoconutUnlockThreshold nextUnlock = GetNextLockedCoconut();
+        float unlockProgress = GetNextUnlockProgress01();
+
+        if (nextUnlockImage != null)
+        {
+            bool showImage = nextUnlock != null;
+            nextUnlockImage.gameObject.SetActive(showImage);
+            if (showImage)
+            {
+                if (nextUnlock.icon != null) nextUnlockImage.sprite = nextUnlock.icon;
+                Color c = nextUnlockImage.color;
+                c.a = Mathf.Lerp(lockedImageMinAlpha, 1f, unlockProgress);
+                nextUnlockImage.color = c;
+            }
+        }
+        if (nextUnlockPercentText != null)
+        {
+            bool showText = nextUnlock != null;
+            nextUnlockPercentText.gameObject.SetActive(showText);
+            if (showText) nextUnlockPercentText.text = Mathf.RoundToInt(unlockProgress * 100f) + "%";
+        }
 
         if (deudaMoneyText != null) deudaMoneyText.text = Loc("collection_current_money", money);
-        if (deudaDaysLeftText != null) deudaDaysLeftText.text = Loc("debt_days_left", daysLeft);
-        if (deudaBillText != null) deudaBillText.text = billPaid ? Loc("debt_paid_label") : Loc("debt_amount_pending", billAmount);
-        if (payDebtButton != null) payDebtButton.interactable = !billPaid && money >= billAmount;
+
+        // Primer texto: cuanto FALTA para completar el pedido.
+        if (deudaBillText != null)
+        {
+            if (orderFulfilled) deudaBillText.text = "¡Pedido listo!";
+            else
+            {
+                float remaining = Mathf.Max(0f, waterTargetML - waterCurrentML);
+                deudaBillText.text = "Faltan " + FormatWater(remaining);
+            }
+        }
+
+        // Segundo texto: dias restantes, con aviso urgente el ultimo dia
+        // para que no te agarre de sorpresa la bancarrota.
+        if (deudaDaysLeftText != null)
+        {
+            if (orderFulfilled)
+            {
+                deudaDaysLeftText.text = "Pedido cumplido";
+                deudaDaysLeftText.color = normalDaysColor;
+            }
+            else if (daysLeft <= 1)
+            {
+                deudaDaysLeftText.text = "¡PAGALO YA!";
+                deudaDaysLeftText.color = urgentColor;
+            }
+            else
+            {
+                deudaDaysLeftText.text = daysLeft + " dias restantes";
+                deudaDaysLeftText.color = normalDaysColor;
+            }
+        }
+
+        if (payDebtButton != null) payDebtButton.interactable = !orderFulfilled && waterCurrentML >= waterTargetML;
 
         MacheteData current = GetCurrentMachete();
         MacheteData next = GetNextMachete();
@@ -729,6 +869,9 @@ public class GameManager : MonoBehaviour
         new SkillNode { id = "aparicion_1", nodeName = "Cosecha Rapida", description = "Los cocos aparecen mas seguido", cost = 24, prerequisiteIds = new [] { "cocos_1" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.5f },
         new SkillNode { id = "aparicion_2", nodeName = "Cosecha Papidisima", description = "Los cocos aparecen mas seguido", cost = 55, prerequisiteIds = new [] { "cocos_2" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 0.7f },
         new SkillNode { id = "aparicion_3", nodeName = "Cosecha Veloz", description = "Los cocos aparecen mas seguido", cost = 120, prerequisiteIds = new [] { "cocos_3" }, effect = SkillEffect.SpawnIntervalReduction, effectValue = 1f },
+        new SkillNode { id = "leche_1", nodeName = "Coco Lechero I", description = "+15% de agua de coco por golpe", cost = 20, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.15f },
+        new SkillNode { id = "leche_2", nodeName = "Coco Lechero II", description = "+20% de agua de coco por golpe", cost = 65, prerequisiteIds = new [] { "leche_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.2f },
+        new SkillNode { id = "leche_3", nodeName = "Coco Lechero III", description = "+30% de agua de coco por golpe", cost = 150, prerequisiteIds = new [] { "leche_2" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.3f },
             };
         }
 
@@ -752,6 +895,28 @@ public class GameManager : MonoBehaviour
                 new LegacyItem { itemName = "Pulsera de Aguante", description = "+5 de energia maxima PERMANENTE", cost = 1, effect = LegacyEffect.PermanentStaminaMaxBonus, value = 5f },
                 new LegacyItem { itemName = "Amuleto del Cobrador", description = "+10% de dinero PERMANENTE", cost = 2, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.1f },
                 new LegacyItem { itemName = "Cesta Grande", description = "+1 coco al iniciar cada dia, PERMANENTE", cost = 2, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 1f },
+            };
+        }
+
+        if (coconutUnlocks == null || coconutUnlocks.Count == 0)
+        {
+            coconutUnlocks = new List<CoconutUnlockThreshold>
+            {
+                new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0 },
+                new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 10 },
+                new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 25 },
+                new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 45 },
+                new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 70 },
+                new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 100 },
+                new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 140 },
+                new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 185 },
+                new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 235 },
+                new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 290 },
+                new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 350 },
+                new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 420 },
+                new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 500 },
+                new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 600 },
+                new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 720 },
             };
         }
     }

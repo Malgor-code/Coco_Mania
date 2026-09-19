@@ -11,8 +11,11 @@ public class CoconutTypeData
     [Tooltip("Multiplica el HP base que calcula el GameManager.")]
     public float hpMultiplier = 1f;
 
-    [Tooltip("Multiplica el dinero que suelta al morir.")]
+    [Tooltip("Multiplica el dinero Y el agua de coco que suelta al morir.")]
     public float lootMultiplier = 1f;
+
+    [Tooltip("OPCIONAL: modelo 3D real de este tier. Vacio = usa el placeholder de tinte/escala.")]
+    public GameObject visualPrefab;
 
     [Header("Placeholder para habilidades especiales futuras")]
     public string specialAbilityId = "";

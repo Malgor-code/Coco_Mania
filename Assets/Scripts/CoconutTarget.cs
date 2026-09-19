@@ -28,6 +28,11 @@ public class CoconutTarget : MonoBehaviour
     [Tooltip("Cuanto tiempo quedan los fragmentos en el suelo antes de desaparecer.")]
     public float fragmentLifetime = 3f;
 
+    [Header("Modelo visual por tier (opcional)")]
+    [Tooltip("Donde se instancia el modelo del tier si CoconutTypeData.visualPrefab tiene algo. Si lo dejas vacio, se usa el propio transform del coco.")]
+    public Transform modelSlot;
+    private GameObject currentModelInstance;
+
     public int hp;
     public int hpMax;
 
@@ -78,16 +83,38 @@ public class CoconutTarget : MonoBehaviour
         typedScale = originalScale * sizeBoost;
         transform.localScale = typedScale;
 
+        // Si este tier trae su propio modelo 3D, lo instancia y le pasa la
+        // referencia de renderer/animator (para que el flash/squash y la
+        // desincronizacion de animacion sigan funcionando con el modelo
+        // nuevo). Si no trae, se queda con el placeholder de tinte/escala.
+        if (type.visualPrefab != null)
+        {
+            if (currentModelInstance != null) Destroy(currentModelInstance);
+
+            Transform slot = modelSlot != null ? modelSlot : transform;
+            currentModelInstance = Instantiate(type.visualPrefab, slot);
+            currentModelInstance.transform.localPosition = Vector3.zero;
+            currentModelInstance.transform.localRotation = Quaternion.identity;
+            currentModelInstance.transform.localScale = Vector3.one;
+
+            Renderer modelRend = currentModelInstance.GetComponentInChildren<Renderer>();
+            if (modelRend != null) rend = modelRend;
+
+            Animator modelAnimator = currentModelInstance.GetComponentInChildren<Animator>();
+            if (modelAnimator != null)
+            {
+                animator = modelAnimator;
+                DesyncAnimation();
+            }
+        }
+
         if (rend != null)
         {
-            Color baseColor = new Color(0.55f, 0.38f, 0.22f);
-            Color toughColor = new Color(0.18f, 0.1f, 0.06f);
             float t = Mathf.Clamp01((type.hpMultiplier - 1f) / 2.5f);
-            restColor = Color.Lerp(baseColor, toughColor, t);
             rend.material.color = restColor;
         }
 
-        if (rend != null) rend.enabled = true; 
+        if (rend != null) rend.enabled = true;
     }
 
     public bool TakeDamage(int amount)
@@ -130,7 +157,7 @@ public class CoconutTarget : MonoBehaviour
         if (hasFragments)
         {
             SpawnFragments();
-            if (rend != null) rend.enabled = false; 
+            if (rend != null) rend.enabled = false;
         }
 
         if (deathParticles != null)
@@ -147,11 +174,17 @@ public class CoconutTarget : MonoBehaviour
         OnSpecialAbilityTrigger();
 
         float loot = currentType != null ? currentType.lootMultiplier : 1f;
-        int earned = GameManager.Instance != null ? GameManager.Instance.OnCoconutDestroyed(loot) : 0;
+        int earned = 0;
+        float waterGained = 0f;
+        if (GameManager.Instance != null)
+        {
+            earned = GameManager.Instance.OnCoconutDestroyed(loot, out waterGained);
+        }
 
         if (JuiceManager.Instance != null)
         {
             JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.6f, "+$" + earned, true);
+            JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.9f, "+" + Mathf.RoundToInt(waterGained) + "mL", false);
         }
 
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.RemoveCoconut(this);
