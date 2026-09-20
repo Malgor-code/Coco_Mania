@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     [Header("Dias / ciclos")]
     public int daysLeft = 6;
     public int dayLimitBase = 6;
-    public int billCycle = 1; // ciclo de pedidos (nombre interno historico, sin efecto en el jugador)
+    public int billCycle = 1; 
 
     [Header("Coco / dano")]
     [Tooltip("HP base de un coco 'Coco Verde' (tier inicial). Ya NO crece con los ciclos de pedido - la dificultad ahora viene 100% de los TIPOS de coco que se van desbloqueando (mas duros y mas rentables).")]
@@ -296,7 +296,6 @@ public class GameManager : MonoBehaviour
         if (moneyText != null) moneyText.text = Loc("collection_current_money", Mathf.RoundToInt(displayedMoney));
     }
 
-    // "1.2 L" / "850 mL" segun la cantidad, para que se lea natural
     public static string FormatWater(float ml)
     {
         if (ml >= 1000f) return (ml / 1000f).ToString("0.0") + " L";
@@ -304,6 +303,8 @@ public class GameManager : MonoBehaviour
     }
 
     public bool IsHittingPhase() => currentPhase == Phase.Hitting;
+
+    public bool IsOrderUrgent => !orderFulfilled && daysLeft <= 1;
 
     string Loc(string key) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : key;
     string Loc(string key, params object[] args) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key, args) : key;
@@ -318,8 +319,6 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
     }
 
-    // Ya NO crece con billCycle: la dificultad viene de los TIPOS de coco
-    // (CoconutTypeData.hpMultiplier), no de un multiplicador por ciclo.
     public int GetCoconutHpMax()
     {
         return coconutHpMaxBase;
@@ -352,10 +351,6 @@ public class GameManager : MonoBehaviour
     {
         return skillMoneyMultiplierBonus * 100f;
     }
-
-    // Devuelve el proximo tipo de coco todavia NO desbloqueado (el de menor
-    // killsRequired entre los que superan totalCoconutsKilled). Null si ya
-    // los desbloqueaste todos.
     public CoconutUnlockThreshold GetNextLockedCoconut()
     {
         CoconutUnlockThreshold next = null;
@@ -371,9 +366,6 @@ public class GameManager : MonoBehaviour
         }
         return next;
     }
-
-    // 0 a 1: que tan cerca estas de desbloquear GetNextLockedCoconut().
-    // 1 = ya se desbloqueo (o no hay mas tipos por desbloquear).
     public float GetNextUnlockProgress01()
     {
         CoconutUnlockThreshold next = GetNextLockedCoconut();
@@ -381,8 +373,6 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp01((float)totalCoconutsKilled / next.killsRequired);
     }
 
-    // Llamado por CoconutTarget al morir un coco. Reparte DINERO (para
-    // mejoras) y AGUA DE COCO (para el pedido) por separado.
     public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
     {
         totalCoconutsKilled++;
@@ -403,7 +393,6 @@ public class GameManager : MonoBehaviour
         return earned;
     }
 
-    // Sobrecarga sin agua, por si algun script viejo todavia llama sin el "out"
     public int OnCoconutDestroyed(float lootMultiplier = 1f)
     {
         return OnCoconutDestroyed(lootMultiplier, out _);
@@ -453,7 +442,6 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
     }
 
-    // Antes "PayDebt": ahora entrega el agua acumulada si alcanza el pedido.
     public void PayDebt()
     {
         if (orderFulfilled || waterCurrentML < waterTargetML) return;
@@ -499,8 +487,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // No se entrego el pedido a tiempo -> bancarrota, igual que antes
-            // pero ahora disparado por el AGUA, no por dinero.
             int gained = Mathf.Max(1, Mathf.RoundToInt(billCycle / 2f));
             legacyPoints += gained;
             totalLegacyPointsEarned += gained;
@@ -513,8 +499,6 @@ public class GameManager : MonoBehaviour
             daysLeft = dayLimitBase;
             orderFulfilled = false;
 
-            // El progreso de desbloqueo de tipos de coco TAMBIEN se resetea:
-            // es progreso de ESTA partida, no permanente entre bancarrotas.
             totalCoconutsKilled = 0;
 
             unlockedSkillIds.Clear();
@@ -757,7 +741,6 @@ public class GameManager : MonoBehaviour
         if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", runCoconutsKilled);
         if (runMoneyText != null) runMoneyText.text = Loc("collection_money_earned", runMoneyEarned);
 
-        // Progreso de desbloqueo del proximo tipo de coco.
         CoconutUnlockThreshold nextUnlock = GetNextLockedCoconut();
         float unlockProgress = GetNextUnlockProgress01();
 
@@ -781,8 +764,6 @@ public class GameManager : MonoBehaviour
         }
 
         if (deudaMoneyText != null) deudaMoneyText.text = Loc("collection_current_money", money);
-
-        // Primer texto: cuanto FALTA para completar el pedido.
         if (deudaBillText != null)
         {
             if (orderFulfilled) deudaBillText.text = "¡Pedido listo!";
@@ -792,9 +773,6 @@ public class GameManager : MonoBehaviour
                 deudaBillText.text = "Faltan " + FormatWater(remaining);
             }
         }
-
-        // Segundo texto: dias restantes, con aviso urgente el ultimo dia
-        // para que no te agarre de sorpresa la bancarrota.
         if (deudaDaysLeftText != null)
         {
             if (orderFulfilled)
