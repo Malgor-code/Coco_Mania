@@ -114,7 +114,7 @@ public class LocalizationManager : MonoBehaviour
 
         // ---------- Mensajes de log (feedback corto en pantalla) ----------
         Add("log_money_earned", "+${0}", "+${0}");
-        Add("log_debt_paid", "Deuda pagada.", "Debt paid.");
+        Add("log_debt_paid", "Completa el pedido", "Complete the order");
         Add("log_new_cycle", "Nuevo ciclo. Cuenta: ${0}", "New cycle. Bill: ${0}");
         Add("log_bankruptcy", "Bancarrota. +{0} puntos de legado.", "Bankruptcy. +{0} legacy points.");
         Add("log_new_machete", "Nuevo machete: {0}", "New machete: {0}");

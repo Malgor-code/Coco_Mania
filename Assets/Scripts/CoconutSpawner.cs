@@ -5,10 +5,11 @@ public class CoconutSpawner : MonoBehaviour
 {
     public static CoconutSpawner Instance;
 
-    [Header("Prefab y area de spawn")]
+    [Header("Prefab de respaldo (fallback) y area de spawn")]
+    [Tooltip("Se usa SOLO si el tipo elegido (en 'Tipos de coco' abajo) no tiene su propio prefab asignado todavia. Cada tier deberia tener el suyo.")]
     public GameObject coconutPrefab;
-    public Transform mapCenter;             
-    public Vector2 mapHalfExtents = new Vector2(8f, 8f); 
+    public Transform mapCenter;
+    public Vector2 mapHalfExtents = new Vector2(8f, 8f);
 
     [Header("Reglas de spawn")]
     public int startingCoconuts = 4;
@@ -47,7 +48,6 @@ public class CoconutSpawner : MonoBehaviour
             };
         }
     }
-
     public void StartNewDay()
     {
         for (int i = activeCoconuts.Count - 1; i >= 0; i--)
@@ -69,7 +69,6 @@ public class CoconutSpawner : MonoBehaviour
 
         activeCoconuts.RemoveAll(c => c == null);
 
-        // nunca dejar la mesa vacia
         if (activeCoconuts.Count == 0)
         {
             SpawnOne();
@@ -87,9 +86,10 @@ public class CoconutSpawner : MonoBehaviour
 
     void SpawnOne()
     {
-        if (coconutPrefab == null) return;
-
         CoconutTypeData chosenType = PickTypeToSpawn();
+
+        GameObject prefabToUse = (chosenType != null && chosenType.prefab != null) ? chosenType.prefab : coconutPrefab;
+        if (prefabToUse == null) return;
 
         Vector3 center = mapCenter != null ? mapCenter.position : Vector3.zero;
         Vector3 pos = center + new Vector3(
@@ -97,19 +97,32 @@ public class CoconutSpawner : MonoBehaviour
             0f,
             Random.Range(-mapHalfExtents.y, mapHalfExtents.y)
         );
-        pos.y = coconutPrefab.transform.position.y;
+        pos.y = prefabToUse.transform.position.y;
 
-        GameObject go = Instantiate(coconutPrefab, pos, Quaternion.identity);
+        GameObject go = Instantiate(prefabToUse, pos, Quaternion.identity);
+        CoconutTarget target = EnsureCoconutComponents(go);
 
-        CoconutTarget target = go.GetComponent<CoconutTarget>();
-        if (target != null)
-        {
-            target.ApplyType(chosenType);
-            activeCoconuts.Add(target);
-        }
+        target.ApplyType(chosenType);
+        activeCoconuts.Add(target);
 
         CoconutWander wander = go.GetComponent<CoconutWander>();
         if (wander != null) wander.SetBounds(center, mapHalfExtents);
+    }
+
+    CoconutTarget EnsureCoconutComponents(GameObject go)
+    {
+        if (go.GetComponent<CoconutWander>() == null)
+        {
+            go.AddComponent<CoconutWander>(); 
+        }
+
+        CoconutTarget target = go.GetComponent<CoconutTarget>();
+        if (target == null)
+        {
+            target = go.AddComponent<CoconutTarget>(); 
+        }
+
+        return target;
     }
 
     CoconutTypeData PickTypeToSpawn()

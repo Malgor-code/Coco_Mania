@@ -28,11 +28,6 @@ public class CoconutTarget : MonoBehaviour
     [Tooltip("Cuanto tiempo quedan los fragmentos en el suelo antes de desaparecer.")]
     public float fragmentLifetime = 3f;
 
-    [Header("Modelo visual por tier (opcional)")]
-    [Tooltip("Donde se instancia el modelo del tier si CoconutTypeData.visualPrefab tiene algo. Si lo dejas vacio, se usa el propio transform del coco.")]
-    public Transform modelSlot;
-    private GameObject currentModelInstance;
-
     public int hp;
     public int hpMax;
 
@@ -82,31 +77,6 @@ public class CoconutTarget : MonoBehaviour
         float sizeBoost = 1f + (type.hpMultiplier - 1f) * 0.25f;
         typedScale = originalScale * sizeBoost;
         transform.localScale = typedScale;
-
-        // Si este tier trae su propio modelo 3D, lo instancia y le pasa la
-        // referencia de renderer/animator (para que el flash/squash y la
-        // desincronizacion de animacion sigan funcionando con el modelo
-        // nuevo). Si no trae, se queda con el placeholder de tinte/escala.
-        if (type.visualPrefab != null)
-        {
-            if (currentModelInstance != null) Destroy(currentModelInstance);
-
-            Transform slot = modelSlot != null ? modelSlot : transform;
-            currentModelInstance = Instantiate(type.visualPrefab, slot);
-            currentModelInstance.transform.localPosition = Vector3.zero;
-            currentModelInstance.transform.localRotation = Quaternion.identity;
-            currentModelInstance.transform.localScale = Vector3.one;
-
-            Renderer modelRend = currentModelInstance.GetComponentInChildren<Renderer>();
-            if (modelRend != null) rend = modelRend;
-
-            Animator modelAnimator = currentModelInstance.GetComponentInChildren<Animator>();
-            if (modelAnimator != null)
-            {
-                animator = modelAnimator;
-                DesyncAnimation();
-            }
-        }
 
         if (rend != null)
         {

@@ -10,7 +10,9 @@ public enum SkillEffect
     StaminaCostReduction,
     ExtraStartingCoconut,
     SpawnIntervalReduction,
-    WaterMultiplierBonus
+    WaterMultiplierBonus,
+    CoinChanceBonus,
+    CritChanceBonus
 }
 
 [System.Serializable]

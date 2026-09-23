@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 [System.Serializable]
 public class CoconutTypeData
 {
@@ -14,8 +15,8 @@ public class CoconutTypeData
     [Tooltip("Multiplica el dinero Y el agua de coco que suelta al morir.")]
     public float lootMultiplier = 1f;
 
-    [Tooltip("OPCIONAL: modelo 3D real de este tier. Vacio = usa el placeholder de tinte/escala.")]
-    public GameObject visualPrefab;
+    [Tooltip("Prefab COMPLETO de este tier (como el Coconut Prefab base). Si lo dejas vacio, el spawner usa el 'Fallback Prefab' del CoconutSpawner mientras tanto.")]
+    public GameObject prefab;
 
     [Header("Placeholder para habilidades especiales futuras")]
     public string specialAbilityId = "";

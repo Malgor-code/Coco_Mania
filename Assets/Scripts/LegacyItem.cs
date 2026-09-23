@@ -6,7 +6,9 @@ public enum LegacyEffect
     PermanentStaminaMaxBonus,
     PermanentMoneyMultiplierBonus,
     PermanentStartingCoconutBonus,
-    PermanentLegacyMultiplierBonus
+    PermanentLegacyMultiplierBonus,
+    PermanentCritChanceBonus,
+    PermanentCoinChanceBonus
 }
 
 [System.Serializable]

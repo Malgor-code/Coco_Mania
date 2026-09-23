@@ -6,7 +6,9 @@ public enum PerkEffect
     StaminaMaxBonus,
     MoneyMultiplierBonus,
     SwingIntervalReduction,
-    ExtraCoconutNextCycle
+    ExtraCoconutNextCycle,
+    CritChanceBonus,
+    WaterMultiplierBonus
 }
 
 [System.Serializable]
