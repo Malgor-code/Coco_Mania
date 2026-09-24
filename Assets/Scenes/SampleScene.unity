@@ -2516,6 +2516,7 @@ MonoBehaviour:
   waterTargetGrowth: 2
   baseWaterPerKill: 20
   waterVariance: 40
+  skillCritChanceBonus: 0
   daysLeft: 6
   dayLimitBase: 6
   billCycle: 1
@@ -2534,10 +2535,19 @@ MonoBehaviour:
   equippedMacheteIndex: 0
   skillTree: []
   perkPool: []
+  perkDamageBonus: 0
+  perkStaminaMaxBonus: 0
+  perkWaterMultiplierBonus: 0
+  perkSwingIntervalReduction: 0
+  perkCritChanceBonus: 0
   legacyPoints: 0
   totalLegacyPointsEarned: 0
   legacyMultiplier: 1
   legacyShop: []
+  legacyDamageBonus: 0
+  legacyStaminaBonus: 0
+  legacyWaterMultiplierBonus: 0
+  legacyCritChanceBonus: 0
   gameplayUIPanel: {fileID: 1141519674}
   staminaSlider: {fileID: 1029852769}
   moneyText: {fileID: 1766819598}
@@ -19502,7 +19512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1656352519
 RectTransform:
   m_ObjectHideFlags: 0

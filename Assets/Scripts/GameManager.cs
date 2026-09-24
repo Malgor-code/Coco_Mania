@@ -367,6 +367,11 @@ public class GameManager : MonoBehaviour
             MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus;
         }
     }
+    public int GetCurrentDayLimit()
+    {
+        int reduction = (billCycle - 1) / 2;
+        return Mathf.Max(3, dayLimitBase - reduction);
+    }
 
     public float GetStaminaMax()
     {
@@ -896,9 +901,11 @@ public class GameManager : MonoBehaviour
             macheteOptions = new List<MacheteData>
             {
                 new MacheteData { macheteName = "Machete Oxidado", description = "El que ya tienes.", baseDamage = 3f, baseSwingInterval = 1.2f, baseHitRadius = 1.5f, staminaCostMultiplier = 1f, unlockCost = 0 },
-                new MacheteData { macheteName = "Machete Normal", description = "Mas daño, mas rapido, mas rango.", baseDamage = 5f, baseSwingInterval = 1.05f, baseHitRadius = 1.6f, staminaCostMultiplier = 0.95f, unlockCost = 4000 },
-                new MacheteData { macheteName = "Machete de Acero", description = "Un salto grande de poder.", baseDamage = 8f, baseSwingInterval = 0.9f, baseHitRadius = 1.75f, staminaCostMultiplier = 0.9f, unlockCost = 18000 },
-                new MacheteData { macheteName = "Machete de Oro", description = "El mejor de todos.", baseDamage = 13f, baseSwingInterval = 0.75f, baseHitRadius = 1.9f, staminaCostMultiplier = 0.85f, unlockCost = 70000 },
+                new MacheteData { macheteName = "Machete Normal", description = "Mas daño, mas rapido, mas rango.", baseDamage = 5f, baseSwingInterval = 1.4f, baseHitRadius = 1.6f, staminaCostMultiplier = 0.95f, unlockCost = 4000 },
+                new MacheteData { macheteName = "Machete de Acero", description = "Un salto grande de poder.", baseDamage = 8f, baseSwingInterval = 1f, baseHitRadius = 1.75f, staminaCostMultiplier = 1.3f, unlockCost = 18000 },
+                new MacheteData { macheteName = "Machete de Oro", description = "Valioso.", baseDamage = 13f, baseSwingInterval = 0.75f, baseHitRadius = 1.9f, staminaCostMultiplier = 0.85f, unlockCost = 70000 },
+                new MacheteData { macheteName = "Machete de Obsidiana", description = "Muy duro.", baseDamage = 19f, baseSwingInterval = 0.68f, baseHitRadius = 2f, staminaCostMultiplier = 0.98f, unlockCost = 180000 },
+                new MacheteData { macheteName = "Machete de Cobrador", description = "El mejor de todos.", baseDamage = 28f, baseSwingInterval = 0.6f, baseHitRadius = 2.15f, staminaCostMultiplier = 0.75f, unlockCost = 450000 },
             };
         }
 
@@ -917,7 +924,7 @@ public class GameManager : MonoBehaviour
         new SkillNode { id = "radio_2", nodeName = "Golpe Amplio II", description = "Aun mas radio de golpe", cost = 2200, prerequisiteIds = new [] { "radio_1" }, effect = SkillEffect.HitRadiusBonus, effectValue = 0.3f },
         new SkillNode { id = "resistencia_1", nodeName = "Aguante I", description = "+6 segundos de resistencia", cost = 500, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 6f },
         new SkillNode { id = "resistencia_2", nodeName = "Aguante II", description = "+6 segundos de resistencia", cost = 1400, prerequisiteIds = new [] { "resistencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 6f },
-        new SkillNode { id = "resistencia_3", nodeName = "Aguante III", description = "+6 segundos de resistencia", cost = 2400, prerequisiteIds = new [] { "eficiencia_1", "cocos_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 6f },
+        new SkillNode { id = "resistencia_3", nodeName = "Aguante III", description = "+6 segundos de resistencia", cost = 2400, prerequisiteIds = new [] { "eficiencia_1" }, effect = SkillEffect.StaminaMaxFlatBonus, effectValue = 6f },
         new SkillNode { id = "eficiencia_1", nodeName = "Golpe Eficiente", description = "Cada golpe gasta menos energia", cost = 750, prerequisiteIds = new [] { "resistencia_2" }, effect = SkillEffect.StaminaCostReduction, effectValue = 0.15f },
         new SkillNode { id = "cocos_1", nodeName = "Cosecha Inicial", description = "+1 coco al iniciar el dia", cost = 400, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 1f },
         new SkillNode { id = "cocos_2", nodeName = "Mejores vendedores", description = "+1 coco al iniciar el dia", cost = 950, prerequisiteIds = new [] { "aparicion_1" }, effect = SkillEffect.ExtraStartingCoconut, effectValue = 2f },
@@ -928,10 +935,10 @@ public class GameManager : MonoBehaviour
         new SkillNode { id = "leche_1", nodeName = "Coco Lechero I", description = "+15% de agua de coco por golpe", cost = 500, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.15f },
         new SkillNode { id = "leche_2", nodeName = "Coco Lechero II", description = "+20% de agua de coco por golpe", cost = 1500, prerequisiteIds = new [] { "leche_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.2f },
         new SkillNode { id = "leche_3", nodeName = "Coco Lechero III", description = "+30% de agua de coco por golpe", cost = 3400, prerequisiteIds = new [] { "leche_2" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.3f },
-        new SkillNode { id = "moneda_1", nodeName = "Suerte de Moneda I", description = "+0.25% de probabilidad de encontrar una moneda por golpe", cost = 1000, prerequisiteIds = new [] { "velocidad_2, radio_1" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.0025f },
-        new SkillNode { id = "moneda_2", nodeName = "Suerte de Moneda II", description = "+0.5% de probabilidad de encontrar una moneda por golpe", cost = 6000, prerequisiteIds = new [] { "moneda_1, radio_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.005f },
+        new SkillNode { id = "moneda_1", nodeName = "Suerte de Moneda I", description = "+0.25% de probabilidad de encontrar una moneda por golpe", cost = 1000, prerequisiteIds = new [] { "velocidad_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.0025f },
+        new SkillNode { id = "moneda_2", nodeName = "Suerte de Moneda II", description = "+0.5% de probabilidad de encontrar una moneda por golpe", cost = 6000, prerequisiteIds = new [] { "moneda_1" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.005f },
         new SkillNode { id = "moneda_3", nodeName = "Suerte de Moneda III", description = "+1% de probabilidad de encontrar una moneda por golpe", cost = 20000, prerequisiteIds = new [] { "moneda_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.01f },
-        new SkillNode { id = "critico_1",nodeName = "Golpe Certero I",description = "+5% de probabilidad de golpe crítico.",cost = 1000,prerequisiteIds = new[] { "velocidad_2", "radio_1" },effect = SkillEffect.CritChanceBonus,effectValue = 0.05f},
+        new SkillNode { id = "critico_1",nodeName = "Golpe Certero I",description = "+5% de probabilidad de golpe crítico.",cost = 1000,prerequisiteIds = new[] { "velocidad_2" },effect = SkillEffect.CritChanceBonus,effectValue = 0.05f},
         new SkillNode { id = "critico_2",nodeName = "Golpe Certero II",description = "+7% de probabilidad de golpe crítico.",cost = 3500,prerequisiteIds = new[] { "critico_1" },effect = SkillEffect.CritChanceBonus,effectValue = 0.07f},
         new SkillNode { id = "critico_3",nodeName = "Golpe Certero III",description = "+8% de probabilidad de golpe crítico.",cost = 9000,prerequisiteIds = new[] { "critico_2" },effect = SkillEffect.CritChanceBonus,effectValue = 0.08f},
         new SkillNode { id = "critico_4",nodeName = "Golpe Certero IV",description = "+10% de probabilidad de golpe crítico.",cost = 20000,prerequisiteIds = new[] { "critico_3" },effect = SkillEffect.CritChanceBonus,effectValue = 0.10f},
