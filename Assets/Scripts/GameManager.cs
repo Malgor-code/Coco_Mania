@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cuanta agua de coco (en mL) pide el cliente este ciclo")]
     public float waterTargetML = 500f;
     [Tooltip("Cuanto crece el pedido de agua en cada ciclo nuevo (2 = se duplica)")]
-    public float waterTargetGrowth = 2f;
+    public float waterTargetGrowth = 1.5f;
     [Header("Cuanta agua suelta cada coco al morir")]
     public float baseWaterPerKill = 20f;
     public float waterVariance = 40f;

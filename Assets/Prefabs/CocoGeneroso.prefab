@@ -430,6 +430,80 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2592684
   m_Center: {x: 0, y: 1.3016495, z: 0}
+--- !u!1001 &337772900155979504
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 647359988313350105}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1700.01
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1700.0109
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1700.0109
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.0075
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.246
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.211
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5965341
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.80258775
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0000000013680284
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.000000001884019
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -106.756
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+      propertyPath: m_Name
+      value: Mexican Sombrero
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+--- !u!4 &232704853161382171 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a54667fbb0df0df41a1fdcf1acc40ac1, type: 3}
+  m_PrefabInstance: {fileID: 337772900155979504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7783956618350466544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -441,7 +515,7 @@ PrefabInstance:
     - target: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f733ce660096fc547bd8364c77647967, type: 2}
+      objectReference: {fileID: 2100000, guid: e10c31fefffdc8b47aa026fcc64cbf3d, type: 2}
     - target: {fileID: 704204481458553677, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -513,6 +587,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2234410323087472270}
+    - targetCorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 232704853161382171}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
 --- !u!4 &647359988313350105 stripped

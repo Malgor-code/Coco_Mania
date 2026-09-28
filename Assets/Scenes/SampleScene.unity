@@ -3430,7 +3430,7 @@ MonoBehaviour:
   money: 0
   waterCurrentML: 0
   waterTargetML: 500
-  waterTargetGrowth: 2
+  waterTargetGrowth: 1.5
   baseWaterPerKill: 20
   waterVariance: 40
   skillCritChanceBonus: 0
@@ -3457,27 +3457,27 @@ MonoBehaviour:
   - coconutName: 
     killsRequired: 0
     ability: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: ed0b61a37e52a41448397ba014f25fae, type: 3}
     prefab: {fileID: 7661746383814953141, guid: 5e5368a603b95d748a65e409dc8584e7, type: 3}
   - coconutName: 
     killsRequired: 0
     ability: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 27572bdccf460d9409da141ad65d8389, type: 3}
     prefab: {fileID: 7661746383814953141, guid: 28ff903501a77574fb250c3be492d09b, type: 3}
   - coconutName: 
     killsRequired: 0
     ability: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 66837bfcbac599748a182979b8dba938, type: 3}
     prefab: {fileID: 7661746383814953141, guid: 74421eb7f9827d14c9a7dc8e998098b2, type: 3}
   - coconutName: 
     killsRequired: 0
     ability: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: c1edbfdb9234ad9428cdcfb9c5012b0f, type: 3}
     prefab: {fileID: 7661746383814953141, guid: ab4549adeeeda7c4f989c56377c1e5a5, type: 3}
   - coconutName: 
     killsRequired: 0
     ability: 0
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 3164567e370deca49ac8dddd673afc90, type: 3}
     prefab: {fileID: 7661746383814953141, guid: a579c54f71954054783c9798d25a769d, type: 3}
   - coconutName: 
     killsRequired: 0
