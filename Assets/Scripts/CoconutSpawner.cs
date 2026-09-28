@@ -22,30 +22,46 @@ public class CoconutSpawner : MonoBehaviour
     private float spawnTimer;
     private readonly List<CoconutTarget> activeCoconuts = new List<CoconutTarget>();
 
+    private static readonly CoconutTypeData[] CanonicalTypes = new CoconutTypeData[]
+{
+    new CoconutTypeData { typeName = "Coco Verde",       killsToUnlock = 0,   hpMultiplier = 1.00f, lootMultiplier = 1.00f },
+    new CoconutTypeData { typeName = "Coco Maduro",      killsToUnlock = 10,  hpMultiplier = 1.33f, lootMultiplier = 1.15f },
+    new CoconutTypeData { typeName = "Coco Correoso",    killsToUnlock = 25,  hpMultiplier = 1.55f, lootMultiplier = 1.32f },
+    new CoconutTypeData { typeName = "Coco Fibroso",     killsToUnlock = 45,  hpMultiplier = 1.73f, lootMultiplier = 1.52f },
+    new CoconutTypeData { typeName = "Coco Petreo",      killsToUnlock = 70,  hpMultiplier = 2.07f, lootMultiplier = 1.75f },
+    new CoconutTypeData { typeName = "Coco Curtido",     killsToUnlock = 100, hpMultiplier = 2.49f, lootMultiplier = 2.01f },
+    new CoconutTypeData { typeName = "Coco Blindado",    killsToUnlock = 140, hpMultiplier = 2.99f, lootMultiplier = 2.31f },
+    new CoconutTypeData { typeName = "Coco de Hierro",   killsToUnlock = 185, hpMultiplier = 3.58f, lootMultiplier = 2.66f },
+    new CoconutTypeData { typeName = "Coco de Acero",    killsToUnlock = 235, hpMultiplier = 4.30f, lootMultiplier = 3.06f },
+    new CoconutTypeData { typeName = "Coco de Titanio",  killsToUnlock = 290, hpMultiplier = 5.16f, lootMultiplier = 3.52f },
+    new CoconutTypeData { typeName = "Coco de Diamante", killsToUnlock = 350, hpMultiplier = 6.19f, lootMultiplier = 4.05f },
+    new CoconutTypeData { typeName = "Coco Legendario",  killsToUnlock = 420, hpMultiplier = 7.43f, lootMultiplier = 4.65f },
+    new CoconutTypeData { typeName = "Coco Mitico",      killsToUnlock = 500, hpMultiplier = 8.92f, lootMultiplier = 5.35f },
+    new CoconutTypeData { typeName = "Coco Ancestral",   killsToUnlock = 600, hpMultiplier = 10.70f, lootMultiplier = 6.15f },
+    new CoconutTypeData { typeName = "Coco Supremo",     killsToUnlock = 720, hpMultiplier = 12.84f, lootMultiplier = 7.08f },
+};
+
     void Awake()
     {
         Instance = this;
+        StampCanonicalData();
+    }
 
-        if (coconutTypes == null || coconutTypes.Count == 0)
+    void StampCanonicalData()
+    {
+        if (coconutTypes == null) coconutTypes = new List<CoconutTypeData>();
+
+        while (coconutTypes.Count < CanonicalTypes.Length)
+            coconutTypes.Add(new CoconutTypeData());
+
+        for (int i = 0; i < CanonicalTypes.Length; i++)
         {
-            coconutTypes = new List<CoconutTypeData>
-            {
-                new CoconutTypeData { typeName = "Coco Verde",       killsToUnlock = 0,   hpMultiplier = 1.00f, lootMultiplier = 1.00f },
-                new CoconutTypeData { typeName = "Coco Maduro",      killsToUnlock = 10,  hpMultiplier = 1.20f, lootMultiplier = 1.15f },
-                new CoconutTypeData { typeName = "Coco Correoso",    killsToUnlock = 25,  hpMultiplier = 1.44f, lootMultiplier = 1.32f },
-                new CoconutTypeData { typeName = "Coco Fibroso",     killsToUnlock = 45,  hpMultiplier = 1.73f, lootMultiplier = 1.52f },
-                new CoconutTypeData { typeName = "Coco Petreo",      killsToUnlock = 70,  hpMultiplier = 2.07f, lootMultiplier = 1.75f },
-                new CoconutTypeData { typeName = "Coco Curtido",     killsToUnlock = 100, hpMultiplier = 2.49f, lootMultiplier = 2.01f },
-                new CoconutTypeData { typeName = "Coco Blindado",    killsToUnlock = 140, hpMultiplier = 2.99f, lootMultiplier = 2.31f },
-                new CoconutTypeData { typeName = "Coco de Hierro",   killsToUnlock = 185, hpMultiplier = 3.58f, lootMultiplier = 2.66f },
-                new CoconutTypeData { typeName = "Coco de Acero",    killsToUnlock = 235, hpMultiplier = 4.30f, lootMultiplier = 3.06f },
-                new CoconutTypeData { typeName = "Coco de Titanio",  killsToUnlock = 290, hpMultiplier = 5.16f, lootMultiplier = 3.52f },
-                new CoconutTypeData { typeName = "Coco de Diamante", killsToUnlock = 350, hpMultiplier = 6.19f, lootMultiplier = 4.05f },
-                new CoconutTypeData { typeName = "Coco Legendario",  killsToUnlock = 420, hpMultiplier = 7.43f, lootMultiplier = 4.65f },
-                new CoconutTypeData { typeName = "Coco Mitico",      killsToUnlock = 500, hpMultiplier = 8.92f, lootMultiplier = 5.35f },
-                new CoconutTypeData { typeName = "Coco Ancestral",   killsToUnlock = 600, hpMultiplier = 10.70f, lootMultiplier = 6.15f },
-                new CoconutTypeData { typeName = "Coco Supremo",     killsToUnlock = 720, hpMultiplier = 12.84f, lootMultiplier = 7.08f },
-            };
+            GameObject keepPrefab = coconutTypes[i].prefab; 
+            coconutTypes[i].typeName = CanonicalTypes[i].typeName;
+            coconutTypes[i].killsToUnlock = CanonicalTypes[i].killsToUnlock;
+            coconutTypes[i].hpMultiplier = CanonicalTypes[i].hpMultiplier;
+            coconutTypes[i].lootMultiplier = CanonicalTypes[i].lootMultiplier;
+            coconutTypes[i].prefab = keepPrefab;
         }
     }
     public void StartNewDay()
@@ -83,7 +99,13 @@ public class CoconutSpawner : MonoBehaviour
             SpawnOne();
         }
     }
-
+    public void ClearAllCoconuts()
+    {
+        foreach (var coco in GetActiveCoconuts())
+        {
+            if (coco != null) Destroy(coco.gameObject);
+        }
+    }
     void SpawnOne()
     {
         CoconutTypeData chosenType = PickTypeToSpawn();

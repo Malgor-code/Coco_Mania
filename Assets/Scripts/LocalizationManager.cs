@@ -82,7 +82,8 @@ public class LocalizationManager : MonoBehaviour
         Add("collection_title", "Recaudacion", "Collection");
         Add("collection_coconuts_killed", "Cocos destruidos: {0}", "Coconuts destroyed: {0}");
         Add("collection_money_earned", "Dinero conseguido: ${0}", "Money earned: ${0}");
-        Add("collection_current_money", "Dinero actual: ${0}", "Current money: ${0}");
+        Add("collection_lechita_earned", "Agua conseguide: ${0}", "Water earned: ${0}");
+        Add("collection_current_money", "${0}", "${0}");
         Add("collection_cycle", "Ciclo de deuda: {0}", "Debt cycle: {0}");
         Add("collection_upgrades_button", "Mejoras", "Upgrades");
         Add("collection_shop_button", "Tienda", "Shop");

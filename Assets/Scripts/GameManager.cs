@@ -2,10 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public enum Phase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
+
+    public enum CoconutAbility
+    {
+        Ninguna,
+        Generoso,
+        Resistente,
+        FibraDura,
+        Pesado,
+        Tenaz,
+        Armadura,
+        Rebote,
+        Fortificado,
+        Implacable,
+        FragilValioso,
+        Regeneracion,
+        Camuflaje,
+        Maldicion,
+        Supremo
+    }
 
     public static GameManager Instance;
 
@@ -35,23 +56,105 @@ public class GameManager : MonoBehaviour
     public int daysLeft = 6;
     public int dayLimitBase = 6;
     public int billCycle = 1;
-
+    [Header("UI - Panel de la Maquina de Recompensas (gacha)")]
+    [Tooltip("El mismo GameObject que le pasas a RewardMachinePanel.panelRoot.")]
+    public GameObject rewardMachinePanel;
     [Header("Coco / dano")]
     [Tooltip("HP base de un coco 'Coco Verde' (tier inicial). Ya NO crece con los ciclos de pedido - la dificultad ahora viene 100% de los TIPOS de coco que se van desbloqueando (mas duros y mas rentables).")]
-    public int coconutHpMaxBase = 40;
+    public int coconutHpMaxBase = 20;
 
     [Header("Progreso permanente (para desbloquear tipos de coco) - se resetea en bancarrota")]
     public int totalCoconutsKilled = 0;
 
+    [Header("Reward Machine - bonos de reliquias (temporales o permanentes del intento)")]
+    public float relicDamageBonus = 0f;
+    public float relicStaminaMaxBonus = 0f;
+    public float relicWaterMultiplierBonus = 0f;
+    public float relicSwingIntervalReduction = 0f;
+    public float relicHitRadiusBonus = 0f;
+    public float relicCritChanceBonus = 0f;
+    public event System.Action OnDayStarted;
+    public event System.Action OnRunReset;
+    [Tooltip("Si es true, la PROXIMA llamada a ContinueToNextDay() no descuenta daysLeft (se consume solo).")]
+    public bool skipNextDayDecrement = false;
     [System.Serializable]
     public class CoconutUnlockThreshold
     {
-        public string coconutName;
-        [Tooltip("Imagen/silueta de este tipo de coco, para mostrar en el Panel de Recaudacion mientras esta bloqueado.")]
+        [HideInInspector] public string coconutName;
+        [HideInInspector] public int killsRequired;
+        [HideInInspector] public CoconutAbility ability = CoconutAbility.Ninguna;
+
         public Sprite icon;
-        [Tooltip("Cuantos cocos totales (de ESTA partida, se resetea en bancarrota) hay que matar para desbloquearlo.")]
-        public int killsRequired;
+        public GameObject prefab;
     }
+
+    public CoconutAbility GetAbilityForCoconutName(string name)
+    {
+        if (coconutUnlocks == null || string.IsNullOrEmpty(name)) return CoconutAbility.Ninguna;
+        foreach (var u in coconutUnlocks)
+        {
+            if (u != null && u.coconutName == name) return u.ability;
+        }
+        return CoconutAbility.Ninguna;
+    }
+    public void ApplyStaminaPenalty(float amount)
+    {
+        stamina = Mathf.Max(0f, stamina - amount);
+    }
+
+    public void ApplyTemporaryCurse(float durationSeconds)
+    {
+        StartCoroutine(TemporaryCurseRoutine(durationSeconds));
+    }
+
+    private IEnumerator TemporaryCurseRoutine(float duration)
+    {
+        int effect = Random.Range(0, 4);
+        switch (effect)
+        {
+            case 0:
+                perkSwingIntervalReduction -= 0.15f;
+                RecalculateAllStats();
+                Log("Maldicion: golpes mas lentos por un rato...");
+                yield return new WaitForSeconds(duration);
+                perkSwingIntervalReduction += 0.15f;
+                RecalculateAllStats();
+                break;
+
+            case 1:
+                perkWaterMultiplierBonus -= 0.15f;
+                Log("Maldicion: menos agua por un rato...");
+                yield return new WaitForSeconds(duration);
+                perkWaterMultiplierBonus += 0.15f;
+                break;
+
+            case 2:
+                {
+                    float penalty = staminaMaxBase * 0.2f;
+                    perkStaminaMaxBonus -= penalty;
+                    Log("Maldicion: menos resistencia por un rato...");
+                    yield return new WaitForSeconds(duration);
+                    perkStaminaMaxBonus += penalty;
+                }
+                break;
+
+            case 3:
+                if (CoconutSpawner.Instance != null)
+                {
+                    float original = CoconutSpawner.Instance.spawnInterval;
+                    CoconutSpawner.Instance.spawnInterval += 1.5f;
+                    Log("Maldicion: los cocos tardan mas en aparecer...");
+                    yield return new WaitForSeconds(duration);
+                    CoconutSpawner.Instance.spawnInterval = original;
+                }
+                break;
+        }
+    }
+
+    [Header("Transicion entre Mejoras/Tienda")]
+    [Tooltip("Pausa entre que se cierra un panel y se abre el otro, para que no se sienta como un swap instantaneo.")]
+    public float panelSwitchBreak = 0.12f;
+    private Coroutine panelSwitchRoutine;
 
     [Header("Umbrales de desbloqueo de tipos de coco (15 tiers, mismo orden que CoconutSpawner.coconutTypes)")]
     public List<CoconutUnlockThreshold> coconutUnlocks = new List<CoconutUnlockThreshold>();
@@ -84,7 +187,8 @@ public class GameManager : MonoBehaviour
     [Header("Arbol de Mejoras (se paga con agua de coco, ramificado, se resetea en bancarrota)")]
     public List<SkillNode> skillTree = new List<SkillNode>();
     private HashSet<string> unlockedSkillIds = new HashSet<string>();
-
+    [Header("UI - Indicaciones (activo junto con Mejoras y Tienda)")]
+    public GameObject indicacionesPanel;
     private float skillDamageBonus = 0f;
     private float skillStaminaBonus = 0f;
     private float skillSwingIntervalReduction = 0f;
@@ -198,11 +302,12 @@ public class GameManager : MonoBehaviour
         if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
         if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (rewardMachinePanel != null) rewardMachinePanel.SetActive(false);
         if (deudaPanel != null) deudaPanel.SetActive(false);
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
         if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
         if (machete != null) machete.SetActive(false);
-
+        if (indicacionesPanel != null) indicacionesPanel.SetActive(false);
         SetCursorVisible(true);
 
         RecalculateAllStats();
@@ -320,6 +425,19 @@ public class GameManager : MonoBehaviour
         }
 
         if (moneyText != null) moneyText.text = Loc("collection_current_money", FormatWater(displayedMoney));
+        if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
+
+    }
+
+    // Puramente visual: lanza gotas 3D desde el coco hasta el jarron 3D (WaterJar3D).
+    // El agua real ya se sumo en OnCoconutDestroyed(); el jarron sube su nivel
+    // recien cuando cada gota LLEGA.
+    // Devuelve true si el jarron se quedo con el efecto de particulas (deathFx) y
+    // se encarga de moverlo y destruirlo. Si devuelve false, quien llama lo destruye.
+    public bool PlayWaterDropEffect(Vector3 worldPosition, float waterAmountML, GameObject deathFx = null)
+    {
+        if (WaterJar3D.Instance == null) return false;
+        return WaterJar3D.Instance.HandleCoconutWater(worldPosition, waterAmountML, deathFx);
     }
 
     public static string FormatWater(float ml)
@@ -337,6 +455,7 @@ public class GameManager : MonoBehaviour
 
     public void BeginNewGame()
     {
+
         daysLeft = dayLimitBase;
         runCoconutsKilled = 0;
         runMoneyEarned = 0;
@@ -358,19 +477,19 @@ public class GameManager : MonoBehaviour
         float baseRadius = m != null ? m.baseHitRadius : 1.5f;
         float staminaCostMult = m != null ? m.staminaCostMultiplier : 1f;
 
-        int damage = Mathf.RoundToInt(baseDmg + skillDamageBonus + perkDamageBonus + legacyDamageBonus);
+        int damage = Mathf.RoundToInt(baseDmg + skillDamageBonus + perkDamageBonus + legacyDamageBonus + relicDamageBonus);
 
         if (MacheteController.Instance != null)
         {
             MacheteController.Instance.damageOverride = damage;
-            MacheteController.Instance.swingInterval = Mathf.Max(0.3f, baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction);
-            MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus;
+            MacheteController.Instance.swingInterval = Mathf.Max(0.3f, baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction - relicSwingIntervalReduction);
+            MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus + relicHitRadiusBonus;
         }
     }
-
+    public void RefreshCombatStats() => RecalculateAllStats();
     public float GetStaminaMax()
     {
-        return staminaMaxBase + skillStaminaBonus + perkStaminaMaxBonus + legacyStaminaBonus;
+        return staminaMaxBase + skillStaminaBonus + perkStaminaMaxBonus + legacyStaminaBonus + relicStaminaMaxBonus;
     }
 
     [System.Obsolete("Renombrado conceptualmente: ahora devuelve el bonus de AGUA extra (no de dinero, que ya no existe). Se deja el nombre por compatibilidad con UI existente.")]
@@ -407,13 +526,18 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp01((float)totalCoconutsKilled / next.killsRequired);
     }
 
+    public float GetCritChance()
+    {
+        float chance = skillCritChanceBonus + perkCritChanceBonus + legacyCritChanceBonus + relicCritChanceBonus;
+        return Mathf.Clamp01(chance);
+    }
+
     public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
     {
         totalCoconutsKilled++;
         runCoconutsKilled++;
         dayCoconutsKilled++;
-
-        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus;
+        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus + relicWaterMultiplierBonus;
         waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult;
         waterCurrentML += waterGained;
 
@@ -449,6 +573,7 @@ public class GameManager : MonoBehaviour
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
         if (tiendaPanel != null) tiendaPanel.SetActive(false);
         if (deudaPanel != null) deudaPanel.SetActive(false);
+        if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.ClearAllCoconuts();
 
         SetCursorVisible(true);
 
@@ -476,18 +601,79 @@ public class GameManager : MonoBehaviour
         {
             CoconutSpawner.Instance.StartNewDay();
         }
+        OnDayStarted?.Invoke();
     }
 
     public void ToggleUpgradeTreePanel()
     {
-        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(!upgradeTreePanel.activeSelf);
-        if (upgradeTreePanel != null && upgradeTreePanel.activeSelf) RecenterUpgradeTree();
-        RefreshAllUI();
+        bool willOpen = upgradeTreePanel != null && !upgradeTreePanel.activeSelf;
+        if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
+        panelSwitchRoutine = StartCoroutine(SwitchPanels(upgradeTreePanel, new GameObject[] { tiendaPanel, rewardMachinePanel }, willOpen));
     }
 
     public void ToggleTiendaPanel()
     {
-        if (tiendaPanel != null) tiendaPanel.SetActive(!tiendaPanel.activeSelf);
+        bool willOpen = tiendaPanel != null && !tiendaPanel.activeSelf;
+        if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
+        panelSwitchRoutine = StartCoroutine(SwitchPanels(tiendaPanel, new GameObject[] { upgradeTreePanel, rewardMachinePanel }, willOpen));
+    }
+
+    public void ToggleRewardMachinePanel()
+    {
+        bool willOpen = rewardMachinePanel != null && !rewardMachinePanel.activeSelf;
+        if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
+        panelSwitchRoutine = StartCoroutine(SwitchPanels(rewardMachinePanel, new GameObject[] { upgradeTreePanel, tiendaPanel }, willOpen));
+    }
+
+    IEnumerator SwitchPanels(GameObject panelToToggle, GameObject[] otherPanels, bool willOpen)
+    {
+        bool anyOtherWasOpen = false;
+        if (otherPanels != null)
+        {
+            foreach (var p in otherPanels)
+            {
+                if (p != null && p.activeSelf)
+                {
+                    anyOtherWasOpen = true;
+                    p.SetActive(false);
+                }
+            }
+        }
+
+        if (panelToToggle != null && !willOpen) panelToToggle.SetActive(false);
+
+        if (willOpen && anyOtherWasOpen)
+        {
+            yield return new WaitForSecondsRealtime(panelSwitchBreak);
+        }
+
+        if (willOpen && panelToToggle != null)
+        {
+            panelToToggle.SetActive(true);
+            if (panelToToggle == upgradeTreePanel) RecenterUpgradeTree();
+        }
+
+        RefreshAllUI();
+    }
+
+    IEnumerator SwitchPanels(GameObject panelToToggle, GameObject otherPanel, bool willOpen)
+    {
+        bool otherWasOpen = otherPanel != null && otherPanel.activeSelf;
+
+        if (otherPanel != null) otherPanel.SetActive(false);
+        if (panelToToggle != null && !willOpen) panelToToggle.SetActive(false);
+
+        if (willOpen && otherWasOpen)
+        {
+            yield return new WaitForSecondsRealtime(panelSwitchBreak);
+        }
+
+        if (willOpen && panelToToggle != null)
+        {
+            panelToToggle.SetActive(true);
+            if (panelToToggle == upgradeTreePanel) RecenterUpgradeTree();
+        }
+
         RefreshAllUI();
     }
 
@@ -504,7 +690,8 @@ public class GameManager : MonoBehaviour
 
         billCycle++;
         waterTargetML *= waterTargetGrowth;
-        daysLeft = dayLimitBase + (billCycle - 1);
+
+        daysLeft = Mathf.Max(3, dayLimitBase - ((billCycle - 1) / 2));
         RecalculateAllStats();
 
         Log("Pedido entregado. Nuevo pedido: " + FormatWater(waterTargetML));
@@ -515,8 +702,11 @@ public class GameManager : MonoBehaviour
 
     public void ContinueToNextDay()
     {
-        daysLeft--;
-
+        if (skipNextDayDecrement) { skipNextDayDecrement = false; }
+        else
+        {
+            daysLeft--;
+        }
         if (daysLeft <= 0 && waterCurrentML < waterTargetML)
         {
             ResolveBankruptcy();
@@ -532,6 +722,7 @@ public class GameManager : MonoBehaviour
         stamina = GetStaminaMax();
         ShowHittingUI();
         RefreshAllUI();
+
     }
 
     void ResolveBankruptcy()
@@ -546,11 +737,9 @@ public class GameManager : MonoBehaviour
         money = 0;
         billCycle = 1;
         waterCurrentML = 0f;
-        waterTargetML = 2000f;
+        waterTargetML = 500f;
         daysLeft = dayLimitBase;
-
         totalCoconutsKilled = 0;
-
         unlockedSkillIds.Clear();
         skillDamageBonus = 0f;
         skillStaminaBonus = 0f;
@@ -558,14 +747,17 @@ public class GameManager : MonoBehaviour
         skillHitRadiusBonus = 0f;
         skillWaterMultiplierBonus = 0f;
         skillStaminaCostReduction = 0f;
-
         equippedMacheteIndex = 0;
-
         perkDamageBonus = 0f;
         perkStaminaMaxBonus = 0f;
         perkWaterMultiplierBonus = 0f;
         perkSwingIntervalReduction = 0f;
-
+        relicDamageBonus = 0f;
+        relicStaminaMaxBonus = 0f;
+        relicWaterMultiplierBonus = 0f;
+        relicSwingIntervalReduction = 0f;
+        relicHitRadiusBonus = 0f;
+        relicCritChanceBonus = 0f;
         coinDropChance = 0.005f;
 
         if (CoconutSpawner.Instance != null)
@@ -583,6 +775,7 @@ public class GameManager : MonoBehaviour
         Log(Loc("log_bankruptcy", gained));
 
         EnterBetweenRunsPhase();
+        OnRunReset?.Invoke();
     }
 
     void EnterBetweenRunsPhase()
@@ -785,12 +978,7 @@ public class GameManager : MonoBehaviour
         Log(Loc("log_legacy_bought", item.itemName));
         RefreshAllUI();
     }
-    public float GetCritChance()
-    {
-        float chance = skillCritChanceBonus + perkCritChanceBonus + legacyCritChanceBonus;
 
-        return Mathf.Clamp01(chance);
-    }
     void ApplyLegacyEffect(LegacyItem item)
     {
         switch (item.effect)
@@ -798,10 +986,10 @@ public class GameManager : MonoBehaviour
             case LegacyEffect.PermanentDamageBonus: legacyDamageBonus += item.value; break;
             case LegacyEffect.PermanentStaminaMaxBonus: legacyStaminaBonus += item.value; break;
             case LegacyEffect.PermanentMoneyMultiplierBonus: legacyWaterMultiplierBonus += item.value; break;
-            case LegacyEffect.PermanentStartingCoconutBonus:if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(item.value);break;
+            case LegacyEffect.PermanentStartingCoconutBonus: if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(item.value); break;
             case LegacyEffect.PermanentLegacyMultiplierBonus: legacyMultiplier += item.value; break;
-            case LegacyEffect.PermanentCritChanceBonus:legacyCritChanceBonus += item.value;break;
-            case LegacyEffect.PermanentCoinChanceBonus:coinDropChance += item.value;break;
+            case LegacyEffect.PermanentCritChanceBonus: legacyCritChanceBonus += item.value; break;
+            case LegacyEffect.PermanentCoinChanceBonus: coinDropChance += item.value; break;
 
         }
         RecalculateAllStats();
@@ -813,6 +1001,13 @@ public class GameManager : MonoBehaviour
 
     void RefreshAllUI()
     {
+        if (indicacionesPanel != null)
+        {
+            bool showIndicaciones = (upgradeTreePanel != null && upgradeTreePanel.activeSelf)
+                      || (tiendaPanel != null && tiendaPanel.activeSelf)
+                      || (rewardMachinePanel != null && rewardMachinePanel.activeSelf);
+            indicacionesPanel.SetActive(showIndicaciones);
+        }
         UpdateMoneyUI();
 
         if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", dayCoconutsKilled);
@@ -895,10 +1090,10 @@ public class GameManager : MonoBehaviour
         {
             macheteOptions = new List<MacheteData>
             {
-                new MacheteData { macheteName = "Machete Oxidado", description = "El que ya tienes.", baseDamage = 3f, baseSwingInterval = 1.2f, baseHitRadius = 1.5f, staminaCostMultiplier = 1f, unlockCost = 0 },
-                new MacheteData { macheteName = "Machete Normal", description = "Mas daño, mas rapido, mas rango.", baseDamage = 5f, baseSwingInterval = 1.05f, baseHitRadius = 1.6f, staminaCostMultiplier = 0.95f, unlockCost = 4000 },
-                new MacheteData { macheteName = "Machete de Acero", description = "Un salto grande de poder.", baseDamage = 8f, baseSwingInterval = 0.9f, baseHitRadius = 1.75f, staminaCostMultiplier = 0.9f, unlockCost = 18000 },
-                new MacheteData { macheteName = "Machete de Oro", description = "El mejor de todos.", baseDamage = 13f, baseSwingInterval = 0.75f, baseHitRadius = 1.9f, staminaCostMultiplier = 0.85f, unlockCost = 70000 },
+                new MacheteData { macheteName = "Machete Oxidado", description = "El que ya tienes.", baseDamage = 5f, baseSwingInterval = 1.2f, baseHitRadius = 1.5f, staminaCostMultiplier = 1f, unlockCost = 0 },
+                new MacheteData { macheteName = "Machete Normal", description = "Mas daño, mas rapido, mas rango.", baseDamage = 9f, baseSwingInterval = 1.05f, baseHitRadius = 1.6f, staminaCostMultiplier = 0.95f, unlockCost = 4000 },
+                new MacheteData { macheteName = "Machete de Acero", description = "Un salto grande de poder.", baseDamage = 14f, baseSwingInterval = 0.9f, baseHitRadius = 1.75f, staminaCostMultiplier = 0.9f, unlockCost = 18000 },
+                new MacheteData { macheteName = "Machete de Oro", description = "El mejor de todos.", baseDamage = 22f, baseSwingInterval = 0.75f, baseHitRadius = 1.9f, staminaCostMultiplier = 0.85f, unlockCost = 70000 },
             };
         }
 
@@ -928,9 +1123,9 @@ public class GameManager : MonoBehaviour
         new SkillNode { id = "leche_1", nodeName = "Coco Lechero I", description = "+15% de agua de coco por golpe", cost = 500, prerequisiteIds = new [] { "fuerza_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.15f },
         new SkillNode { id = "leche_2", nodeName = "Coco Lechero II", description = "+20% de agua de coco por golpe", cost = 1500, prerequisiteIds = new [] { "leche_1" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.2f },
         new SkillNode { id = "leche_3", nodeName = "Coco Lechero III", description = "+30% de agua de coco por golpe", cost = 3400, prerequisiteIds = new [] { "leche_2" }, effect = SkillEffect.WaterMultiplierBonus, effectValue = 0.3f },
-        new SkillNode { id = "moneda_1", nodeName = "Suerte de Moneda I", description = "+0.25% de probabilidad de encontrar una moneda por golpe", cost = 1000, prerequisiteIds = new [] { "velocidad_2, radio_1" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.0025f },
-        new SkillNode { id = "moneda_2", nodeName = "Suerte de Moneda II", description = "+0.5% de probabilidad de encontrar una moneda por golpe", cost = 6000, prerequisiteIds = new [] { "moneda_1, radio_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.005f },
-        new SkillNode { id = "moneda_3", nodeName = "Suerte de Moneda III", description = "+1% de probabilidad de encontrar una moneda por golpe", cost = 20000, prerequisiteIds = new [] { "moneda_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.01f },
+        new SkillNode { id = "moneda_1", nodeName = "Suerte de Moneda I", description = "+0.25% de probabilidad de encontrar una moneda", cost = 1000, prerequisiteIds = new [] { "velocidad_2", "radio_1" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.0025f },
+        new SkillNode { id = "moneda_2", nodeName = "Suerte de Moneda II", description = "+0.5% de probabilidad de encontrar una moneda", cost = 6000, prerequisiteIds = new [] { "moneda_1", "radio_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.005f },
+        new SkillNode { id = "moneda_3", nodeName = "Suerte de Moneda III", description = "+1% de probabilidad de encontrar una moneda", cost = 20000, prerequisiteIds = new [] { "moneda_2" }, effect = SkillEffect.CoinChanceBonus, effectValue = 0.01f },
         new SkillNode { id = "critico_1",nodeName = "Golpe Certero I",description = "+5% de probabilidad de golpe crítico.",cost = 1000,prerequisiteIds = new[] { "velocidad_2", "radio_1" },effect = SkillEffect.CritChanceBonus,effectValue = 0.05f},
         new SkillNode { id = "critico_2",nodeName = "Golpe Certero II",description = "+7% de probabilidad de golpe crítico.",cost = 3500,prerequisiteIds = new[] { "critico_1" },effect = SkillEffect.CritChanceBonus,effectValue = 0.07f},
         new SkillNode { id = "critico_3",nodeName = "Golpe Certero III",description = "+8% de probabilidad de golpe crítico.",cost = 9000,prerequisiteIds = new[] { "critico_2" },effect = SkillEffect.CritChanceBonus,effectValue = 0.08f},
@@ -949,7 +1144,7 @@ public class GameManager : MonoBehaviour
                 new PerkOption { perkName = "Golpe Certero",description = "+8% de probabilidad de crítico.",effect = PerkEffect.CritChanceBonus,value = 0.08f},
                 new PerkOption { perkName = "Cosecha Extra",description = "+2 cocos al comenzar el siguiente ciclo.",effect = PerkEffect.ExtraCoconutNextCycle,value = 2f},
                 new PerkOption { perkName = "Coco Generoso",description = "+25% agua, pero los golpes son 10% más lentos.",effect = PerkEffect.WaterMultiplierBonus,value = 0.25f},
-                new PerkOption { perkName = "Golpe de Suerte",description = "+15% crítico y +10% agua.",effect = PerkEffect.CritChanceBonus,value = 0.15f}
+                new PerkOption { perkName = "Golpe de Suerte",description = "+15% crítico y +1% Monedas.",effect = PerkEffect.CritChanceBonus,value = 0.15f}
             };
         }
 
@@ -961,31 +1156,52 @@ public class GameManager : MonoBehaviour
                 new LegacyItem { itemName = "Pulsera de Aguante",description = "+5 stamina máxima permanente.",cost = 2,effect = LegacyEffect.PermanentStaminaMaxBonus,value = 5f},
                 new LegacyItem { itemName = "Amuleto del Cobrador",description = "+10% agua obtenida permanentemente.",cost = 3,effect = LegacyEffect.PermanentMoneyMultiplierBonus,value = 0.10f},
                 new LegacyItem { itemName = "Cesta Grande",description = "+1 coco inicial cada día.",cost = 4,effect = LegacyEffect.PermanentStartingCoconutBonus,value = 1f},
-                new LegacyItem { itemName = "Lente del Afortunado",description = "+3% probabilidad de crítico permanente.",cost = 5,effect = LegacyEffect.PermanentCritChanceBonus,value = 0.03f},
-                new LegacyItem { itemName = "Moneda Antigua",description = "+0.5% probabilidad de encontrar monedas.",cost = 7,effect = LegacyEffect.PermanentCoinChanceBonus,value = 0.005f}
+                new LegacyItem { itemName = "Lente del Afortunado",description = "+3% probabilidad de crítico permanente.",cost = 2,effect = LegacyEffect.PermanentCritChanceBonus,value = 0.03f},
+                new LegacyItem { itemName = "Lente del Afortunado II",description = "+6% probabilidad de crítico permanente.",cost = 6,effect = LegacyEffect.PermanentCritChanceBonus,value = 0.06f},
+                new LegacyItem { itemName = "Lente del Afortunado III",description = "+10% probabilidad de crítico permanente.",cost = 9,effect = LegacyEffect.PermanentCritChanceBonus,value = 0.1f},
+                new LegacyItem { itemName = "Moneda Antigua",description = "+0.5% probabilidad de encontrar monedas.",cost = 1,effect = LegacyEffect.PermanentCoinChanceBonus,value = 0.005f},
+                new LegacyItem { itemName = "Moneda Antigua II",description = "+1% probabilidad de encontrar monedas.",cost = 3,effect = LegacyEffect.PermanentCoinChanceBonus,value = 0.01f},
+                new LegacyItem { itemName = "Moneda Antigua III",description = "+2% probabilidad de encontrar monedas.",cost = 6,effect = LegacyEffect.PermanentCoinChanceBonus,value = 0.02f}
             };
         }
 
-        if (coconutUnlocks == null || coconutUnlocks.Count == 0)
+        StampCoconutUnlocks();
+    }
+    private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
+{
+    new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,   ability = CoconutAbility.Ninguna },
+    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 10,  ability = CoconutAbility.Generoso },
+    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 25,  ability = CoconutAbility.Resistente },
+    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 45,  ability = CoconutAbility.FibraDura },
+    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 70,  ability = CoconutAbility.Pesado },
+    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 100, ability = CoconutAbility.Tenaz },
+    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 140, ability = CoconutAbility.Armadura },
+    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 185, ability = CoconutAbility.Rebote },
+    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 235, ability = CoconutAbility.Fortificado },
+    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 290, ability = CoconutAbility.Implacable },
+    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 350, ability = CoconutAbility.FragilValioso },
+    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 420, ability = CoconutAbility.Regeneracion },
+    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 500, ability = CoconutAbility.Camuflaje },
+    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 600, ability = CoconutAbility.Maldicion },
+    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 720, ability = CoconutAbility.Supremo },
+};
+
+    void StampCoconutUnlocks()
+    {
+        if (coconutUnlocks == null) coconutUnlocks = new List<CoconutUnlockThreshold>();
+
+        while (coconutUnlocks.Count < CanonicalUnlocks.Length)
+            coconutUnlocks.Add(new CoconutUnlockThreshold());
+
+        for (int i = 0; i < CanonicalUnlocks.Length; i++)
         {
-            coconutUnlocks = new List<CoconutUnlockThreshold>
-            {
-                new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0 },
-                new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 10 },
-                new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 25 },
-                new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 45 },
-                new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 70 },
-                new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 100 },
-                new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 140 },
-                new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 185 },
-                new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 235 },
-                new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 290 },
-                new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 350 },
-                new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 420 },
-                new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 500 },
-                new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 600 },
-                new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 720 },
-            };
+            Sprite keepIcon = coconutUnlocks[i].icon;
+            GameObject keepPrefab = coconutUnlocks[i].prefab;
+            coconutUnlocks[i].coconutName = CanonicalUnlocks[i].coconutName;
+            coconutUnlocks[i].killsRequired = CanonicalUnlocks[i].killsRequired;
+            coconutUnlocks[i].ability = CanonicalUnlocks[i].ability;
+            coconutUnlocks[i].icon = keepIcon;
+            coconutUnlocks[i].prefab = keepPrefab;
         }
     }
 }
