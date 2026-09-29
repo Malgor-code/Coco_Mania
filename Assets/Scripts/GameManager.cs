@@ -101,6 +101,11 @@ public class GameManager : MonoBehaviour
     {
         stamina = Mathf.Max(0f, stamina - amount);
     }
+    public void RegisterSwingResult(bool hit)
+    {
+        daySwings++;
+        if (hit) dayHits++;
+    }
 
     public void ApplyTemporaryCurse(float durationSeconds)
     {
@@ -168,6 +173,12 @@ public class GameManager : MonoBehaviour
     public int dayCoconutsKilled = 0;
     [Tooltip("Ahora acumula mL de agua ganados en el dia (antes era dinero). Se deja el nombre del campo para no romper otros scripts.")]
     public int dayMoneyEarned = 0;
+    [Tooltip("Cuantas veces golpeaste (conectes o no) durante el dia. Lo suma MacheteController via RegisterSwingResult().")]
+    public int daySwings = 0;
+    [Tooltip("De esos golpes, cuantos conectaron con al menos un coco.")]
+    public int dayHits = 0;
+    [Tooltip("Cuantas monedas encontraste durante el dia (se resetea cada dia; el total de toda la partida sigue siendo coconutCoins).")]
+    public int dayCoinsFound = 0;
 
     [Header("Energia (stamina) - se mide en SEGUNDOS, se gasta por tiempo, no por golpe")]
     public float stamina = 15f;
@@ -199,6 +210,8 @@ public class GameManager : MonoBehaviour
     [Header("Perks (1 de 3 al pagar cada cuenta)")]
     public List<PerkOption> perkPool = new List<PerkOption>();
     private PerkOption[] currentPerkChoices = new PerkOption[3];
+    [Tooltip("Cuantas elecciones de mejora quedan pendientes por mostrar (subio por pagos de pedido seguidos).")]
+    private int pendingPerkOffers = 0;
     [Header("Perks")]
     public float perkDamageBonus = 0f;
     public float perkStaminaMaxBonus = 0f;
@@ -229,6 +242,10 @@ public class GameManager : MonoBehaviour
     public GameObject recaudacionPanel;
     public TMP_Text runKillsText;
     public TMP_Text runMoneyText;
+    [Tooltip("Muestra el porcentaje de golpes que conectaron con al menos un coco, sobre el total de golpes del dia.")]
+    public TMP_Text accuracyText;
+    [Tooltip("Muestra cuantas monedas encontraste en el dia. Si no encontraste ninguna, se desactiva solo.")]
+    public TMP_Text dayCoinsText;
     public Button continueButton;
 
     [Header("UI - Recaudacion: progreso de desbloqueo del proximo tipo de coco")]
@@ -428,12 +445,6 @@ public class GameManager : MonoBehaviour
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
 
     }
-
-    // Puramente visual: lanza gotas/particulas 3D desde el coco hasta el jarron 3D activo (WaterJarGroup).
-    // El agua real ya se sumo en OnCoconutDestroyed(); el jarron sube su nivel
-    // recien cuando cada gota LLEGA.
-    // Devuelve true si el jarron se quedo con el efecto de particulas (deathFx) y
-    // se encarga de moverlo y destruirlo. Si devuelve false, quien llama lo destruye.
     public bool PlayWaterDropEffect(Vector3 worldPosition, float waterAmountML, GameObject deathFx = null)
     {
         if (WaterJarGroup.Instance == null) return false;
@@ -549,6 +560,7 @@ public class GameManager : MonoBehaviour
         if (foundCoin)
         {
             coconutCoins++;
+            dayCoinsFound++;
             Log(Loc("log_coin_found", coconutCoins));
         }
         else
@@ -573,10 +585,6 @@ public class GameManager : MonoBehaviour
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
         if (tiendaPanel != null) tiendaPanel.SetActive(false);
         if (deudaPanel != null) deudaPanel.SetActive(false);
-
-        // Limpia los cocos que quedaron vivos/congelados: no cuentan como
-        // progreso (no se llama OnCoconutDestroyed) y evita que se vean
-        // "flotando" detras del panel semitransparente de Recaudacion.
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.ClearAllCoconuts();
 
         SetCursorVisible(true);
@@ -589,6 +597,9 @@ public class GameManager : MonoBehaviour
         currentPhase = Phase.Hitting;
         dayCoconutsKilled = 0;
         dayMoneyEarned = 0;
+        daySwings = 0;
+        dayHits = 0;
+        dayCoinsFound = 0;
         if (machete != null) machete.SetActive(true);
 
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(true);
@@ -701,26 +712,34 @@ public class GameManager : MonoBehaviour
         Log("Pedido entregado. Nuevo pedido: " + FormatWater(waterTargetML));
         RefreshAllUI();
 
-        OfferPerkChoice();
+        QueuePerkOffer();
+    }
+    void QueuePerkOffer()
+    {
+        pendingPerkOffers++;
+
+        if (currentPhase != Phase.PerkChoice)
+        {
+            OfferPerkChoice();
+        }
     }
 
     public void ContinueToNextDay()
     {
-        if (skipNextDayDecrement) { skipNextDayDecrement = false; }
+        if (skipNextDayDecrement)
+        {
+            skipNextDayDecrement = false;
+        }
         else
         {
-            daysLeft--;
-        }
-        if (daysLeft <= 0 && waterCurrentML < waterTargetML)
-        {
-            ResolveBankruptcy();
-            RefreshAllUI();
-            return;
-        }
+            if (daysLeft <= 0)
+            {
+                ResolveBankruptcy();
+                RefreshAllUI();
+                return;
+            }
 
-        if (daysLeft <= 0)
-        {
-            daysLeft = 1;
+            daysLeft--;
         }
 
         stamina = GetStaminaMax();
@@ -732,6 +751,8 @@ public class GameManager : MonoBehaviour
     void ResolveBankruptcy()
     {
         if (machete != null) machete.SetActive(false);
+        if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        pendingPerkOffers = 0;
 
         int gained = Mathf.Max(1, Mathf.RoundToInt(billCycle / 2f));
         legacyPoints += gained;
@@ -934,6 +955,14 @@ public class GameManager : MonoBehaviour
         ApplyPerk(currentPerkChoices[index]);
         Log(Loc("log_perk_chosen", currentPerkChoices[index].perkName));
 
+        if (pendingPerkOffers > 0) pendingPerkOffers--;
+
+        if (pendingPerkOffers > 0)
+        {
+            OfferPerkChoice();
+            return;
+        }
+
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
 
         stamina = GetStaminaMax();
@@ -1016,6 +1045,22 @@ public class GameManager : MonoBehaviour
 
         if (runKillsText != null) runKillsText.text = Loc("collection_coconuts_killed", dayCoconutsKilled);
         if (runMoneyText != null) runMoneyText.text = Loc("collection_money_earned", FormatWater(dayMoneyEarned));
+
+        if (accuracyText != null)
+        {
+            float accuracyPercent = daySwings > 0 ? (dayHits / (float)daySwings) * 100f : 0f;
+            accuracyText.text = Mathf.RoundToInt(accuracyPercent) + "% de punteria";
+        }
+
+        if (dayCoinsText != null)
+        {
+            bool gotCoinsToday = dayCoinsFound > 0;
+            dayCoinsText.gameObject.SetActive(gotCoinsToday);
+            if (gotCoinsToday)
+            {
+                dayCoinsText.text = "+" + dayCoinsFound + (dayCoinsFound == 1 ? " moneda encontrada" : " monedas encontradas");
+            }
+        }
 
         CoconutUnlockThreshold nextUnlock = GetNextLockedCoconut();
         float unlockProgress = GetNextUnlockProgress01();

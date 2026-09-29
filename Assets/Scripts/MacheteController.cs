@@ -215,24 +215,28 @@ public class MacheteController : MonoBehaviour
                 if (Vector3.Distance(a, b) <= hitRadius)
                 {
                     int finalDamage = damageOverride;
-
                     bool isCritical = false;
 
                     if (GameManager.Instance != null)
                     {
                         isCritical = Random.value < GameManager.Instance.GetCritChance();
-
                         if (isCritical)
                         {
                             finalDamage *= 2;
                         }
                     }
 
-                    bool killed = coco.TakeDamage(finalDamage);
+                    bool killed = coco.TakeDamage(finalDamage, isCritical);
                     hitSomething = true;
+
                     if (killed) killedSomething = true;
                 }
             }
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterSwingResult(hitSomething);
         }
 
         shakeTrauma = Mathf.Clamp01(shakeTrauma + shakeTraumaPerSwing);
