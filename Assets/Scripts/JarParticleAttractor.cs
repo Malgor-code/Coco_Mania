@@ -5,7 +5,7 @@ public class JarParticleAttractor : MonoBehaviour
 {
     private static ParticleSystem.Particle[] sBuffer = new ParticleSystem.Particle[256];
 
-    private WaterJar3D jar;
+    private WaterJarGroup jar;
     private ParticleSystem[] systems;
     private readonly HashSet<uint> arrived = new HashSet<uint>();
     private float totalML;
@@ -14,7 +14,7 @@ public class JarParticleAttractor : MonoBehaviour
     private float startTime;
     private bool finished;
 
-    public void Init(WaterJar3D jarRef, ParticleSystem[] systemsRef, float waterML)
+    public void Init(WaterJarGroup jarRef, ParticleSystem[] systemsRef, float waterML)
     {
         jar = jarRef;
         systems = systemsRef;
@@ -64,7 +64,6 @@ public class JarParticleAttractor : MonoBehaviour
                 float attractAge = age - jar.particleAttractDelay;
                 float speed = Mathf.Lerp(jar.particleMinSpeed, jar.particleMaxSpeed,
                                          Mathf.Clamp01(attractAge / Mathf.Max(0.01f, jar.particleAccelTime)));
-
                 if (worldDist <= jar.particleArriveDistance || worldDist <= speed * dt)
                 {
                     if (arrived.Add(p.randomSeed))
@@ -96,7 +95,6 @@ public class JarParticleAttractor : MonoBehaviour
 
             if (changed) ps.SetParticles(sBuffer, n);
         }
-
         float elapsed = Time.time - startTime;
         bool anyAlive = false;
         for (int si = 0; si < systems.Length; si++)

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cuanta agua de coco (en mL) pide el cliente este ciclo")]
     public float waterTargetML = 500f;
     [Tooltip("Cuanto crece el pedido de agua en cada ciclo nuevo (2 = se duplica)")]
-    public float waterTargetGrowth = 1.5f;
+    public float waterTargetGrowth = 2f;
     [Header("Cuanta agua suelta cada coco al morir")]
     public float baseWaterPerKill = 20f;
     public float waterVariance = 40f;
@@ -429,15 +429,15 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Puramente visual: lanza gotas 3D desde el coco hasta el jarron 3D (WaterJar3D).
+    // Puramente visual: lanza gotas/particulas 3D desde el coco hasta el jarron 3D activo (WaterJarGroup).
     // El agua real ya se sumo en OnCoconutDestroyed(); el jarron sube su nivel
     // recien cuando cada gota LLEGA.
     // Devuelve true si el jarron se quedo con el efecto de particulas (deathFx) y
     // se encarga de moverlo y destruirlo. Si devuelve false, quien llama lo destruye.
     public bool PlayWaterDropEffect(Vector3 worldPosition, float waterAmountML, GameObject deathFx = null)
     {
-        if (WaterJar3D.Instance == null) return false;
-        return WaterJar3D.Instance.HandleCoconutWater(worldPosition, waterAmountML, deathFx);
+        if (WaterJarGroup.Instance == null) return false;
+        return WaterJarGroup.Instance.HandleCoconutWater(worldPosition, waterAmountML, deathFx);
     }
 
     public static string FormatWater(float ml)
@@ -573,6 +573,10 @@ public class GameManager : MonoBehaviour
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
         if (tiendaPanel != null) tiendaPanel.SetActive(false);
         if (deudaPanel != null) deudaPanel.SetActive(false);
+
+        // Limpia los cocos que quedaron vivos/congelados: no cuentan como
+        // progreso (no se llama OnCoconutDestroyed) y evita que se vean
+        // "flotando" detras del panel semitransparente de Recaudacion.
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.ClearAllCoconuts();
 
         SetCursorVisible(true);

@@ -472,6 +472,8 @@ public class CoconutTarget : MonoBehaviour
             earned = GameManager.Instance.OnCoconutDestroyed(loot, out waterGained);
         }
 
+        // Las Death Particles son las que viajan al jarron 3D (el agua real ya se sumo arriba).
+        // Si el jarron las toma, el se encarga de destruirlas; si no, las destruimos aca.
         bool jarTookFx = false;
         if (GameManager.Instance != null)
         {
@@ -490,6 +492,7 @@ public class CoconutTarget : MonoBehaviour
         Destroy(gameObject, 0.05f);
     }
 
+    // Destruye un efecto de particulas cuando termina su animacion.
     static void AutoDestroyFx(GameObject fx)
     {
         if (fx != null) Destroy(fx, GetFxLifetime(fx));
@@ -504,6 +507,7 @@ public class CoconutTarget : MonoBehaviour
             float life = m.duration + m.startLifetimeMultiplier;
             if (life > max) max = life;
         }
+        // Sin ParticleSystem (o valores raros): tiempo por defecto; y nunca mas de 10 s.
         return max > 0f ? Mathf.Min(max + 0.5f, 10f) : 3f;
     }
 
