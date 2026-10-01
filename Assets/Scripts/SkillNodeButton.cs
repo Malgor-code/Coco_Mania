@@ -32,57 +32,77 @@ public class SkillNodeButton : MonoBehaviour
     public Color lineColorInactiva = new Color(0.35f, 0.35f, 0.35f, 0.6f);
     public Color lineColorActiva = new Color(1f, 0.85f, 0.2f, 0.9f);
 
-    [Header("Efecto de aparicion (pop) al desbloquearse / habilitarse")]
-    [Tooltip("Que tan grande es el 'salto' de escala cuando se COMPRA el nodo")]
-    public float popStrengthComprado = 0.45f;
-    public float popDurationComprado = 0.35f;
+    [Header("Efecto de aparicion (pop) al habilitarse")]
     [Tooltip("Que tan grande es el 'salto' de escala cuando el nodo pasa de bloqueado a disponible")]
     public float popStrengthDisponible = 0.25f;
     public float popDurationDisponible = 0.25f;
+
+    [Header("Efecto de COMPRA (se achica, tiembla y crece con el nuevo color)")]
+    [Tooltip("Escala a la que se achica (0.6 = 60% del tamano)")]
+    public float purchaseShrinkScale = 0.6f;
+    public float purchaseShrinkDuration = 0.12f;
+    [Tooltip("Cuanto dura el temblor mientras esta chiquito")]
+    public float purchaseShakeDuration = 0.25f;
+    [Tooltip("Angulo maximo del temblor en grados")]
+    public float purchaseShakeAngle = 12f;
+    [Tooltip("Cuantas oscilaciones tiene el temblor")]
+    public float purchaseShakeFrequency = 4f;
+    [Tooltip("Cuanto dura el crecimiento final (con rebote)")]
+    public float purchaseGrowDuration = 0.35f;
 
     private enum NodeVisualState { Bloqueado, SinDinero, Disponible, Comprado }
     private NodeVisualState previousState = NodeVisualState.Bloqueado;
     private NodeVisualState currentState = NodeVisualState.Bloqueado;
     private bool stateInitialized = false;
     private Vector3 originalScale = Vector3.one;
+    private Quaternion originalRotation = Quaternion.identity;
     private Coroutine popCoroutine;
-
-    private LineRenderer[] lines;
+    private Coroutine purchaseCoroutine;
+    private bool purchaseAnimating = false;
+    private float purchaseColorBlend = 0f;
+    private Image[] lineImages;
+    private RectTransform[] lineRects;
     private SkillNode cachedNode;
     private RectTransform rt;
+    private RectTransform parentRt;
 
     void Awake()
     {
         if (button == null) button = GetComponent<Button>();
         if (backgroundImage == null) backgroundImage = GetComponent<Image>();
         rt = GetComponent<RectTransform>();
+        parentRt = transform.parent as RectTransform;
         originalScale = transform.localScale;
+        originalRotation = transform.localRotation;
 
         if (button != null) button.onClick.AddListener(OnClick);
 
         SetupLines();
     }
-
     void SetupLines()
     {
         if (prerequisiteButtons == null || prerequisiteButtons.Length == 0) return;
 
-        lines = new LineRenderer[prerequisiteButtons.Length];
+        lineImages = new Image[prerequisiteButtons.Length];
+        lineRects = new RectTransform[prerequisiteButtons.Length];
+
         for (int i = 0; i < prerequisiteButtons.Length; i++)
         {
             if (prerequisiteButtons[i] == null) continue;
 
-            GameObject lineObj = new GameObject("Linea_" + nodeId + "_" + i);
-            lineObj.transform.SetParent(transform.parent, false);
-            lineObj.transform.SetAsFirstSibling(); 
-
-            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
-            lr.useWorldSpace = true;
-            lr.positionCount = 2;
-            lr.startWidth = lineWidth;
-            lr.endWidth = lineWidth;
-            lr.material = new Material(Shader.Find("UI/Default"));
-            lines[i] = lr;
+            GameObject lineObj = new GameObject("Linea_" + nodeId + "_" + i, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            RectTransform lrt = lineObj.GetComponent<RectTransform>();
+            lrt.SetParent(transform.parent, false);
+            lrt.SetAsFirstSibling();
+            lrt.anchorMin = new Vector2(0.5f, 0.5f);
+            lrt.anchorMax = new Vector2(0.5f, 0.5f);
+            lrt.pivot = new Vector2(0.5f, 0.5f);
+            LayoutElement le = lineObj.AddComponent<LayoutElement>();
+            le.ignoreLayout = true;
+            Image img = lineObj.GetComponent<Image>();
+            img.raycastTarget = false;
+            lineImages[i] = img;
+            lineRects[i] = lrt;
         }
     }
 
@@ -153,6 +173,9 @@ public class SkillNodeButton : MonoBehaviour
                 case NodeVisualState.SinDinero: c = colorSinDinero; break;
                 default: c = colorBloqueado; break;
             }
+            if (purchaseAnimating)
+                c = Color.Lerp(colorDisponible, colorComprado, purchaseColorBlend);
+
             c.a = visible ? 1f : 0f;
             backgroundImage.color = c;
         }
@@ -190,7 +213,7 @@ public class SkillNodeButton : MonoBehaviour
         {
             if (newState == NodeVisualState.Comprado)
             {
-                PlayPop(popStrengthComprado, popDurationComprado);
+                PlayPurchase();
             }
             else if (newState == NodeVisualState.Disponible && previousState == NodeVisualState.Bloqueado)
             {
@@ -203,6 +226,7 @@ public class SkillNodeButton : MonoBehaviour
 
     void PlayPop(float strength, float duration)
     {
+        if (purchaseCoroutine != null) return;
         if (popCoroutine != null) StopCoroutine(popCoroutine);
         popCoroutine = StartCoroutine(PopEffect(strength, duration));
     }
@@ -212,9 +236,9 @@ public class SkillNodeButton : MonoBehaviour
         float t = 0f;
         while (t < duration)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             float p = Mathf.Clamp01(t / duration);
-            float scaleMult = 1f + Mathf.Sin(p * Mathf.PI) * strength; 
+            float scaleMult = 1f + Mathf.Sin(p * Mathf.PI) * strength;
             transform.localScale = originalScale * scaleMult;
             yield return null;
         }
@@ -222,31 +246,100 @@ public class SkillNodeButton : MonoBehaviour
         popCoroutine = null;
     }
 
+    void PlayPurchase()
+    {
+        if (popCoroutine != null) { StopCoroutine(popCoroutine); popCoroutine = null; }
+        if (purchaseCoroutine != null) StopCoroutine(purchaseCoroutine);
+        purchaseCoroutine = StartCoroutine(PurchaseEffect());
+    }
+
+    System.Collections.IEnumerator PurchaseEffect()
+    {
+        purchaseAnimating = true;
+        purchaseColorBlend = 0f;
+
+        Vector3 smallScale = originalScale * purchaseShrinkScale;
+
+        float t = 0f;
+        while (t < purchaseShrinkDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / purchaseShrinkDuration);
+            transform.localScale = Vector3.Lerp(originalScale, smallScale, EaseOutQuad(p));
+            yield return null;
+        }
+        transform.localScale = smallScale;
+        t = 0f;
+        while (t < purchaseShakeDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / purchaseShakeDuration);
+            float amplitude = 1f - p;
+            float angle = Mathf.Sin(p * purchaseShakeFrequency * Mathf.PI * 2f) * purchaseShakeAngle * amplitude;
+            transform.localRotation = originalRotation * Quaternion.Euler(0f, 0f, angle);
+            yield return null;
+        }
+        transform.localRotation = originalRotation;
+        t = 0f;
+        while (t < purchaseGrowDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = Mathf.Clamp01(t / purchaseGrowDuration);
+            purchaseColorBlend = Mathf.Clamp01(p * 3f);
+            transform.localScale = Vector3.LerpUnclamped(smallScale, originalScale, EaseOutBack(p));
+            yield return null;
+        }
+
+        transform.localScale = originalScale;
+        transform.localRotation = originalRotation;
+        purchaseColorBlend = 1f;
+        purchaseAnimating = false;
+        purchaseCoroutine = null;
+    }
+
+    static float EaseOutQuad(float p)
+    {
+        return 1f - (1f - p) * (1f - p);
+    }
+
+    static float EaseOutBack(float p)
+    {
+        const float c1 = 1.70158f;
+        const float c3 = c1 + 1f;
+        return 1f + c3 * Mathf.Pow(p - 1f, 3f) + c1 * Mathf.Pow(p - 1f, 2f);
+    }
+
     void UpdateLines()
     {
-        if (lines == null) return;
+        if (lineImages == null || parentRt == null) return;
 
         bool thisVisible = currentState != NodeVisualState.Bloqueado;
 
-        for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < lineImages.Length; i++)
         {
-            if (lines[i] == null || prerequisiteButtons[i] == null) continue;
+            if (lineImages[i] == null || prerequisiteButtons[i] == null) continue;
 
-            lines[i].enabled = thisVisible;
+            lineImages[i].enabled = thisVisible;
             if (!thisVisible) continue;
 
             RectTransform preRt = prerequisiteButtons[i].GetComponent<RectTransform>();
             if (preRt == null) continue;
+            Vector3 a = parentRt.InverseTransformPoint(preRt.position);
+            Vector3 b = parentRt.InverseTransformPoint(rt.position);
+            Vector3 dir = b - a;
+            float length = dir.magnitude;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            lines[i].SetPosition(0, preRt.position);
-            lines[i].SetPosition(1, rt.position);
+            RectTransform lrt = lineRects[i];
+            lrt.localPosition = (a + b) * 0.5f;
+            lrt.localRotation = Quaternion.Euler(0f, 0f, angle);
+            lrt.localScale = Vector3.one;
+            lrt.sizeDelta = new Vector2(length, lineWidth);
 
             bool preUnlocked = GameManager.Instance.IsSkillUnlocked(prerequisiteButtons[i].nodeId);
             bool thisUnlocked = GameManager.Instance.IsSkillUnlocked(nodeId);
 
-            Color c = (preUnlocked && thisUnlocked) ? lineColorActiva : lineColorInactiva;
-            lines[i].startColor = c;
-            lines[i].endColor = c;
+            lineImages[i].color = (preUnlocked && thisUnlocked) ? lineColorActiva : lineColorInactiva;
         }
     }
 }

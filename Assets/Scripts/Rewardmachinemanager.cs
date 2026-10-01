@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,8 +12,8 @@ public class RewardMachineManager : MonoBehaviour
     [Header("Costo de tirada")]
     public int pullCost = 100;
 
-    [Header("Limite de reliquias activas por intento")]
-    public int maxRelics = 5;
+    [Header("Ranuras activas (cuantos objetos puedes tener activos a la vez)")]
+    public int slotCount = 3;
 
     [Header("Probabilidades base (deberian sumar 100)")]
     [Range(0f, 100f)] public float commonChance = 55f;
@@ -27,29 +26,11 @@ public class RewardMachineManager : MonoBehaviour
     public int pityEpicThreshold = 20;
     public int pityLegendaryThreshold = 50;
 
-    [Header("Fragmentos de Cobrador otorgados por duplicado, segun rareza")]
-    public int fragmentsCommon = 1;
-    public int fragmentsUncommon = 2;
-    public int fragmentsRare = 5;
-    public int fragmentsEpic = 15;
-    public int fragmentsLegendary = 50;
-
-    [Header("Precios de la tienda de fragmentos")]
-    [Tooltip("Cualquier recompensa de rareza Comun (cualquier categoria).")]
-    public int shopPriceCommon = 10;
-    [Tooltip("Cualquier recompensa de categoria Permanente (cualquier rareza).")]
-    public int shopPricePermanent = 25;
-    [Tooltip("Cualquier objeto fisico (cualquier rareza).")]
-    public int shopPricePhysical = 75;
-    [Tooltip("Cualquier recompensa Legendaria (cualquier categoria).")]
-    public int shopPriceLegendary = 150;
-
     [Header("Datos en tiempo de ejecucion (visibles para depurar)")]
     public CurrentRunData currentRun = new CurrentRunData();
     public PersistentData persistent = new PersistentData();
     public event Action<RewardData, bool> OnPullResult;
     public event Action OnStateChanged;
-    public event Action<RewardData> OnPhysicalItemTriggered;
 
     void Awake()
     {
@@ -59,6 +40,7 @@ public class RewardMachineManager : MonoBehaviour
             return;
         }
         Instance = this;
+        EnsureSlots();
     }
 
     void Start()
@@ -89,40 +71,36 @@ public class RewardMachineManager : MonoBehaviour
         }
     }
 
-    void Update()
+    void EnsureSlots()
     {
-        if (database == null || currentRun.physicalItems.Count == 0) return;
-
-        for (int i = currentRun.physicalItems.Count - 1; i >= 0; i--)
-        {
-            var inst = currentRun.physicalItems[i];
-            var data = database.GetById(inst.rewardId);
-            if (data == null) continue;
-            if (data.triggerMode != PhysicalTriggerMode.RealTimeInterval) continue;
-
-            inst.secondsSinceLastTrigger += Time.deltaTime;
-            if (inst.secondsSinceLastTrigger >= Mathf.Max(0.01f, data.intervalSeconds))
-            {
-                inst.secondsSinceLastTrigger = 0f;
-                ExecuteAutomaticActivation(inst, data);
-            }
-        }
+        slotCount = Mathf.Max(1, slotCount);
+        while (currentRun.slots.Count < slotCount) currentRun.slots.Add(new EquippedSlot());
     }
 
-    void ExecuteAutomaticActivation(PhysicalItemInstance inst, RewardData data)
+    public int GetBagCount(string rewardId)
     {
-        ExecutePhysicalEffect(data);
-        OnPhysicalItemTriggered?.Invoke(data);
-
-        if (inst.usesRemaining > 0)
-        {
-            inst.usesRemaining--;
-            if (inst.usesRemaining == 0) currentRun.physicalItems.Remove(inst);
-        }
-
-        OnStateChanged?.Invoke();
+        foreach (var e in currentRun.bag)
+            if (e.rewardId == rewardId) return e.count;
+        return 0;
     }
 
+    public bool IsEquipped(string rewardId)
+    {
+        foreach (var s in currentRun.slots)
+            if (!s.IsEmpty && s.rewardId == rewardId) return true;
+        return false;
+    }
+    public bool IsRelicOwned(string rewardId)
+    {
+        return GetBagCount(rewardId) > 0 || IsEquipped(rewardId);
+    }
+
+    public bool HasFreeSlot()
+    {
+        foreach (var s in currentRun.slots)
+            if (s.IsEmpty) return true;
+        return false;
+    }
     public bool CanPull()
     {
         return GameManager.Instance != null && database != null && GameManager.Instance.coconutCoins >= pullCost;
@@ -147,7 +125,7 @@ public class RewardMachineManager : MonoBehaviour
         if (data == null)
         {
             Debug.LogWarning($"[RewardMachineManager] No hay ninguna RewardData de rareza {rarity} (ni de una rareza menor) en la base de datos. Se devolvio la moneda gastada.");
-            GameManager.Instance.coconutCoins += pullCost; 
+            GameManager.Instance.coconutCoins += pullCost;
             currentRun.pullsSinceEpic--;
             currentRun.pullsSinceLegendary--;
             OnStateChanged?.Invoke();
@@ -156,6 +134,7 @@ public class RewardMachineManager : MonoBehaviour
         }
 
         bool wasDuplicate = GrantReward(data);
+        if (wasDuplicate) GameManager.Instance.coconutCoins += pullCost;
 
         OnPullResult?.Invoke(data, wasDuplicate);
         OnStateChanged?.Invoke();
@@ -216,95 +195,83 @@ public class RewardMachineManager : MonoBehaviour
         for (int r = (int)rarity; r >= 0; r--)
         {
             var pool = database.GetByRarity((RewardRarity)r);
+            pool.RemoveAll(x => x.category != RewardCategory.Temporary && x.category != RewardCategory.PermanentRelic);
             if (pool.Count > 0) return pool[UnityEngine.Random.Range(0, pool.Count)];
         }
         return null;
     }
     bool GrantReward(RewardData data)
     {
-        bool isDuplicate = !data.canRepeat && IsCurrentlyOwned(data);
+        bool isTemporary = data.category == RewardCategory.Temporary;
 
-        if (isDuplicate)
-        {
-            int frags = GetFragmentsForRarity(data.rarity, data.fragmentOverride);
-            persistent.fragments += frags;
-            return true;
-        }
+        if (!isTemporary && IsRelicOwned(data.id)) return true;
 
         persistent.unlockedRewardIds.Add(data.id);
-
-        switch (data.category)
-        {
-            case RewardCategory.Temporary: ApplyTemporaryReward(data); break;
-            case RewardCategory.PermanentRelic: ApplyRelicReward(data); break;
-            case RewardCategory.PhysicalItem: ApplyPhysicalReward(data); break;
-        }
-
+        AddToBag(data.id);
         return false;
     }
 
-    bool IsCurrentlyOwned(RewardData data)
+    void AddToBag(string rewardId)
     {
-        switch (data.category)
+        foreach (var e in currentRun.bag)
         {
-            case RewardCategory.Temporary:
-                return currentRun.temporaryRewards.Exists(t => t.rewardId == data.id);
-            case RewardCategory.PermanentRelic:
-                return currentRun.relics.Exists(r => r.rewardId == data.id);
-            case RewardCategory.PhysicalItem:
-                return currentRun.physicalItems.Exists(p => p.rewardId == data.id);
+            if (e.rewardId == rewardId) { e.count++; return; }
         }
-        return false;
+        currentRun.bag.Add(new BagEntry { rewardId = rewardId, count = 1 });
     }
 
-    int GetFragmentsForRarity(RewardRarity rarity, int overrideValue)
+    void RemoveOneFromBag(string rewardId)
     {
-        if (overrideValue >= 0) return overrideValue;
-
-        switch (rarity)
+        for (int i = 0; i < currentRun.bag.Count; i++)
         {
-            case RewardRarity.Common: return fragmentsCommon;
-            case RewardRarity.Uncommon: return fragmentsUncommon;
-            case RewardRarity.Rare: return fragmentsRare;
-            case RewardRarity.Epic: return fragmentsEpic;
-            default: return fragmentsLegendary;
-        }
-    }
-
-    void ApplyTemporaryReward(RewardData data)
-    {
-        currentRun.temporaryRewards.Add(new ActiveTemporaryReward
-        {
-            rewardId = data.id,
-            effect = data.effect,
-            value = data.value,
-            daysRemaining = Mathf.Max(1, data.durationDays)
-        });
-
-        ApplyStatEffect(data.effect, data.value, 1);
-    }
-
-    void ApplyRelicReward(RewardData data)
-    {
-        if (currentRun.relics.Count >= maxRelics)
-        {
-            int frags = GetFragmentsForRarity(data.rarity, data.fragmentOverride);
-            persistent.fragments += frags;
+            var e = currentRun.bag[i];
+            if (e.rewardId != rewardId) continue;
+            e.count--;
+            if (e.count <= 0) currentRun.bag.RemoveAt(i);
             return;
         }
-
-        currentRun.relics.Add(new ActiveRelic { rewardId = data.id, effect = data.effect, value = data.value });
-        ApplyStatEffect(data.effect, data.value, 1);
     }
 
-    void ApplyPhysicalReward(RewardData data)
+    public bool Equip(string rewardId)
     {
-        currentRun.physicalItems.Add(new PhysicalItemInstance
-        {
-            rewardId = data.id,
-            usesRemaining = data.usesPerRun,
-            secondsSinceLastTrigger = 0f
-        });
+        var data = database != null ? database.GetById(rewardId) : null;
+        if (data == null || GetBagCount(rewardId) <= 0) return false;
+
+        EnsureSlots();
+        int free = currentRun.slots.FindIndex(s => s.IsEmpty);
+        if (free < 0) return false;
+
+        RemoveOneFromBag(rewardId);
+
+        var slot = currentRun.slots[free];
+        slot.rewardId = data.id;
+        slot.effect = data.effect;
+        slot.value = data.value;
+        slot.isTemporary = data.category == RewardCategory.Temporary;
+        slot.daysRemaining = slot.isTemporary ? Mathf.Max(1, data.durationDays) : 0;
+
+        ApplyStatEffect(slot.effect, slot.value, 1);
+        OnStateChanged?.Invoke();
+        return true;
+    }
+    public bool CanUnequip(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= currentRun.slots.Count) return false;
+        var slot = currentRun.slots[slotIndex];
+        return !slot.IsEmpty && !slot.isTemporary;
+    }
+
+    public bool Unequip(int slotIndex)
+    {
+        if (!CanUnequip(slotIndex)) return false;
+
+        var slot = currentRun.slots[slotIndex];
+        ApplyStatEffect(slot.effect, slot.value, -1);
+        AddToBag(slot.rewardId);
+        slot.Clear();
+
+        OnStateChanged?.Invoke();
+        return true;
     }
 
     void ApplyStatEffect(RewardEffect effect, float value, int sign)
@@ -321,126 +288,23 @@ public class RewardMachineManager : MonoBehaviour
             case RewardEffect.HitRadiusBonus: gm.relicHitRadiusBonus += sign * value; break;
             case RewardEffect.SwingIntervalReduction: gm.relicSwingIntervalReduction += sign * value; break;
             case RewardEffect.CoinDropChanceBonus: gm.coinDropChance = Mathf.Clamp01(gm.coinDropChance + sign * value); break;
-            default: return; 
+            default: return;
         }
 
         gm.RefreshCombatStats();
     }
-    void ExecutePhysicalEffect(RewardData data)
-    {
-        var gm = GameManager.Instance;
 
-        switch (data.effect)
-        {
-            case RewardEffect.InstantWaterBurst:
-                if (gm != null) gm.waterCurrentML += data.value;
-                break;
-
-            case RewardEffect.DestroyRandomCoconuts:
-                DestroyRandomCoconuts(Mathf.RoundToInt(data.value));
-                break;
-
-            case RewardEffect.SkipNextDayCounter:
-                if (gm != null) gm.skipNextDayDecrement = true;
-                break;
-
-            case RewardEffect.TempCoinMagnet:
-                StartCoroutine(TempCoinChanceBoost(data.value, data.durationSeconds));
-                break;
-
-            case RewardEffect.TempWaterBasket:
-                StartCoroutine(TempWaterMultBoost(data.value, data.durationSeconds));
-                break;
-        }
-    }
-
-    void DestroyRandomCoconuts(int count)
-    {
-        if (CoconutSpawner.Instance == null) return;
-
-        var active = CoconutSpawner.Instance.GetActiveCoconuts();
-        for (int i = 0; i < count && active.Count > 0; i++)
-        {
-            int idx = UnityEngine.Random.Range(0, active.Count);
-            var target = active[idx];
-            active.RemoveAt(idx);
-            if (target != null) target.TakeDamage(999999, false);
-        }
-    }
-
-    IEnumerator TempCoinChanceBoost(float amount, float duration)
-    {
-        var gm = GameManager.Instance;
-        if (gm == null) yield break;
-
-        gm.coinDropChance = Mathf.Clamp01(gm.coinDropChance + amount);
-        yield return new WaitForSeconds(duration);
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.coinDropChance = Mathf.Clamp01(GameManager.Instance.coinDropChance - amount);
-    }
-
-    IEnumerator TempWaterMultBoost(float amount, float duration)
-    {
-        var gm = GameManager.Instance;
-        if (gm == null) yield break;
-
-        gm.relicWaterMultiplierBonus += amount;
-        yield return new WaitForSeconds(duration);
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.relicWaterMultiplierBonus -= amount;
-    }
-    public List<RewardData> GetShopPool(RewardCategory? category, RewardRarity? rarity)
-    {
-        List<RewardData> result = new List<RewardData>();
-        if (database == null) return result;
-
-        foreach (var r in database.allRewards)
-        {
-            if (r == null) continue;
-            if (category.HasValue && r.category != category.Value) continue;
-            if (rarity.HasValue && r.rarity != rarity.Value) continue;
-            result.Add(r);
-        }
-        return result;
-    }
-
-    public bool BuyFromFragmentShop(string rewardId, int price)
-    {
-        if (persistent.fragments < price) return false;
-
-        var data = database != null ? database.GetById(rewardId) : null;
-        if (data == null) return false;
-
-        persistent.fragments -= price;
-        GrantReward(data);
-
-        OnStateChanged?.Invoke();
-        return true;
-    }
     void HandleDayStarted()
     {
-        for (int i = currentRun.temporaryRewards.Count - 1; i >= 0; i--)
+        foreach (var slot in currentRun.slots)
         {
-            var t = currentRun.temporaryRewards[i];
-            t.daysRemaining--;
-            if (t.daysRemaining <= 0)
-            {
-                ApplyStatEffect(t.effect, t.value, -1);
-                currentRun.temporaryRewards.RemoveAt(i);
-            }
-        }
-        if (database != null)
-        {
-            for (int i = currentRun.physicalItems.Count - 1; i >= 0; i--)
-            {
-                var inst = currentRun.physicalItems[i];
-                var data = database.GetById(inst.rewardId);
-                if (data == null) continue;
-                if (data.triggerMode != PhysicalTriggerMode.EveryNewDay) continue;
+            if (slot.IsEmpty || !slot.isTemporary) continue;
 
-                ExecuteAutomaticActivation(inst, data);
+            slot.daysRemaining--;
+            if (slot.daysRemaining <= 0)
+            {
+                ApplyStatEffect(slot.effect, slot.value, -1);
+                slot.Clear();
             }
         }
 
@@ -451,9 +315,8 @@ public class RewardMachineManager : MonoBehaviour
     {
         currentRun.pullsSinceEpic = 0;
         currentRun.pullsSinceLegendary = 0;
-        currentRun.relics.Clear();
-        currentRun.temporaryRewards.Clear();
-        currentRun.physicalItems.Clear();
+        currentRun.bag.Clear();
+        foreach (var slot in currentRun.slots) slot.Clear();
 
         OnStateChanged?.Invoke();
     }

@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// Panel independiente de la Maquina de Recompensas. No toca ningun otro Canvas/panel del juego.
 public class RewardMachinePanel : MonoBehaviour
 {
     [Header("Referencias")]
@@ -19,7 +18,6 @@ public class RewardMachinePanel : MonoBehaviour
     [Header("UI - Botones principales")]
     public Button pullButton;
     public Button collectionButton;
-    public Button fragmentsButton;
     public Button closeButton;
 
     [Header("UI - Probabilidades")]
@@ -41,16 +39,9 @@ public class RewardMachinePanel : MonoBehaviour
     public TMP_Text resultNameText;
     public TMP_Text resultRarityText;
     public TMP_Text resultDescriptionText;
-    public TMP_Text fragmentsText;
 
-    [Header("Sub-paneles internos (Coleccion / Fragmentos / Objetos - se comportan como pestañas: abrir uno cierra los otros)")]
+    [Header("Sub-panel: Coleccion")]
     public RewardCollectionUI collectionUI;
-    public RewardFragmentShopUI fragmentShopUI;
-    public RewardPhysicalItemsUI physicalItemsUI;
-    public Button physicalItemsButton;
-    [Tooltip("Pausa entre que se cierra un sub-panel y se abre el otro (mismo criterio que el resto del juego).")]
-    public float subPanelSwitchBreak = 0.12f;
-    private Coroutine subPanelSwitchRoutine;
 
     [Header("Animacion / sonido (opcionales, todo funciona igual si se dejan vacios)")]
     public Animator pullAnimator;
@@ -70,31 +61,22 @@ public class RewardMachinePanel : MonoBehaviour
     public Color legendaryColor = new Color(1f, 0.65f, 0f);
 
     private bool isPulling = false;
+    private Coroutine resultHideRoutine;
 
     void Start()
     {
         if (pullButton != null) pullButton.onClick.AddListener(OnPullPressed);
         if (closeButton != null) closeButton.onClick.AddListener(ClosePanel);
         if (collectionButton != null) collectionButton.onClick.AddListener(OpenCollectionTab);
-        if (fragmentsButton != null) fragmentsButton.onClick.AddListener(OpenFragmentsTab);
-        if (physicalItemsButton != null) physicalItemsButton.onClick.AddListener(OpenPhysicalItemsTab);
 
         if (machine != null) machine.OnStateChanged += RefreshUI;
 
         if (resultPanel != null) resultPanel.SetActive(false);
-
-        // NOTA: antes aca se llamaba ClosePanel(), pero si panelRoot es el mismo GameObject
-        // que este script (como se recomienda), la PRIMERA vez que GameManager activa este
-        // panel, Start() corre y ClosePanel() lo desactivaba de nuevo en el mismo frame,
-        // dejandolo inactivo sin que se notara. El estado inicial (activo/inactivo) lo decide
-        // el checkbox del GameObject en el Editor, no hace falta forzarlo aca.
         RefreshUI();
     }
 
     void OnEnable()
     {
-        // Se dispara tanto si abrís el panel con OpenPanel() como si GameManager
-        // activa el GameObject directamente (switch con Mejoras/Tienda).
         RefreshUI();
     }
 
@@ -121,50 +103,10 @@ public class RewardMachinePanel : MonoBehaviour
         if (panelRoot.activeSelf) ClosePanel(); else OpenPanel();
     }
 
-    // --- Pestañas internas: Coleccion / Fragmentos / Objetos Fisicos ---
-    // Abrir una cierra automaticamente las otras que estuvieran abiertas (mismo criterio
-    // que GameManager usa entre Mejoras y Tienda).
-
-    public void OpenCollectionTab() => SwitchSubPanel(0);
-    public void OpenFragmentsTab() => SwitchSubPanel(1);
-    public void OpenPhysicalItemsTab() => SwitchSubPanel(2);
-
-    void SwitchSubPanel(int indexToOpen)
+    public void OpenCollectionTab()
     {
-        if (!gameObject.activeInHierarchy)
-        {
-            // Esto NO deberia pasar nunca si "Coleccion"/"Fragmentos"/"Objetos" solo tienen
-            // wireado (por codigo, en Start()) OpenCollectionTab/OpenFragmentsTab/OpenPhysicalItemsTab.
-            // Si ves este warning es porque ALGO esta cerrando 'Panel (Gacha)' antes de procesar
-            // este click. Revisa el OnClick() de ese boton en el Inspector: debe estar VACIO
-            // (sin ninguna entrada manual, ni GameManager.Instance.ToggleRewardMachinePanel ni nada) -
-            // el listener ya se agrega solo, por codigo, en RewardMachinePanel.Start().
-            Debug.LogWarning("[RewardMachinePanel] Se ignoro un click de pestana porque 'Panel (Gacha)' esta inactivo. " +
-                              "Revisa el OnClick() de ese boton en el Inspector: debe estar VACIO (sin ninguna entrada manual).");
-            return;
-        }
-
-        if (subPanelSwitchRoutine != null) StopCoroutine(subPanelSwitchRoutine);
-        subPanelSwitchRoutine = StartCoroutine(SwitchSubPanelRoutine(indexToOpen));
-    }
-
-    IEnumerator SwitchSubPanelRoutine(int indexToOpen)
-    {
-        bool anyWasOpen = false;
-
-        if (indexToOpen != 0 && collectionUI != null && collectionUI.IsOpen) { collectionUI.Hide(); anyWasOpen = true; }
-        if (indexToOpen != 1 && fragmentShopUI != null && fragmentShopUI.IsOpen) { fragmentShopUI.Hide(); anyWasOpen = true; }
-        if (indexToOpen != 2 && physicalItemsUI != null && physicalItemsUI.IsOpen) { physicalItemsUI.Hide(); anyWasOpen = true; }
-
-        if (anyWasOpen && subPanelSwitchBreak > 0f)
-            yield return new WaitForSecondsRealtime(subPanelSwitchBreak);
-
-        switch (indexToOpen)
-        {
-            case 0: if (collectionUI != null) collectionUI.Show(); break;
-            case 1: if (fragmentShopUI != null) fragmentShopUI.Show(); break;
-            case 2: if (physicalItemsUI != null) physicalItemsUI.Show(); break;
-        }
+        if (collectionUI == null) return;
+        if (collectionUI.IsOpen) collectionUI.Hide(); else collectionUI.Show();
     }
 
     void OnPullPressed()
@@ -181,8 +123,6 @@ public class RewardMachinePanel : MonoBehaviour
         if (audioSource != null && pullSound != null) audioSource.PlayOneShot(pullSound);
         if (pullAnimator != null && !string.IsNullOrEmpty(pullAnimTrigger)) pullAnimator.SetTrigger(pullAnimTrigger);
 
-        // Escuchamos el evento para capturar el resultado exacto (dato + si fue duplicado),
-        // en vez de intentar adivinarlo despues.
         RewardData lastResult = null;
         bool lastWasDuplicate = false;
         void Handler(RewardData d, bool dup) { lastResult = d; lastWasDuplicate = dup; }
@@ -196,11 +136,9 @@ public class RewardMachinePanel : MonoBehaviour
         ShowResult(lastResult, lastWasDuplicate);
         RefreshUI();
 
-        if (pullButton != null) pullButton.interactable = true;
         isPulling = false;
+        RefreshUI();
     }
-
-    private Coroutine resultHideRoutine;
 
     void ShowResult(RewardData data, bool wasDuplicate)
     {
@@ -217,7 +155,7 @@ public class RewardMachinePanel : MonoBehaviour
         if (resultDescriptionText != null)
         {
             resultDescriptionText.text = wasDuplicate
-                ? data.description + "\n\n(Duplicado -> convertido en Fragmentos de Cobrador)"
+                ? data.description + "\n\n(Duplicado -> se te devolvio la moneda)"
                 : data.description;
         }
 
@@ -279,7 +217,7 @@ public class RewardMachinePanel : MonoBehaviour
         if (probabilitiesText != null)
         {
             probabilitiesText.text =
-                $"Comun {machine.commonChance:0}%  |  Poco comun {machine.uncommonChance:0}%  |  Raro {machine.rareChance:0}%  |  Epico {machine.epicChance:0}%  |  Legendario {machine.legendaryChance:0}%";
+                $"Comun {machine.commonChance:0}%    Poco comun {machine.uncommonChance:0}%    Raro {machine.rareChance:0}%    Epico {machine.epicChance:0}%  |  Legendario {machine.legendaryChance:0}%";
         }
 
         if (pityEpicText != null)
@@ -287,8 +225,5 @@ public class RewardMachinePanel : MonoBehaviour
 
         if (pityLegendaryText != null)
             pityLegendaryText.text = $"Garantia Legendaria: {machine.currentRun.pullsSinceLegendary} / {machine.pityLegendaryThreshold}";
-
-        if (fragmentsText != null)
-            fragmentsText.text = "Fragmentos de Cobrador: " + machine.persistent.fragments;
     }
 }
