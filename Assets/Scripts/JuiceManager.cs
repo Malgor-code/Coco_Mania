@@ -19,6 +19,8 @@ public class JuiceManager : MonoBehaviour
     [Range(0f, 1f)] public float traumaPerHit = 0.05f;
     [Tooltip("Trauma que agrega un golpe que mata. Un poco mas, pero sigue siendo sutil.")]
     [Range(0f, 1f)] public float traumaPerKill = 0.12f;
+    [Tooltip("Trauma extra cuando el golpe suelta una moneda (un 'ding' sutil).")]
+    [Range(0f, 1f)] public float traumaPerCoin = 0.03f;
     [Tooltip("Que tan rapido se disipa el trauma por segundo (mas alto = shake mas corto).")]
     public float traumaDecay = 1.8f;
     [Tooltip("Desplazamiento MAXIMO de camara si el trauma llegara a 1.0 (casi nunca pasa).")]
@@ -29,9 +31,17 @@ public class JuiceManager : MonoBehaviour
     private float trauma = 0f;
     private Vector3 camOriginalLocalPos;
 
-    [Header("Numeros de dano flotantes (opcional)")]
+    [Header("Numeros flotantes (opcional)")]
     [Tooltip("Prefab con un TextMeshPro (3D, world space) o un Canvas World Space con TMP_Text adentro, mas el script DamageNumberPopup. Si lo dejas vacio, simplemente no se muestran numeros.")]
     public GameObject damageNumberPrefab;
+
+    [Header("Reporte de golpe (textos que salen uno por uno)")]
+    [Tooltip("Segundos entre que sale un texto y el siguiente (dano -> agua -> moneda).")]
+    public float popupStagger = 0.5f;
+    [Tooltip("Separacion vertical entre los textos de un mismo golpe.")]
+    public float popupLineSpacing = 0.35f;
+    [Tooltip("Variacion horizontal aleatoria del punto de aparicion.")]
+    public float popupJitterX = 0.1f;
 
     private Coroutine hitStopRoutine;
 
@@ -41,7 +51,25 @@ public class JuiceManager : MonoBehaviour
         if (targetCamera == null) targetCamera = Camera.main;
         if (targetCamera != null) camOriginalLocalPos = targetCamera.transform.localPosition;
     }
+    public void SpawnKillRewards(Vector3 worldPos, float waterML, bool gaveCoin)
+    {
+        if (damageNumberPrefab == null) return;
 
+        float delay = popupStagger;
+        int line = 1;
+
+        if (waterML > 0.0001f)
+        {
+            SpawnPopup(worldPos, FormatWater(waterML), PopupStyle.Water, false, line++, delay);
+            delay += popupStagger;
+        }
+
+        if (gaveCoin)
+        {
+            SpawnPopup(worldPos, "+1 Moneda", PopupStyle.Coin, false, line++, delay);
+            trauma = Mathf.Clamp01(trauma + traumaPerCoin);
+        }
+    }
     void Update()
     {
         if (targetCamera == null) return;
@@ -87,10 +115,48 @@ public class JuiceManager : MonoBehaviour
 
     public void SpawnDamageNumber(Vector3 worldPos, string text, bool big)
     {
+        SpawnPopup(worldPos, text, PopupStyle.Damage, big, 0, 0f);
+    }
+
+    public void SpawnHitReport(Vector3 worldPos, float damage, float waterML, bool gaveCoin, bool crit)
+    {
         if (damageNumberPrefab == null) return;
 
-        GameObject go = Instantiate(damageNumberPrefab, worldPos, Quaternion.identity);
+        int line = 0;
+        float delay = 0f;
+
+        SpawnPopup(worldPos, damage.ToString("0.#"), PopupStyle.Damage, crit, line++, delay);
+
+        if (waterML > 0.0001f)
+        {
+            delay += popupStagger;
+            SpawnPopup(worldPos, FormatWater(waterML), PopupStyle.Water, false, line++, delay);
+        }
+
+        if (gaveCoin)
+        {
+            delay += popupStagger;
+            SpawnPopup(worldPos, "+1 Moneda", PopupStyle.Coin, false, line++, delay);
+            trauma = Mathf.Clamp01(trauma + traumaPerCoin);
+        }
+    }
+
+    static string FormatWater(float ml)
+    {
+        if (ml >= 1000f) return "+" + (ml / 1000f).ToString("0.##") + " L";
+        return "+" + ml.ToString("0") + " mL";
+    }
+
+    void SpawnPopup(Vector3 worldPos, string text, PopupStyle style, bool big, int line, float delay)
+    {
+        if (damageNumberPrefab == null) return;
+
+        Vector3 pos = worldPos
+                      + Vector3.up * (line * popupLineSpacing)
+                      + Vector3.right * Random.Range(-popupJitterX, popupJitterX);
+
+        GameObject go = Instantiate(damageNumberPrefab, pos, Quaternion.identity);
         DamageNumberPopup popup = go.GetComponent<DamageNumberPopup>();
-        if (popup != null) popup.Setup(text, big);
+        if (popup != null) popup.Setup(text, style, big, delay);
     }
 }

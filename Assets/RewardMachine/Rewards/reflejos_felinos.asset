@@ -15,7 +15,7 @@ MonoBehaviour:
   id: reflejos_felinos
   displayName: Reflejos Felinos
   description: "Golpea ~15% m\xE1s seguido mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9f7946fd01186a744b1a91eb490c4dc6, type: 3}
   rarity: 3
   category: 1
   effect: 6

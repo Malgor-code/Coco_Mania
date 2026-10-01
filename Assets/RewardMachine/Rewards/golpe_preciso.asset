@@ -15,7 +15,7 @@ MonoBehaviour:
   id: golpe_preciso
   displayName: Golpe Preciso
   description: "+5% cr\xEDtico durante 2 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 528c729642f590a4b9fa600898bacc96, type: 3}
   rarity: 1
   category: 0
   effect: 2

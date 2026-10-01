@@ -82,18 +82,18 @@ public class LocalizationManager : MonoBehaviour
         Add("collection_title", "Recaudacion", "Collection");
         Add("collection_coconuts_killed", "Cocos destruidos: {0}", "Coconuts destroyed: {0}");
         Add("collection_money_earned", "Dinero conseguido: ${0}", "Money earned: ${0}");
-        Add("collection_lechita_earned", "Agua conseguide: ${0}", "Water earned: ${0}");
-        Add("collection_current_money", "${0}", "${0}");
+        Add("collection_lechita_earned", "Agua conseguide: {0}", "Water earned: {0}");
+        Add("collection_current_money", "{0}", "{0}");
         Add("collection_cycle", "Ciclo de deuda: {0}", "Debt cycle: {0}");
         Add("collection_upgrades_button", "Mejoras", "Upgrades");
         Add("collection_shop_button", "Tienda", "Shop");
         Add("collection_debt_button", "Deuda", "Debt");
         Add("collection_continue_button", "Continuar", "Continue");
-        Add("collection_money", "${0}", "${0}");
+        Add("collection_money", "{0}", "{0}");
         // ---------- Panel de Deuda ----------
         Add("debt_title", "Deuda", "Debt");
         Add("debt_days_left", "{0} dias para pagar", "{0} days left to pay");
-        Add("debt_amount_pending", "${0}", "${0}");
+        Add("debt_amount_pending", "{0}", "{0}");
         Add("debt_paid_label", "Pagada", "Paid");
         Add("debt_pay_button", "Pagar Deuda", "Pay Debt");
 
@@ -101,7 +101,7 @@ public class LocalizationManager : MonoBehaviour
         Add("upgrades_title", "Mejoras", "Upgrades");
         Add("shop_title", "Tienda", "Shop");
         Add("shop_current_machete", "Machete actual: {0}", "Current machete: {0}");
-        Add("shop_next_machete", "{0} - ${1}", "{0} - ${1}");
+        Add("shop_next_machete", "{0} - {1}", "{0} - {1}");
         Add("shop_max_machete", "Maximo alcanzado", "Max level reached");
         Add("shop_upgrade_button", "Mejorar Machete", "Upgrade Machete");
 
@@ -114,9 +114,9 @@ public class LocalizationManager : MonoBehaviour
         Add("betweenruns_legacy_points", "{0} Puntos de Legado", "{0} Legacy Points");
 
         // ---------- Mensajes de log (feedback corto en pantalla) ----------
-        Add("log_money_earned", "+${0}", "+${0}");
+        Add("log_money_earned", "+{0}", "+{0}");
         Add("log_debt_paid", "Completa el pedido", "Complete the order");
-        Add("log_new_cycle", "Nuevo ciclo. Cuenta: ${0}", "New cycle. Bill: ${0}");
+        Add("log_new_cycle", "Nuevo ciclo. Cuenta: {0}", "New cycle. Bill: {0}");
         Add("log_bankruptcy", "Bancarrota. +{0} puntos de legado.", "Bankruptcy. +{0} legacy points.");
         Add("log_new_machete", "Nuevo machete: {0}", "New machete: {0}");
         Add("log_upgrade_bought", "Mejora comprada: {0}", "Upgrade bought: {0}");

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: manantial_eterno
   displayName: Manantial Eterno
   description: "+30% agua mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 24b13407bc157954bb0e34e00cfddd88, type: 3}
   rarity: 4
   category: 1
   effect: 3

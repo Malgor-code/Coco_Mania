@@ -36,10 +36,7 @@ public class GameManager : MonoBehaviour
     [Header("Machete (se ACTIVA recien al empezar a golpear, se apaga en menus/paneles)")]
     [Tooltip("El GameObject raiz del machete (el que tiene MacheteController). Se activa en Play y en Siguiente Dia, y se desactiva en cualquier otra fase (tienda, pedido, arbol, perks, entre-partidas).")]
     public GameObject machete;
-
-    [Header("OBSOLETO - ya no se usa (la economia es 100% agua de coco). Se deja declarado para no romper otros scripts que lo referencien, pero siempre queda en 0.")]
     public int money = 0;
-
     [Header("Agua de coco (UNICO recurso del juego: sirve para el pedido Y para pagar mejoras/machetes)")]
     [Tooltip("Cuanta agua de coco (en mL) tienes acumulada ahora mismo. Se gasta tanto al entregar el pedido como al comprar mejoras en la tienda/arbol - por eso hay que elegir entre progresar o guardar para el pedido.")]
     public float waterCurrentML = 0f;
@@ -187,6 +184,7 @@ public class GameManager : MonoBehaviour
     [Header("Monedas raras (coleccionable: no se ganan por golpe, es un drop raro al matar un coco)")]
     [Tooltip("Cuantas monedas has encontrado. Es un contador/coleccionable; no se gasta en nada todavia.")]
     public int coconutCoins = 0;
+    [HideInInspector] public bool lastKillFoundCoin = false;
     [Range(0f, 1f)]
     [Tooltip("Probabilidad de que un coco suelte 1 moneda al morir. Empieza en 0.5% (0.005) y sube con los nodos 'Suerte de Moneda' del arbol de mejoras.")]
     public float coinDropChance = 0.005f;
@@ -557,6 +555,7 @@ public class GameManager : MonoBehaviour
         dayMoneyEarned += gainedRounded;
 
         bool foundCoin = Random.value < coinDropChance;
+        lastKillFoundCoin = foundCoin;
         if (foundCoin)
         {
             coconutCoins++;
@@ -594,13 +593,12 @@ public class GameManager : MonoBehaviour
 
     void ShowHittingUI()
     {
-        currentPhase = Phase.Hitting;
         dayCoconutsKilled = 0;
         dayMoneyEarned = 0;
         daySwings = 0;
         dayHits = 0;
         dayCoinsFound = 0;
-        if (machete != null) machete.SetActive(true);
+        if (machete != null) machete.SetActive(false);
 
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(true);
         if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
@@ -614,11 +612,29 @@ public class GameManager : MonoBehaviour
 
         if (CoconutSpawner.Instance != null)
         {
+            CoconutSpawner.Instance.OnInitialSpawnComplete -= HandleInitialSpawnComplete;
+            CoconutSpawner.Instance.OnInitialSpawnComplete += HandleInitialSpawnComplete;
             CoconutSpawner.Instance.StartNewDay();
         }
-        OnDayStarted?.Invoke();
+        else
+        {
+            ActivateHittingPhase();
+        }
+    }
+    void HandleInitialSpawnComplete()
+    {
+        if (CoconutSpawner.Instance != null)
+            CoconutSpawner.Instance.OnInitialSpawnComplete -= HandleInitialSpawnComplete;
+
+        ActivateHittingPhase();
     }
 
+    void ActivateHittingPhase()
+    {
+        currentPhase = Phase.Hitting;
+        if (machete != null) machete.SetActive(true);
+        OnDayStarted?.Invoke();
+    }
     public void ToggleUpgradeTreePanel()
     {
         bool willOpen = upgradeTreePanel != null && !upgradeTreePanel.activeSelf;

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: rey_midas
   displayName: Rey Midas
   description: "+15% prob. de moneda mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e24f61a937a16d94eb702fac77351903, type: 3}
   rarity: 4
   category: 1
   effect: 7

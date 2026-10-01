@@ -15,7 +15,7 @@ MonoBehaviour:
   id: filo_perfecto
   displayName: Filo Perfecto
   description: "+5 da\xF1o mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3451f8c525c38234388ed50b115ba510, type: 3}
   rarity: 4
   category: 1
   effect: 1

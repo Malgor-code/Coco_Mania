@@ -15,7 +15,7 @@ MonoBehaviour:
   id: filo_improvisado_3
   displayName: Filo Improvisado III
   description: "+3 da\xF1o durante 3 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d20499280d76c9f43a21131859b94811, type: 3}
   rarity: 2
   category: 0
   effect: 1

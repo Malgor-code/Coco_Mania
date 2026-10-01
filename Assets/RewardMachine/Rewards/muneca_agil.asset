@@ -15,7 +15,7 @@ MonoBehaviour:
   id: muneca_agil
   displayName: "Mu\xF1eca \xC1gil"
   description: "Golpea ~5% m\xE1s seguido durante 2 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9a0ecc6a7dd47934ba549320eae630ab, type: 3}
   rarity: 1
   category: 0
   effect: 6

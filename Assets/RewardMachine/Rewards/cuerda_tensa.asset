@@ -15,7 +15,7 @@ MonoBehaviour:
   id: cuerda_tensa
   displayName: Cuerda Tensa
   description: "Golpea ~8% m\xE1s seguido mientras est\xE9 equipada."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5bb363b1b29b80143a7c4b4eff5947cf, type: 3}
   rarity: 2
   category: 1
   effect: 6

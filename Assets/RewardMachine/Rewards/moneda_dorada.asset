@@ -15,7 +15,7 @@ MonoBehaviour:
   id: moneda_dorada
   displayName: Moneda Dorada
   description: "+8% prob. de moneda mientras est\xE9 equipada."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 761041511d5e104458fe121afdf866f6, type: 3}
   rarity: 3
   category: 1
   effect: 7

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: filo_improvisado
   displayName: Filo Improvisado
   description: "+1 da\xF1o durante 2 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 03f74a0ca76cbdb4bb4c812e8d4e43e7, type: 3}
   rarity: 0
   category: 0
   effect: 1

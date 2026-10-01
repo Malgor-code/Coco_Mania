@@ -15,7 +15,7 @@ MonoBehaviour:
   id: moneda_suelta
   displayName: Moneda Suelta
   description: "+3% prob. de moneda durante 2 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: eba37f45c72a87241a86ee9c5ed75014, type: 3}
   rarity: 0
   category: 0
   effect: 7

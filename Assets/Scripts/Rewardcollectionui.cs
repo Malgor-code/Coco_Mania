@@ -18,6 +18,12 @@ public class RewardCollectionUI : MonoBehaviour, IRewardSubPanel
     public RewardItemUI itemPrefab;
     public Button closeButton;
 
+    [Header("Panel que se apaga mientras la Coleccion esta abierta")]
+    [Tooltip("Opcional. Se desactiva al abrir la Coleccion y se vuelve a activar al cerrarla.")]
+    public GameObject panelToHide;
+
+    private bool otherPanelHidden = false;
+
     public bool IsOpen => panelRoot != null && panelRoot.activeSelf;
 
     void Start()
@@ -38,6 +44,12 @@ public class RewardCollectionUI : MonoBehaviour, IRewardSubPanel
 
     public void Show()
     {
+        if (panelToHide != null && panelToHide.activeSelf)
+        {
+            panelToHide.SetActive(false);
+            otherPanelHidden = true;
+        }
+
         if (panelRoot != null) panelRoot.SetActive(true);
         Populate();
     }
@@ -45,6 +57,19 @@ public class RewardCollectionUI : MonoBehaviour, IRewardSubPanel
     public void Hide()
     {
         if (panelRoot != null) panelRoot.SetActive(false);
+        RestoreOtherPanel();
+    }
+
+    void RestoreOtherPanel()
+    {
+        if (!otherPanelHidden) return;
+        otherPanelHidden = false;
+        if (panelToHide != null) panelToHide.SetActive(true);
+    }
+
+    void OnDisable()
+    {
+        RestoreOtherPanel();
     }
 
     void Populate()
@@ -55,7 +80,12 @@ public class RewardCollectionUI : MonoBehaviour, IRewardSubPanel
 
     void PopulateSlots()
     {
-        if (slotsParent == null || slotPrefab == null || machine == null) return;
+        if (machine == null) { Debug.LogWarning("[RewardCollectionUI] Falta asignar 'Machine'."); return; }
+        if (slotsParent == null || slotPrefab == null)
+        {
+            Debug.LogWarning("[RewardCollectionUI] Falta asignar 'Slots Parent' y/o 'Slot Prefab' (las ranuras no se mostraran).");
+            return;
+        }
 
         foreach (Transform child in slotsParent) Destroy(child.gameObject);
 
@@ -75,7 +105,14 @@ public class RewardCollectionUI : MonoBehaviour, IRewardSubPanel
     void PopulateGrid()
     {
         var db = database != null ? database : (machine != null ? machine.database : null);
-        if (gridParent == null || itemPrefab == null || db == null) return;
+        if (db == null) { Debug.LogWarning("[RewardCollectionUI] No hay RewardDatabase (asigna 'Database' o la del Machine)."); return; }
+        if (gridParent == null || itemPrefab == null)
+        {
+            Debug.LogWarning("[RewardCollectionUI] Falta asignar 'Grid Parent' y/o 'Item Prefab'.");
+            return;
+        }
+        if (db.allRewards == null || db.allRewards.Count == 0)
+            Debug.LogWarning("[RewardCollectionUI] La RewardDatabase esta vacia. Ejecuta Tools > Reward Machine > Generar Recompensas.");
 
         foreach (Transform child in gridParent) Destroy(child.gameObject);
 

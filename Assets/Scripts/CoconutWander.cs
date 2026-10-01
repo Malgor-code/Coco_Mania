@@ -5,19 +5,24 @@ public class CoconutWander : MonoBehaviour
 {
     public float speed = 1.5f;
     public float retargetInterval = 2.5f;
-    public float rotationSpeed = 8f; 
+    public float rotationSpeed = 8f;
+    public bool debugLog = false;
 
     private Vector3 targetPos;
     private float timer;
     private Vector3 boundsCenter;
     private Vector2 boundsHalfExtents = new Vector2(8f, 8f);
+    private bool boundsSet = false;
     private float stunTimer = 0f;
     private Rigidbody rb;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false;
         rb.useGravity = false;
+        rb.linearDamping = 0f;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.constraints = RigidbodyConstraints.FreezePositionY
                         | RigidbodyConstraints.FreezeRotationX
                         | RigidbodyConstraints.FreezeRotationZ;
@@ -25,14 +30,19 @@ public class CoconutWander : MonoBehaviour
 
     void Start()
     {
-        boundsCenter = transform.position;
+        if (!boundsSet)
+        {
+            boundsCenter = transform.position;
+        }
         PickNewTarget();
+        rb.WakeUp();
     }
 
     public void SetBounds(Vector3 center, Vector2 halfExtents)
     {
         boundsCenter = center;
         boundsHalfExtents = halfExtents;
+        boundsSet = true;
         PickNewTarget();
     }
 
@@ -41,18 +51,32 @@ public class CoconutWander : MonoBehaviour
         stunTimer = Mathf.Max(stunTimer, duration);
     }
 
+    void StopMoving()
+    {
+        if (!rb.isKinematic) rb.linearVelocity = Vector3.zero;
+    }
+
     void FixedUpdate()
     {
-        if (GameManager.Instance != null && !GameManager.Instance.IsHittingPhase())
+        bool hitting = GameManager.Instance == null || GameManager.Instance.IsHittingPhase();
+        bool dayActive = CoconutSpawner.Instance != null && CoconutSpawner.Instance.DayActive;
+
+        if (debugLog)
         {
-            rb.linearVelocity = Vector3.zero;
+            Debug.Log($"{name} hitting={hitting} dayActive={dayActive} stun={stunTimer} " +
+                      $"kinematic={rb.isKinematic} timeScale={Time.timeScale}");
+        }
+
+        if (!hitting && !dayActive)
+        {
+            StopMoving();
             return;
         }
 
         if (stunTimer > 0f)
         {
             stunTimer -= Time.fixedDeltaTime;
-            rb.linearVelocity = Vector3.zero;
+            StopMoving();
             return;
         }
 
@@ -66,12 +90,21 @@ public class CoconutWander : MonoBehaviour
         Vector3 dir = targetPos - transform.position;
         dir.y = 0f;
 
-        rb.linearVelocity = dir.magnitude > 0.05f ? dir.normalized * speed : Vector3.zero;
-
         if (dir.magnitude > 0.05f)
         {
+            Vector3 velocity = dir.normalized * speed;
+
+            if (rb.isKinematic)
+                rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            else
+                rb.linearVelocity = velocity;
+
             Quaternion targetRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
+        }
+        else
+        {
+            StopMoving();
         }
     }
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: mango_reforzado_2
   displayName: Mango Reforzado II
   description: "+0.2 radio de golpe mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fc8b62baeb3811e46b8db3c7c3af5662, type: 3}
   rarity: 3
   category: 1
   effect: 5

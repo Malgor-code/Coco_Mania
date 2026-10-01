@@ -15,7 +15,7 @@ MonoBehaviour:
   id: pulso_firme
   displayName: Pulso Firme
   description: "Golpea ~10% m\xE1s seguido durante 2 d\xEDas."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bdbf128fd5f886945af35ccdf5f5bbc5, type: 3}
   rarity: 2
   category: 0
   effect: 6

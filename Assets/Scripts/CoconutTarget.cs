@@ -478,10 +478,12 @@ public class CoconutTarget : MonoBehaviour
         }
         if (!jarTookFx && deathFx != null) AutoDestroyFx(deathFx);
 
-        if (JuiceManager.Instance != null)
+        if (JuiceManager.Instance != null && GameManager.Instance != null)
         {
-            JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.6f, "+$" + earned, true);
-            JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.9f, "+" + Mathf.RoundToInt(waterGained) + "mL", false);
+            JuiceManager.Instance.SpawnKillRewards(
+                transform.position + Vector3.up * 0.5f,
+                waterGained,
+                GameManager.Instance.lastKillFoundCoin);
         }
 
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.RemoveCoconut(this);

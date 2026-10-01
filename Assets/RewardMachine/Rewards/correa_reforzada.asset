@@ -15,7 +15,7 @@ MonoBehaviour:
   id: correa_reforzada
   displayName: Correa Reforzada
   description: "+4 stamina m\xE1xima mientras est\xE9 equipada."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ca9715fe87c811941862fd5c6109c1f2, type: 3}
   rarity: 2
   category: 1
   effect: 4

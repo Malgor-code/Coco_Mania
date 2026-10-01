@@ -15,7 +15,7 @@ MonoBehaviour:
   id: ojo_cazador
   displayName: Ojo de Cazador
   description: "+3% cr\xEDtico mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6099487036528754c8f1ca238a535108, type: 3}
   rarity: 2
   category: 1
   effect: 2

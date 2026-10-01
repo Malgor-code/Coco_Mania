@@ -15,7 +15,7 @@ MonoBehaviour:
   id: danza_machete
   displayName: Danza del Machete
   description: "Golpea ~25% m\xE1s seguido mientras est\xE9 equipada."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7cea6c9115eba0944ae27a5f82195792, type: 3}
   rarity: 4
   category: 1
   effect: 6

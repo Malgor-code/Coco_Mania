@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: -5580033761004635376, guid: d3aa134bf7a12394dbf138fca6163b8e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,8 +105,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sample text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d3aa134bf7a12394dbf138fca6163b8e, type: 2}
+  m_sharedMaterial: {fileID: -5580033761004635376, guid: d3aa134bf7a12394dbf138fca6163b8e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -192,6 +192,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 5051492863686912611}
   riseSpeed: 1.5
-  lifetime: 1
+  lifetime: 2
+  driftX: 0.35
+  popDuration: 0.18
+  popOvershoot: 2.2
+  fadeStart: 0.55
+  wobbleDegrees: 8
   normalColor: {r: 1, g: 0.8137255, b: 0, a: 1}
   bigColor: {r: 0.9622642, g: 0.046402372, b: 0.027233727, a: 1}
+  waterColor: {r: 0.35, g: 0.8, b: 1, a: 1}
+  rainbowSpeed: 1.5
+  rainbowCharOffset: 0.12
+  bigScale: 1.4
+  waterScale: 0.85
+  coinScale: 1.1

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: mango_colosal
   displayName: Mango Colosal
   description: "+0.4 radio de golpe mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: a5e1ae0e65fa9a041902599849cd62a1, type: 3}
   rarity: 4
   category: 1
   effect: 5

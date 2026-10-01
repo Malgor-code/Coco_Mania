@@ -15,7 +15,7 @@ MonoBehaviour:
   id: corazon_coco
   displayName: "Coraz\xF3n de Coco"
   description: "+12 stamina m\xE1xima mientras est\xE9 equipado."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7f03f3f5e65329749b599bb294b74d0d, type: 3}
   rarity: 4
   category: 1
   effect: 4
