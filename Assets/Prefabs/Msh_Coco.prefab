@@ -624,15 +624,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d5da6b8529f0e3e4cb99fef5578a6123, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5da6b8529f0e3e4cb99fef5578a6123, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5da6b8529f0e3e4cb99fef5578a6123, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5da6b8529f0e3e4cb99fef5578a6123, type: 3}
       propertyPath: m_LocalPosition.x
@@ -751,6 +751,43 @@ MonoBehaviour:
   pitchVariation: 0.1
   hitFeedbackDuration: 0.18
   squashAmount: 0.2
+  lowHpBlinkThreshold: 0.25
+  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 1}
+  lowHpBlinksPerSecond: 4
+  fragmentPrefabs: []
+  fragmentExplosionForce: 5
+  fragmentTorque: 8
+  fragmentLifetime: 3
+  ability: 0
+  resistenteDamageReduction: 0.3
+  armaduraDamageReduction: 0.5
+  diamanteDamageReduction: 0.75
+  diamanteCritMultiplier: 4
+  fibraDuraStackPerHit: 0.05
+  fibraDuraMaxStack: 0.25
+  fibraDuraResetTime: 1.5
+  tenazHpThreshold: 0.3
+  tenazDamageReduction: 0.25
+  reboteHitsPerTrigger: 5
+  reboteStaminaPenalty: 2
+  fortificadoNormalDuration: 4
+  fortificadoBuffDuration: 3
+  fortificadoDamageReduction: 0.4
+  implacableHitsToTrigger: 4
+  implacableWindowSeconds: 2
+  implacableBuffDuration: 2
+  implacableDamageReduction: 0.3
+  regeneracionDelayAfterHit: 2
+  regeneracionPercentPerSecond: 0.03
+  supremoFase2RegenPercentPerSecond: 0.015
+  camuflajeVisibleDuration: 3
+  camuflajeHiddenDuration: 2
+  camuflajeHiddenAlpha: 0.2
+  maldicionDuration: 6
+  supremoFase2HpThreshold: 0.7
+  supremoFase3HpThreshold: 0.3
+  supremoFase1DamageReduction: 0.2
+  supremoFase3DamageReduction: 0.35
   hp: 0
   hpMax: 0
 --- !u!114 &6205389778159658485
