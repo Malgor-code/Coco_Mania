@@ -11,7 +11,9 @@ public class CoconutSpawner : MonoBehaviour
     public GameObject coconutPrefab;
     public Transform mapCenter;
     public Vector2 mapHalfExtents = new Vector2(8f, 8f);
-
+    [Header("Animacion al golpear (objeto de la escena)")]
+    [Tooltip("Arrastra aqui el objeto con Animator de la escena. Se le pasa a cada coco al nacer.")]
+    public Animator hitAnimator;
     [Header("Reglas de spawn")]
     public int startingCoconuts = 4;
     public float spawnInterval = 5f;
@@ -146,6 +148,7 @@ public class CoconutSpawner : MonoBehaviour
         CoconutTarget target = EnsureCoconutComponents(go);
 
         target.ApplyType(chosenType);
+        if (hitAnimator != null) target.hitAnimator = hitAnimator;
         activeCoconuts.Add(target);
 
         CoconutWander wander = go.GetComponent<CoconutWander>();

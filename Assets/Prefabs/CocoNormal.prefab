@@ -409,6 +409,8 @@ MonoBehaviour:
   implacableWindowSeconds: 2
   implacableBuffDuration: 2
   implacableDamageReduction: 0.3
+  hitAnimator: {fileID: 1747711446717148761}
+  hitStateName: Hit_Coco
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
   supremoFase2RegenPercentPerSecond: 0.015

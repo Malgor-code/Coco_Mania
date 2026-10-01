@@ -74,7 +74,11 @@ public class CoconutTarget : MonoBehaviour
     [Range(0f, 1f)] public float implacableDamageReduction = 0.3f;
     private readonly Queue<float> implacableRecentHitTimes = new Queue<float>();
     private float implacableBuffUntil = -999f;
-
+    [Header("Animacion al recibir golpe")]
+    [Tooltip("Animator que se activa al golpear. Si el objeto es hijo del prefab, arrastralo aqui. Si esta en la escena, dejalo vacio y asignalo en CoconutSpawner: el spawner lo pasa solo.")]
+    public Animator hitAnimator;
+    [Tooltip("Nombre EXACTO del estado de la animacion en el Animator Controller.")]
+    public string hitStateName = "Hit";
     [Header("Ajustes de habilidad: Regeneracion (Legendario, y parcial en Supremo fase 2)")]
     public float regeneracionDelayAfterHit = 2f;
     [Range(0f, 0.2f)] public float regeneracionPercentPerSecond = 0.03f;
@@ -259,7 +263,11 @@ public class CoconutTarget : MonoBehaviour
             }
         }
     }
-
+    void PlayHitAnimation()
+    {
+        if (hitAnimator == null || string.IsNullOrEmpty(hitStateName)) return;
+        hitAnimator.Play(hitStateName, 0, 0f);
+    }
     void UpdateSupremo()
     {
         float hpPercent = hpMax > 0 ? (float)hp / hpMax : 1f;
@@ -382,7 +390,7 @@ public class CoconutTarget : MonoBehaviour
         }
 
         PlaySound(hitSounds);
-
+        PlayHitAnimation();
         if (JuiceManager.Instance != null)
         {
             JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.5f, "-" + finalDamage, false);
