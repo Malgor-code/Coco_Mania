@@ -301,7 +301,11 @@ public class GameManager : MonoBehaviour
     public GameObject betweenRunsPanel;
     public TMP_Text legacyPointsText;
     public TMP_Text bankruptcyMessageText;
-
+    [Header("UI - Eleccion de Perk: iconos y FX")]
+    public Image perkOption1Icon, perkOption2Icon, perkOption3Icon;
+    public PerkCardFX perkCard1, perkCard2, perkCard3;
+    public float perkCardStagger = 0.12f;
+    private bool isChoosingPerk = false;
     [Header("UI - Log")]
     public TMP_Text logText;
 
@@ -929,6 +933,7 @@ public class GameManager : MonoBehaviour
     void OfferPerkChoice()
     {
         currentPhase = Phase.PerkChoice;
+        isChoosingPerk = false;
         if (machete != null) machete.SetActive(false);
         if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(true);
@@ -937,16 +942,27 @@ public class GameManager : MonoBehaviour
 
         currentPerkChoices = PickRandomPerks(3);
 
-        SetPerkLabel(perkOption1Name, perkOption1Desc, currentPerkChoices[0]);
-        SetPerkLabel(perkOption2Name, perkOption2Desc, currentPerkChoices[1]);
-        SetPerkLabel(perkOption3Name, perkOption3Desc, currentPerkChoices[2]);
+        SetPerkLabel(perkOption1Name, perkOption1Desc, perkOption1Icon, currentPerkChoices[0]);
+        SetPerkLabel(perkOption2Name, perkOption2Desc, perkOption2Icon, currentPerkChoices[1]);
+        SetPerkLabel(perkOption3Name, perkOption3Desc, perkOption3Icon, currentPerkChoices[2]);
+
+        if (perkCard1 != null) perkCard1.PlayAppear(0f);
+        if (perkCard2 != null) perkCard2.PlayAppear(perkCardStagger);
+        if (perkCard3 != null) perkCard3.PlayAppear(perkCardStagger * 2f);
     }
 
-    void SetPerkLabel(TMP_Text nameLabel, TMP_Text descLabel, PerkOption perk)
+    void SetPerkLabel(TMP_Text nameLabel, TMP_Text descLabel, Image iconImage, PerkOption perk)
     {
         if (perk == null) return;
         if (nameLabel != null) nameLabel.text = perk.perkName;
         if (descLabel != null) descLabel.text = perk.description;
+        if (iconImage != null)
+        {
+            Sprite s = GetPerkIcon(perk);
+            iconImage.sprite = s;
+            iconImage.enabled = s != null;
+            iconImage.preserveAspect = true;
+        }
     }
 
     PerkOption[] PickRandomPerks(int count)
@@ -966,7 +982,24 @@ public class GameManager : MonoBehaviour
 
     public void ChoosePerk(int index)
     {
+        if (isChoosingPerk) return;
         if (index < 0 || index >= currentPerkChoices.Length || currentPerkChoices[index] == null) return;
+        StartCoroutine(ChoosePerkRoutine(index));
+    }
+
+    IEnumerator ChoosePerkRoutine(int index)
+    {
+        isChoosingPerk = true;
+
+        PerkCardFX[] cards = { perkCard1, perkCard2, perkCard3 };
+        float wait = 0f;
+        for (int i = 0; i < cards.Length; i++)
+        {
+            if (cards[i] == null) continue;
+            if (i == index) wait = Mathf.Max(wait, cards[i].PlaySelected());
+            else cards[i].PlayDismiss();
+        }
+        if (wait > 0f) yield return new WaitForSecondsRealtime(wait);
 
         ApplyPerk(currentPerkChoices[index]);
         Log(Loc("log_perk_chosen", currentPerkChoices[index].perkName));
@@ -975,13 +1008,14 @@ public class GameManager : MonoBehaviour
 
         if (pendingPerkOffers > 0)
         {
-            OfferPerkChoice();
-            return;
+            OfferPerkChoice(); 
+            yield break;
         }
 
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
 
         stamina = GetStaminaMax();
+        isChoosingPerk = false;
         ShowHittingUI();
         RefreshAllUI();
     }
@@ -1209,7 +1243,7 @@ public class GameManager : MonoBehaviour
                 new PerkOption { perkName = "Golpe Certero",description = "+8% de probabilidad de crítico.",effect = PerkEffect.CritChanceBonus,value = 0.08f},
                 new PerkOption { perkName = "Cosecha Extra",description = "+2 cocos al comenzar el siguiente ciclo.",effect = PerkEffect.ExtraCoconutNextCycle,value = 2f},
                 new PerkOption { perkName = "Coco Generoso",description = "+25% agua, pero los golpes son 10% más lentos.",effect = PerkEffect.WaterMultiplierBonus,value = 0.25f},
-                new PerkOption { perkName = "Golpe de Suerte",description = "+15% crítico y +1% Monedas.",effect = PerkEffect.CritChanceBonus,value = 0.15f}
+                new PerkOption { perkName = "Golpe de Suerte",description = "+15% crítico",effect = PerkEffect.CritChanceBonus,value = 0.15f}
             };
         }
 
@@ -1235,20 +1269,20 @@ public class GameManager : MonoBehaviour
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
 {
     new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,   ability = CoconutAbility.Ninguna },
-    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 10,  ability = CoconutAbility.Generoso },
-    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 25,  ability = CoconutAbility.Resistente },
-    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 45,  ability = CoconutAbility.FibraDura },
-    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 70,  ability = CoconutAbility.Pesado },
-    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 100, ability = CoconutAbility.Tenaz },
-    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 140, ability = CoconutAbility.Armadura },
-    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 185, ability = CoconutAbility.Rebote },
-    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 235, ability = CoconutAbility.Fortificado },
-    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 290, ability = CoconutAbility.Implacable },
-    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 350, ability = CoconutAbility.FragilValioso },
-    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 420, ability = CoconutAbility.Regeneracion },
-    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 500, ability = CoconutAbility.Camuflaje },
-    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 600, ability = CoconutAbility.Maldicion },
-    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 720, ability = CoconutAbility.Supremo },
+    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 20,  ability = CoconutAbility.Generoso },
+    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 55,  ability = CoconutAbility.Resistente },
+    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 90,  ability = CoconutAbility.FibraDura },
+    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 160,  ability = CoconutAbility.Pesado },
+    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 240, ability = CoconutAbility.Tenaz },
+    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 300, ability = CoconutAbility.Armadura },
+    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 400, ability = CoconutAbility.Rebote },
+    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 520, ability = CoconutAbility.Fortificado },
+    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 640, ability = CoconutAbility.Implacable },
+    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 780, ability = CoconutAbility.FragilValioso },
+    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 940, ability = CoconutAbility.Regeneracion },
+    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 1100, ability = CoconutAbility.Camuflaje },
+    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 1340, ability = CoconutAbility.Maldicion },
+    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 1555, ability = CoconutAbility.Supremo },
 };
 
     void StampCoconutUnlocks()
@@ -1268,5 +1302,33 @@ public class GameManager : MonoBehaviour
             coconutUnlocks[i].icon = keepIcon;
             coconutUnlocks[i].prefab = keepPrefab;
         }
+    }
+    [System.Serializable]
+    public class PerkIconEntry
+    {
+        public string perkName;
+        public Sprite icon;
+    }
+
+    [Header("Iconos de perks (por nombre)")]
+    public List<PerkIconEntry> perkIcons = new List<PerkIconEntry>();
+
+    Sprite GetPerkIcon(PerkOption perk)
+    {
+        if (perk == null) return null;
+        foreach (var entry in perkIcons)
+        {
+            if (entry != null && entry.perkName == perk.perkName) return entry.icon;
+        }
+        return perk.icon;
+    }
+
+    [ContextMenu("Rellenar nombres de perks")]
+    void FillPerkIconNames()
+    {
+        string[] names = { "Manos Firmes", "Segundo Aire", "Buen Trato", "Reflejos",
+                       "Golpe Certero", "Cosecha Extra", "Coco Generoso", "Golpe de Suerte" };
+        perkIcons.Clear();
+        foreach (var n in names) perkIcons.Add(new PerkIconEntry { perkName = n });
     }
 }

@@ -15,7 +15,7 @@ public enum PerkEffect
 public class PerkOption
 {
     public string perkName = "Perk";
-
+    public Sprite icon;
     [TextArea]
     public string description = "";
 
