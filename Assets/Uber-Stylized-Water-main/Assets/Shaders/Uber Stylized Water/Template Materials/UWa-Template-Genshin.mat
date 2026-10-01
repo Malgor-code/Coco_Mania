@@ -143,7 +143,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SurfFoam_Map:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 57096ddb09de959428aa1a0ad0fb48c2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SurfFoam_Mask:
@@ -185,11 +185,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _1st_Wave_Height: 0.01
-    - _1st_Wave_Length: 3.76
+    - _1st_Wave_Length: 100
     - _1st_Wave_Sharpness: -0.06
     - _1st_Wave_Speed: -1.06
     - _2nd_Wave_Height: 0.015
-    - _2nd_Wave_Length: 5
+    - _2nd_Wave_Length: 15
     - _2nd_Wave_Sharpness: 0.3
     - _2nd_Wave_Speed: 1.06
     - _A: 11.3
@@ -215,7 +215,7 @@ Material:
     - _CausticsStart: 1.36
     - _CausticsStartDistance: 5
     - _CausticsStrength: 1.49
-    - _Caustics_Depth: -4
+    - _Caustics_Depth: 44.87
     - _Caustics_Distortion_Scale: 2
     - _Caustics_Distortion_Strength: 3
     - _Caustics_Fade: 5

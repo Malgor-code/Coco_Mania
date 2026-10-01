@@ -27,6 +27,7 @@ Material:
   m_ValidKeywords:
   - _ENABLECAUSTICS
   - _ENABLENORMAL
+  - _ENABLESHORELINE
   - _ENABLEWAVE
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -236,7 +237,7 @@ Material:
     - _ENABLENORMAL: 1
     - _ENABLEPLANERREFLECTION: 0
     - _ENABLEREFRACTION: 0
-    - _ENABLESHORELINE: 0
+    - _ENABLESHORELINE: 1
     - _ENABLESURFACEFOAM: 1
     - _ENABLEUNDERWATERLAYER: 0
     - _ENABLEWAVE: 1
@@ -316,7 +317,7 @@ Material:
     - _SL_CenterMask: 0.5
     - _SL_CenterMaskFade: 0
     - _SL_Depth: 0.3
-    - _SL_Dissolve: 0.7
+    - _SL_Dissolve: 0
     - _SL_EnableTrail: 0
     - _SL_ExplandNearShore: 0
     - _SL_GradientDissolve: 0
@@ -447,7 +448,7 @@ Material:
     - _ShoreLineMaskPanning: {r: 0, g: 0, b: 0, a: 0}
     - _ShoreLineMaskTile: {r: 3, g: 3, b: 0, a: 0}
     - _Specular_Color: {r: 4.0000005, g: 4.0000005, b: 4.0000005, a: 1}
-    - _SurfFoam_Color: {r: 1, g: 0.844, b: 0.9524024, a: 1}
+    - _SurfFoam_Color: {r: 1, g: 0.8726415, b: 0.9617924, a: 1}
     - _SurfFoam_Pan: {r: 0.2, g: 0.1, b: 0, a: 0}
     - _SurfFoam_Tile: {r: 1, g: 1, b: 0, a: 0}
     - _Surface: {r: 1, g: 1, b: 1, a: 1}
