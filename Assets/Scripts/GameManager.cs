@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cuanto crece el pedido de agua en cada ciclo nuevo (2 = se duplica)")]
     public float waterTargetGrowth = 2f;
     [Header("Cuanta agua suelta cada coco al morir")]
-    public float baseWaterPerKill = 20f;
-    public float waterVariance = 40f;
+    public float baseWaterPerKill = 40f;
+    public float waterVariance = 90f;
     [Header("Skill Tree - Critico")]
     public float skillCritChanceBonus = 0f;
     [Header("Dias / ciclos")]
@@ -235,6 +235,8 @@ public class GameManager : MonoBehaviour
 
     [Header("UI - Agua actual (opcional, siempre visible en pantalla; antes mostraba dinero)")]
     public TMP_Text moneyText;
+    public TMP_Text moneyText2;
+    public TMP_Text moneyText3;
 
     [Header("UI - Recaudacion (hub: estadisticas + 3 botones)")]
     public GameObject recaudacionPanel;
@@ -444,6 +446,8 @@ public class GameManager : MonoBehaviour
         }
 
         if (moneyText != null) moneyText.text = Loc("collection_current_money", FormatWater(displayedMoney));
+        if (moneyText2 != null) moneyText2.text = Loc("collection_current_money", FormatWater(displayedMoney));
+        if (moneyText3 != null) moneyText3.text = Loc("collection_current_money", FormatWater(displayedMoney));
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
 
     }

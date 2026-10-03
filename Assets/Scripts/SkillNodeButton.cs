@@ -147,7 +147,7 @@ public class SkillNodeButton : MonoBehaviour
     void UpdateLabel(bool unlocked)
     {
         if (label == null) return;
-        label.text = unlocked ? cachedNode.nodeName + "\n(comprado)" : cachedNode.nodeName + "\n$" + cachedNode.cost;
+        label.text = unlocked ? cachedNode.nodeName + "\n(comprado)" : cachedNode.nodeName + "\n" + cachedNode.cost + " ml" ;
     }
 
     void UpdateVisualState(bool unlocked, bool canUnlock, bool prereqsMet)

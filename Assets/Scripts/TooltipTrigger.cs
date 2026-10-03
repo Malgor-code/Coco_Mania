@@ -25,7 +25,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         string title = node.nodeName;
         string description = node.description;
         string stat = BuildStatLine(node);
-        string price = unlocked ? "" : ("$" + node.cost);
+        string price = unlocked ? "" : (node.cost + "ml");
 
         TooltipUI.Instance.ShowUpgradeInfo(title, description, stat, price);
     }
