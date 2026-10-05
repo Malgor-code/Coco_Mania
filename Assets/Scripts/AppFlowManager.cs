@@ -8,8 +8,7 @@ public class AppFlowManager : MonoBehaviour
 
     void Start()
     {
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
-        if (settingsPanel != null) settingsPanel.SetActive(false);
+        ShowMainMenu();
     }
 
     public void OnPlayPressed()
@@ -21,6 +20,11 @@ public class AppFlowManager : MonoBehaviour
         {
             GameManager.Instance.BeginNewGame();
         }
+    }
+    public void ShowMainMenu()
+    {
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
     }
 
     public void OnSettingsPressed()

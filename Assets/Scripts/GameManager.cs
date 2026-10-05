@@ -1031,7 +1031,7 @@ public class GameManager : MonoBehaviour
             bankruptcyMessageText.text = Loc("log_bankruptcy", gained);
         }
         Log(Loc("log_bankruptcy", gained));
-
+        ResetRunState();
         EnterBetweenRunsPhase();
         SaveGame();
         OnRunReset?.Invoke();
@@ -1273,7 +1273,42 @@ public class GameManager : MonoBehaviour
         ShowHittingUI();
         RefreshAllUI();
     }
+    public void RestartRun()
+    {
+        BetaLog("run_restart");
 
+        currentPhase = Phase.MainMenu;
+        isChoosingPerk = false;
+        pendingPerkOffers = 0;
+        Time.timeScale = 1f;
+
+        ClearCurse();
+
+        if (CoconutSpawner.Instance != null)
+        {
+            CoconutSpawner.Instance.OnInitialSpawnComplete -= HandleInitialSpawnComplete;
+            CoconutSpawner.Instance.ClearAllCoconuts();
+        }
+
+        if (machete != null) machete.SetActive(false);
+        if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
+        if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (rewardMachinePanel != null) rewardMachinePanel.SetActive(false);
+        if (deudaPanel != null) deudaPanel.SetActive(false);
+        if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
+        if (indicacionesPanel != null) indicacionesPanel.SetActive(false);
+
+        ResetRunState();
+        displayedMoney = 0f;
+
+        SaveGame();
+        OnRunReset?.Invoke();
+
+        BeginNewGame();
+    }
     void ApplyPerk(PerkOption perk)
     {
         switch (perk.effect)
@@ -1317,7 +1352,65 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
         SaveGame();
     }
+    void ResetRunState()
+    {
+        money = 0;
+        billCycle = 1;
+        waterCurrentML = 0f;
+        waterTargetML = 500f;
+        daysLeft = dayLimitBase;
+        totalCoconutsKilled = 0;
+        unlockedSkillIds.Clear();
 
+        skillDamageBonus = 0f;
+        skillStaminaBonus = 0f;
+        skillSwingIntervalReduction = 0f;
+        skillHitRadiusBonus = 0f;
+        skillWaterMultiplierBonus = 0f;
+        skillStaminaRecoveryChance = 0f;
+        skillStaminaRecoveryAmount = 0f;
+        skillJackpotChance = 0f;
+        skillJackpotMultBonus = 0f;
+        skillCritDamageBonus = 0f;
+        skillCritChanceBonus = 0f;
+        skillExtraCoconutChance = 0f;
+        skillStreakForgives = 0;
+        streakForgivesLeft = 0;
+        skillLastBreathBonus = 0f;
+        skillExecuteBonus = 0f;
+        skillOrderRefund = 0f;
+        skillEarlyDayBonus = 0f;
+        skillChainSplashPercent = 0f;
+        skillLastBreathSwingReduction = 0f;
+
+        equippedMacheteIndex = 0;
+        currentHitStreak = 0;
+
+        perkDamageBonus = 0f;
+        perkStaminaMaxBonus = 0f;
+        perkWaterMultiplierBonus = 0f;
+        perkSwingIntervalReduction = 0f;
+        perkCritChanceBonus = 0f;
+        perkCopies.Clear();
+
+        relicDamageBonus = 0f;
+        relicStaminaMaxBonus = 0f;
+        relicWaterMultiplierBonus = 0f;
+        relicSwingIntervalReduction = 0f;
+        relicHitRadiusBonus = 0f;
+        relicCritChanceBonus = 0f;
+
+        coinDropChance = 0.005f + legacyCoinChanceBonus;
+        runVictoryAwarded = false;
+
+        if (CoconutSpawner.Instance != null)
+        {
+            CoconutSpawner.Instance.startingCoconuts = 4 + legacyStartingCoconuts;
+            CoconutSpawner.Instance.spawnInterval = 5f;
+        }
+
+        RecalculateAllStats();
+    }
     void ApplyLegacyEffect(LegacyItem item)
     {
         switch (item.effect)
@@ -1614,8 +1707,6 @@ public class GameManager : MonoBehaviour
 
             if (forceDefaultData || legacyShop == null || legacyShop.Count == 0)
             {
-                // Presupuesto: ~30-35 puntos de legado en 5-7 partidas. Los niveles II/III/IV exigen el anterior.
-                // OJO: no cambies los itemName existentes (el guardado los usa como clave).
                 legacyShop = new List<LegacyItem>
         {
             // Nivel I (baratos: se compran en las primeras partidas)
@@ -1641,7 +1732,6 @@ public class GameManager : MonoBehaviour
             new LegacyItem { itemName = "Moneda Antigua III",        description = "+2% probabilidad de encontrar monedas.", cost = 6,  effect = LegacyEffect.PermanentCoinChanceBonus,      value = 0.02f },
             // Nivel IV
             new LegacyItem { itemName = "Lente del Afortunado IV",   description = "+12% probabilidad de crítico permanente.",cost = 12, effect = LegacyEffect.PermanentCritChanceBonus,     value = 0.12f },
-            // Sellos: multiplican lo que da CADA punto de legado (ahora si, gracias al fix de RecalcLegacyMultiplier)
             new LegacyItem { itemName = "Sello Ancestral I",   description = "+25% al valor de cada punto de legado.",  cost = 8,  effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.25f },
             new LegacyItem { itemName = "Sello Ancestral II",  description = "+50% al valor de cada punto de legado.",  cost = 16, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.5f },
             new LegacyItem { itemName = "Sello Ancestral III", description = "+100% al valor de cada punto de legado.", cost = 30, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 1f },
