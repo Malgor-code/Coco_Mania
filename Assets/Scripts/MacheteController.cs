@@ -33,7 +33,8 @@ public class MacheteController : MonoBehaviour
     [Tooltip("Velocidad minima/maxima permitida para la animacion (evita que se vea absurda).")]
     public float minAnimSpeed = 0.5f;
     public float maxAnimSpeed = 6f;
-
+    [Tooltip("Opcional: parametro float del Animator para la velocidad del golpe (ver Speed > Parameter en el estado). Si lo dejas vacio se usa animator.speed.")]
+    public string speedParameterName = "";
     [Header("Momento del impacto")]
     [Tooltip("Si esta activo, el daño se aplica cuando la animacion llama al evento 'AnimationImpact' (pon un Animation Event en el frame del golpe y agrega MacheteAnimationRelay al objeto del Animator). Si esta apagado se usa 'Impact Normalized Time'.")]
     public bool useAnimationEvent = false;
@@ -45,7 +46,6 @@ public class MacheteController : MonoBehaviour
     [Range(0f, 0.3f)] public float swingPitchVariation = 0.08f;
     private AudioSource audioSource;
     [HideInInspector] public int damageOverride = 3;
-    [HideInInspector] public float swingStaminaCostOverride = 1f;
 
     [Header("Camara: sigue un poco al cursor (opcional)")]
     public Transform cameraToFollow;
@@ -205,25 +205,27 @@ public class MacheteController : MonoBehaviour
 
         cameraToFollow.position = smoothedCameraFollowPos + cameraShakeOffset;
     }
+    void OnEnable()
+    {
+        timer = 0f;
+        impactPending = false;
+        if (impactRoutine != null) { StopCoroutine(impactRoutine); impactRoutine = null; }
+        if (animator != null) SetAnimSpeed(1f);
+    }
 
+    void SetAnimSpeed(float s)
+    {
+        if (!string.IsNullOrEmpty(speedParameterName)) animator.SetFloat(speedParameterName, s);
+        else animator.speed = s;
+    }
     void TrySwing()
     {
         timer = 0f;
 
-        // Duracion real (en segundos) que debe durar la animacion con la velocidad actual.
-        float targetDuration = Mathf.Max(0.05f, swingInterval * swingAnimDurationFraction);
+        if (impactRoutine != null) { StopCoroutine(impactRoutine); impactRoutine = null; }
+        if (impactPending) { impactPending = false; ApplyHit(); }
 
-        // Si habia un impacto pendiente del golpe anterior, se aplica antes de empezar el nuevo
-        if (impactRoutine != null)
-        {
-            StopCoroutine(impactRoutine);
-            impactRoutine = null;
-        }
-        if (impactPending)
-        {
-            impactPending = false;
-            ApplyHit();
-        }
+        float targetDuration = Mathf.Max(0.05f, swingInterval * swingAnimDurationFraction);
 
         if (animator != null)
         {
@@ -232,22 +234,17 @@ public class MacheteController : MonoBehaviour
             if (cachedClipLength > 0f)
             {
                 float speed = Mathf.Clamp(cachedClipLength / targetDuration, minAnimSpeed, maxAnimSpeed);
-                animator.speed = speed;
-                // Con la velocidad aplicada, la animacion dura cachedClipLength / speed
+                SetAnimSpeed(speed);
                 targetDuration = cachedClipLength / speed;
             }
 
             animator.Play(swingStateName, 0, 0f);
+            animator.Update(0f);
         }
 
         impactPending = true;
-
-        if (!useAnimationEvent)
-        {
-            float delay = targetDuration * impactNormalizedTime;
-            impactRoutine = StartCoroutine(ImpactAfterDelay(delay));
-        }
-        // Si useAnimationEvent esta activo, el evento llama a AnimationImpact()
+        float delay = useAnimationEvent ? targetDuration : targetDuration * impactNormalizedTime;
+        impactRoutine = StartCoroutine(ImpactAfterDelay(delay));
     }
 
     IEnumerator ImpactAfterDelay(float delay)
@@ -256,12 +253,13 @@ public class MacheteController : MonoBehaviour
         impactRoutine = null;
         if (impactPending)
         {
+            if (useAnimationEvent)
+                Debug.LogWarning("[MacheteController] El Animation Event 'AnimationImpact' no llego. Revisa el evento y el script Relay.");
             impactPending = false;
             ApplyHit();
         }
     }
 
-    // Llamado por el Animation Event (via MacheteAnimationRelay) en el frame del golpe
     public void AnimationImpact()
     {
         if (!useAnimationEvent) return;
@@ -292,10 +290,14 @@ public class MacheteController : MonoBehaviour
                     if (GameManager.Instance != null)
                     {
                         isCritical = Random.value < GameManager.Instance.GetCritChance();
+                        float dmg = finalDamage;
                         if (isCritical)
                         {
-                            finalDamage *= 2;
+                            dmg *= GameManager.Instance.GetCritMultiplier();
+                            dmg *= GameManager.Instance.GetLastBreathMultiplier();
                         }
+                        dmg *= GameManager.Instance.GetStreakDamageMultiplier();
+                        finalDamage = Mathf.Max(1, Mathf.RoundToInt(dmg));
                     }
 
                     bool killed = coco.TakeDamage(finalDamage, isCritical);

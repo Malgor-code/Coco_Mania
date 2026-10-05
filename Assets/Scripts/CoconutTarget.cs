@@ -85,7 +85,17 @@ public class CoconutTarget : MonoBehaviour
     [Range(0f, 0.2f)] public float supremoFase2RegenPercentPerSecond = 0.015f;
     private float regeneracionLastHitTime = -999f;
     private float regeneracionAccumulator = 0f;
-
+    [Tooltip("Nombre del CLIP (no del estado). Vacio = mismo que hitStateName. Sirve para leer su duracion.")]
+    public string hitClipName = "";
+    [Tooltip("Desde que punto del clip arranca (0-1). Sube este valor si el clip tiene un 'anticipo' antes del golpe visible.")]
+    [Range(0f, 0.9f)] public float hitAnimStartNormalized = 0f;
+    [Tooltip("Opcional: parametro float del Animator usado como Speed Multiplier del estado Hit. Si el golpe del machete es mas rapido que el clip, se acelera para que alcance a terminar.")]
+    public string hitSpeedParameter = "";
+    public float maxHitAnimSpeed = 4f;
+    [HideInInspector] public int lastDamageTaken = 0;
+    private int hitStateHash;
+    private float hitClipLength = -1f;
+    private bool warnedMissingHitState = false;
     [Header("Ajustes de habilidad: Camuflaje (Mitico)")]
     public float camuflajeVisibleDuration = 3f;
     public float camuflajeHiddenDuration = 2f;
@@ -125,7 +135,7 @@ public class CoconutTarget : MonoBehaviour
         wander = GetComponent<CoconutWander>();
         rend = GetComponentInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
-
+        if (hitAnimator == null) hitAnimator = animator;
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;
@@ -139,7 +149,7 @@ public class CoconutTarget : MonoBehaviour
 
         AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
         animator.Play(state.fullPathHash, 0, Random.Range(0f, 1f));
-        animator.speed = Random.Range(0.9f, 1.1f);
+        if (animator != hitAnimator) animator.speed = Random.Range(0.9f, 1.1f);
     }
 
     public void ApplyType(CoconutTypeData type)
@@ -266,7 +276,44 @@ public class CoconutTarget : MonoBehaviour
     void PlayHitAnimation()
     {
         if (hitAnimator == null || string.IsNullOrEmpty(hitStateName)) return;
-        hitAnimator.Play(hitStateName, 0, 0f);
+
+        if (hitStateHash == 0) hitStateHash = Animator.StringToHash(hitStateName);
+
+        if (!hitAnimator.HasState(0, hitStateHash))
+        {
+            if (!warnedMissingHitState)
+            {
+                warnedMissingHitState = true;
+                Debug.LogWarning("[CoconutTarget] El Animator no tiene el estado '" + hitStateName + "'. Revisa 'Hit State Name'.", this);
+            }
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(hitSpeedParameter))
+        {
+            float speed = 1f;
+            if (MacheteController.Instance != null)
+            {
+                if (hitClipLength < 0f) hitClipLength = ResolveHitClipLength();
+                float window = Mathf.Max(0.1f, MacheteController.Instance.swingInterval * 0.9f);
+                if (hitClipLength > window) speed = Mathf.Min(hitClipLength / window, maxHitAnimSpeed);
+            }
+            hitAnimator.SetFloat(hitSpeedParameter, speed);
+        }
+
+        hitAnimator.Play(hitStateHash, 0, hitAnimStartNormalized);
+        hitAnimator.Update(0f); 
+    }
+
+    float ResolveHitClipLength()
+    {
+        if (hitAnimator == null || hitAnimator.runtimeAnimatorController == null) return 0f;
+        string clipName = string.IsNullOrEmpty(hitClipName) ? hitStateName : hitClipName;
+        foreach (var clip in hitAnimator.runtimeAnimatorController.animationClips)
+        {
+            if (clip != null && clip.name == clipName) return clip.length;
+        }
+        return 0f;
     }
     void UpdateSupremo()
     {
@@ -358,12 +405,17 @@ public class CoconutTarget : MonoBehaviour
     public bool TakeDamage(int amount, bool isCritical = false)
     {
         if (isDead) return false;
-
-        float modified = ModifyIncomingDamage(amount, isCritical);
+        float hpPercentNow = hpMax > 0 ? (float)hp / hpMax : 1f;
+        float executeMult = GameManager.Instance != null
+            ? GameManager.Instance.GetExecuteDamageMultiplier(hpPercentNow)
+            : 1f;
+        float modified = ModifyIncomingDamage(amount, isCritical) * executeMult;
         int finalDamage = Mathf.Max(1, Mathf.RoundToInt(modified));
+        lastDamageTaken = finalDamage;
 
         hp -= finalDamage;
-
+        if (executeMult > 1f && JuiceManager.Instance != null)
+    JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.9f, "¡REMATE!", true);
         if (ability == GameManager.CoconutAbility.Rebote)
         {
             reboteHitCounter++;
@@ -478,6 +530,7 @@ public class CoconutTarget : MonoBehaviour
         if (GameManager.Instance != null)
         {
             earned = GameManager.Instance.OnCoconutDestroyed(loot, out waterGained);
+            GameManager.Instance.ApplyChainSplash(transform.position, lastDamageTaken, gameObject);
         }
         bool jarTookFx = false;
         if (GameManager.Instance != null)

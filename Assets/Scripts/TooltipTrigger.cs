@@ -77,11 +77,6 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 float newPct = curPct + node.effectValue * 100f;
                 return "Dinero por coco: +" + curPct.ToString("0") + "% -> +" + newPct.ToString("0") + "%";
 
-            case SkillEffect.StaminaCostReduction:
-                if (mc == null) return "";
-                float newCost = Mathf.Max(0.3f, mc.swingStaminaCostOverride - node.effectValue);
-                return "Energia por golpe: " + mc.swingStaminaCostOverride.ToString("0.00") + " -> " + newCost.ToString("0.00");
-
             case SkillEffect.ExtraStartingCoconut:
                 if (cs == null) return "";
                 int newStarting = cs.startingCoconuts + Mathf.RoundToInt(node.effectValue);

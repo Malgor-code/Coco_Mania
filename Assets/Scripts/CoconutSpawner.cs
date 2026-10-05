@@ -20,7 +20,7 @@ public class CoconutSpawner : MonoBehaviour
     public int maxCoconuts = 15;
     public float startSpawnStagger = 0.3f;
     public event System.Action OnInitialSpawnComplete;
-
+    public void SpawnExtraCoconut() { StartCoroutine(SpawnExtraDelayed()); }
     [Header("Tipos de coco (progresion por muertes)")]
     public List<CoconutTypeData> coconutTypes = new List<CoconutTypeData>();
 
@@ -32,7 +32,7 @@ public class CoconutSpawner : MonoBehaviour
     private static readonly CoconutTypeData[] CanonicalTypes = new CoconutTypeData[]
     {
         new CoconutTypeData { typeName = "Coco Verde",       killsToUnlock = 0,   hpMultiplier = 1.00f,  lootMultiplier = 1.00f },
-        new CoconutTypeData { typeName = "Coco Maduro",      killsToUnlock = 10,  hpMultiplier = 1.33f,  lootMultiplier = 1.15f },
+        new CoconutTypeData { typeName = "Coco Maduro",      killsToUnlock = 12,  hpMultiplier = 1.33f,  lootMultiplier = 1.15f },
         new CoconutTypeData { typeName = "Coco Correoso",    killsToUnlock = 25,  hpMultiplier = 1.55f,  lootMultiplier = 1.32f },
         new CoconutTypeData { typeName = "Coco Fibroso",     killsToUnlock = 45,  hpMultiplier = 1.73f,  lootMultiplier = 1.52f },
         new CoconutTypeData { typeName = "Coco Petreo",      killsToUnlock = 70,  hpMultiplier = 2.07f,  lootMultiplier = 1.75f },
@@ -85,7 +85,14 @@ public class CoconutSpawner : MonoBehaviour
         DayActive = true;
         StartCoroutine(SpawnStartingCoconutsSequenced());
     }
-
+    IEnumerator SpawnExtraDelayed()
+    {
+        yield return new WaitForSeconds(0.3f);
+        if (!DayActive) yield break;
+        if (GameManager.Instance == null || !GameManager.Instance.IsHittingPhase()) yield break;
+        if (activeCoconuts.Count >= maxCoconuts) yield break;
+        SpawnOne();
+    }
     IEnumerator SpawnStartingCoconutsSequenced()
     {
         for (int i = 0; i < startingCoconuts; i++)
@@ -174,20 +181,23 @@ public class CoconutSpawner : MonoBehaviour
     CoconutTypeData PickTypeToSpawn()
     {
         int kills = GameManager.Instance != null ? GameManager.Instance.totalCoconutsKilled : 0;
-
         List<CoconutTypeData> unlocked = new List<CoconutTypeData>();
-        foreach (var t in coconutTypes)
+
+        for (int i = 0; i < coconutTypes.Count; i++)
         {
-            if (kills >= t.killsToUnlock) unlocked.Add(t);
+            int required = coconutTypes[i].killsToUnlock;
+            if (GameManager.Instance != null && i < GameManager.Instance.coconutUnlocks.Count)
+                required = GameManager.Instance.coconutUnlocks[i].killsRequired;
+
+            if (kills >= required) unlocked.Add(coconutTypes[i]);
         }
 
         if (unlocked.Count == 0)
-        {
             return coconutTypes.Count > 0 ? coconutTypes[0] : new CoconutTypeData();
-        }
 
         return unlocked[Random.Range(0, unlocked.Count)];
     }
+
 
     public void RemoveCoconut(CoconutTarget coco)
     {

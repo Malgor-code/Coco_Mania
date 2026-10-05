@@ -8,7 +8,8 @@ public enum PerkEffect
     SwingIntervalReduction,
     ExtraCoconutNextCycle,
     CritChanceBonus,
-    WaterMultiplierBonus
+    WaterMultiplierBonus,
+    WaterForSwingPenalty
 }
 
 [System.Serializable]

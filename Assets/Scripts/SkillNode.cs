@@ -12,7 +12,20 @@ public enum SkillEffect
     SpawnIntervalReduction,
     WaterMultiplierBonus,
     CoinChanceBonus,
-    CritChanceBonus
+    CritChanceBonus,
+    StaminaRecoveryChanceBonus,
+    JackpotChanceBonus,
+    JackpotWaterBonus,
+    CritDamageBonus,
+    ExtraCoconutChanceBonus,
+    StreakForgiveness, 
+    OrderDiscount, 
+    LastBreathBonus,
+    ChainSplash,
+    LastBreathSwingBonus,
+    ExecuteDamageBonus,
+    OrderRefundBonus,
+    EarlyDayWaterBonus
 }
 
 [System.Serializable]

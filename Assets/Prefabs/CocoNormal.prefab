@@ -414,6 +414,10 @@ MonoBehaviour:
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
   supremoFase2RegenPercentPerSecond: 0.015
+  hitClipName: 
+  hitAnimStartNormalized: 0
+  hitSpeedParameter: HitSpeed
+  maxHitAnimSpeed: 4
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
@@ -464,9 +468,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  runSpeedMultiplier: 2.4
+  hopSpeedMultiplier: 0.7
   retargetInterval: 2.5
   rotationSpeed: 8
   debugLog: 0
+  speedVariation: 0.3
+  personalityVariation: 0.7
+  idleWeight: 25
+  walkWeight: 40
+  runWeight: 15
+  lookAroundWeight: 12
+  hopWeight: 8
+  idleTime: {x: 0.8, y: 3}
+  lookAroundTime: {x: 1.2, y: 2.5}
+  walkDistance: {x: 1.5, y: 4.5}
+  runDistance: {x: 3, y: 7}
+  hopDistance: {x: 1, y: 3}
+  runZigzagChance: 0.35
+  zigzagAngle: 35
+  zigzagFrequency: 3
+  visual: {fileID: 301885127590024273}
+  hopHeight: 0.25
+  hopsPerSecond: 2.2
+  panicChanceAfterHit: 0.35
+  animSpeedParameter: 
 --- !u!135 &2097344187949809292
 SphereCollider:
   m_ObjectHideFlags: 0
