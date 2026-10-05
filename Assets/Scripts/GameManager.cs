@@ -1563,10 +1563,7 @@ public class GameManager : MonoBehaviour
         {
             return new SkillNode { id = id, nodeName = name, description = desc, cost = cost, prerequisiteIds = pre, effect = effect, effectValue = value };
         }
-
-        void EnsureDefaultData()
-        {
-            if (forceDefaultData || macheteOptions == null || macheteOptions.Count == 0)
+        if (forceDefaultData || macheteOptions == null || macheteOptions.Count == 0)
             {
                 // Costo y poder suben parejo; el swing baja poco para dejar espacio al arbol y perks.
                 macheteOptions = new List<MacheteData>
@@ -1737,9 +1734,8 @@ public class GameManager : MonoBehaviour
             new LegacyItem { itemName = "Sello Ancestral III", description = "+100% al valor de cada punto de legado.", cost = 30, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 1f },
         };
             }
-
             StampCoconutUnlocks();
-        }
+        
     }
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
 {
