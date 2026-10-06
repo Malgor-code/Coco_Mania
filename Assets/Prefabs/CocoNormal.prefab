@@ -418,6 +418,7 @@ MonoBehaviour:
   hitAnimStartNormalized: 0
   hitSpeedParameter: HitSpeed
   maxHitAnimSpeed: 4
+  lastDamageTaken: 0
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
@@ -428,6 +429,12 @@ MonoBehaviour:
   supremoFase3DamageReduction: 0.35
   hp: 0
   hpMax: 0
+  coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
+  coinLifetime: 30
+  coinPopForce: 3
+  hitParticleSystem: {fileID: 0}
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmission: 1.5
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0

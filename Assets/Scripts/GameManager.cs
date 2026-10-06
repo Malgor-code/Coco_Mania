@@ -1603,9 +1603,9 @@ public class GameManager : MonoBehaviour
             N("resistencia_4", "Aguante IV",  "+8 segundos de resistencia", 20000, SkillEffect.StaminaMaxFlatBonus, 8f, "resistencia_3"),
 
             N("eficiencia_1", "Segundo Aliento I",   "10% de probabilidad de recuperar 2 de resistencia al destruir un coco", 750,  SkillEffect.StaminaRecoveryChanceBonus, 0.10f, "resistencia_2"),
-            N("eficiencia_2", "Segundo Aliento II",  "+10% de probabilidad (total 20%) y +2 de resistencia recuperada (total 4)", 1600, SkillEffect.StaminaRecoveryChanceBonus, 0.10f, "eficiencia_1"),
-            N("eficiencia_3", "Segundo Aliento III", "+8% de probabilidad (total 28%) y +2 de resistencia recuperada (total 6)", 5000, SkillEffect.StaminaRecoveryChanceBonus, 0.08f, "eficiencia_2"),
-            N("eficiencia_4", "Segundo Aliento IV",  "+7% de probabilidad (total 35%, el maximo) y +2 de resistencia recuperada (total 8)", 9000, SkillEffect.StaminaRecoveryChanceBonus, 0.07f, "eficiencia_3"),
+            N("eficiencia_2", "Segundo Aliento II",  "+10% de probabilidad (total 20%) y +2 de resistencia recuperada (total 4)", 5000, SkillEffect.StaminaRecoveryChanceBonus, 0.10f, "eficiencia_1"),
+            N("eficiencia_3", "Segundo Aliento III", "+8% de probabilidad (total 28%) y +2 de resistencia recuperada (total 6)", 15000, SkillEffect.StaminaRecoveryChanceBonus, 0.08f, "eficiencia_2"),
+            N("eficiencia_4", "Segundo Aliento IV",  "+7% de probabilidad (total 35%, el maximo) y +2 de resistencia recuperada (total 8)", 50000, SkillEffect.StaminaRecoveryChanceBonus, 0.07f, "eficiencia_3"),
 
             N("cocos_1", "Cosecha Inicial",     "+1 coco al iniciar el dia", 400,  SkillEffect.ExtraStartingCoconut, 1f, "fuerza_1"),
             N("cocos_2", "Mejores vendedores",  "+2 cocos al iniciar el dia", 950,  SkillEffect.ExtraStartingCoconut, 2f, "aparicion_1"),
@@ -1662,7 +1662,7 @@ public class GameManager : MonoBehaviour
             N("manofirme_1", "Mano Firme I",  "Con menos del 20% de resistencia: golpeas 0.15s más rápido", 5000,  SkillEffect.LastBreathSwingBonus, 0.15f, "aliento_1"),
             N("manofirme_2", "Mano Firme II", "Con menos del 20% de resistencia: 0.3s más rápido (total)",  13500, SkillEffect.LastBreathSwingBonus, 0.15f, "manofirme_1"),
 
-            N("filo_1", "Filo Afilado I",   "+7% de daño a cocos con menos del 50% de vida", 4500,  SkillEffect.ExecuteDamageBonus, 0.07f, "fuerza_2"),
+            N("filo_1", "Filo Afilado I",   "+7% de daño a cocos con menos del 50% de vida", 4500,  SkillEffect.ExecuteDamageBonus, 0.07f, "fuerza_5"),
             N("filo_2", "Filo Afilado II",  "+10% más (total 17%)", 12000, SkillEffect.ExecuteDamageBonus, 0.1f,  "filo_1"),
             N("filo_3", "Filo Afilado III", "+18% más (total 35%)", 20000, SkillEffect.ExecuteDamageBonus, 0.18f, "filo_2"),
 

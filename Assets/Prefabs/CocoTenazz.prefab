@@ -414,6 +414,11 @@ MonoBehaviour:
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
   supremoFase2RegenPercentPerSecond: 0.015
+  hitClipName: 
+  hitAnimStartNormalized: 0
+  hitSpeedParameter: 
+  maxHitAnimSpeed: 4
+  lastDamageTaken: 0
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
@@ -424,6 +429,11 @@ MonoBehaviour:
   supremoFase3DamageReduction: 0.35
   hp: 0
   hpMax: 0
+  coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
+  coinLifetime: 30
+  coinPopForce: 3
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmission: 1.5
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -464,9 +474,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  runSpeedMultiplier: 2.4
+  hopSpeedMultiplier: 0.7
   retargetInterval: 2.5
   rotationSpeed: 8
   debugLog: 0
+  speedVariation: 0.3
+  personalityVariation: 0.7
+  idleWeight: 25
+  walkWeight: 40
+  runWeight: 15
+  lookAroundWeight: 12
+  hopWeight: 8
+  idleTime: {x: 0.8, y: 3}
+  lookAroundTime: {x: 1.2, y: 2.5}
+  walkDistance: {x: 1.5, y: 4.5}
+  runDistance: {x: 3, y: 7}
+  hopDistance: {x: 1, y: 3}
+  runZigzagChance: 0.35
+  zigzagAngle: 35
+  zigzagFrequency: 3
+  visual: {fileID: 0}
+  hopHeight: 0.25
+  hopsPerSecond: 2.2
+  panicChanceAfterHit: 0.35
+  animSpeedParameter: 
 --- !u!135 &2097344187949809292
 SphereCollider:
   m_ObjectHideFlags: 0

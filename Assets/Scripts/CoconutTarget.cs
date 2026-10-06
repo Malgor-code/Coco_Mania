@@ -115,7 +115,16 @@ public class CoconutTarget : MonoBehaviour
 
     public int hp;
     public int hpMax;
+    [Header("Moneda 3D (cuando el coco suelta moneda)")]
+    public GameObject coinPrefab;
+    public float coinLifetime = 300f;
+    public float coinPopForce = 3f;
 
+    [Header("Flash al recibir golpe")]
+    public Color hitFlashColor = Color.white;
+    [Range(0f, 3f)] public float hitFlashEmission = 1.5f;
+
+    private List<Material> flashMats = new List<Material>();
     private Vector3 originalScale;
     private Vector3 typedScale;
     private Color restColor = Color.white;
@@ -139,7 +148,16 @@ public class CoconutTarget : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;
-
+        foreach (var r in GetComponentsInChildren<Renderer>())
+        {
+            if (r is ParticleSystemRenderer) continue;
+            foreach (var m in r.materials)
+            {
+                m.EnableKeyword("_EMISSION");
+                flashMats.Add(m);
+            }
+        }
+        SetFlash(0f);
         DesyncAnimation();
     }
 
@@ -151,7 +169,12 @@ public class CoconutTarget : MonoBehaviour
         animator.Play(state.fullPathHash, 0, Random.Range(0f, 1f));
         if (animator != hitAnimator) animator.speed = Random.Range(0.9f, 1.1f);
     }
-
+    void SetFlash(float t)
+    {
+        Color e = hitFlashColor * (hitFlashEmission * t);
+        foreach (var m in flashMats)
+            if (m != null && m.HasProperty("_EmissionColor")) m.SetColor("_EmissionColor", e);
+    }
     public void ApplyType(CoconutTypeData type)
     {
         StopAllCoroutines();
@@ -440,7 +463,6 @@ public class CoconutTarget : MonoBehaviour
             GameObject hitFx = Instantiate(hitParticles, transform.position, Quaternion.identity);
             AutoDestroyFx(hitFx);
         }
-
         PlaySound(hitSounds);
         PlayHitAnimation();
         if (JuiceManager.Instance != null)
@@ -532,6 +554,7 @@ public class CoconutTarget : MonoBehaviour
             earned = GameManager.Instance.OnCoconutDestroyed(loot, out waterGained);
             GameManager.Instance.ApplyChainSplash(transform.position, lastDamageTaken, gameObject);
         }
+        if (GameManager.Instance != null && GameManager.Instance.lastKillFoundCoin) SpawnCoin();
         bool jarTookFx = false;
         if (GameManager.Instance != null)
         {
@@ -551,7 +574,21 @@ public class CoconutTarget : MonoBehaviour
 
         Destroy(gameObject, 0.05f);
     }
+    void SpawnCoin()
+    {
+        if (coinPrefab == null) return;
+        GameObject coin = Instantiate(coinPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
 
+        if (coin.GetComponentInChildren<Collider>() == null) coin.AddComponent<SphereCollider>();
+        Rigidbody rb = coin.GetComponent<Rigidbody>();
+        if (rb == null) rb = coin.AddComponent<Rigidbody>();
+
+        Vector3 dir = (Random.insideUnitSphere * 0.5f + Vector3.up).normalized;
+        rb.AddForce(dir * coinPopForce, ForceMode.Impulse);
+        rb.AddTorque(Random.insideUnitSphere * 2f, ForceMode.Impulse);
+
+        Destroy(coin, coinLifetime); 
+    }
     static void AutoDestroyFx(GameObject fx)
     {
         if (fx != null) Destroy(fx, GetFxLifetime(fx));
@@ -622,6 +659,7 @@ public class CoconutTarget : MonoBehaviour
 
     IEnumerator HitFeedback()
     {
+        SetFlash(1f);
         if (rend != null) rend.material.color = Color.white;
         transform.localScale = typedScale * (1f - squashAmount);
 
@@ -631,7 +669,7 @@ public class CoconutTarget : MonoBehaviour
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / hitFeedbackDuration);
             float eased = EaseOutBack(p);
-
+            SetFlash(1f - p);
             float scaleMult = Mathf.LerpUnclamped(1f - squashAmount, 1f, eased);
             transform.localScale = typedScale * scaleMult;
 
@@ -641,8 +679,8 @@ public class CoconutTarget : MonoBehaviour
         }
 
         transform.localScale = typedScale;
+        SetFlash(0f);
         if (rend != null) rend.material.color = restColor;
-
         UpdateLowHpBlink();
     }
 

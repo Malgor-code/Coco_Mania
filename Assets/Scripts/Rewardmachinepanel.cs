@@ -217,7 +217,7 @@ public class RewardMachinePanel : MonoBehaviour
         if (probabilitiesText != null)
         {
             probabilitiesText.text =
-                $"Comun {machine.commonChance:0}%    Poco comun {machine.uncommonChance:0}%    Raro {machine.rareChance:0}%     Epico {machine.epicChance:0}%    Legendario {machine.legendaryChance:0}%";
+                $"Comun {machine.commonChance:0}%    Poco comun {machine.uncommonChance:0}%      Raro {machine.rareChance:0}%     Epico {machine.epicChance:0}%    Legendario {machine.legendaryChance:0}%";
         }
 
         if (pityEpicText != null)
