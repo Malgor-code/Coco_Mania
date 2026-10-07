@@ -102,7 +102,7 @@ public class CoconutTarget : MonoBehaviour
     [Range(0f, 1f)] public float camuflajeHiddenAlpha = 0.2f;
     private float camuflajeTimer = 0f;
     private bool camuflajeIsHidden = false;
-
+    public Renderer colorRenderer;
     [Header("Ajustes de habilidad: Maldicion (Ancestral)")]
     public float maldicionDuration = 6f;
 
@@ -123,7 +123,7 @@ public class CoconutTarget : MonoBehaviour
     [Header("Flash al recibir golpe")]
     public Color hitFlashColor = Color.white;
     [Range(0f, 3f)] public float hitFlashEmission = 1.5f;
-
+    [Range(1f, 6f)] public float hitFlashTintBoost = 3f;
     private List<Material> flashMats = new List<Material>();
     private Vector3 originalScale;
     private Vector3 typedScale;
@@ -142,16 +142,24 @@ public class CoconutTarget : MonoBehaviour
         originalScale = transform.localScale;
         typedScale = originalScale;
         wander = GetComponent<CoconutWander>();
-        rend = GetComponentInChildren<Renderer>();
+        rend = colorRenderer;
+        if (rend == null)
+        {
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                if (r is ParticleSystemRenderer) continue;
+                rend = r;
+                break;
+            }
+        }
         animator = GetComponentInChildren<Animator>();
         if (hitAnimator == null) hitAnimator = animator;
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;
-        foreach (var r in GetComponentsInChildren<Renderer>())
+        if (rend != null)
         {
-            if (r is ParticleSystemRenderer) continue;
-            foreach (var m in r.materials)
+            foreach (var m in rend.materials)
             {
                 m.EnableKeyword("_EMISSION");
                 flashMats.Add(m);
@@ -660,7 +668,9 @@ public class CoconutTarget : MonoBehaviour
     IEnumerator HitFeedback()
     {
         SetFlash(1f);
-        if (rend != null) rend.material.color = Color.white;
+        Color flashTint = hitFlashColor * hitFlashTintBoost;
+        flashTint.a = 1f;
+        if (rend != null) rend.material.color = flashTint;
         transform.localScale = typedScale * (1f - squashAmount);
 
         float t = 0f;
@@ -673,7 +683,7 @@ public class CoconutTarget : MonoBehaviour
             float scaleMult = Mathf.LerpUnclamped(1f - squashAmount, 1f, eased);
             transform.localScale = typedScale * scaleMult;
 
-            if (rend != null) rend.material.color = Color.Lerp(Color.white, restColor, p);
+            if (rend != null) rend.material.color = Color.Lerp(flashTint, restColor, p);
 
             yield return null;
         }

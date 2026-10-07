@@ -422,6 +422,7 @@ MonoBehaviour:
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
+  colorRenderer: {fileID: 7615688705278271982}
   maldicionDuration: 6
   supremoFase2HpThreshold: 0.7
   supremoFase3HpThreshold: 0.3
@@ -430,7 +431,7 @@ MonoBehaviour:
   hp: 0
   hpMax: 0
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
-  coinLifetime: 30
+  coinLifetime: 10
   coinPopForce: 3
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashEmission: 1.5
@@ -681,5 +682,10 @@ PrefabInstance:
 --- !u!4 &647359988313350105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+  m_PrefabInstance: {fileID: 7783956618350466544}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7615688705278271982 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
   m_PrefabInstance: {fileID: 7783956618350466544}
   m_PrefabAsset: {fileID: 0}

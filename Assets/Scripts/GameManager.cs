@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public enum Phase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
@@ -101,7 +101,10 @@ public class GameManager : MonoBehaviour
     public float lateGrowthFromCycle = 8f;
     [Tooltip("Crecimiento del pedido a partir del ciclo siguiente. Mas bajo = el late game se puede superar.")]
     public float waterTargetGrowthLate = 1.45f;
-
+    [Header("UI - Decision forzada del ultimo dia")]
+    [Tooltip("Boton 'Bancarrota' dentro del panel de Deuda. Solo se muestra cuando la decision es forzada.")]
+    public Button bankruptcyButton;
+    private bool forcedOrderDecision = false;
     [Header("BETA - Meta de la partida (condicion de victoria)")]
     public int victoryCycle = 16;
     public int victoryLegacyBonus = 10;
@@ -150,7 +153,9 @@ public class GameManager : MonoBehaviour
     private int legacyStartingCoconuts = 0;
     private float legacyMultiplierBonus = 0f;
     private float legacyCoinChanceBonus = 0f;
-
+    [Header("UI - Menu de pausa (Esc)")]
+    public GameObject pauseMenuPanel;
+    public bool isPaused = false;
     void RecalcLegacyMultiplier()
     {
         legacyMultiplier = 1f + totalLegacyPointsEarned * 0.1f * (1f + legacyMultiplierBonus);
@@ -435,14 +440,20 @@ public class GameManager : MonoBehaviour
         if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
         if (machete != null) machete.SetActive(false);
         if (indicacionesPanel != null) indicacionesPanel.SetActive(false);
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         SetCursorVisible(true);
         LoadGame();
         RecalculateAllStats();
         UpdateMoneyUI();
+        if (bankruptcyButton != null) bankruptcyButton.gameObject.SetActive(false);
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape) && currentPhase != Phase.MainMenu)
+        {
+            if (isPaused) ResumeGame(); else PauseGame();
+        }
         if (currentPhase == Phase.Hitting)
         {
             stamina -= Time.deltaTime;
@@ -723,14 +734,22 @@ public class GameManager : MonoBehaviour
         currentPhase = Phase.Shop;
         if (machete != null) machete.SetActive(false);
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
-        if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
         if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
         if (tiendaPanel != null) tiendaPanel.SetActive(false);
-        if (deudaPanel != null) deudaPanel.SetActive(false);
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.ClearAllCoconuts();
         BetaLog("day_end");
         SetCursorVisible(true);
-        RefreshAllUI();
+        bool isDeliveryDay = daysLeft <= 1 && !skipNextDayDecrement;
+        if (isDeliveryDay)
+        {
+            OpenForcedOrderPanel();
+        }
+        else
+        {
+            if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
+            if (deudaPanel != null) deudaPanel.SetActive(false);
+            RefreshAllUI();
+        }
         SaveGame();
     }
 
@@ -788,6 +807,7 @@ public class GameManager : MonoBehaviour
     }
     public void ToggleUpgradeTreePanel()
     {
+        if (forcedOrderDecision) return;
         bool willOpen = upgradeTreePanel != null && !upgradeTreePanel.activeSelf;
         if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
         panelSwitchRoutine = StartCoroutine(SwitchPanels(upgradeTreePanel, new GameObject[] { tiendaPanel, rewardMachinePanel }, willOpen));
@@ -795,6 +815,7 @@ public class GameManager : MonoBehaviour
 
     public void ToggleTiendaPanel()
     {
+        if (forcedOrderDecision) return;
         bool willOpen = tiendaPanel != null && !tiendaPanel.activeSelf;
         if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
         panelSwitchRoutine = StartCoroutine(SwitchPanels(tiendaPanel, new GameObject[] { upgradeTreePanel, rewardMachinePanel }, willOpen));
@@ -802,6 +823,7 @@ public class GameManager : MonoBehaviour
 
     public void ToggleRewardMachinePanel()
     {
+        if (forcedOrderDecision) return;
         bool willOpen = rewardMachinePanel != null && !rewardMachinePanel.activeSelf;
         if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
         panelSwitchRoutine = StartCoroutine(SwitchPanels(rewardMachinePanel, new GameObject[] { upgradeTreePanel, tiendaPanel }, willOpen));
@@ -902,12 +924,15 @@ public class GameManager : MonoBehaviour
     void DeleteSave() { SaveSystem.Delete(); }
     public void ToggleDeudaPanel()
     {
+        if (forcedOrderDecision) return;
         if (deudaPanel != null) deudaPanel.SetActive(!deudaPanel.activeSelf);
         RefreshAllUI();
     }
     public void PayDebt()
     {
         if (waterCurrentML < waterTargetML) return;
+        forcedOrderDecision = false;
+        if (deudaPanel != null) deudaPanel.SetActive(false);
         float delivered = waterTargetML;
         waterCurrentML -= delivered;
         float refund = delivered * skillOrderRefund;
@@ -946,23 +971,36 @@ public class GameManager : MonoBehaviour
         {
             if (daysLeft <= 1)
             {
-                if (waterCurrentML < waterTargetML)
-                {
-                    ResolveBankruptcy();
-                    RefreshAllUI();
-                    return;
-                }
+                OpenForcedOrderPanel();
+                return;
             }
-            else
-            {
-                daysLeft--;
-            }
+            daysLeft--;
         }
 
         stamina = GetStaminaMax();
         ShowHittingUI();
         RefreshAllUI();
+    }
 
+    void OpenForcedOrderPanel()
+    {
+        forcedOrderDecision = true;
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
+        if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (rewardMachinePanel != null) rewardMachinePanel.SetActive(false);
+        if (deudaPanel != null) deudaPanel.SetActive(true);
+        Log("Se acabó el tiempo: paga el pedido o declara bancarrota.");
+        RefreshAllUI();
+    }
+
+    public void DeclareBankruptcy()
+    {
+        if (!forcedOrderDecision) return;
+        forcedOrderDecision = false;
+        if (deudaPanel != null) deudaPanel.SetActive(false);
+        ResolveBankruptcy();
+        RefreshAllUI();
     }
 
     void ResolveBankruptcy()
@@ -1168,9 +1206,7 @@ public class GameManager : MonoBehaviour
         {
             pendingPerkOffers = 0;
             if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
-            stamina = GetStaminaMax();
-            ShowHittingUI();
-            RefreshAllUI();
+            ShowRecaudacionAfterPerk();
             return;
         }
         SetPerkLabel(perkOption1Name, perkOption1Desc, perkOption1Icon, currentPerkChoices[0]);
@@ -1181,7 +1217,24 @@ public class GameManager : MonoBehaviour
         if (perkCard2 != null) perkCard2.PlayAppear(perkCardStagger);
         if (perkCard3 != null) perkCard3.PlayAppear(perkCardStagger * 2f);
     }
+    void ShowRecaudacionAfterPerk()
+    {
+        skipNextDayDecrement = true;
+        currentPhase = Phase.Shop;
+        if (machete != null) machete.SetActive(false);
+        if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
+        if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
+        if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
+        if (upgradeTreePanel != null) upgradeTreePanel.SetActive(false);
+        if (tiendaPanel != null) tiendaPanel.SetActive(false);
+        if (rewardMachinePanel != null) rewardMachinePanel.SetActive(false);
+        if (deudaPanel != null) deudaPanel.SetActive(false);
+        if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
 
+        SetCursorVisible(true);
+        RefreshAllUI();
+        SaveGame();
+    }
     void SetPerkLabel(TMP_Text nameLabel, TMP_Text descLabel, Image iconImage, PerkOption perk)
     {
         if (perk == null) return;
@@ -1268,10 +1321,8 @@ public class GameManager : MonoBehaviour
 
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
 
-        stamina = GetStaminaMax();
         isChoosingPerk = false;
-        ShowHittingUI();
-        RefreshAllUI();
+        ShowRecaudacionAfterPerk();
     }
     public void RestartRun()
     {
@@ -1306,7 +1357,7 @@ public class GameManager : MonoBehaviour
 
         SaveGame();
         OnRunReset?.Invoke();
-
+        forcedOrderDecision = false;
         BeginNewGame();
     }
     void ApplyPerk(PerkOption perk)
@@ -1408,7 +1459,7 @@ public class GameManager : MonoBehaviour
             CoconutSpawner.Instance.startingCoconuts = 4 + legacyStartingCoconuts;
             CoconutSpawner.Instance.spawnInterval = 5f;
         }
-
+        forcedOrderDecision = false;
         RecalculateAllStats();
     }
     void ApplyLegacyEffect(LegacyItem item)
@@ -1499,7 +1550,12 @@ public class GameManager : MonoBehaviour
 
         if (deudaDaysLeftText != null)
         {
-            if (!readyToDeliver && daysLeft <= 1)
+            if (forcedOrderDecision)
+            {
+                deudaDaysLeftText.text = readyToDeliver ? "¡ÚLTIMO DÍA! Paga o bancarrota" : "¡ÚLTIMO DÍA! No alcanza: bancarrota";
+                deudaDaysLeftText.color = urgentColor;
+            }
+            else if (!readyToDeliver && daysLeft <= 1)
             {
                 deudaDaysLeftText.text = "¡ENTREGALO YA!";
                 deudaDaysLeftText.color = urgentColor;
@@ -1510,6 +1566,8 @@ public class GameManager : MonoBehaviour
                 deudaDaysLeftText.color = normalDaysColor;
             }
         }
+
+        if (bankruptcyButton != null) bankruptcyButton.gameObject.SetActive(forcedOrderDecision);
 
         if (payDebtButton != null) payDebtButton.interactable = readyToDeliver;
 
@@ -1565,7 +1623,6 @@ public class GameManager : MonoBehaviour
         }
         if (forceDefaultData || macheteOptions == null || macheteOptions.Count == 0)
             {
-                // Costo y poder suben parejo; el swing baja poco para dejar espacio al arbol y perks.
                 macheteOptions = new List<MacheteData>
         {
             new MacheteData { macheteName = "Machete Oxidado",     description = "El que ya tienes.",                    baseDamage = 5f,  baseSwingInterval = 1.2f,  baseHitRadius = 1.5f,  unlockCost = 0 },
@@ -1669,7 +1726,6 @@ public class GameManager : MonoBehaviour
             N("reembolso_1", "Pedido Flexible I",  "Al entregar un pedido, recuperas 10% de lo entregado", 5000,  SkillEffect.OrderRefundBonus, 0.10f, "negociador_3"),
             N("reembolso_2", "Pedido Flexible II", "+10% más (total 20%)",                                 13500, SkillEffect.OrderRefundBonus, 0.10f, "reembolso_1"),
  
-            // Duracion = earlyDayDuration (5 s). Costos mas bajos que la propuesta anterior.
             N("calma_1", "Calma Antes de la Tormenta I",   "+25% de agua en los primeros 5 segundos del día", 3000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "manofirme_1"),
             N("calma_2", "Calma Antes de la Tormenta II",  "+25% más (total +50%)", 8000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_1"),
             N("calma_3", "Calma Antes de la Tormenta III", "+25% más (total +75%)", 18000, SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_2"),
@@ -1678,10 +1734,8 @@ public class GameManager : MonoBehaviour
 
             if (forceDefaultData || perkPool == null || perkPool.Count == 0)
             {
-                // Los rangos de ciclo estan en PerkMinCycle / PerkMaxCycle (arriba).
                 perkPool = new List<PerkOption>
         {
-            // --- Tier 1 (ciclos 2-9) ---
             new PerkOption { perkName = "Manos Firmes",    description = "+4 daño.",                          effect = PerkEffect.DamageBonus,           value = 4f },
             new PerkOption { perkName = "Segundo Aire",    description = "+8 stamina máxima.",                effect = PerkEffect.StaminaMaxBonus,       value = 8f },
             new PerkOption { perkName = "Buen Trato",      description = "+15% agua obtenida.",               effect = PerkEffect.WaterMultiplierBonus,  value = 0.15f },
@@ -1690,13 +1744,11 @@ public class GameManager : MonoBehaviour
             new PerkOption { perkName = "Cosecha Extra",   description = "+2 cocos iniciales cada día (esta partida).", effect = PerkEffect.ExtraCoconutNextCycle, value = 2f },
             new PerkOption { perkName = "Golpe de Suerte", description = "+10% de probabilidad de crítico.",  effect = PerkEffect.CritChanceBonus,       value = 0.10f },
             new PerkOption { perkName = "Coco Generoso",   description = "+25% agua, pero los golpes son 0.12s mas lentos.", effect = PerkEffect.WaterForSwingPenalty, value = 0.25f },
-            // --- Tier 2 (ciclo 7+) ---
             new PerkOption { perkName = "Cosecha Abundante", description = "+3 cocos iniciales cada día (esta partida).", effect = PerkEffect.ExtraCoconutNextCycle, value = 3f },
             new PerkOption { perkName = "Manos de Hierro",   description = "+10 daño.",              effect = PerkEffect.DamageBonus,          value = 10f },
             new PerkOption { perkName = "Pulmones de Acero", description = "+12 stamina máxima.",    effect = PerkEffect.StaminaMaxBonus,      value = 12f },
             new PerkOption { perkName = "Pacto del Cobrador",description = "+25% agua obtenida.",    effect = PerkEffect.WaterMultiplierBonus, value = 0.25f },
             new PerkOption { perkName = "Ojo de Halcón",     description = "+12% de probabilidad de crítico.", effect = PerkEffect.CritChanceBonus, value = 0.12f },
-            // --- Tier 3 (ciclo 11+): riesgo/recompensa de verdad ---
             new PerkOption { perkName = "Coco Dorado",   description = "+50% agua, pero los golpes son 0.24s mas lentos.", effect = PerkEffect.WaterForSwingPenalty, value = 0.50f },
             new PerkOption { perkName = "Manos de Titán",description = "+18 daño.",                   effect = PerkEffect.DamageBonus, value = 18f },
         };
@@ -1706,28 +1758,24 @@ public class GameManager : MonoBehaviour
             {
                 legacyShop = new List<LegacyItem>
         {
-            // Nivel I (baratos: se compran en las primeras partidas)
             new LegacyItem { itemName = "Anillo del Machetero",   description = "+1 daño permanente.",                      cost = 1, effect = LegacyEffect.PermanentDamageBonus,           value = 1f },
             new LegacyItem { itemName = "Pulsera de Aguante",     description = "+5 stamina máxima permanente.",            cost = 2, effect = LegacyEffect.PermanentStaminaMaxBonus,       value = 5f },
             new LegacyItem { itemName = "Amuleto del Cobrador",   description = "+10% agua obtenida permanentemente.",      cost = 3, effect = LegacyEffect.PermanentMoneyMultiplierBonus,  value = 0.10f },
             new LegacyItem { itemName = "Cesta Grande",           description = "+1 coco inicial cada día.",                cost = 4, effect = LegacyEffect.PermanentStartingCoconutBonus,  value = 1f },
             new LegacyItem { itemName = "Lente del Afortunado",   description = "+3% probabilidad de crítico permanente.",  cost = 2, effect = LegacyEffect.PermanentCritChanceBonus,       value = 0.03f },
             new LegacyItem { itemName = "Moneda Antigua",         description = "+0.5% probabilidad de encontrar monedas.", cost = 1, effect = LegacyEffect.PermanentCoinChanceBonus,       value = 0.005f },
-            // Nivel II
             new LegacyItem { itemName = "Anillo del Machetero II",   description = "+2 daño permanente.",                    cost = 3, effect = LegacyEffect.PermanentDamageBonus,          value = 2f },
             new LegacyItem { itemName = "Pulsera de Aguante II",     description = "+8 stamina máxima permanente.",          cost = 4, effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 8f },
             new LegacyItem { itemName = "Amuleto del Cobrador II",   description = "+15% agua obtenida permanentemente.",    cost = 6, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.15f },
             new LegacyItem { itemName = "Cesta Grande II",           description = "+1 coco inicial cada día.",              cost = 6, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 1f },
             new LegacyItem { itemName = "Lente del Afortunado II",   description = "+6% probabilidad de crítico permanente.",cost = 5, effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.06f },
             new LegacyItem { itemName = "Moneda Antigua II",         description = "+1% probabilidad de encontrar monedas.", cost = 3, effect = LegacyEffect.PermanentCoinChanceBonus,      value = 0.01f },
-            // Nivel III
             new LegacyItem { itemName = "Anillo del Machetero III",  description = "+4 daño permanente.",                    cost = 6,  effect = LegacyEffect.PermanentDamageBonus,          value = 4f },
             new LegacyItem { itemName = "Pulsera de Aguante III",    description = "+12 stamina máxima permanente.",         cost = 8,  effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 12f },
             new LegacyItem { itemName = "Amuleto del Cobrador III",  description = "+25% agua obtenida permanentemente.",    cost = 10, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.25f },
             new LegacyItem { itemName = "Cesta Grande III",          description = "+2 cocos iniciales cada día.",           cost = 10, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 2f },
             new LegacyItem { itemName = "Lente del Afortunado III",  description = "+10% probabilidad de crítico permanente.",cost = 8,  effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.10f },
             new LegacyItem { itemName = "Moneda Antigua III",        description = "+2% probabilidad de encontrar monedas.", cost = 6,  effect = LegacyEffect.PermanentCoinChanceBonus,      value = 0.02f },
-            // Nivel IV
             new LegacyItem { itemName = "Lente del Afortunado IV",   description = "+12% probabilidad de crítico permanente.",cost = 12, effect = LegacyEffect.PermanentCritChanceBonus,     value = 0.12f },
             new LegacyItem { itemName = "Sello Ancestral I",   description = "+25% al valor de cada punto de legado.",  cost = 8,  effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.25f },
             new LegacyItem { itemName = "Sello Ancestral II",  description = "+50% al valor de cada punto de legado.",  cost = 16, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.5f },
@@ -1804,5 +1852,37 @@ new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 7
         perkIcons.Clear();
         foreach (var n in names) perkIcons.Add(new PerkIconEntry { perkName = n });
     }
-    
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0f;
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(true);
+        SetCursorVisible(true);
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        SetCursorVisible(currentPhase != Phase.Hitting);
+    }
+
+    public void GoToMainMenu()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        SaveGame();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void QuitGame()
+    {
+        SaveGame();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
 }

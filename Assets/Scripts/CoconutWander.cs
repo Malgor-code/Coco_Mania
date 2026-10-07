@@ -40,8 +40,6 @@ public class CoconutWander : MonoBehaviour
     [Range(0f, 1f)] public float runZigzagChance = 0.35f;
     public float zigzagAngle = 35f;
     public float zigzagFrequency = 3f;
-
-    [Header("Saltitos (arrastra aqui un hijo VISUAL; ver nota)")]
     public Transform visual;
     public float hopHeight = 0.25f;
     public float hopsPerSecond = 2.2f;
