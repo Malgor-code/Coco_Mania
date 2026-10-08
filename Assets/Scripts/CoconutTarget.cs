@@ -119,7 +119,9 @@ public class CoconutTarget : MonoBehaviour
     public GameObject coinPrefab;
     public float coinLifetime = 300f;
     public float coinPopForce = 3f;
-
+    public float baseScale = 0.6f;
+    public float scaleGrowth = 0.08f;
+    public float maxScale = 1.5f;
     [Header("Flash al recibir golpe")]
     public Color hitFlashColor = Color.white;
     [Range(0f, 3f)] public float hitFlashEmission = 1.5f;
@@ -201,7 +203,7 @@ public class CoconutTarget : MonoBehaviour
         hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * type.hpMultiplier));
         hp = hpMax;
 
-        float sizeBoost = 1f + (type.hpMultiplier - 1f) * 0.25f;
+        float sizeBoost = Mathf.Min(baseScale + Mathf.Sqrt(type.hpMultiplier - 1f) * scaleGrowth, maxScale);
         typedScale = originalScale * sizeBoost;
         transform.localScale = typedScale;
 
