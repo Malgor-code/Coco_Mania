@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using System.Linq;
+using System.Collections.Generic;
 public class MacheteController : MonoBehaviour
 {
     public static MacheteController Instance;
@@ -75,7 +76,7 @@ public class MacheteController : MonoBehaviour
 
     private float shakeTrauma = 0f;
     private Vector3 cameraShakeOffset = Vector3.zero;
-
+    private bool initialized;
     private Coroutine missFlashCoroutine;
     private Coroutine impactRoutine;
     private bool impactPending = false;
@@ -117,6 +118,7 @@ public class MacheteController : MonoBehaviour
             missVignetteImage.color = c;
             if (!missVignetteImage.gameObject.activeSelf) missVignetteImage.gameObject.SetActive(true);
         }
+        initialized = true;
     }
 
     float ResolveClipLength()
@@ -272,61 +274,65 @@ public class MacheteController : MonoBehaviour
     {
         bool hitSomething = false;
         bool killedSomething = false;
+        float multiHitMult = 1f;
 
         if (CoconutSpawner.Instance != null)
         {
+            Vector3 a = transform.position; a.y = 0f;
+            float radiusSqr = hitRadius * hitRadius;
+            var targets = new List<CoconutTarget>();
             foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
             {
                 if (coco == null) continue;
-
-                Vector3 a = transform.position; a.y = 0f;
                 Vector3 b = coco.transform.position; b.y = 0f;
-
-                if (Vector3.Distance(a, b) <= hitRadius)
-                {
-                    int finalDamage = damageOverride;
-                    bool isCritical = false;
-
-                    if (GameManager.Instance != null)
-                    {
-                        isCritical = Random.value < GameManager.Instance.GetCritChance();
-                        float dmg = finalDamage;
-                        if (isCritical)
-                        {
-                            dmg *= GameManager.Instance.GetCritMultiplier();
-                            dmg *= GameManager.Instance.GetLastBreathMultiplier();
-                        }
-                        dmg *= GameManager.Instance.GetStreakDamageMultiplier();
-                        finalDamage = Mathf.Max(1, Mathf.RoundToInt(dmg));
-                    }
-
-                    bool killed = coco.TakeDamage(finalDamage, isCritical);
-                    hitSomething = true;
-
-                    if (killed) killedSomething = true;
-                }
+                if ((a - b).sqrMagnitude <= radiusSqr) targets.Add(coco);
             }
+
+            if (GameManager.Instance != null)
+                multiHitMult = GameManager.Instance.GetMultiHitMultiplier(targets.Count);
+
+            foreach (var coco in targets)
+            {
+                if (coco == null) continue;
+
+                int finalDamage = damageOverride;
+                bool isCritical = false;
+
+                if (GameManager.Instance != null)
+                {
+                    isCritical = Random.value < GameManager.Instance.GetCritChance();
+                    float dmg = finalDamage;
+                    if (isCritical)
+                    {
+                        dmg *= GameManager.Instance.GetCritMultiplier();
+                        dmg *= GameManager.Instance.GetLastBreathMultiplier();
+                    }
+                    dmg *= GameManager.Instance.GetStreakDamageMultiplier();
+                    dmg *= multiHitMult;
+                    finalDamage = Mathf.Max(1, Mathf.RoundToInt(dmg));
+                }
+
+                bool killed = coco.TakeDamage(finalDamage, isCritical);
+                hitSomething = true;
+                if (killed) killedSomething = true;
+            }
+
+            if (multiHitMult > 1f && JuiceManager.Instance != null)
+                JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 1.5f, "¡MULTIPLE!", true);
         }
 
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.RegisterSwingResult(hitSomething);
-        }
 
         shakeTrauma = Mathf.Clamp01(shakeTrauma + shakeTraumaPerSwing);
 
-        if (!hitSomething)
-        {
-            TriggerMissFlash();
-        }
+        if (!hitSomething) TriggerMissFlash();
 
         OnSwingImpact?.Invoke();
         PlaySwingSound();
 
         if (JuiceManager.Instance != null)
-        {
             JuiceManager.Instance.OnSwingConnect(killedSomething);
-        }
     }
 
     void TriggerMissFlash()
@@ -369,7 +375,25 @@ public class MacheteController : MonoBehaviour
         audioSource.pitch = 1f + Random.Range(-swingPitchVariation, swingPitchVariation);
         audioSource.PlayOneShot(swingSounds[Random.Range(0, swingSounds.Length)]);
     }
+    void OnDisable()
+    {
+        if (!initialized) return;
 
+        missFlashCoroutine = null;
+        shakeTrauma = 0f;
+        followVelocity = Vector3.zero;
+
+        if (missVignetteImage != null)
+        {
+            Color c = missVignetteImage.color; c.a = 0f; missVignetteImage.color = c;
+        }
+        if (cameraToFollow != null)
+        {
+            smoothedCameraFollowPos = cameraBasePosition;
+            cameraFollowVelocity = Vector3.zero;
+            cameraToFollow.position = cameraBasePosition;
+        }
+    }
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

@@ -167,6 +167,7 @@ public class CoconutTarget : MonoBehaviour
                 flashMats.Add(m);
             }
         }
+        if (rend != null) { restColor = rend.material.color; restColor.a = 1f; }
         SetFlash(0f);
         DesyncAnimation();
     }
@@ -246,6 +247,7 @@ public class CoconutTarget : MonoBehaviour
             case GameManager.CoconutAbility.Camuflaje: UpdateCamuflaje(); break;
             case GameManager.CoconutAbility.Supremo: UpdateSupremo(); break;
         }
+
     }
 
     void UpdateFortificado()
@@ -404,7 +406,7 @@ public class CoconutTarget : MonoBehaviour
             case GameManager.CoconutAbility.FibraDura:
                 {
                     if (Time.time - fibraDuraLastHitTime > fibraDuraResetTime) fibraDuraCurrentStack = 0f;
-                    float mult = 1f + Mathf.Min(fibraDuraCurrentStack, fibraDuraMaxStack);
+                    float mult = 1f - Mathf.Min(fibraDuraCurrentStack, fibraDuraMaxStack);
                     amount *= mult;
                     fibraDuraCurrentStack += fibraDuraStackPerHit;
                     fibraDuraLastHitTime = Time.time;
@@ -527,7 +529,10 @@ public class CoconutTarget : MonoBehaviour
             yield return new WaitForSeconds(halfCycle);
         }
     }
-
+    void OnDestroy()
+    {
+        foreach (var m in flashMats) if (m != null) Destroy(m);
+    }
     void Die()
     {
         isDead = true;
@@ -689,7 +694,15 @@ public class CoconutTarget : MonoBehaviour
 
             yield return null;
         }
-
+        Color RestTint()
+        {
+            Color c = restColor;
+            if (ability == GameManager.CoconutAbility.Fortificado && fortificadoActive)
+                c = Color.Lerp(restColor, Color.black, 0.45f);
+            if (ability == GameManager.CoconutAbility.Camuflaje && camuflajeIsHidden)
+                c.a = camuflajeHiddenAlpha;
+            return c;
+        }
         transform.localScale = typedScale;
         SetFlash(0f);
         if (rend != null) rend.material.color = restColor;

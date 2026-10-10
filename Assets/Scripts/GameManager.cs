@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     public float executeHpThreshold = 0.5f;
     public float earlyDayDuration = 3f;
     private float skillExecuteBonus = 0f;
+    private float skillMultiHitBonus = 0f;
     private float skillOrderRefund = 0f;
     private float skillEarlyDayBonus = 0f;
     private float dayElapsed = 0f;
@@ -680,6 +681,7 @@ public class GameManager : MonoBehaviour
     {
         totalCoconutsKilled++;
         runCoconutsKilled++;
+        if (runCoconutsKilled > bestRunKills) bestRunKills = runCoconutsKilled;
         dayCoconutsKilled++;
         float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus + relicWaterMultiplierBonus - curseWaterPenalty;
         float streakMult = GetStreakWaterMultiplier();
@@ -803,6 +805,7 @@ public class GameManager : MonoBehaviour
     {
         currentPhase = Phase.Hitting;
         if (machete != null) machete.SetActive(true);
+        RecalculateAllStats();
         OnDayStarted?.Invoke();
     }
     public void ToggleUpgradeTreePanel()
@@ -864,6 +867,10 @@ public class GameManager : MonoBehaviour
     {
         return (skillExecuteBonus > 0f && targetHpPercent < executeHpThreshold) ? 1f + skillExecuteBonus : 1f;
     }
+    public float GetMultiHitMultiplier(int targetsHit)
+    {
+        return (skillMultiHitBonus > 0f && targetsHit >= 2) ? 1f + skillMultiHitBonus : 1f;
+    }
 
     float GetEarlyDayMultiplier()
     {
@@ -905,14 +912,16 @@ public class GameManager : MonoBehaviour
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts = 4;
 
         purchasedLegacyItems.Clear();
-        foreach (string name in d.purchasedLegacyItems)
+        if (d.purchasedLegacyItems != null)
         {
-            LegacyItem item = GetLegacyItem(name);
-            if (item == null) continue; 
-            purchasedLegacyItems.Add(name);
-            ApplyLegacyEffect(item);
+            foreach (string name in d.purchasedLegacyItems)
+            {
+                LegacyItem item = GetLegacyItem(name);
+                if (item == null) continue;
+                purchasedLegacyItems.Add(name);
+                ApplyLegacyEffect(item);
+            }
         }
-
         RecalcLegacyMultiplier();
         RecalculateAllStats();
     }
@@ -930,6 +939,7 @@ public class GameManager : MonoBehaviour
     }
     public void PayDebt()
     {
+        if (currentPhase != Phase.Shop) return;
         if (waterCurrentML < waterTargetML) return;
         forcedOrderDecision = false;
         if (deudaPanel != null) deudaPanel.SetActive(false);
@@ -1056,6 +1066,7 @@ public class GameManager : MonoBehaviour
         skillEarlyDayBonus = 0f;
         skillChainSplashPercent = 0f;
         skillLastBreathSwingReduction = 0f;
+        skillMultiHitBonus = 0f;
         if (CoconutSpawner.Instance != null)
         {
             CoconutSpawner.Instance.startingCoconuts = 4 + legacyStartingCoconuts;
@@ -1187,6 +1198,7 @@ public class GameManager : MonoBehaviour
             case SkillEffect.ExecuteDamageBonus: skillExecuteBonus += node.effectValue; break;
             case SkillEffect.OrderRefundBonus: skillOrderRefund += node.effectValue; break;
             case SkillEffect.EarlyDayWaterBonus: skillEarlyDayBonus += node.effectValue; break;
+            case SkillEffect.MultiHitDamageBonus: skillMultiHitBonus += node.effectValue; break;
         }
         RecalculateAllStats();
     }
@@ -1212,7 +1224,9 @@ public class GameManager : MonoBehaviour
         SetPerkLabel(perkOption1Name, perkOption1Desc, perkOption1Icon, currentPerkChoices[0]);
         SetPerkLabel(perkOption2Name, perkOption2Desc, perkOption2Icon, currentPerkChoices[1]);
         SetPerkLabel(perkOption3Name, perkOption3Desc, perkOption3Icon, currentPerkChoices[2]);
-
+        if (perkCard1 != null) perkCard1.gameObject.SetActive(currentPerkChoices[0] != null);
+        if (perkCard2 != null) perkCard2.gameObject.SetActive(currentPerkChoices[1] != null);
+        if (perkCard3 != null) perkCard3.gameObject.SetActive(currentPerkChoices[2] != null);
         if (perkCard1 != null) perkCard1.PlayAppear(0f);
         if (perkCard2 != null) perkCard2.PlayAppear(perkCardStagger);
         if (perkCard3 != null) perkCard3.PlayAppear(perkCardStagger * 2f);
@@ -1332,7 +1346,9 @@ public class GameManager : MonoBehaviour
         isChoosingPerk = false;
         pendingPerkOffers = 0;
         Time.timeScale = 1f;
-
+        isPaused = false;
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        skipNextDayDecrement = false;
         ClearCurse();
 
         if (CoconutSpawner.Instance != null)
@@ -1412,7 +1428,7 @@ public class GameManager : MonoBehaviour
         daysLeft = dayLimitBase;
         totalCoconutsKilled = 0;
         unlockedSkillIds.Clear();
-
+        skillExecuteBonus = 0f;
         skillDamageBonus = 0f;
         skillStaminaBonus = 0f;
         skillSwingIntervalReduction = 0f;
@@ -1653,6 +1669,14 @@ public class GameManager : MonoBehaviour
 
             N("radio_1", "Golpe Amplio I",  "Mas radio de golpe",     1200, SkillEffect.HitRadiusBonus, 0.2f, "velocidad_1"),
             N("radio_2", "Golpe Amplio II", "Aun mas radio de golpe", 2200, SkillEffect.HitRadiusBonus, 0.3f, "radio_1"),
+            N("radio_3", "Golpe Amplio III", "Mas radio de golpe", 10000,  SkillEffect.HitRadiusBonus, 0.20f, "protegida_2"),
+            N("radio_4", "Golpe Amplio IV",  "Mas radio de golpe", 20000, SkillEffect.HitRadiusBonus, 0.25f, "radio_3"),
+            N("radio_5", "Golpe Amplio V",   "Mas radio de golpe", 35000, SkillEffect.HitRadiusBonus, 0.30f, "radio_4"),
+            N("radio_6", "Golpe Amplio VI",  "Mas radio de golpe", 80000, SkillEffect.HitRadiusBonus, 0.35f, "radio_5"),
+
+            N("multi_1", "Golpe Multiple I",   "+20% de daño si golpeas 2 o mas cocos a la vez",     15000,  SkillEffect.MultiHitDamageBonus, 0.20f, "radio_3"),
+            N("multi_2", "Golpe Multiple II",  "+15% mas (total +35%) al golpear 2 o mas cocos",     40000, SkillEffect.MultiHitDamageBonus, 0.15f, "multi_1"),
+            N("multi_3", "Golpe Multiple III", "+15% mas (total +50%) al golpear 2 o mas cocos",     90000, SkillEffect.MultiHitDamageBonus, 0.15f, "multi_2"),
 
             N("resistencia_1", "Aguante I",   "+6 segundos de resistencia", 500,   SkillEffect.StaminaMaxFlatBonus, 6f, "fuerza_1"),
             N("resistencia_2", "Aguante II",  "+6 segundos de resistencia", 1400,  SkillEffect.StaminaMaxFlatBonus, 6f, "resistencia_1"),
@@ -1788,20 +1812,20 @@ public class GameManager : MonoBehaviour
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
 {
     new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,   ability = CoconutAbility.Ninguna },
-new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 12,   ability = CoconutAbility.Generoso },
-new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 25,  ability = CoconutAbility.Resistente },
-new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 45,  ability = CoconutAbility.FibraDura },
-new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 70,  ability = CoconutAbility.Pesado },
-new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 100,  ability = CoconutAbility.Tenaz },
-new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 140,  ability = CoconutAbility.Armadura },
-new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 185, ability = CoconutAbility.Rebote },
-new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 235, ability = CoconutAbility.Fortificado },
-new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 290, ability = CoconutAbility.Implacable },
-new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 350, ability = CoconutAbility.FragilValioso },
-new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 420, ability = CoconutAbility.Regeneracion },
-new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 500, ability = CoconutAbility.Camuflaje },
-new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 600, ability = CoconutAbility.Maldicion },
-new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 720, ability = CoconutAbility.Supremo },
+new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 25,   ability = CoconutAbility.Generoso },
+new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 55,  ability = CoconutAbility.Resistente },
+new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 110,  ability = CoconutAbility.FibraDura },
+new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 150,  ability = CoconutAbility.Pesado },
+new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 200,  ability = CoconutAbility.Tenaz },
+new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 250,  ability = CoconutAbility.Armadura },
+new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 320, ability = CoconutAbility.Rebote },
+new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 400, ability = CoconutAbility.Fortificado },
+new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 490, ability = CoconutAbility.Implacable },
+new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 590, ability = CoconutAbility.FragilValioso },
+new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 700, ability = CoconutAbility.Regeneracion },
+new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 830, ability = CoconutAbility.Camuflaje },
+new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 10000, ability = CoconutAbility.Maldicion },
+new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 10100, ability = CoconutAbility.Supremo },
 };
 
     void StampCoconutUnlocks()

@@ -25,7 +25,8 @@ public enum SkillEffect
     LastBreathSwingBonus,
     ExecuteDamageBonus,
     OrderRefundBonus,
-    EarlyDayWaterBonus
+    EarlyDayWaterBonus,
+    MultiHitDamageBonus
 }
 
 [System.Serializable]
