@@ -26,7 +26,10 @@ public enum SkillEffect
     ExecuteDamageBonus,
     OrderRefundBonus,
     EarlyDayWaterBonus,
-    MultiHitDamageBonus
+    MultiHitDamageBonus, 
+    MacheteDiscount, 
+    StreakMaxStacksBonus, 
+    StreakPowerBonus
 }
 
 [System.Serializable]

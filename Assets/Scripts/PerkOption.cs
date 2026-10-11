@@ -9,7 +9,19 @@ public enum PerkEffect
     ExtraCoconutNextCycle,
     CritChanceBonus,
     WaterMultiplierBonus,
-    WaterForSwingPenalty
+    WaterForSwingPenalty, 
+    HitRadiusBonus, 
+    JackpotChanceBonus, 
+    StreakMaxStacksBonus, 
+    StreakPowerBonus, 
+    OrderDiscount,
+    CoinChanceBonus, 
+    ExecuteDamageBonus, 
+    ChainSplash, 
+    LastBreathBonus, 
+    EarlyDayWaterBonus,
+    MultiHitDamageBonus, 
+    DamageForStaminaPenalty
 }
 
 [System.Serializable]

@@ -24,6 +24,8 @@ public class CoconutSpawner : MonoBehaviour
     public float hpBoost = 1.5f;
     public float startSpawnStagger = 0.3f;
     public event System.Action OnInitialSpawnComplete;
+    public float spawnSpeedMultiplier = 2f;
+    public float tierWeightBias = 0f;
     public void SpawnExtraCoconut() { StartCoroutine(SpawnExtraDelayed()); }
     [Header("Tipos de coco (progresion por muertes)")]
     public List<CoconutTypeData> coconutTypes = new List<CoconutTypeData>();
@@ -37,19 +39,19 @@ public class CoconutSpawner : MonoBehaviour
     {
     new CoconutTypeData { typeName = "Coco Verde",       hpMultiplier = 1.00f, lootMultiplier = 1.00f },
     new CoconutTypeData { typeName = "Coco Maduro",      hpMultiplier = 3f,    lootMultiplier = 1.4f },
-    new CoconutTypeData { typeName = "Coco Correoso",    hpMultiplier = 7f,    lootMultiplier = 1.8f },
-    new CoconutTypeData { typeName = "Coco Fibroso",     hpMultiplier = 12f,   lootMultiplier = 2.2f },
+    new CoconutTypeData { typeName = "Coco Correoso",    hpMultiplier = 6f,   lootMultiplier = 1.8f },
+    new CoconutTypeData { typeName = "Coco Fibroso",     hpMultiplier = 10f,  lootMultiplier = 2.2f },
     new CoconutTypeData { typeName = "Coco Petreo",      hpMultiplier = 18f,   lootMultiplier = 2.6f },
     new CoconutTypeData { typeName = "Coco Curtido",     hpMultiplier = 23f,   lootMultiplier = 3f },
     new CoconutTypeData { typeName = "Coco Blindado",    hpMultiplier = 30f,   lootMultiplier = 3.66f },
-    new CoconutTypeData { typeName = "Coco de Hierro",   hpMultiplier = 48f,   lootMultiplier = 4.46f },
-    new CoconutTypeData { typeName = "Coco de Acero",    hpMultiplier = 55f,   lootMultiplier = 5.23f },
+    new CoconutTypeData { typeName = "Coco de Hierro",   hpMultiplier = 42f,  lootMultiplier = 4.46f },
+    new CoconutTypeData { typeName = "Coco de Acero",    hpMultiplier = 52f,  lootMultiplier = 5.23f },
     new CoconutTypeData { typeName = "Coco de Titanio",  hpMultiplier = 63f,   lootMultiplier = 5.98f },
     new CoconutTypeData { typeName = "Coco de Diamante", hpMultiplier = 71f,   lootMultiplier = 6.84f },
     new CoconutTypeData { typeName = "Coco Legendario",  hpMultiplier = 90f,   lootMultiplier = 8.26f },
     new CoconutTypeData { typeName = "Coco Mitico",      hpMultiplier = 110f,  lootMultiplier = 9.99f },
     new CoconutTypeData { typeName = "Coco Ancestral",   hpMultiplier = 140f,  lootMultiplier = 11.39f },
-    new CoconutTypeData { typeName = "Coco Supremo",     hpMultiplier = 200f,  lootMultiplier = 12.77f },
+    new CoconutTypeData { typeName = "Coco Supremo",     hpMultiplier = 160f, lootMultiplier = 12.77f },
 };
 
     void Awake()
@@ -121,14 +123,8 @@ public class CoconutSpawner : MonoBehaviour
             return;
         }
 
-        spawnTimer += Time.deltaTime;
-        if (spawnTimer >= spawnInterval && activeCoconuts.Count < maxCoconuts)
-        {
-            spawnTimer = 0f;
-            SpawnOne();
-        }
         float interval = Mathf.Max(0.3f, spawnInterval);
-        spawnTimer += Time.deltaTime;
+        spawnTimer += Time.deltaTime * spawnSpeedMultiplier;
         if (spawnTimer >= interval && activeCoconuts.Count < maxCoconuts)
         {
             spawnTimer = 0f;
@@ -202,7 +198,24 @@ public class CoconutSpawner : MonoBehaviour
         if (unlocked.Count == 0)
             return coconutTypes.Count > 0 ? coconutTypes[0] : new CoconutTypeData();
 
-        return unlocked[Random.Range(0, unlocked.Count)];
+        if (Mathf.Approximately(tierWeightBias, 0f) || unlocked.Count == 1)
+            return unlocked[Random.Range(0, unlocked.Count)];
+
+        float[] w = new float[unlocked.Count];
+        float total = 0f;
+        for (int i = 0; i < w.Length; i++)
+        {
+            float t = i / (float)(w.Length - 1);
+            w[i] = Mathf.Max(0.05f, 1f + tierWeightBias * t);
+            total += w[i];
+        }
+        float r = Random.value * total;
+        for (int i = 0; i < w.Length; i++)
+        {
+            r -= w[i];
+            if (r <= 0f) return unlocked[i];
+        }
+        return unlocked[unlocked.Count - 1];
     }
 
 

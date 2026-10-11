@@ -305,7 +305,6 @@ public class MacheteController : MonoBehaviour
                     if (isCritical)
                     {
                         dmg *= GameManager.Instance.GetCritMultiplier();
-                        dmg *= GameManager.Instance.GetLastBreathMultiplier();
                     }
                     dmg *= GameManager.Instance.GetStreakDamageMultiplier();
                     dmg *= multiHitMult;

@@ -4,10 +4,12 @@ using UnityEngine;
 public class MacheteData
 {
     public string macheteName = "Machete de palma";
-
+    public enum MachetePassive { Ninguna, WaterBonus, CritChance, StaminaMax, ChainSplash, CritDamage, JackpotChance, MultiHit }
     [TextArea]
     public string description = "Equilibrado. Bueno para empezar.";
-
+    public MachetePassive passive = MachetePassive.Ninguna;
+    public float passiveValue = 0f;
+    public string passiveDescription = "";
     public float baseDamage = 3f;
     public float baseSwingInterval = 1.2f;
     public float baseHitRadius = 1.5f;

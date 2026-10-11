@@ -4,10 +4,10 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using static MacheteData;
 public class GameManager : MonoBehaviour
 {
     public enum Phase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
-
     public enum CoconutAbility
     {
         Ninguna,
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
     private float skillLastBreathBonus = 0f;
     private float skillChainSplashPercent = 0f;
     private float skillLastBreathSwingReduction = 0f;
+    private int skillStaminaRecoveryLevel = 0;
+    static readonly float[] StaminaRecoveryCaps = { 6f, 9f, 12f, 16f };
     private bool lastBreathSwingActive = false;
     private bool isApplyingSplash = false;
     public float executeHpThreshold = 0.5f;
@@ -72,6 +74,8 @@ public class GameManager : MonoBehaviour
     private float skillOrderRefund = 0f;
     private float skillEarlyDayBonus = 0f;
     private float dayElapsed = 0f;
+    public float GetCritChance() => Mathf.Clamp01(GetRawCritChance());
+    float GetRawCritChance() => skillCritChanceBonus + perkCritChanceBonus + legacyCritChanceBonus + relicCritChanceBonus + PassiveValue(MachetePassive.CritChance);
     [Header("Reward Machine - bonos de reliquias (temporales o permanentes del intento)")]
     public float relicDamageBonus = 0f;
     public float relicStaminaMaxBonus = 0f;
@@ -146,11 +150,13 @@ public class GameManager : MonoBehaviour
     int CurrentStreakStacks()
     {
         int stacks = currentHitStreak - streakThreshold + 1;
-        return Mathf.Clamp(stacks, 0, streakMaxStacks);
+        int max = Mathf.Min(StreakHardCap, streakMaxStacks + skillStreakStackBonus + legacyStreakStacks);
+        return Mathf.Clamp(stacks, 0, max);
     }
-
-    public float GetStreakDamageMultiplier() => 1f + CurrentStreakStacks() * streakDamageBonusPerHit;
-    public float GetStreakWaterMultiplier() => 1f + CurrentStreakStacks() * streakWaterBonusPerHit;
+    public float GetStreakDamageMultiplier() =>
+        1f + CurrentStreakStacks() * Mathf.Min(StreakPowerCap, streakDamageBonusPerHit + skillStreakPowerBonus);
+    public float GetStreakWaterMultiplier() =>
+        1f + CurrentStreakStacks() * Mathf.Min(StreakPowerCap, streakWaterBonusPerHit + skillStreakPowerBonus);
     private int legacyStartingCoconuts = 0;
     private float legacyMultiplierBonus = 0f;
     private float legacyCoinChanceBonus = 0f;
@@ -161,7 +167,7 @@ public class GameManager : MonoBehaviour
     {
         legacyMultiplier = 1f + totalLegacyPointsEarned * 0.1f * (1f + legacyMultiplierBonus);
     }
-    public float GetCritMultiplier() => 2f + skillCritDamageBonus;
+    public float GetCritMultiplier() => 2f + skillCritDamageBonus + PassiveValue(MachetePassive.CritDamage) + Mathf.Max(0f, GetRawCritChance() - 1f);
 
     public void ApplyTemporaryCurse(float durationSeconds)
     {
@@ -255,6 +261,7 @@ public class GameManager : MonoBehaviour
     [Header("Energia (stamina) - se mide en SEGUNDOS, se gasta por tiempo, no por golpe")]
     public float stamina = 15f;
     public float staminaMaxBase = 15f;
+    public float staminaStartDelay = 2f;
     public int coconutCoins = 0;
     [HideInInspector] public bool lastKillFoundCoin = false;
     [Range(0f, 1f)]
@@ -266,7 +273,8 @@ public class GameManager : MonoBehaviour
     [Header("Machete: progresion lineal (se paga con agua de coco, se resetea en bancarrota)")]
     public List<MacheteData> macheteOptions = new List<MacheteData>();
     public int equippedMacheteIndex = 0;
-
+    private int skillStreakStackBonus = 0;
+    private float skillStreakPowerBonus = 0f;
     [Header("Arbol de Mejoras (se paga con agua de coco, ramificado, se resetea en bancarrota)")]
     public List<SkillNode> skillTree = new List<SkillNode>();
     private HashSet<string> unlockedSkillIds = new HashSet<string>();
@@ -312,6 +320,7 @@ public class GameManager : MonoBehaviour
     private float curseStaminaPenalty = 0f;
     private float curseSpawnPenalty = 0f;
     private int curseGeneration = 0;
+    private float perkWaterMultiplicative = 1f;
     [Header("Legado (permanente, solo se gasta tras una bancarrota)")]
     public int legacyPoints = 0;
     public int totalLegacyPointsEarned = 0;
@@ -323,7 +332,15 @@ public class GameManager : MonoBehaviour
     public float legacyStaminaBonus = 0f;
     public float legacyWaterMultiplierBonus = 0f;
     public float legacyCritChanceBonus = 0f;
-
+    private int legacyExtraDays = 0;
+    private float legacyStartingWater = 0f;
+    private float legacyJackpotChance = 0f;
+    private int legacyStreakStacks = 0;
+    private float legacyHitRadiusBonus = 0f;
+    private float legacyOrderDiscount = 0f;
+    private int legacyStartingMachete = 0;
+    const int StreakHardCap = 12;
+    const float StreakPowerCap = 0.10f;
     [Header("UI - Gameplay (solo stamina)")]
     public GameObject gameplayUIPanel;
     public Slider staminaSlider;
@@ -393,7 +410,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Color del texto de dias cuando es urgente (ultimo dia sin entregar).")]
     public Color urgentColor = new Color(1f, 0.25f, 0.25f);
     public Color normalDaysColor = Color.white;
-
+    const float SwingFloor = 0.2f;
     [Header("UI - Eleccion de Perk")]
     public GameObject perkChoiceUIPanel;
     public TMP_Text perkOption1Name, perkOption1Desc;
@@ -411,11 +428,29 @@ public class GameManager : MonoBehaviour
     private bool isChoosingPerk = false;
     [Header("UI - Log")]
     public TMP_Text logText;
+    float PassiveValue(MachetePassive p)
+    {
+        MacheteData m = GetCurrentMachete();
+        return (m != null && m.passive == p) ? m.passiveValue : 0f;
+    }
+
+    string PassiveLine(MacheteData m)
+    {
+        return (m != null && m.passive != MachetePassive.Ninguna && !string.IsNullOrEmpty(m.passiveDescription))
+            ? "\n" + m.passiveDescription : "";
+    }
+
+    int GetDayLimitBase() => dayLimitBase + legacyExtraDays;
     static readonly Dictionary<string, int> PerkMinCycle = new Dictionary<string, int>
 {
+    { "Madrugador", 2 }, { "Buen Regateo", 3 }, { "Racha Viva", 3 },
+    { "Pulso Firme", 4 }, { "Doble Golpe", 4 },
+    { "Corazón de Jackpot", 5 }, { "Último Aliento", 5 }, { "Machete Pesado", 5 },
+    { "Instinto Cazador", 6 }, { "Chispa en Cadena", 6 },
     { "Cosecha Abundante", 7 }, { "Manos de Hierro", 7 }, { "Pulmones de Acero", 7 },
     { "Pacto del Cobrador", 8 }, { "Ojo de Halcón", 8 },
-    { "Coco Dorado", 11 }, { "Manos de Titán", 11 },
+    { "Racha Imparable", 10 },
+    { "Coco Dorado", 11 }, { "Manos de Titán", 11 }, { "Jackpot Mayor", 11 }, { "Cazador Maestro", 11 },
 };
     static readonly Dictionary<string, int> PerkMaxCycle = new Dictionary<string, int>
 {
@@ -425,7 +460,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        earlyDayDuration = 5f;
+        earlyDayDuration = 10f;
         EnsureDefaultData();
     }
 
@@ -457,12 +492,16 @@ public class GameManager : MonoBehaviour
         }
         if (currentPhase == Phase.Hitting)
         {
-            stamina -= Time.deltaTime;
-            if (stamina <= 0f)
+            if (dayElapsed >= staminaStartDelay)
             {
-                stamina = 0f;
-                EnterRecaudacionPhase();
+                stamina -= Time.deltaTime;
+                if (stamina <= 0f)
+                {
+                    stamina = 0f;
+                    EnterRecaudacionPhase();
+                }
             }
+
             bool shouldBeActive = skillLastBreathSwingReduction > 0f && stamina <= GetStaminaMax() * 0.2f;
             if (shouldBeActive != lastBreathSwingActive)
             {
@@ -598,10 +637,14 @@ public class GameManager : MonoBehaviour
     public void BeginNewGame()
     {
         stamina = GetStaminaMax();
-        daysLeft = dayLimitBase;
+        daysLeft = GetDayLimitBase();
+        waterCurrentML = Mathf.Max(waterCurrentML, legacyStartingWater);
+        equippedMacheteIndex = Mathf.Max(equippedMacheteIndex, legacyStartingMachete);
+        if (billCycle == 1) waterTargetML = 500f * (1f - legacyOrderDiscount);
         runCoconutsKilled = 0;
         runMoneyEarned = 0;
         RecalculateAllStats();
+        stamina = GetStaminaMax();
         ShowHittingUI();
         RefreshAllUI();
         runStartTime = Time.time;
@@ -624,17 +667,15 @@ public class GameManager : MonoBehaviour
         if (MacheteController.Instance != null)
         {
             MacheteController.Instance.damageOverride = damage;
-            MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus + relicHitRadiusBonus;
-            MacheteController.Instance.swingInterval = Mathf.Max(0.2f,
-    baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction - relicSwingIntervalReduction
-    + curseSwingPenalty - (lastBreathSwingActive ? skillLastBreathSwingReduction : 0f));
+            MacheteController.Instance.hitRadius = baseRadius + skillHitRadiusBonus + relicHitRadiusBonus + legacyHitRadiusBonus;
+            MacheteController.Instance.swingInterval = Mathf.Max(SwingFloor, GetRawSwingInterval(true));
         }
     }
     public void RefreshCombatStats() => RecalculateAllStats();
     public float GetStaminaMax()
     {
         return Mathf.Max(1f, staminaMaxBase + skillStaminaBonus + perkStaminaMaxBonus
-        + legacyStaminaBonus + relicStaminaMaxBonus - curseStaminaPenalty);
+            + legacyStaminaBonus + relicStaminaMaxBonus + PassiveValue(MachetePassive.StaminaMax) - curseStaminaPenalty);
     }
 
     [System.Obsolete("Renombrado conceptualmente: ahora devuelve el bonus de AGUA extra (no de dinero, que ya no existe). Se deja el nombre por compatibilidad con UI existente.")]
@@ -671,22 +712,17 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp01((float)totalCoconutsKilled / next.killsRequired);
     }
 
-    public float GetCritChance()
-    {
-        float chance = skillCritChanceBonus + perkCritChanceBonus + legacyCritChanceBonus + relicCritChanceBonus;
-        return Mathf.Clamp(chance, 0f, 2f);
-    }
-
     public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
     {
         totalCoconutsKilled++;
         runCoconutsKilled++;
         if (runCoconutsKilled > bestRunKills) bestRunKills = runCoconutsKilled;
         dayCoconutsKilled++;
-        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus + relicWaterMultiplierBonus - curseWaterPenalty;
+        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus  + relicWaterMultiplierBonus + PassiveValue(MachetePassive.WaterBonus) - curseWaterPenalty;
         float streakMult = GetStreakWaterMultiplier();
-        waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult * legacyMultiplier * streakMult * GetLastBreathMultiplier() * GetEarlyDayMultiplier();
-        lastKillHadJackpot = skillJackpotChance > 0f && Random.value < skillJackpotChance;
+        waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult * legacyMultiplier * streakMult * GetLastBreathMultiplier() * GetEarlyDayMultiplier() * perkWaterMultiplicative;
+        float jackpotChance = skillJackpotChance + legacyJackpotChance + PassiveValue(MachetePassive.JackpotChance);
+        lastKillHadJackpot = jackpotChance > 0f && Random.value < jackpotChance;
         if (lastKillHadJackpot)
         {
             float jackpotWater = waterGained * (jackpotBaseMultiplier + skillJackpotMultBonus);
@@ -697,10 +733,11 @@ public class GameManager : MonoBehaviour
         int gainedRounded = Mathf.RoundToInt(waterGained);
         runMoneyEarned += gainedRounded;
         dayMoneyEarned += gainedRounded;
-        if (skillStaminaRecoveryChance > 0f && dayStaminaRecovered < maxStaminaRecoveryPerDay
-    && Random.value < skillStaminaRecoveryChance)
+        float recoveryCap = GetStaminaRecoveryCap();
+        if (skillStaminaRecoveryChance > 0f && dayStaminaRecovered < recoveryCap
+            && Random.value < skillStaminaRecoveryChance)
         {
-            float amount = Mathf.Min(skillStaminaRecoveryAmount, maxStaminaRecoveryPerDay - dayStaminaRecovered);
+            float amount = Mathf.Min(skillStaminaRecoveryAmount, recoveryCap - dayStaminaRecovered);
             stamina = Mathf.Min(GetStaminaMax(), stamina + amount);
             dayStaminaRecovered += amount;
             Log("¡Recuperaste " + Mathf.RoundToInt(amount) + " de resistencia!");
@@ -815,7 +852,13 @@ public class GameManager : MonoBehaviour
         if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
         panelSwitchRoutine = StartCoroutine(SwitchPanels(upgradeTreePanel, new GameObject[] { tiendaPanel, rewardMachinePanel }, willOpen));
     }
-
+    float GetRawSwingInterval(bool includeLastBreath)
+    {
+        MacheteData m = GetCurrentMachete();
+        float baseSwing = m != null ? m.baseSwingInterval : 1.2f;
+        return baseSwing - skillSwingIntervalReduction - perkSwingIntervalReduction - relicSwingIntervalReduction
+             + curseSwingPenalty - (includeLastBreath && lastBreathSwingActive ? skillLastBreathSwingReduction : 0f);
+    }
     public void ToggleTiendaPanel()
     {
         if (forcedOrderDecision) return;
@@ -823,7 +866,11 @@ public class GameManager : MonoBehaviour
         if (panelSwitchRoutine != null) StopCoroutine(panelSwitchRoutine);
         panelSwitchRoutine = StartCoroutine(SwitchPanels(tiendaPanel, new GameObject[] { upgradeTreePanel, rewardMachinePanel }, willOpen));
     }
-
+    float GetStaminaRecoveryCap()
+    {
+        if (skillStaminaRecoveryLevel <= 0) return 0f;
+        return StaminaRecoveryCaps[Mathf.Min(skillStaminaRecoveryLevel, StaminaRecoveryCaps.Length) - 1];
+    }
     public void ToggleRewardMachinePanel()
     {
         if (forcedOrderDecision) return;
@@ -869,7 +916,8 @@ public class GameManager : MonoBehaviour
     }
     public float GetMultiHitMultiplier(int targetsHit)
     {
-        return (skillMultiHitBonus > 0f && targetsHit >= 2) ? 1f + skillMultiHitBonus : 1f;
+        float bonus = skillMultiHitBonus + PassiveValue(MachetePassive.MultiHit);
+        return (bonus > 0f && targetsHit >= 2) ? 1f + bonus : 1f;
     }
 
     float GetEarlyDayMultiplier()
@@ -901,13 +949,9 @@ public class GameManager : MonoBehaviour
         coconutCoins = d.coconutCoins;
         bestRunKills = d.bestRunKills;
         bestCycleReached = Mathf.Max(1, d.bestCycleReached);
-        legacyDamageBonus = 0f;
-        legacyStaminaBonus = 0f;
-        legacyWaterMultiplierBonus = 0f;
-        legacyCritChanceBonus = 0f;
-        legacyStartingCoconuts = 0;
-        legacyMultiplierBonus = 0f;
-        legacyCoinChanceBonus = 0f;
+        legacyDamageBonus = 0f;legacyStaminaBonus = 0f; legacyWaterMultiplierBonus = 0f; legacyCritChanceBonus = 0f; legacyStartingCoconuts = 0; legacyMultiplierBonus = 0f; legacyCoinChanceBonus = 0f; legacyExtraDays = 0; legacyStartingWater = 0f; legacyJackpotChance = 0f; legacyStreakStacks = 0;
+        legacyHitRadiusBonus = 0f; legacyOrderDiscount = 0f; legacyStartingMachete = 0;
+        equippedMacheteIndex = 0;
         coinDropChance = 0.005f;
         if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts = 4;
 
@@ -952,7 +996,7 @@ public class GameManager : MonoBehaviour
         bestCycleReached = Mathf.Max(bestCycleReached, billCycle);
         float growth = billCycle > lateGrowthFromCycle ? waterTargetGrowthLate : waterTargetGrowth;
         waterTargetML *= growth;
-        daysLeft = Mathf.Max(3, dayLimitBase - ((billCycle - 1) / 2));
+        daysLeft = Mathf.Max(3 + legacyExtraDays, GetDayLimitBase() - ((billCycle - 1) / 2));
         RecalculateAllStats();
         Log("Pedido entregado. Nuevo pedido: " + FormatWater(waterTargetML)
             + (refund > 0f ? " (reembolso +" + FormatWater(refund) + ")" : ""));
@@ -1021,65 +1065,14 @@ public class GameManager : MonoBehaviour
         if (perkChoiceUIPanel != null) perkChoiceUIPanel.SetActive(false);
         pendingPerkOffers = 0;
 
-        int gained = Mathf.Max(1, Mathf.RoundToInt(billCycle / 2f));
+        int gained = Mathf.Max(1, Mathf.CeilToInt(billCycle / 2f));
         legacyPoints += gained;
         totalLegacyPointsEarned += gained;
         RecalcLegacyMultiplier();
-        skillStaminaRecoveryChance = 0f;
-        skillStaminaRecoveryAmount = 0f;
-        skillJackpotChance = 0f; 
-        skillJackpotMultBonus = 0f;
-        skillCritDamageBonus = 0f;
-        currentHitStreak = 0;
-        money = 0;
-        billCycle = 1;
-        waterCurrentML = 0f;
-        waterTargetML = 500f;
-        daysLeft = dayLimitBase;
-        totalCoconutsKilled = 0;
-        unlockedSkillIds.Clear();
-        skillDamageBonus = 0f;
-        skillStaminaBonus = 0f;
-        skillSwingIntervalReduction = 0f;
-        skillHitRadiusBonus = 0f;
-        skillWaterMultiplierBonus = 0f;
-        equippedMacheteIndex = 0;
-        perkDamageBonus = 0f;
-        perkStaminaMaxBonus = 0f;
-        perkWaterMultiplierBonus = 0f;
-        perkSwingIntervalReduction = 0f;
-        relicDamageBonus = 0f;
-        relicStaminaMaxBonus = 0f;
-        relicWaterMultiplierBonus = 0f;
-        relicSwingIntervalReduction = 0f;
-        relicHitRadiusBonus = 0f;
-        relicCritChanceBonus = 0f;
-        coinDropChance = 0.005f + legacyCoinChanceBonus;
-        skillExtraCoconutChance = 0f;
-        skillCritChanceBonus = 0f;
-        perkCritChanceBonus = 0f;
-        skillStreakForgives = 0;
-        streakForgivesLeft = 0;
-        skillLastBreathBonus = 0f;
-        skillExecuteBonus = 0f;
-        skillOrderRefund = 0f;
-        skillEarlyDayBonus = 0f;
-        skillChainSplashPercent = 0f;
-        skillLastBreathSwingReduction = 0f;
-        skillMultiHitBonus = 0f;
-        if (CoconutSpawner.Instance != null)
-        {
-            CoconutSpawner.Instance.startingCoconuts = 4 + legacyStartingCoconuts;
-            CoconutSpawner.Instance.spawnInterval = 5f;
-        }
-        perkCopies.Clear();
-        RecalculateAllStats();
 
-        if (bankruptcyMessageText != null)
-        {
-            bankruptcyMessageText.text = Loc("log_bankruptcy", gained);
-        }
+        if (bankruptcyMessageText != null) bankruptcyMessageText.text = Loc("log_bankruptcy", gained);
         Log(Loc("log_bankruptcy", gained));
+
         ResetRunState();
         EnterBetweenRunsPhase();
         SaveGame();
@@ -1185,7 +1178,6 @@ public class GameManager : MonoBehaviour
                     CoconutSpawner.Instance.spawnInterval = Mathf.Max(0.5f, CoconutSpawner.Instance.spawnInterval - node.effectValue);break;
             case SkillEffect.CoinChanceBonus:coinDropChance += node.effectValue;break;
             case SkillEffect.CritChanceBonus:skillCritChanceBonus += node.effectValue;break;
-            case SkillEffect.StaminaRecoveryChanceBonus:skillStaminaRecoveryChance = Mathf.Min(0.35f, skillStaminaRecoveryChance + node.effectValue);skillStaminaRecoveryAmount += 2f;break;
             case SkillEffect.JackpotChanceBonus:skillJackpotChance += node.effectValue;break;
             case SkillEffect.JackpotWaterBonus: skillJackpotMultBonus += node.effectValue; break;
             case SkillEffect.CritDamageBonus:skillCritDamageBonus += node.effectValue;break;
@@ -1199,6 +1191,9 @@ public class GameManager : MonoBehaviour
             case SkillEffect.OrderRefundBonus: skillOrderRefund += node.effectValue; break;
             case SkillEffect.EarlyDayWaterBonus: skillEarlyDayBonus += node.effectValue; break;
             case SkillEffect.MultiHitDamageBonus: skillMultiHitBonus += node.effectValue; break;
+            case SkillEffect.StreakMaxStacksBonus: skillStreakStackBonus += Mathf.RoundToInt(node.effectValue); break;
+            case SkillEffect.StreakPowerBonus: skillStreakPowerBonus += node.effectValue; break;
+            case SkillEffect.StaminaRecoveryChanceBonus:skillStaminaRecoveryChance = Mathf.Min(0.35f, skillStaminaRecoveryChance + node.effectValue);skillStaminaRecoveryAmount += 2f;skillStaminaRecoveryLevel++;break;
         }
         RecalculateAllStats();
     }
@@ -1271,6 +1266,7 @@ public class GameManager : MonoBehaviour
             int max = PerkMaxCycle.TryGetValue(p.perkName, out int mx) ? mx : int.MaxValue;
             bool cycleOk = billCycle >= min && billCycle < max;
             bool copiesOk = !perkCopies.ContainsKey(p.perkName) || perkCopies[p.perkName] < maxCopiesPerPerk;
+            if (p.effect == PerkEffect.SwingIntervalReduction && GetRawSwingInterval(false) - p.value < SwingFloor) return false;
             return cycleOk && copiesOk;
         });
         PerkOption[] result = new PerkOption[count];
@@ -1285,18 +1281,18 @@ public class GameManager : MonoBehaviour
     }
     public void ApplyChainSplash(Vector3 position, int killingDamage, GameObject source)
     {
-        if (skillChainSplashPercent <= 0f || isApplyingSplash) return;
+        float pct = skillChainSplashPercent + PassiveValue(MachetePassive.ChainSplash);
+        if (pct <= 0f || isApplyingSplash) return;
         isApplyingSplash = true;
-        int splashDamage = Mathf.Max(1, Mathf.RoundToInt(killingDamage * skillChainSplashPercent));
+        int splashDamage = Mathf.Max(1, Mathf.RoundToInt(killingDamage * pct));
         float radius = MacheteController.Instance != null ? MacheteController.Instance.hitRadius : 1.5f;
+        var already = new HashSet<CoconutTarget>();
         foreach (var col in Physics.OverlapSphere(position, radius))
         {
-            if (col.gameObject == source) continue;
             var target = col.GetComponentInParent<CoconutTarget>();
-            if (target == null || target.gameObject == source) continue;
+            if (target == null || target.gameObject == source || !already.Add(target)) continue;
             target.TakeDamage(splashDamage);
         }
-
         isApplyingSplash = false;
     }
     public void ChoosePerk(int index)
@@ -1384,16 +1380,22 @@ public class GameManager : MonoBehaviour
             case PerkEffect.StaminaMaxBonus: perkStaminaMaxBonus += perk.value; break;
             case PerkEffect.MoneyMultiplierBonus: perkWaterMultiplierBonus += perk.value; break;
             case PerkEffect.SwingIntervalReduction: perkSwingIntervalReduction += perk.value; break;
-            case PerkEffect.ExtraCoconutNextCycle:
-                if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(perk.value);
-                break;
-            case PerkEffect.CritChanceBonus:
-                perkCritChanceBonus += perk.value;
-                break;
-            case PerkEffect.WaterForSwingPenalty:perkWaterMultiplierBonus += perk.value;perkSwingIntervalReduction -= perk.value * 0.48f;break;
-            case PerkEffect.WaterMultiplierBonus:
-                perkWaterMultiplierBonus += perk.value;
-                break;
+            case PerkEffect.ExtraCoconutNextCycle:if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(perk.value);break;
+            case PerkEffect.CritChanceBonus:perkCritChanceBonus += perk.value;break;
+            case PerkEffect.WaterMultiplierBonus:perkWaterMultiplierBonus += perk.value;break;
+            case PerkEffect.WaterForSwingPenalty:perkWaterMultiplicative *= 1f + perk.value;perkSwingIntervalReduction -= perk.value * 0.48f;break;
+            case PerkEffect.HitRadiusBonus: skillHitRadiusBonus += perk.value; break;
+            case PerkEffect.JackpotChanceBonus: skillJackpotChance += perk.value; break;
+            case PerkEffect.StreakMaxStacksBonus: skillStreakStackBonus += Mathf.RoundToInt(perk.value); break;
+            case PerkEffect.StreakPowerBonus: skillStreakPowerBonus += perk.value; break;
+            case PerkEffect.OrderDiscount: waterTargetML *= 1f - perk.value; break;
+            case PerkEffect.CoinChanceBonus: coinDropChance += perk.value; break;
+            case PerkEffect.ExecuteDamageBonus: skillExecuteBonus += perk.value; break;
+            case PerkEffect.ChainSplash: skillChainSplashPercent += perk.value; break;
+            case PerkEffect.LastBreathBonus: skillLastBreathBonus += perk.value; break;
+            case PerkEffect.EarlyDayWaterBonus: skillEarlyDayBonus += perk.value; break;
+            case PerkEffect.MultiHitDamageBonus: skillMultiHitBonus += perk.value; break;
+            case PerkEffect.DamageForStaminaPenalty: perkDamageBonus += perk.value; perkStaminaMaxBonus -= perk.value * 0.5f; break;
         }
         RecalculateAllStats();
     }
@@ -1423,12 +1425,12 @@ public class GameManager : MonoBehaviour
     {
         money = 0;
         billCycle = 1;
-        waterCurrentML = 0f;
-        waterTargetML = 500f;
-        daysLeft = dayLimitBase;
+        waterCurrentML = legacyStartingWater;
+        waterTargetML = 500f * (1f - legacyOrderDiscount);
+        daysLeft = GetDayLimitBase();
         totalCoconutsKilled = 0;
         unlockedSkillIds.Clear();
-        skillExecuteBonus = 0f;
+
         skillDamageBonus = 0f;
         skillStaminaBonus = 0f;
         skillSwingIntervalReduction = 0f;
@@ -1436,6 +1438,7 @@ public class GameManager : MonoBehaviour
         skillWaterMultiplierBonus = 0f;
         skillStaminaRecoveryChance = 0f;
         skillStaminaRecoveryAmount = 0f;
+        skillStaminaRecoveryLevel = 0;
         skillJackpotChance = 0f;
         skillJackpotMultBonus = 0f;
         skillCritDamageBonus = 0f;
@@ -1443,16 +1446,20 @@ public class GameManager : MonoBehaviour
         skillExtraCoconutChance = 0f;
         skillStreakForgives = 0;
         streakForgivesLeft = 0;
+        skillStreakStackBonus = 0;
+        skillStreakPowerBonus = 0f;
         skillLastBreathBonus = 0f;
+        skillLastBreathSwingReduction = 0f;
         skillExecuteBonus = 0f;
+        skillMultiHitBonus = 0f;
         skillOrderRefund = 0f;
         skillEarlyDayBonus = 0f;
         skillChainSplashPercent = 0f;
-        skillLastBreathSwingReduction = 0f;
 
-        equippedMacheteIndex = 0;
+        equippedMacheteIndex = legacyStartingMachete;
         currentHitStreak = 0;
 
+        perkWaterMultiplicative = 1f;
         perkDamageBonus = 0f;
         perkStaminaMaxBonus = 0f;
         perkWaterMultiplierBonus = 0f;
@@ -1489,7 +1496,13 @@ public class GameManager : MonoBehaviour
             case LegacyEffect.PermanentStartingCoconutBonus:legacyStartingCoconuts += Mathf.RoundToInt(item.value);if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(item.value);break;
             case LegacyEffect.PermanentLegacyMultiplierBonus:legacyMultiplierBonus += item.value;RecalcLegacyMultiplier();break;
             case LegacyEffect.PermanentCoinChanceBonus:legacyCoinChanceBonus += item.value;coinDropChance += item.value;break;
-
+            case LegacyEffect.PermanentExtraDay: legacyExtraDays += Mathf.RoundToInt(item.value); break;
+            case LegacyEffect.PermanentStartingWater: legacyStartingWater += item.value; break;
+            case LegacyEffect.PermanentJackpotChance: legacyJackpotChance += item.value; break;
+            case LegacyEffect.PermanentStreakStacks: legacyStreakStacks += Mathf.RoundToInt(item.value); break;
+            case LegacyEffect.PermanentHitRadius: legacyHitRadiusBonus += item.value; break;
+            case LegacyEffect.PermanentOrderDiscount: legacyOrderDiscount += item.value; break;
+            case LegacyEffect.PermanentStartingMachete: legacyStartingMachete += Mathf.RoundToInt(item.value); equippedMacheteIndex = Mathf.Max(equippedMacheteIndex, legacyStartingMachete); break;
         }
         RecalculateAllStats();
     }
@@ -1600,7 +1613,10 @@ public class GameManager : MonoBehaviour
             if (macheteUpgradeCostText != null) macheteUpgradeCostText.text = Loc("shop_max_machete");
             if (macheteUpgradeButton != null) macheteUpgradeButton.interactable = false;
         }
-
+        if (macheteStatusText != null)
+            macheteStatusText.text = Loc("shop_current_machete", current != null ? current.macheteName : "-") + PassiveLine(current);
+        if (macheteUpgradeCostText != null)
+            macheteUpgradeCostText.text = Loc("shop_next_machete", next.macheteName, FormatWater(next.unlockCost)) + PassiveLine(next);
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
 
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
@@ -1639,16 +1655,26 @@ public class GameManager : MonoBehaviour
         }
         if (forceDefaultData || macheteOptions == null || macheteOptions.Count == 0)
             {
-                macheteOptions = new List<MacheteData>
-        {
-            new MacheteData { macheteName = "Machete Oxidado",     description = "El que ya tienes.",                    baseDamage = 5f,  baseSwingInterval = 1.2f,  baseHitRadius = 1.5f,  unlockCost = 0 },
-            new MacheteData { macheteName = "Machete Normal",      description = "Mas daño, mas rapido, mas rango.",     baseDamage = 9f,  baseSwingInterval = 1.1f,  baseHitRadius = 1.6f,  unlockCost = 2500 },
-            new MacheteData { macheteName = "Machete de Acero",    description = "Un salto grande de poder.",            baseDamage = 14f, baseSwingInterval = 1.05f, baseHitRadius = 1.75f, unlockCost = 12000 },
-            new MacheteData { macheteName = "Machete de Oro",      description = "Brilla y pega fuerte.",                baseDamage = 22f, baseSwingInterval = 1.0f,  baseHitRadius = 1.9f,  unlockCost = 45000 },
-            new MacheteData { macheteName = "Machete de Obsidiana",description = "Corta como el vidrio. Pega muy duro.",baseDamage = 35f, baseSwingInterval = 0.95f, baseHitRadius = 2.05f, unlockCost = 150000 },
-            new MacheteData { macheteName = "Machete de Maestro",  description = "La obra final del herrero.",           baseDamage = 50f, baseSwingInterval = 0.9f,  baseHitRadius = 2.2f,  unlockCost = 400000 },
-        };
-            }
+            macheteOptions = new List<MacheteData>
+{
+    new MacheteData { macheteName = "Machete Oxidado",      description = "El que ya tienes.",                     baseDamage = 5f,   baseSwingInterval = 1.2f,  baseHitRadius = 1.5f,  unlockCost = 0 },
+    new MacheteData { macheteName = "Machete Normal",       description = "Mas daño, mas rapido, mas rango.",      baseDamage = 9f,   baseSwingInterval = 1.1f,  baseHitRadius = 1.6f,  unlockCost = 2500 },
+    new MacheteData { macheteName = "Machete de Acero",     description = "Un salto grande de poder.",             baseDamage = 14f,  baseSwingInterval = 1.05f, baseHitRadius = 1.75f, unlockCost = 10000,
+        passive = MachetePassive.StaminaMax,   passiveValue = 6f,    passiveDescription = "Acero Templado: +6 de resistencia maxima." },
+    new MacheteData { macheteName = "Machete de Oro",       description = "Brilla y pega fuerte.",                 baseDamage = 22f,  baseSwingInterval = 1.0f,  baseHitRadius = 1.9f,  unlockCost = 30000,
+        passive = MachetePassive.WaterBonus,   passiveValue = 0.15f, passiveDescription = "Toque Dorado: +15% de agua por coco." },
+    new MacheteData { macheteName = "Machete de Obsidiana", description = "Corta como el vidrio. Pega muy duro.", baseDamage = 35f,  baseSwingInterval = 0.95f, baseHitRadius = 2.05f, unlockCost = 80000,
+        passive = MachetePassive.CritChance,   passiveValue = 0.10f, passiveDescription = "Filo de Vidrio: +10% de probabilidad de critico." },
+    new MacheteData { macheteName = "Machete de Maestro",   description = "La obra final del herrero.",            baseDamage = 50f,  baseSwingInterval = 0.9f,  baseHitRadius = 2.2f,  unlockCost = 200000,
+        passive = MachetePassive.ChainSplash,  passiveValue = 0.25f, passiveDescription = "Obra Maestra: al matar un coco, los cercanos reciben 25% del daño." },
+    new MacheteData { macheteName = "Machete Volcanico",    description = "Forjado en lava. Los criticos arden.",   baseDamage = 70f,  baseSwingInterval = 0.88f, baseHitRadius = 2.3f,  unlockCost = 450000,
+        passive = MachetePassive.CritDamage,   passiveValue = 0.5f,  passiveDescription = "Brasas: los criticos pegan +0.5x mas." },
+    new MacheteData { macheteName = "Machete Abisal",       description = "Viene de lo mas hondo del coco.",        baseDamage = 95f,  baseSwingInterval = 0.86f, baseHitRadius = 2.4f,  unlockCost = 1000000,
+        passive = MachetePassive.JackpotChance, passiveValue = 0.08f, passiveDescription = "Sed del Abismo: +8% de probabilidad de Jackpot." },
+    new MacheteData { macheteName = "Machete Ancestral",    description = "El primer machete. Resuena en todos.",   baseDamage = 130f, baseSwingInterval = 0.84f, baseHitRadius = 2.5f,  unlockCost = 2500000,
+        passive = MachetePassive.MultiHit,     passiveValue = 0.25f, passiveDescription = "Eco Ancestral: +25% de daño al golpear 2 o mas cocos a la vez." },
+};
+        }
 
             if (forceDefaultData || skillTree == null || skillTree.Count == 0)
             {
@@ -1678,10 +1704,10 @@ public class GameManager : MonoBehaviour
             N("multi_2", "Golpe Multiple II",  "+15% mas (total +35%) al golpear 2 o mas cocos",     40000, SkillEffect.MultiHitDamageBonus, 0.15f, "multi_1"),
             N("multi_3", "Golpe Multiple III", "+15% mas (total +50%) al golpear 2 o mas cocos",     90000, SkillEffect.MultiHitDamageBonus, 0.15f, "multi_2"),
 
-            N("resistencia_1", "Aguante I",   "+6 segundos de resistencia", 500,   SkillEffect.StaminaMaxFlatBonus, 6f, "fuerza_1"),
-            N("resistencia_2", "Aguante II",  "+6 segundos de resistencia", 1400,  SkillEffect.StaminaMaxFlatBonus, 6f, "resistencia_1"),
-            N("resistencia_3", "Aguante III", "+6 segundos de resistencia", 2400,  SkillEffect.StaminaMaxFlatBonus, 6f, "resistencia_2"),
-            N("resistencia_4", "Aguante IV",  "+8 segundos de resistencia", 20000, SkillEffect.StaminaMaxFlatBonus, 8f, "resistencia_3"),
+            N("resistencia_1", "Aguante I",   "+6 segundos de resistencia", 600,   SkillEffect.StaminaMaxFlatBonus, 6f, "fuerza_1"),
+            N("resistencia_2", "Aguante II",  "+6 segundos de resistencia", 1800,  SkillEffect.StaminaMaxFlatBonus, 6f, "resistencia_1"),
+            N("resistencia_3", "Aguante III", "+6 segundos de resistencia", 4500,  SkillEffect.StaminaMaxFlatBonus, 6f, "resistencia_2"),
+            N("resistencia_4", "Aguante IV",  "+8 segundos de resistencia", 12000, SkillEffect.StaminaMaxFlatBonus, 8f, "resistencia_3"),
 
             N("eficiencia_1", "Segundo Aliento I",   "10% de probabilidad de recuperar 2 de resistencia al destruir un coco", 750,  SkillEffect.StaminaRecoveryChanceBonus, 0.10f, "resistencia_2"),
             N("eficiencia_2", "Segundo Aliento II",  "+10% de probabilidad (total 20%) y +2 de resistencia recuperada (total 4)", 5000, SkillEffect.StaminaRecoveryChanceBonus, 0.10f, "eficiencia_1"),
@@ -1703,11 +1729,11 @@ public class GameManager : MonoBehaviour
 
             N("moneda_1", "Golpe de Suerte I",   "+7% de probabilidad de Jackpot de Agua al destruir un coco", 1000,   SkillEffect.JackpotChanceBonus, 0.07f, "velocidad_2", "radio_1"),
             N("moneda_2", "Golpe de Suerte II",  "+4% de probabilidad de Jackpot (total 11%)",  9000,   SkillEffect.JackpotChanceBonus, 0.04f, "moneda_1", "radio_2"),
-            N("moneda_3", "Golpe de Suerte III", "+6% de probabilidad de Jackpot (total 17%)",  20000,  SkillEffect.JackpotChanceBonus, 0.06f, "moneda_2"),
-            N("moneda_4", "Golpe de Suerte IV",  "+8% de probabilidad de Jackpot (total 25%)",  50000,  SkillEffect.JackpotChanceBonus, 0.08f, "moneda_3"),
-            N("moneda_5", "Golpe de Suerte V",   "+10% de probabilidad de Jackpot (total 35%)", 100000, SkillEffect.JackpotChanceBonus, 0.1f,  "moneda_4"),
+            N("moneda_3", "Golpe de Suerte III", "+6% de probabilidad de Jackpot (total 17%)",  14000,  SkillEffect.JackpotChanceBonus, 0.06f, "moneda_2"),
+            N("moneda_4", "Golpe de Suerte IV",  "+8% de probabilidad de Jackpot (total 25%)",  30000,  SkillEffect.JackpotChanceBonus, 0.08f, "moneda_3"),
+            N("moneda_5", "Golpe de Suerte V",   "+10% de probabilidad de Jackpot (total 35%)", 60000, SkillEffect.JackpotChanceBonus, 0.1f,  "moneda_4"),
 
-            N("jackpot_1", "Botin de Jackpot I",  "El Jackpot da +1x mas agua (total x2.5 del coco)",   1000,  SkillEffect.JackpotWaterBonus, 1f,   "moneda_2"),
+            N("jackpot_1", "Botin de Jackpot I",  "El Jackpot da +1x mas agua (total x2.5 del coco)",   6000,  SkillEffect.JackpotWaterBonus, 1f,   "moneda_2"),
             N("jackpot_2", "Botin de Jackpot II", "El Jackpot da +1.5x mas agua (total x4 del coco)",   40000, SkillEffect.JackpotWaterBonus, 1.5f, "jackpot_1"),
 
             N("critico_1", "Golpe Certero I",   "+5% de probabilidad de golpe crítico.",  1000,  SkillEffect.CritChanceBonus, 0.05f, "leche_1"),
@@ -1729,10 +1755,10 @@ public class GameManager : MonoBehaviour
             N("protegida_1", "Racha Protegida I",  "Un fallo por dia no rompe tu racha",    1800, SkillEffect.StreakForgiveness, 1f, "radio_2"),
             N("protegida_2", "Racha Protegida II", "Dos fallos por dia no rompen tu racha", 7500, SkillEffect.StreakForgiveness, 1f, "protegida_1"),
 
-            N("negociador_1", "Negociador I",   "-4% al pedido actual y a los siguientes", 2500,   SkillEffect.OrderDiscount, 0.04f, "suerte_1"),
-            N("negociador_2", "Negociador II",  "-8% mas al pedido",  9000,   SkillEffect.OrderDiscount, 0.08f, "negociador_1"),
-            N("negociador_3", "Negociador III", "-10% mas al pedido", 24000,  SkillEffect.OrderDiscount, 0.1f,  "negociador_2"),
-            N("negociador_4", "Negociador IV",  "-15% mas al pedido", 100000, SkillEffect.OrderDiscount, 0.15f, "negociador_3"),
+            N("negociador_1", "Negociador I",   "-3% al pedido actual y a los siguientes", 2500,   SkillEffect.OrderDiscount, 0.03f, "suerte_1"),
+            N("negociador_2", "Negociador II",  "-5% mas al pedido",  9000,   SkillEffect.OrderDiscount, 0.05f, "negociador_1", "suerte_1"),
+            N("negociador_3", "Negociador III", "-7% mas al pedido", 24000,  SkillEffect.OrderDiscount, 0.07f,  "negociador_2"),
+            N("negociador_4", "Negociador IV",  "-10% mas al pedido", 100000, SkillEffect.OrderDiscount, 0.1f, "negociador_3"),
 
             N("aliento_1", "Aliento Final I",  "Con menos del 20% de resistencia: +20% de agua", 4500,  SkillEffect.LastBreathBonus, 0.2f, "suerte_2"),
             N("aliento_2", "Aliento Final II", "Con menos del 20% de resistencia: +40% de agua (total)", 12000, SkillEffect.LastBreathBonus, 0.2f, "aliento_1"),
@@ -1743,17 +1769,30 @@ public class GameManager : MonoBehaviour
             N("manofirme_1", "Mano Firme I",  "Con menos del 20% de resistencia: golpeas 0.15s más rápido", 5000,  SkillEffect.LastBreathSwingBonus, 0.15f, "aliento_1"),
             N("manofirme_2", "Mano Firme II", "Con menos del 20% de resistencia: 0.3s más rápido (total)",  13500, SkillEffect.LastBreathSwingBonus, 0.15f, "manofirme_1"),
 
-            N("filo_1", "Filo Afilado I",   "+7% de daño a cocos con menos del 50% de vida", 4500,  SkillEffect.ExecuteDamageBonus, 0.07f, "fuerza_5"),
-            N("filo_2", "Filo Afilado II",  "+10% más (total 17%)", 12000, SkillEffect.ExecuteDamageBonus, 0.1f,  "filo_1"),
-            N("filo_3", "Filo Afilado III", "+18% más (total 35%)", 20000, SkillEffect.ExecuteDamageBonus, 0.18f, "filo_2"),
+            N("filo_1", "Filo Afilado I",   "+7% de daño a cocos con menos del 50% de vida", 20000,  SkillEffect.ExecuteDamageBonus, 0.07f, "fuerza_5"),
+            N("filo_2", "Filo Afilado II",  "+10% más (total 17%)", 30000, SkillEffect.ExecuteDamageBonus, 0.1f,  "filo_1"),
+            N("filo_3", "Filo Afilado III", "+18% más (total 35%)", 45000, SkillEffect.ExecuteDamageBonus, 0.18f, "filo_2"),
 
-            N("reembolso_1", "Pedido Flexible I",  "Al entregar un pedido, recuperas 10% de lo entregado", 5000,  SkillEffect.OrderRefundBonus, 0.10f, "negociador_3"),
-            N("reembolso_2", "Pedido Flexible II", "+10% más (total 20%)",                                 13500, SkillEffect.OrderRefundBonus, 0.10f, "reembolso_1"),
+            N("reembolso_1", "Pedido Flexible I",  "Al entregar un pedido, recuperas 10% de lo entregado", 20000,  SkillEffect.OrderRefundBonus, 0.10f, "negociador_3"),
+            N("reembolso_2", "Pedido Flexible II", "+5% más, total 15%",                                 50000, SkillEffect.OrderRefundBonus, 0.05f, "reembolso_1"),
  
             N("calma_1", "Calma Antes de la Tormenta I",   "+25% de agua en los primeros 5 segundos del día", 3000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "manofirme_1"),
             N("calma_2", "Calma Antes de la Tormenta II",  "+25% más (total +50%)", 8000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_1"),
             N("calma_3", "Calma Antes de la Tormenta III", "+25% más (total +75%)", 18000, SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_2"),
-        };
+
+            N("racha_1", "Racha Ardiente I",   "+1 acumulacion maxima de racha",  3500,  SkillEffect.StreakMaxStacksBonus, 1f, "protegida_1"),
+            N("racha_2", "Racha Ardiente II",  "+1 acumulacion maxima de racha",  12000, SkillEffect.StreakMaxStacksBonus, 1f, "racha_1"),
+            N("racha_3", "Racha Ardiente III", "+2 acumulaciones maximas de racha", 40000, SkillEffect.StreakMaxStacksBonus, 2f, "racha_2"),
+
+            N("rachapoder_1", "Racha Poderosa I",   "Cada acumulacion de racha da +1% mas de daño y agua",   6000,  SkillEffect.StreakPowerBonus, 0.01f,  "racha_1"),
+            N("rachapoder_2", "Racha Poderosa II",  "+1% mas por acumulacion",                               25000, SkillEffect.StreakPowerBonus, 0.01f,  "rachapoder_1", "racha_2"),
+            N("rachapoder_3", "Racha Poderosa III", "+1.5% mas por acumulacion",                             70000, SkillEffect.StreakPowerBonus, 0.015f, "rachapoder_2", "racha_3"),
+
+            N("tesoro_1", "Ojo de Tesorero I",   "+1% de probabilidad de encontrar monedas",   2000,  SkillEffect.CoinChanceBonus, 0.01f,  "suerte_1"),
+            N("tesoro_2", "Ojo de Tesorero II",  "+1.5% de probabilidad de encontrar monedas", 8000,  SkillEffect.CoinChanceBonus, 0.015f, "tesoro_1"),
+            N("tesoro_3", "Ojo de Tesorero III", "+2% de probabilidad de encontrar monedas",   25000, SkillEffect.CoinChanceBonus, 0.02f,  "tesoro_2"),
+
+                };
             }
 
             if (forceDefaultData || perkPool == null || perkPool.Count == 0)
@@ -1775,6 +1814,21 @@ public class GameManager : MonoBehaviour
             new PerkOption { perkName = "Ojo de Halcón",     description = "+12% de probabilidad de crítico.", effect = PerkEffect.CritChanceBonus, value = 0.12f },
             new PerkOption { perkName = "Coco Dorado",   description = "+50% agua, pero los golpes son 0.24s mas lentos.", effect = PerkEffect.WaterForSwingPenalty, value = 0.50f },
             new PerkOption { perkName = "Manos de Titán",description = "+18 daño.",                   effect = PerkEffect.DamageBonus, value = 18f },
+            new PerkOption { perkName = "Ojo de Águila",      description = "+0.25 de radio de golpe.",                          effect = PerkEffect.HitRadiusBonus,        value = 0.25f },
+            new PerkOption { perkName = "Moneda de la Suerte",description = "+1% de probabilidad de encontrar monedas.",         effect = PerkEffect.CoinChanceBonus,       value = 0.01f },
+            new PerkOption { perkName = "Madrugador",         description = "+20% de agua en los primeros segundos del día.",    effect = PerkEffect.EarlyDayWaterBonus,    value = 0.20f },
+            new PerkOption { perkName = "Buen Regateo",       description = "-4% al pedido actual y a los siguientes.",         effect = PerkEffect.OrderDiscount,         value = 0.04f },
+            new PerkOption { perkName = "Racha Viva",         description = "+1 acumulación máxima de racha.",                   effect = PerkEffect.StreakMaxStacksBonus,  value = 1f },
+            new PerkOption { perkName = "Pulso Firme",        description = "+1.5% de daño y agua por acumulación de racha.",    effect = PerkEffect.StreakPowerBonus,      value = 0.015f },
+            new PerkOption { perkName = "Doble Golpe",        description = "+12% de daño al golpear 2 o más cocos a la vez.",   effect = PerkEffect.MultiHitDamageBonus,   value = 0.12f },
+            new PerkOption { perkName = "Corazón de Jackpot", description = "+5% de probabilidad de Jackpot de agua.",           effect = PerkEffect.JackpotChanceBonus,    value = 0.05f },
+            new PerkOption { perkName = "Último Aliento",     description = "Con poca resistencia: +15% de agua.",               effect = PerkEffect.LastBreathBonus,       value = 0.15f },
+            new PerkOption { perkName = "Machete Pesado",     description = "+8 daño, pero -4 de stamina máxima.",               effect = PerkEffect.DamageForStaminaPenalty, value = 8f },
+            new PerkOption { perkName = "Instinto Cazador",   description = "+8% de daño a cocos con menos del 50% de vida.",    effect = PerkEffect.ExecuteDamageBonus,    value = 0.08f },
+            new PerkOption { perkName = "Chispa en Cadena",   description = "Al matar un coco, los cercanos reciben +12% del daño.", effect = PerkEffect.ChainSplash,       value = 0.12f },
+            new PerkOption { perkName = "Racha Imparable",    description = "+2 acumulaciones máximas de racha.",                effect = PerkEffect.StreakMaxStacksBonus,  value = 2f },
+            new PerkOption { perkName = "Jackpot Mayor",      description = "+10% de probabilidad de Jackpot de agua.",          effect = PerkEffect.JackpotChanceBonus,    value = 0.10f },
+            new PerkOption { perkName = "Cazador Maestro",    description = "+15% de daño a cocos con menos del 50% de vida.",   effect = PerkEffect.ExecuteDamageBonus,    value = 0.15f },
         };
             }
 
@@ -1804,6 +1858,21 @@ public class GameManager : MonoBehaviour
             new LegacyItem { itemName = "Sello Ancestral I",   description = "+25% al valor de cada punto de legado.",  cost = 8,  effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.25f },
             new LegacyItem { itemName = "Sello Ancestral II",  description = "+50% al valor de cada punto de legado.",  cost = 16, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.5f },
             new LegacyItem { itemName = "Sello Ancestral III", description = "+100% al valor de cada punto de legado.", cost = 30, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 1f },
+            new LegacyItem { itemName = "Reloj de Arena I",       description = "+1 día por ciclo.",                          cost = 8,  effect = LegacyEffect.PermanentExtraDay,        value = 1f },
+            new LegacyItem { itemName = "Reloj de Arena II",      description = "+1 día por ciclo (total +2).",               cost = 16, effect = LegacyEffect.PermanentExtraDay,        value = 1f },
+            new LegacyItem { itemName = "Barril de Reserva I",    description = "Empiezas cada partida con 250 mL.",          cost = 3,  effect = LegacyEffect.PermanentStartingWater,   value = 250f },
+            new LegacyItem { itemName = "Barril de Reserva II",   description = "Empiezas con 750 mL.",                       cost = 6,  effect = LegacyEffect.PermanentStartingWater,   value = 500f },
+            new LegacyItem { itemName = "Barril de Reserva III",  description = "Empiezas con 2000 mL.",                      cost = 10, effect = LegacyEffect.PermanentStartingWater,   value = 1250f },
+            new LegacyItem { itemName = "Trébol de Agua I",       description = "+3% de probabilidad de Jackpot permanente.", cost = 4,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.03f },
+            new LegacyItem { itemName = "Trébol de Agua II",      description = "+5% de probabilidad de Jackpot permanente.", cost = 8,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.05f },
+            new LegacyItem { itemName = "Ritmo del Machetero I",  description = "+1 acumulación máxima de racha permanente.", cost = 4,  effect = LegacyEffect.PermanentStreakStacks,    value = 1f },
+            new LegacyItem { itemName = "Ritmo del Machetero II", description = "+1 acumulación máxima de racha permanente.", cost = 8,  effect = LegacyEffect.PermanentStreakStacks,    value = 1f },
+            new LegacyItem { itemName = "Ojo Largo I",            description = "+0.1 de radio de golpe permanente.",         cost = 3,  effect = LegacyEffect.PermanentHitRadius,       value = 0.1f },
+            new LegacyItem { itemName = "Ojo Largo II",           description = "+0.15 de radio de golpe permanente.",        cost = 6,  effect = LegacyEffect.PermanentHitRadius,       value = 0.15f },
+            new LegacyItem { itemName = "Contrato Favorable I",   description = "-5% a todos los pedidos.",                   cost = 6,  effect = LegacyEffect.PermanentOrderDiscount,   value = 0.05f },
+            new LegacyItem { itemName = "Contrato Favorable II",  description = "-5% más a todos los pedidos.",               cost = 12, effect = LegacyEffect.PermanentOrderDiscount,   value = 0.05f },
+            new LegacyItem { itemName = "Herencia del Herrero I", description = "Empiezas con el Machete Normal.",            cost = 8,  effect = LegacyEffect.PermanentStartingMachete, value = 1f },
+            new LegacyItem { itemName = "Herencia del Herrero II",description = "Empiezas con el Machete de Acero.",          cost = 20, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
         };
             }
             StampCoconutUnlocks();
@@ -1812,20 +1881,20 @@ public class GameManager : MonoBehaviour
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
 {
     new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,   ability = CoconutAbility.Ninguna },
-new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 25,   ability = CoconutAbility.Generoso },
-new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 55,  ability = CoconutAbility.Resistente },
-new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 110,  ability = CoconutAbility.FibraDura },
-new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 150,  ability = CoconutAbility.Pesado },
-new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 200,  ability = CoconutAbility.Tenaz },
-new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 250,  ability = CoconutAbility.Armadura },
-new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 320, ability = CoconutAbility.Rebote },
-new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 400, ability = CoconutAbility.Fortificado },
-new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 490, ability = CoconutAbility.Implacable },
-new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 590, ability = CoconutAbility.FragilValioso },
-new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 700, ability = CoconutAbility.Regeneracion },
-new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 830, ability = CoconutAbility.Camuflaje },
-new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 10000, ability = CoconutAbility.Maldicion },
-new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 10100, ability = CoconutAbility.Supremo },
+    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 25,   ability = CoconutAbility.Generoso },
+    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 55,  ability = CoconutAbility.Resistente },
+    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 110,  ability = CoconutAbility.FibraDura },
+    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 150,  ability = CoconutAbility.Pesado },
+    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 200,  ability = CoconutAbility.Tenaz },
+    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 250,  ability = CoconutAbility.Armadura },
+    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 320, ability = CoconutAbility.Rebote },
+    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 400, ability = CoconutAbility.Fortificado },
+    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 490, ability = CoconutAbility.Implacable },
+    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 590, ability = CoconutAbility.FragilValioso },
+    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 700, ability = CoconutAbility.Regeneracion },
+    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 830, ability = CoconutAbility.Camuflaje },
+    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 1000, ability = CoconutAbility.Maldicion },
+    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 1100, ability = CoconutAbility.Supremo },
 };
 
     void StampCoconutUnlocks()

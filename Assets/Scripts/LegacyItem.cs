@@ -8,7 +8,15 @@ public enum LegacyEffect
     PermanentStartingCoconutBonus,
     PermanentLegacyMultiplierBonus,
     PermanentCritChanceBonus,
-    PermanentCoinChanceBonus
+    PermanentCoinChanceBonus,
+    PermanentEarlyDeliveryBonus, 
+    PermanentExtraDay, 
+    PermanentStartingWater, 
+    PermanentJackpotChance, 
+    PermanentStreakStacks,
+    PermanentHitRadius, 
+    PermanentOrderDiscount, 
+    PermanentStartingMachete
 }
 
 [System.Serializable]
