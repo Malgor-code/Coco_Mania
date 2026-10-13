@@ -29,7 +29,8 @@ public enum SkillEffect
     MultiHitDamageBonus, 
     MacheteDiscount, 
     StreakMaxStacksBonus, 
-    StreakPowerBonus
+    StreakPowerBonus,
+    StaminaRecoveryAmountBonus
 }
 
 [System.Serializable]

@@ -79,6 +79,27 @@ public class SkillNodeButton : MonoBehaviour
 
         SetupLines();
     }
+    void OnEnable()
+    {
+        ResetAnimationState();
+        stateInitialized = false; 
+        RefreshNow(); 
+    }
+
+    void OnDisable()
+    {
+        ResetAnimationState();
+    }
+
+    void ResetAnimationState()
+    {
+        popCoroutine = null;
+        purchaseCoroutine = null;
+        purchaseAnimating = false;
+        purchaseColorBlend = 0f;
+        transform.localScale = originalScale;
+        transform.localRotation = originalRotation;
+    }
     void SetupLines()
     {
         if (prerequisiteButtons == null || prerequisiteButtons.Length == 0) return;
@@ -112,6 +133,11 @@ public class SkillNodeButton : MonoBehaviour
     }
 
     void Update()
+    {
+        RefreshNow();
+    }
+
+    void RefreshNow()
     {
         if (GameManager.Instance == null) return;
 

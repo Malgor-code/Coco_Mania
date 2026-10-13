@@ -11,9 +11,6 @@ public class CoconutSpawner : MonoBehaviour
     public GameObject coconutPrefab;
     public Transform mapCenter;
     public Vector2 mapHalfExtents = new Vector2(8f, 8f);
-    [Header("Animacion al golpear (objeto de la escena)")]
-    [Tooltip("Arrastra aqui el objeto con Animator de la escena. Se le pasa a cada coco al nacer.")]
-    public Animator hitAnimator;
     [Header("Reglas de spawn")]
     public int startingCoconuts = 4;
     public float spawnInterval = 5f;
@@ -54,9 +51,12 @@ public class CoconutSpawner : MonoBehaviour
     new CoconutTypeData { typeName = "Coco Supremo",     hpMultiplier = 160f, lootMultiplier = 12.77f },
 };
 
+    public const float BaseSpawnInterval = 10f;
+
     void Awake()
     {
         Instance = this;
+        spawnInterval = BaseSpawnInterval;
         StampCanonicalData();
     }
 
@@ -115,17 +115,16 @@ public class CoconutSpawner : MonoBehaviour
         if (GameManager.Instance == null || !GameManager.Instance.IsHittingPhase()) return;
 
         activeCoconuts.RemoveAll(c => c == null);
-
         if (activeCoconuts.Count == 0)
         {
             SpawnOne();
             spawnTimer = 0f;
             return;
         }
+        if (!GameManager.Instance.TimedSpawnUnlocked) return;
 
-        float interval = Mathf.Max(0.3f, spawnInterval);
-        spawnTimer += Time.deltaTime * spawnSpeedMultiplier;
-        if (spawnTimer >= interval && activeCoconuts.Count < maxCoconuts)
+        spawnTimer += Time.deltaTime;
+        if (spawnTimer >= Mathf.Max(0.3f, spawnInterval) && activeCoconuts.Count < maxCoconuts)
         {
             spawnTimer = 0f;
             SpawnOne();
@@ -159,7 +158,6 @@ public class CoconutSpawner : MonoBehaviour
         GameObject go = Instantiate(prefabToUse, pos, Quaternion.identity);
         CoconutTarget target = EnsureCoconutComponents(go);
         target.ApplyType(chosenType);
-        if (hitAnimator != null) target.hitAnimator = hitAnimator;
         activeCoconuts.Add(target);
 
         CoconutWander wander = go.GetComponent<CoconutWander>();
@@ -184,7 +182,7 @@ public class CoconutSpawner : MonoBehaviour
 
     CoconutTypeData PickTypeToSpawn()
     {
-        int kills = GameManager.Instance != null ? GameManager.Instance.totalCoconutsKilled : 0;
+        int kills = GameManager.Instance != null ? GameManager.Instance.killsAtDayStart : 0;
         List<CoconutTypeData> unlocked = new List<CoconutTypeData>();
 
         for (int i = 0; i < coconutTypes.Count; i++)

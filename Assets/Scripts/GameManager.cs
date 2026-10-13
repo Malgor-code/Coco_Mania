@@ -40,9 +40,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cuanta agua de coco (en mL) tienes acumulada ahora mismo. Se gasta tanto al entregar el pedido como al comprar mejoras en la tienda/arbol - por eso hay que elegir entre progresar o guardar para el pedido.")]
     public float waterCurrentML = 0f;
     [Tooltip("Cuanta agua de coco (en mL) pide el cliente este ciclo")]
-    public float waterTargetML = 500f;
+    public float waterTargetML = 250f;
+    public float waterTargetStart = 250f;
     [Tooltip("Cuanto crece el pedido de agua en cada ciclo nuevo (2 = se duplica)")]
-    public float waterTargetGrowth = 1.65f;
+    public float waterTargetGrowth = 1.8f;
     [Header("Cuanta agua suelta cada coco al morir")]
     public float baseWaterPerKill = 40f;
     public float waterVariance = 90f;
@@ -85,6 +86,8 @@ public class GameManager : MonoBehaviour
     public float relicCritChanceBonus = 0f;
     public event System.Action OnDayStarted;
     public event System.Action OnRunReset;
+    public event System.Action OnRunStarted;
+    public event System.Action OnRecaudacionShown;
     [Tooltip("Si es true, la PROXIMA llamada a ContinueToNextDay() no descuenta daysLeft (se consume solo).")]
     public bool skipNextDayDecrement = false;
     [System.Serializable]
@@ -97,6 +100,10 @@ public class GameManager : MonoBehaviour
         public Sprite icon;
         public GameObject prefab;
     }
+    [HideInInspector] public List<MacheteData> macheteOptions = new List<MacheteData>();
+    [HideInInspector] public List<SkillNode> skillTree = new List<SkillNode>();
+    [HideInInspector] public List<PerkOption> perkPool = new List<PerkOption>();
+    [HideInInspector] public List<LegacyItem> legacyShop = new List<LegacyItem>();
     [Header("BETA - Datos")]
     [Tooltip("Si es true, EnsureDefaultData SOBREESCRIBE las listas (machetes, arbol, perks, legado) en cada arranque. Asi todos tus amigos juegan con el mismo balance.")]
     public bool forceDefaultData = true;
@@ -114,7 +121,13 @@ public class GameManager : MonoBehaviour
     public int victoryCycle = 16;
     public int victoryLegacyBonus = 10;
     private bool runVictoryAwarded = false;
-
+    [Header("Desbloqueo de cocos")]
+    [Tooltip("Arrastra aqui el objeto con el script CoconutUnlockPanel.")]
+    public CoconutUnlockPanel unlockPanel;
+    [Tooltip("true = el panel solo sale la primera vez que desbloqueas ese coco (se recuerda entre partidas). false = sale en cada partida.")]
+    public bool showUnlockOnlyFirstTime = true;
+    [HideInInspector] public int killsAtDayStart = 0;
+    private HashSet<int> announcedUnlocks = new HashSet<int>();
     private float runStartTime = 0f;
     public CoconutAbility GetAbilityForCoconutName(string name)
     {
@@ -149,8 +162,9 @@ public class GameManager : MonoBehaviour
 
     int CurrentStreakStacks()
     {
+        if (!StreakUnlocked) return 0;
         int stacks = currentHitStreak - streakThreshold + 1;
-        int max = Mathf.Min(StreakHardCap, streakMaxStacks + skillStreakStackBonus + legacyStreakStacks);
+        int max = Mathf.Min(StreakHardCap, skillStreakStackBonus + legacyStreakStacks);
         return Mathf.Clamp(stacks, 0, max);
     }
     public float GetStreakDamageMultiplier() =>
@@ -270,13 +284,9 @@ public class GameManager : MonoBehaviour
     [Header("Progreso permanente (guardado)")]
     public int bestRunKills = 0;
     public int bestCycleReached = 1;
-    [Header("Machete: progresion lineal (se paga con agua de coco, se resetea en bancarrota)")]
-    public List<MacheteData> macheteOptions = new List<MacheteData>();
     public int equippedMacheteIndex = 0;
     private int skillStreakStackBonus = 0;
     private float skillStreakPowerBonus = 0f;
-    [Header("Arbol de Mejoras (se paga con agua de coco, ramificado, se resetea en bancarrota)")]
-    public List<SkillNode> skillTree = new List<SkillNode>();
     private HashSet<string> unlockedSkillIds = new HashSet<string>();
     [Header("UI - Indicaciones (activo junto con Mejoras y Tienda)")]
     public GameObject indicacionesPanel;
@@ -304,8 +314,6 @@ public class GameManager : MonoBehaviour
     public float streakWaterBonusPerHit = 0.05f;
     public int streakMaxStacks = 6;
     private int currentHitStreak = 0;
-    [Header("Perks (1 de 3 al pagar cada cuenta)")]
-    public List<PerkOption> perkPool = new List<PerkOption>();
     private PerkOption[] currentPerkChoices = new PerkOption[3];
     [Tooltip("Cuantas elecciones de mejora quedan pendientes por mostrar (subio por pagos de pedido seguidos).")]
     private int pendingPerkOffers = 0;
@@ -325,7 +333,6 @@ public class GameManager : MonoBehaviour
     public int legacyPoints = 0;
     public int totalLegacyPointsEarned = 0;
     public float legacyMultiplier = 1f;
-    public List<LegacyItem> legacyShop = new List<LegacyItem>();
     private HashSet<string> purchasedLegacyItems = new HashSet<string>();
     [Header("Legacy")]
     public float legacyDamageBonus = 0f;
@@ -393,7 +400,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text macheteStatusText;
     public TMP_Text macheteUpgradeCostText;
     public Button macheteUpgradeButton;
-    
+
     [Header("UI - Monedas (coleccionable, solo informativo; la mejora de probabilidad ahora esta en el Arbol de Mejoras)")]
     public TMP_Text coinCountText;
 
@@ -439,7 +446,18 @@ public class GameManager : MonoBehaviour
         return (m != null && m.passive != MachetePassive.Ninguna && !string.IsNullOrEmpty(m.passiveDescription))
             ? "\n" + m.passiveDescription : "";
     }
+    string StatsGainLine(MacheteData cur, MacheteData next)
+    {
+        if (next == null) return "";
+        float dDmg = next.baseDamage - (cur != null ? cur.baseDamage : 0f);
+        float dSwing = next.baseSwingInterval - (cur != null ? cur.baseSwingInterval : next.baseSwingInterval);
+        float dRadius = next.baseHitRadius - (cur != null ? cur.baseHitRadius : 0f);
 
+        return "\nDaño " + Signed(dDmg)
+             + "  |  Golpe " + Signed(dSwing) + " s"
+             + "  |  Radio " + Signed(dRadius);
+    }
+    static string Signed(float v) => (v >= 0f ? "+" : "") + v.ToString("0.##");
     int GetDayLimitBase() => dayLimitBase + legacyExtraDays;
     static readonly Dictionary<string, int> PerkMinCycle = new Dictionary<string, int>
 {
@@ -486,10 +504,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && currentPhase != Phase.MainMenu)
+        if (Input.GetKeyDown(KeyCode.Escape) && currentPhase != Phase.MainMenu && !CoconutUnlockPanel.BlocksPause && !StoryManager.BlocksPause)
         {
             if (isPaused) ResumeGame(); else PauseGame();
         }
+
         if (currentPhase == Phase.Hitting)
         {
             if (dayElapsed >= staminaStartDelay)
@@ -628,8 +647,10 @@ public class GameManager : MonoBehaviour
     }
 
     public bool IsHittingPhase() => currentPhase == Phase.Hitting;
-
-    public bool IsOrderUrgent => waterCurrentML < waterTargetML && daysLeft <= 1;
+    public bool TimedSpawnUnlocked => unlockedSkillIds.Contains("aparicion_1");
+    public bool StreakUnlocked => unlockedSkillIds.Contains("racha_1");
+    public int DaysToPlay => Mathf.Max(0, skipNextDayDecrement ? daysLeft : daysLeft - 1);
+    public bool IsOrderUrgent => waterCurrentML < waterTargetML && DaysToPlay <= 1;
 
     string Loc(string key) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : key;
     string Loc(string key, params object[] args) => LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key, args) : key;
@@ -640,7 +661,7 @@ public class GameManager : MonoBehaviour
         daysLeft = GetDayLimitBase();
         waterCurrentML = Mathf.Max(waterCurrentML, legacyStartingWater);
         equippedMacheteIndex = Mathf.Max(equippedMacheteIndex, legacyStartingMachete);
-        if (billCycle == 1) waterTargetML = 500f * (1f - legacyOrderDiscount);
+        if (billCycle == 1) waterTargetML = waterTargetStart * (1f - legacyOrderDiscount);
         runCoconutsKilled = 0;
         runMoneyEarned = 0;
         RecalculateAllStats();
@@ -649,6 +670,7 @@ public class GameManager : MonoBehaviour
         RefreshAllUI();
         runStartTime = Time.time;
         BetaLog("run_start");
+        OnRunStarted?.Invoke();
     }
 
     public int GetCoconutHpMax()
@@ -704,12 +726,46 @@ public class GameManager : MonoBehaviour
         }
         return next;
     }
+    void AnnounceNewUnlocks()
+    {
+        if (unlockPanel == null || coconutUnlocks == null) return;
 
+        for (int i = 1; i < coconutUnlocks.Count; i++)
+        {
+            CoconutUnlockThreshold u = coconutUnlocks[i];
+            if (u == null || totalCoconutsKilled < u.killsRequired) continue;
+            if (!announcedUnlocks.Add(i)) continue;
+
+            if (showUnlockOnlyFirstTime)
+            {
+                string key = "coco_visto_" + i;
+                if (PlayerPrefs.GetInt(key, 0) == 1) continue;
+                PlayerPrefs.SetInt(key, 1);
+            }
+            unlockPanel.Enqueue(i);
+        }
+        PlayerPrefs.Save();
+    }
+
+    [ContextMenu("Borrar cocos vistos (para probar el panel)")]
+    void ClearSeenCoconuts()
+    {
+        for (int i = 0; i < 15; i++) PlayerPrefs.DeleteKey("coco_visto_" + i);
+        PlayerPrefs.Save();
+    }
     public float GetNextUnlockProgress01()
     {
         CoconutUnlockThreshold next = GetNextLockedCoconut();
-        if (next == null || next.killsRequired <= 0) return 1f;
-        return Mathf.Clamp01((float)totalCoconutsKilled / next.killsRequired);
+        if (next == null) return 1f;
+        int prev = 0;
+        foreach (var u in coconutUnlocks)
+        {
+            if (u != null && u.killsRequired < next.killsRequired && u.killsRequired > prev)
+                prev = u.killsRequired;
+        }
+        int span = next.killsRequired - prev;
+        if (span <= 0) return 1f;
+        return Mathf.Clamp01((float)(totalCoconutsKilled - prev) / span);
     }
 
     public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
@@ -718,7 +774,7 @@ public class GameManager : MonoBehaviour
         runCoconutsKilled++;
         if (runCoconutsKilled > bestRunKills) bestRunKills = runCoconutsKilled;
         dayCoconutsKilled++;
-        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus  + relicWaterMultiplierBonus + PassiveValue(MachetePassive.WaterBonus) - curseWaterPenalty;
+        float waterExtraMult = 1f + skillWaterMultiplierBonus + perkWaterMultiplierBonus + legacyWaterMultiplierBonus + relicWaterMultiplierBonus + PassiveValue(MachetePassive.WaterBonus) - curseWaterPenalty;
         float streakMult = GetStreakWaterMultiplier();
         waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult * legacyMultiplier * streakMult * GetLastBreathMultiplier() * GetEarlyDayMultiplier() * perkWaterMultiplicative;
         float jackpotChance = skillJackpotChance + legacyJackpotChance + PassiveValue(MachetePassive.JackpotChance);
@@ -788,7 +844,9 @@ public class GameManager : MonoBehaviour
             if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
             if (deudaPanel != null) deudaPanel.SetActive(false);
             RefreshAllUI();
+            OnRecaudacionShown?.Invoke();
         }
+        AnnounceNewUnlocks();
         SaveGame();
     }
 
@@ -804,6 +862,7 @@ public class GameManager : MonoBehaviour
         dayStaminaRecovered = 0f;
         dayElapsed = 0f;
         lastBreathSwingActive = false;
+        killsAtDayStart = totalCoconutsKilled;
         if (machete != null) machete.SetActive(false);
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(true);
         if (recaudacionPanel != null) recaudacionPanel.SetActive(false);
@@ -949,7 +1008,7 @@ public class GameManager : MonoBehaviour
         coconutCoins = d.coconutCoins;
         bestRunKills = d.bestRunKills;
         bestCycleReached = Mathf.Max(1, d.bestCycleReached);
-        legacyDamageBonus = 0f;legacyStaminaBonus = 0f; legacyWaterMultiplierBonus = 0f; legacyCritChanceBonus = 0f; legacyStartingCoconuts = 0; legacyMultiplierBonus = 0f; legacyCoinChanceBonus = 0f; legacyExtraDays = 0; legacyStartingWater = 0f; legacyJackpotChance = 0f; legacyStreakStacks = 0;
+        legacyDamageBonus = 0f; legacyStaminaBonus = 0f; legacyWaterMultiplierBonus = 0f; legacyCritChanceBonus = 0f; legacyStartingCoconuts = 0; legacyMultiplierBonus = 0f; legacyCoinChanceBonus = 0f; legacyExtraDays = 0; legacyStartingWater = 0f; legacyJackpotChance = 0f; legacyStreakStacks = 0;
         legacyHitRadiusBonus = 0f; legacyOrderDiscount = 0f; legacyStartingMachete = 0;
         equippedMacheteIndex = 0;
         coinDropChance = 0.005f;
@@ -1175,16 +1234,16 @@ public class GameManager : MonoBehaviour
                 break;
             case SkillEffect.SpawnIntervalReduction:
                 if (CoconutSpawner.Instance != null)
-                    CoconutSpawner.Instance.spawnInterval = Mathf.Max(0.5f, CoconutSpawner.Instance.spawnInterval - node.effectValue);break;
-            case SkillEffect.CoinChanceBonus:coinDropChance += node.effectValue;break;
-            case SkillEffect.CritChanceBonus:skillCritChanceBonus += node.effectValue;break;
-            case SkillEffect.JackpotChanceBonus:skillJackpotChance += node.effectValue;break;
+                    CoconutSpawner.Instance.spawnInterval = Mathf.Max(0.5f, CoconutSpawner.Instance.spawnInterval - node.effectValue); break;
+            case SkillEffect.CoinChanceBonus: coinDropChance += node.effectValue; break;
+            case SkillEffect.CritChanceBonus: skillCritChanceBonus += node.effectValue; break;
+            case SkillEffect.JackpotChanceBonus: skillJackpotChance += node.effectValue; break;
             case SkillEffect.JackpotWaterBonus: skillJackpotMultBonus += node.effectValue; break;
-            case SkillEffect.CritDamageBonus:skillCritDamageBonus += node.effectValue;break;
-            case SkillEffect.ExtraCoconutChanceBonus:skillExtraCoconutChance = Mathf.Min(0.5f, skillExtraCoconutChance + node.effectValue);break;
-            case SkillEffect.StreakForgiveness:skillStreakForgives += Mathf.RoundToInt(node.effectValue);streakForgivesLeft += Mathf.RoundToInt(node.effectValue);break;
-            case SkillEffect.OrderDiscount:waterTargetML *= 1f - node.effectValue;break;
-            case SkillEffect.LastBreathBonus:skillLastBreathBonus += node.effectValue;break;
+            case SkillEffect.CritDamageBonus: skillCritDamageBonus += node.effectValue; break;
+            case SkillEffect.ExtraCoconutChanceBonus: skillExtraCoconutChance = Mathf.Min(0.5f, skillExtraCoconutChance + node.effectValue); break;
+            case SkillEffect.StreakForgiveness: skillStreakForgives += Mathf.RoundToInt(node.effectValue); streakForgivesLeft += Mathf.RoundToInt(node.effectValue); break;
+            case SkillEffect.OrderDiscount: waterTargetML *= 1f - node.effectValue; break;
+            case SkillEffect.LastBreathBonus: skillLastBreathBonus += node.effectValue; break;
             case SkillEffect.ChainSplash: skillChainSplashPercent += node.effectValue; break;
             case SkillEffect.LastBreathSwingBonus: skillLastBreathSwingReduction += node.effectValue; break;
             case SkillEffect.ExecuteDamageBonus: skillExecuteBonus += node.effectValue; break;
@@ -1193,7 +1252,7 @@ public class GameManager : MonoBehaviour
             case SkillEffect.MultiHitDamageBonus: skillMultiHitBonus += node.effectValue; break;
             case SkillEffect.StreakMaxStacksBonus: skillStreakStackBonus += Mathf.RoundToInt(node.effectValue); break;
             case SkillEffect.StreakPowerBonus: skillStreakPowerBonus += node.effectValue; break;
-            case SkillEffect.StaminaRecoveryChanceBonus:skillStaminaRecoveryChance = Mathf.Min(0.35f, skillStaminaRecoveryChance + node.effectValue);skillStaminaRecoveryAmount += 2f;skillStaminaRecoveryLevel++;break;
+            case SkillEffect.StaminaRecoveryChanceBonus: skillStaminaRecoveryChance = Mathf.Min(0.35f, skillStaminaRecoveryChance + node.effectValue); skillStaminaRecoveryAmount += 2f; skillStaminaRecoveryLevel++; break;
         }
         RecalculateAllStats();
     }
@@ -1242,6 +1301,7 @@ public class GameManager : MonoBehaviour
 
         SetCursorVisible(true);
         RefreshAllUI();
+        OnRecaudacionShown?.Invoke();
         SaveGame();
     }
     void SetPerkLabel(TMP_Text nameLabel, TMP_Text descLabel, Image iconImage, PerkOption perk)
@@ -1267,6 +1327,7 @@ public class GameManager : MonoBehaviour
             bool cycleOk = billCycle >= min && billCycle < max;
             bool copiesOk = !perkCopies.ContainsKey(p.perkName) || perkCopies[p.perkName] < maxCopiesPerPerk;
             if (p.effect == PerkEffect.SwingIntervalReduction && GetRawSwingInterval(false) - p.value < SwingFloor) return false;
+            if (!StreakUnlocked && (p.effect == PerkEffect.StreakMaxStacksBonus || p.effect == PerkEffect.StreakPowerBonus)) return false;
             return cycleOk && copiesOk;
         });
         PerkOption[] result = new PerkOption[count];
@@ -1325,7 +1386,7 @@ public class GameManager : MonoBehaviour
 
         if (pendingPerkOffers > 0)
         {
-            OfferPerkChoice(); 
+            OfferPerkChoice();
             yield break;
         }
 
@@ -1370,7 +1431,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
         OnRunReset?.Invoke();
         forcedOrderDecision = false;
-        BeginNewGame();
+        GoToMainMenu();
     }
     void ApplyPerk(PerkOption perk)
     {
@@ -1380,10 +1441,10 @@ public class GameManager : MonoBehaviour
             case PerkEffect.StaminaMaxBonus: perkStaminaMaxBonus += perk.value; break;
             case PerkEffect.MoneyMultiplierBonus: perkWaterMultiplierBonus += perk.value; break;
             case PerkEffect.SwingIntervalReduction: perkSwingIntervalReduction += perk.value; break;
-            case PerkEffect.ExtraCoconutNextCycle:if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(perk.value);break;
-            case PerkEffect.CritChanceBonus:perkCritChanceBonus += perk.value;break;
-            case PerkEffect.WaterMultiplierBonus:perkWaterMultiplierBonus += perk.value;break;
-            case PerkEffect.WaterForSwingPenalty:perkWaterMultiplicative *= 1f + perk.value;perkSwingIntervalReduction -= perk.value * 0.48f;break;
+            case PerkEffect.ExtraCoconutNextCycle: if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(perk.value); break;
+            case PerkEffect.CritChanceBonus: perkCritChanceBonus += perk.value; break;
+            case PerkEffect.WaterMultiplierBonus: perkWaterMultiplierBonus += perk.value; break;
+            case PerkEffect.WaterForSwingPenalty: perkWaterMultiplicative *= 1f + perk.value; perkSwingIntervalReduction -= perk.value * 0.48f; break;
             case PerkEffect.HitRadiusBonus: skillHitRadiusBonus += perk.value; break;
             case PerkEffect.JackpotChanceBonus: skillJackpotChance += perk.value; break;
             case PerkEffect.StreakMaxStacksBonus: skillStreakStackBonus += Mathf.RoundToInt(perk.value); break;
@@ -1426,11 +1487,12 @@ public class GameManager : MonoBehaviour
         money = 0;
         billCycle = 1;
         waterCurrentML = legacyStartingWater;
-        waterTargetML = 500f * (1f - legacyOrderDiscount);
+        waterTargetML = waterTargetStart * (1f - legacyOrderDiscount);
         daysLeft = GetDayLimitBase();
         totalCoconutsKilled = 0;
         unlockedSkillIds.Clear();
-
+        killsAtDayStart = 0;
+        announcedUnlocks.Clear();
         skillDamageBonus = 0f;
         skillStaminaBonus = 0f;
         skillSwingIntervalReduction = 0f;
@@ -1480,7 +1542,7 @@ public class GameManager : MonoBehaviour
         if (CoconutSpawner.Instance != null)
         {
             CoconutSpawner.Instance.startingCoconuts = 4 + legacyStartingCoconuts;
-            CoconutSpawner.Instance.spawnInterval = 5f;
+            CoconutSpawner.Instance.spawnInterval = CoconutSpawner.BaseSpawnInterval;
         }
         forcedOrderDecision = false;
         RecalculateAllStats();
@@ -1493,9 +1555,9 @@ public class GameManager : MonoBehaviour
             case LegacyEffect.PermanentStaminaMaxBonus: legacyStaminaBonus += item.value; break;
             case LegacyEffect.PermanentMoneyMultiplierBonus: legacyWaterMultiplierBonus += item.value; break;
             case LegacyEffect.PermanentCritChanceBonus: legacyCritChanceBonus += item.value; break;
-            case LegacyEffect.PermanentStartingCoconutBonus:legacyStartingCoconuts += Mathf.RoundToInt(item.value);if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(item.value);break;
-            case LegacyEffect.PermanentLegacyMultiplierBonus:legacyMultiplierBonus += item.value;RecalcLegacyMultiplier();break;
-            case LegacyEffect.PermanentCoinChanceBonus:legacyCoinChanceBonus += item.value;coinDropChance += item.value;break;
+            case LegacyEffect.PermanentStartingCoconutBonus: legacyStartingCoconuts += Mathf.RoundToInt(item.value); if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts += Mathf.RoundToInt(item.value); break;
+            case LegacyEffect.PermanentLegacyMultiplierBonus: legacyMultiplierBonus += item.value; RecalcLegacyMultiplier(); break;
+            case LegacyEffect.PermanentCoinChanceBonus: legacyCoinChanceBonus += item.value; coinDropChance += item.value; break;
             case LegacyEffect.PermanentExtraDay: legacyExtraDays += Mathf.RoundToInt(item.value); break;
             case LegacyEffect.PermanentStartingWater: legacyStartingWater += item.value; break;
             case LegacyEffect.PermanentJackpotChance: legacyJackpotChance += item.value; break;
@@ -1579,19 +1641,20 @@ public class GameManager : MonoBehaviour
 
         if (deudaDaysLeftText != null)
         {
+            int daysToPlay = DaysToPlay;
             if (forcedOrderDecision)
             {
                 deudaDaysLeftText.text = readyToDeliver ? "¡ÚLTIMO DÍA! Paga o bancarrota" : "¡ÚLTIMO DÍA! No alcanza: bancarrota";
                 deudaDaysLeftText.color = urgentColor;
             }
-            else if (!readyToDeliver && daysLeft <= 1)
+            else if (!readyToDeliver && daysToPlay <= 1)
             {
-                deudaDaysLeftText.text = "¡ENTREGALO YA!";
+                deudaDaysLeftText.text = "¡ÚLTIMO DÍA PARA JUNTAR EL AGUA!";
                 deudaDaysLeftText.color = urgentColor;
             }
             else
             {
-                deudaDaysLeftText.text = daysLeft + " dias restantes";
+                deudaDaysLeftText.text = daysToPlay + (daysToPlay == 1 ? " día restante" : " días restantes");
                 deudaDaysLeftText.color = normalDaysColor;
             }
         }
@@ -1602,10 +1665,13 @@ public class GameManager : MonoBehaviour
 
         MacheteData current = GetCurrentMachete();
         MacheteData next = GetNextMachete();
-        if (macheteStatusText != null) macheteStatusText.text = Loc("shop_current_machete", current != null ? current.macheteName : "-");
+        if (macheteStatusText != null)
+            macheteStatusText.text = Loc("shop_current_machete", current != null ? current.macheteName : "-") + PassiveLine(current);
         if (next != null)
         {
-            if (macheteUpgradeCostText != null) macheteUpgradeCostText.text = Loc("shop_next_machete", next.macheteName, FormatWater(next.unlockCost));
+            if (macheteUpgradeCostText != null)
+                macheteUpgradeCostText.text = Loc("shop_next_machete", next.macheteName, FormatWater(next.unlockCost))
+                            + StatsGainLine(current, next) + PassiveLine(next);
             if (macheteUpgradeButton != null) macheteUpgradeButton.interactable = waterCurrentML >= next.unlockCost;
         }
         else
@@ -1613,15 +1679,11 @@ public class GameManager : MonoBehaviour
             if (macheteUpgradeCostText != null) macheteUpgradeCostText.text = Loc("shop_max_machete");
             if (macheteUpgradeButton != null) macheteUpgradeButton.interactable = false;
         }
-        if (macheteStatusText != null)
-            macheteStatusText.text = Loc("shop_current_machete", current != null ? current.macheteName : "-") + PassiveLine(current);
-        if (macheteUpgradeCostText != null)
-            macheteUpgradeCostText.text = Loc("shop_next_machete", next.macheteName, FormatWater(next.unlockCost)) + PassiveLine(next);
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
 
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
     }
-   
+
     void CheckVictory(int deliveredCycle)
     {
         if (runVictoryAwarded || deliveredCycle < victoryCycle) return;
@@ -1654,7 +1716,7 @@ public class GameManager : MonoBehaviour
             return new SkillNode { id = id, nodeName = name, description = desc, cost = cost, prerequisiteIds = pre, effect = effect, effectValue = value };
         }
         if (forceDefaultData || macheteOptions == null || macheteOptions.Count == 0)
-            {
+        {
             macheteOptions = new List<MacheteData>
 {
     new MacheteData { macheteName = "Machete Oxidado",      description = "El que ya tienes.",                     baseDamage = 5f,   baseSwingInterval = 1.2f,  baseHitRadius = 1.5f,  unlockCost = 0 },
@@ -1676,9 +1738,9 @@ public class GameManager : MonoBehaviour
 };
         }
 
-            if (forceDefaultData || skillTree == null || skillTree.Count == 0)
-            {
-                skillTree = new List<SkillNode>
+        if (forceDefaultData || skillTree == null || skillTree.Count == 0)
+        {
+            skillTree = new List<SkillNode>
         {
             N("fuerza_1", "Mas Fuerza I",   "+2 de daño. Abre el resto del arbol.", 50,    SkillEffect.DamageFlatBonus, 2f),
             N("fuerza_2", "Mas Fuerza II",  "+3 de daño",  900,   SkillEffect.DamageFlatBonus, 3f,  "fuerza_1"),
@@ -1718,9 +1780,10 @@ public class GameManager : MonoBehaviour
             N("cocos_2", "Mejores vendedores",  "+2 cocos al iniciar el dia", 950,  SkillEffect.ExtraStartingCoconut, 2f, "aparicion_1"),
             N("cocos_3", "Cocos locos",         "+3 cocos al iniciar el dia", 2300, SkillEffect.ExtraStartingCoconut, 3f, "aparicion_2"),
 
-            N("aparicion_1", "Cosecha Rapida",      "Los cocos aparecen mas seguido", 600,  SkillEffect.SpawnIntervalReduction, 0.5f, "cocos_1"),
-            N("aparicion_2", "Cosecha Rapidisima",  "Los cocos aparecen mas seguido", 1300, SkillEffect.SpawnIntervalReduction, 0.7f, "cocos_2"),
-            N("aparicion_3", "Cosecha Veloz",       "Los cocos aparecen mas seguido", 4000, SkillEffect.SpawnIntervalReduction, 1f,   "cocos_3"),
+            N("aparicion_1", "Cosecha Rapida",     "DESBLOQUEA la aparicion de cocos durante el dia: aparece uno nuevo cada 10 s (antes solo salen los del inicio)", 600,  SkillEffect.SpawnIntervalReduction, 0f, "cocos_1"),
+            N("aparicion_2", "Cosecha Rapidisima", "Los cocos aparecen mas seguido (-1 s entre cocos)", 1300, SkillEffect.SpawnIntervalReduction, 1f, "cocos_2"),
+            N("aparicion_3", "Cosecha Veloz",      "Los cocos aparecen mas seguido (-2 s entre cocos)", 4000, SkillEffect.SpawnIntervalReduction,2f, "cocos_3"),
+            N("aparicion_4", "Cosecha Veloz",      "Los cocos aparecen mas seguido (-2 s entre cocos)", 10000, SkillEffect.SpawnIntervalReduction,2f, "aparicion_3"),
 
             N("leche_1", "Coco Bendito I",   "+15% de agua de coco", 500,   SkillEffect.WaterMultiplierBonus, 0.15f, "velocidad_2"),
             N("leche_2", "Coco Bendito II",  "+20% de agua de coco", 1500,  SkillEffect.WaterMultiplierBonus, 0.2f,  "leche_1"),
@@ -1752,7 +1815,7 @@ public class GameManager : MonoBehaviour
             N("extra_3", "Cocos Gemelos III", "+5% (total 15%)", 7000,  SkillEffect.ExtraCoconutChanceBonus, 0.05f, "extra_2"),
             N("extra_4", "Cocos Gemelos IV",  "+5% (total 20%)", 13500, SkillEffect.ExtraCoconutChanceBonus, 0.05f, "extra_3"),
 
-            N("protegida_1", "Racha Protegida I",  "Un fallo por dia no rompe tu racha",    1800, SkillEffect.StreakForgiveness, 1f, "radio_2"),
+            N("protegida_1", "Racha Protegida I", "Un fallo por dia no rompe tu racha", 1800, SkillEffect.StreakForgiveness, 1f, "radio_2", "racha_1"),
             N("protegida_2", "Racha Protegida II", "Dos fallos por dia no rompen tu racha", 7500, SkillEffect.StreakForgiveness, 1f, "protegida_1"),
 
             N("negociador_1", "Negociador I",   "-3% al pedido actual y a los siguientes", 2500,   SkillEffect.OrderDiscount, 0.03f, "suerte_1"),
@@ -1775,14 +1838,14 @@ public class GameManager : MonoBehaviour
 
             N("reembolso_1", "Pedido Flexible I",  "Al entregar un pedido, recuperas 10% de lo entregado", 20000,  SkillEffect.OrderRefundBonus, 0.10f, "negociador_3"),
             N("reembolso_2", "Pedido Flexible II", "+5% más, total 15%",                                 50000, SkillEffect.OrderRefundBonus, 0.05f, "reembolso_1"),
- 
+
             N("calma_1", "Calma Antes de la Tormenta I",   "+25% de agua en los primeros 5 segundos del día", 3000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "manofirme_1"),
             N("calma_2", "Calma Antes de la Tormenta II",  "+25% más (total +50%)", 8000,  SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_1"),
             N("calma_3", "Calma Antes de la Tormenta III", "+25% más (total +75%)", 18000, SkillEffect.EarlyDayWaterBonus, 0.25f, "calma_2"),
 
-            N("racha_1", "Racha Ardiente I",   "+1 acumulacion maxima de racha",  3500,  SkillEffect.StreakMaxStacksBonus, 1f, "protegida_1"),
-            N("racha_2", "Racha Ardiente II",  "+1 acumulacion maxima de racha",  12000, SkillEffect.StreakMaxStacksBonus, 1f, "racha_1"),
-            N("racha_3", "Racha Ardiente III", "+2 acumulaciones maximas de racha", 40000, SkillEffect.StreakMaxStacksBonus, 2f, "racha_2"),
+            N("racha_1", "Racha Ardiente I",   "DESBLOQUEA la racha: desde el 3er golpe seguido que conecte, cada golpe da +5% de daño y agua (hasta 4 veces)", 1500, SkillEffect.StreakMaxStacksBonus, 4f, "radio_1"),
+            N("racha_2", "Racha Ardiente II",  "+2 acumulaciones maximas de racha", 8000,  SkillEffect.StreakMaxStacksBonus, 2f, "racha_1"),
+            N("racha_3", "Racha Ardiente III", "+2 acumulaciones maximas de racha", 30000, SkillEffect.StreakMaxStacksBonus, 2f, "racha_2"),
 
             N("rachapoder_1", "Racha Poderosa I",   "Cada acumulacion de racha da +1% mas de daño y agua",   6000,  SkillEffect.StreakPowerBonus, 0.01f,  "racha_1"),
             N("rachapoder_2", "Racha Poderosa II",  "+1% mas por acumulacion",                               25000, SkillEffect.StreakPowerBonus, 0.01f,  "rachapoder_1", "racha_2"),
@@ -1793,11 +1856,11 @@ public class GameManager : MonoBehaviour
             N("tesoro_3", "Ojo de Tesorero III", "+2% de probabilidad de encontrar monedas",   25000, SkillEffect.CoinChanceBonus, 0.02f,  "tesoro_2"),
 
                 };
-            }
+        }
 
-            if (forceDefaultData || perkPool == null || perkPool.Count == 0)
-            {
-                perkPool = new List<PerkOption>
+        if (forceDefaultData || perkPool == null || perkPool.Count == 0)
+        {
+            perkPool = new List<PerkOption>
         {
             new PerkOption { perkName = "Manos Firmes",    description = "+4 daño.",                          effect = PerkEffect.DamageBonus,           value = 4f },
             new PerkOption { perkName = "Segundo Aire",    description = "+8 stamina máxima.",                effect = PerkEffect.StaminaMaxBonus,       value = 8f },
@@ -1830,11 +1893,11 @@ public class GameManager : MonoBehaviour
             new PerkOption { perkName = "Jackpot Mayor",      description = "+10% de probabilidad de Jackpot de agua.",          effect = PerkEffect.JackpotChanceBonus,    value = 0.10f },
             new PerkOption { perkName = "Cazador Maestro",    description = "+15% de daño a cocos con menos del 50% de vida.",   effect = PerkEffect.ExecuteDamageBonus,    value = 0.15f },
         };
-            }
+        }
 
-            if (forceDefaultData || legacyShop == null || legacyShop.Count == 0)
-            {
-                legacyShop = new List<LegacyItem>
+        if (forceDefaultData || legacyShop == null || legacyShop.Count == 0)
+        {
+            legacyShop = new List<LegacyItem>
         {
             new LegacyItem { itemName = "Anillo del Machetero",   description = "+1 daño permanente.",                      cost = 1, effect = LegacyEffect.PermanentDamageBonus,           value = 1f },
             new LegacyItem { itemName = "Pulsera de Aguante",     description = "+5 stamina máxima permanente.",            cost = 2, effect = LegacyEffect.PermanentStaminaMaxBonus,       value = 5f },
@@ -1874,27 +1937,27 @@ public class GameManager : MonoBehaviour
             new LegacyItem { itemName = "Herencia del Herrero I", description = "Empiezas con el Machete Normal.",            cost = 8,  effect = LegacyEffect.PermanentStartingMachete, value = 1f },
             new LegacyItem { itemName = "Herencia del Herrero II",description = "Empiezas con el Machete de Acero.",          cost = 20, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
         };
-            }
-            StampCoconutUnlocks();
-        
+        }
+        StampCoconutUnlocks();
+
     }
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
 {
-    new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,   ability = CoconutAbility.Ninguna },
-    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 25,   ability = CoconutAbility.Generoso },
-    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 55,  ability = CoconutAbility.Resistente },
-    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 110,  ability = CoconutAbility.FibraDura },
-    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 150,  ability = CoconutAbility.Pesado },
-    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 200,  ability = CoconutAbility.Tenaz },
-    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 250,  ability = CoconutAbility.Armadura },
-    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 320, ability = CoconutAbility.Rebote },
-    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 400, ability = CoconutAbility.Fortificado },
-    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 490, ability = CoconutAbility.Implacable },
-    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 590, ability = CoconutAbility.FragilValioso },
-    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 700, ability = CoconutAbility.Regeneracion },
-    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 830, ability = CoconutAbility.Camuflaje },
-    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 1000, ability = CoconutAbility.Maldicion },
-    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 1100, ability = CoconutAbility.Supremo },
+    new CoconutUnlockThreshold { coconutName = "Coco Verde",       killsRequired = 0,    ability = CoconutAbility.Ninguna },
+    new CoconutUnlockThreshold { coconutName = "Coco Maduro",      killsRequired = 40,   ability = CoconutAbility.Generoso },
+    new CoconutUnlockThreshold { coconutName = "Coco Correoso",    killsRequired = 100,  ability = CoconutAbility.Resistente },
+    new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     killsRequired = 190,  ability = CoconutAbility.FibraDura },
+    new CoconutUnlockThreshold { coconutName = "Coco Petreo",      killsRequired = 300,  ability = CoconutAbility.Pesado },
+    new CoconutUnlockThreshold { coconutName = "Coco Curtido",     killsRequired = 430,  ability = CoconutAbility.Tenaz },
+    new CoconutUnlockThreshold { coconutName = "Coco Blindado",    killsRequired = 590,  ability = CoconutAbility.Armadura },
+    new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   killsRequired = 780,  ability = CoconutAbility.Rebote },
+    new CoconutUnlockThreshold { coconutName = "Coco de Acero",    killsRequired = 1000, ability = CoconutAbility.Fortificado },
+    new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  killsRequired = 1250, ability = CoconutAbility.Implacable },
+    new CoconutUnlockThreshold { coconutName = "Coco de Diamante", killsRequired = 1550, ability = CoconutAbility.FragilValioso },
+    new CoconutUnlockThreshold { coconutName = "Coco Legendario",  killsRequired = 1900, ability = CoconutAbility.Regeneracion },
+    new CoconutUnlockThreshold { coconutName = "Coco Mitico",      killsRequired = 2300, ability = CoconutAbility.Camuflaje },
+    new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   killsRequired = 2750, ability = CoconutAbility.Maldicion },
+    new CoconutUnlockThreshold { coconutName = "Coco Supremo",     killsRequired = 3250, ability = CoconutAbility.Supremo },
 };
 
     void StampCoconutUnlocks()
