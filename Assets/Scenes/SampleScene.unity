@@ -41732,7 +41732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   machete: {fileID: 134951793}
   segments: 48
-  lineWidth: 0.15
+  lineWidth: 0.8
   heightOffset: 0.1
   forceDefaultMaterial: 1
   idleColor: {r: 1, g: 1, b: 1, a: 1}
@@ -41844,7 +41844,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 2, y: 2}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -53111,7 +53111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edbab76a172247d4ba0e3f7cccc8066e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeId: 4
+  nodeId: filo_4
   label: {fileID: 2075934772}
   button: {fileID: 1474266813}
   backgroundImage: {fileID: 1474266814}

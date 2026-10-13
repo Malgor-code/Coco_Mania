@@ -9,7 +9,7 @@ public class HitIndicator : MonoBehaviour
 
     [Header("Forma")]
     public int segments = 64;
-    public float lineWidth = 0.15f;
+    public float lineWidth = 0.8f;
     public float heightOffset = 0.1f;
 
     [Header("Material")]
