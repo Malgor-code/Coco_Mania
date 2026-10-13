@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(AudioSource))]
 public class CoconutTarget : MonoBehaviour
@@ -186,7 +187,7 @@ public class CoconutTarget : MonoBehaviour
         foreach (var m in flashMats)
             if (m != null && m.HasProperty("_EmissionColor")) m.SetColor("_EmissionColor", e);
     }
-    public void ApplyType(CoconutTypeData type)
+    public void ApplyType(CoconutTypeData type, float hpScale = 1f)
     {
         StopAllCoroutines();
         blinkCoroutine = null;
@@ -201,10 +202,11 @@ public class CoconutTarget : MonoBehaviour
         ResetAbilityState();
 
         int baseHp = GameManager.Instance != null ? GameManager.Instance.GetCoconutHpMax() : 10;
-        hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * type.hpMultiplier));
+        hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * type.hpMultiplier * hpScale));
         hp = hpMax;
 
-        float sizeBoost = Mathf.Min(baseScale + Mathf.Sqrt(type.hpMultiplier - 1f) * scaleGrowth, maxScale);
+        float globalSize = CoconutSpawner.Instance != null ? CoconutSpawner.Instance.globalSizeMultiplier : 1f;
+        float sizeBoost = Mathf.Min(baseScale + Mathf.Sqrt(Mathf.Max(0f, type.hpMultiplier - 1f)) * scaleGrowth, maxScale) * globalSize;
         typedScale = originalScale * sizeBoost;
         transform.localScale = typedScale;
 
