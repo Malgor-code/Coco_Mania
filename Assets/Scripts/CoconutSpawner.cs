@@ -42,8 +42,8 @@ public class CoconutSpawner : MonoBehaviour
 
     private static readonly CoconutTypeData[] CanonicalTypes = new CoconutTypeData[]
 {
-    new CoconutTypeData { typeName = "Coco Verde",       hpMultiplier = 1f,   lootMultiplier = 1.00f },
-    new CoconutTypeData { typeName = "Coco Maduro",      hpMultiplier = 3f,   lootMultiplier = 1.4f },
+    new CoconutTypeData { typeName = "Coco Verde",       hpMultiplier = 1f,   lootMultiplier = 1.2f },
+    new CoconutTypeData { typeName = "Coco Maduro",      hpMultiplier = 2.2f,   lootMultiplier = 1.55f },
     new CoconutTypeData { typeName = "Coco Correoso",    hpMultiplier = 6f,   lootMultiplier = 1.8f },
     new CoconutTypeData { typeName = "Coco Fibroso",     hpMultiplier = 12f,  lootMultiplier = 2.2f },
     new CoconutTypeData { typeName = "Coco Petreo",      hpMultiplier = 20f,  lootMultiplier = 2.6f },

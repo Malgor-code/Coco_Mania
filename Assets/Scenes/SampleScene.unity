@@ -41732,7 +41732,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   machete: {fileID: 134951793}
   segments: 48
-  lineWidth: 0.8
+  lineWidth: 0.55
   heightOffset: 0.1
   forceDefaultMaterial: 1
   idleColor: {r: 1, g: 1, b: 1, a: 1}

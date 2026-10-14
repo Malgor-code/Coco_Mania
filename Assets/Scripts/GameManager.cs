@@ -1787,7 +1787,7 @@ public class GameManager : MonoBehaviour
             N("eficiencia_4", "Segundo Aliento IV",  "+6% de probabilidad (total 30%)", 22000, SkillEffect.StaminaRecoveryChanceBonus, 0.06f, "eficiencia_3"),
             N("eficiencia_5", "Segundo Aliento V",   "+5% de probabilidad (total 35%, el maximo)", 50000, SkillEffect.StaminaRecoveryChanceBonus, 0.05f, "eficiencia_4"),
 
-            N("resistencia_1", "Aguante I",   "+5 segundos de resistencia", 600,   SkillEffect.StaminaMaxFlatBonus, 5f, "fuerza_1"),
+            N("resistencia_1", "Aguante I",   "+5 segundos de resistencia", 450,   SkillEffect.StaminaMaxFlatBonus, 5f, "fuerza_1"),
             N("resistencia_2", "Aguante II",  "+5 segundos de resistencia", 1800,  SkillEffect.StaminaMaxFlatBonus, 5f, "resistencia_1"),
             N("resistencia_3", "Aguante III", "+5 segundos de resistencia", 4500,  SkillEffect.StaminaMaxFlatBonus, 5f, "resistencia_2"),
             N("resistencia_4", "Aguante IV",  "+5 segundos de resistencia", 12000, SkillEffect.StaminaMaxFlatBonus, 5f, "resistencia_3"),
