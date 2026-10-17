@@ -217,7 +217,18 @@ public class StoryManager : MonoBehaviour
         PlayerPrefs.SetInt(IntroKey, 1);
         PlayerPrefs.Save();
     }
-
+    public void PlayLines(string[] lines, bool strongDim, System.Action onDone)
+    {
+        StartCoroutine(PlayLinesRoutine(lines, strongDim, onDone));
+    }
+    IEnumerator PlayLinesRoutine(string[] lines, bool strongDim, System.Action onDone)
+    {
+        while (running) yield return null;
+        running = true;
+        yield return Say(lines, strongDim ? dimStrong : dimLight, false);
+        running = false;
+        onDone?.Invoke();
+    }
     IEnumerator TutorialRoutine()
     {
         yield return WaitForFree();

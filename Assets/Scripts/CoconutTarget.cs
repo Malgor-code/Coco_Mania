@@ -120,7 +120,7 @@ public class CoconutTarget : MonoBehaviour
     public GameObject coinPrefab;
     public float coinLifetime = 300f;
     public float coinPopForce = 3f;
-    public float baseScale = 0.6f;
+    public float baseScale = 1f;
     public float scaleGrowth = 0.08f;
     public float maxScale = 1.5f;
     [Header("Flash al recibir golpe")]

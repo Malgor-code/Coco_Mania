@@ -433,7 +433,7 @@ MonoBehaviour:
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10
   coinPopForce: 3
-  baseScale: 0.6
+  baseScale: 1
   scaleGrowth: 0.08
   maxScale: 1.5
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
@@ -478,32 +478,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e75933dd01a73a46a9f95b93d9f6ebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  runSpeedMultiplier: 2.4
-  hopSpeedMultiplier: 0.7
-  retargetInterval: 2.5
+  speedMultiplier: 1
+  edgeMargin: 0.6
+  hopHeight: 0.25
   rotationSpeed: 8
   debugLog: 0
   speedVariation: 0.3
   personalityVariation: 0.7
-  idleWeight: 25
-  walkWeight: 40
-  runWeight: 15
-  lookAroundWeight: 12
-  hopWeight: 8
-  idleTime: {x: 0.8, y: 3}
-  lookAroundTime: {x: 1.2, y: 2.5}
-  walkDistance: {x: 1.5, y: 4.5}
-  runDistance: {x: 3, y: 7}
-  hopDistance: {x: 1, y: 3}
-  runZigzagChance: 0.35
-  zigzagAngle: 35
-  zigzagFrequency: 3
+  lookAroundWhenIdle: 1
   visual: {fileID: 0}
-  hopHeight: 0.25
-  hopsPerSecond: 2.2
+  useHitNudge: 1
+  hitNudgeDistance: 0.25
+  nudgeDuration: 0.15
   panicChanceAfterHit: 0.35
+  panicDuration: 1.2
   animSpeedParameter: 
+  style: 0
 --- !u!135 &2097344187949809292
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -777,12 +777,20 @@ MonoBehaviour:
   implacableWindowSeconds: 2
   implacableBuffDuration: 2
   implacableDamageReduction: 0.3
+  hitAnimator: {fileID: 0}
+  hitStateName: Hit
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
   supremoFase2RegenPercentPerSecond: 0.015
+  hitClipName: 
+  hitAnimStartNormalized: 0
+  hitSpeedParameter: 
+  maxHitAnimSpeed: 4
+  lastDamageTaken: 0
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
+  colorRenderer: {fileID: 0}
   maldicionDuration: 6
   supremoFase2HpThreshold: 0.7
   supremoFase3HpThreshold: 0.3
@@ -790,6 +798,15 @@ MonoBehaviour:
   supremoFase3DamageReduction: 0.35
   hp: 0
   hpMax: 0
+  coinPrefab: {fileID: 0}
+  coinLifetime: 300
+  coinPopForce: 3
+  baseScale: 1
+  scaleGrowth: 0.08
+  maxScale: 1.5
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmission: 1.5
+  hitFlashTintBoost: 3
 --- !u!114 &6205389778159658485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,9 +819,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e75933dd01a73a46a9f95b93d9f6ebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
-  retargetInterval: 2.5
+  speedMultiplier: 1
+  edgeMargin: 0.6
+  hopHeight: 0.45
   rotationSpeed: 8
+  debugLog: 0
+  speedVariation: 0.15
+  personalityVariation: 0.5
+  lookAroundWhenIdle: 1
+  visual: {fileID: 0}
+  useHitNudge: 1
+  hitNudgeDistance: 0.25
+  nudgeDuration: 0.15
+  panicChanceAfterHit: 0.35
+  panicDuration: 1.2
+  animSpeedParameter: 
+  style: 0
 --- !u!135 &853628309523988849
 SphereCollider:
   m_ObjectHideFlags: 0

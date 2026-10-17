@@ -15,7 +15,7 @@ public class CoconutSpawner : MonoBehaviour
     public int startingCoconuts = 4;
     public float spawnInterval = 5f;
     public int maxCoconuts = 40;
-    public float baseScale = 0.6f;
+    public float baseScale = 1f;
     public float scaleGrowthPerTier = 0.05f;
     public float maxScale = 1.4f;
     public float hpBoost = 1.5f;
@@ -29,7 +29,8 @@ public class CoconutSpawner : MonoBehaviour
     float GetCycleHpMultiplier()
     {
         int cycle = GameManager.Instance != null ? GameManager.Instance.billCycle : 1;
-        return Mathf.Pow(hpGrowthPerCycle, Mathf.Max(0, cycle - 1));
+        float legacyScale = GameManager.Instance != null ? GameManager.Instance.GetLegacyHpScale() : 1f;
+        return Mathf.Pow(hpGrowthPerCycle, Mathf.Max(0, cycle - 1)) * legacyScale;
     }
     public void SpawnExtraCoconut() { StartCoroutine(SpawnExtraDelayed()); }
     [Header("Tipos de coco (progresion por muertes)")]
