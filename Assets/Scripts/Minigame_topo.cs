@@ -14,37 +14,48 @@ public class Minigame_Topo : MinigameBase
     };
 
     public override bool Is3D => true;
-    const float PopTime = 0.12f;  
-    const float SwingTime = 0.15f; 
-    const float SwingAngle = -55f;  
-    const float MinHitRadiusPx = 40f;
+
+    const float PopTime = 0.16f;
+    const float DieTime = 0.18f; 
+    const float SwingTime = 0.22f;
+    const float SwingAngle = -60f;
+    const float StrikeFrac = 0.35f;
+    const float MinHitRadiusPx = 48f;
+    const float HitForgiveness = 1.25f;
 
     static readonly Color Gold = new Color(1f, 0.85f, 0.2f);
     static readonly Color Rotten = new Color(0.45f, 0.2f, 0.55f);
+    static readonly Color Dirt = new Color(0.42f, 0.28f, 0.16f);
+    static readonly Color Juice = new Color(0.92f, 0.97f, 1f);
+    static readonly Color Bad = new Color(1f, 0.3f, 0.3f);
 
     class Hole
     {
         public Transform spot;
         public GameObject[] variants = new GameObject[3];
         public Vector3[] scale0 = new Vector3[3];
-        public float height;
-        public float life, maxLife;
+        public float[] shownOff = new float[3];
+        public float[] depth = new float[3];
+        public float life, maxLife, dying, sparkle, seed;
         public int type;
         public bool active;
     }
 
+    readonly MinigameFX fx = new MinigameFX();
+
     MinigameStage.TopoSetup S;
     Hole[] holes;
-    float spawnTimer;
-    float spawnInterval;
-    float cocoLife;
+    float spawnTimer, spawnInterval, cocoLife;
     int points;
+    float unit;
 
     GameObject hammer;
     Quaternion hammerBaseRot;
     Plane groundPlane;
     float hammerLift;
-    float hammerSwing;
+    float swingT = 1f;
+    Vector3 hammerPos, hammerTarget;
+    bool cursorHidden, prevCursor;
 
     public override string Hud => "Puntos: " + points;
 
@@ -63,7 +74,7 @@ public class Minigame_Topo : MinigameBase
         spawnInterval = Mathf.Max(0.3f, 0.9f / Scale(0.35f));
         cocoLife = Mathf.Max(0.5f, 1.3f / Scale(0.25f));
         spawnTimer = 0.5f;
-        hammerSwing = 0f;
+        swingT = 1f;
 
         S = Stage != null ? Stage.topo : null;
         if (S == null || !S.IsReady)
@@ -79,7 +90,7 @@ public class Minigame_Topo : MinigameBase
         holes = new Hole[n];
         for (int i = 0; i < n; i++)
         {
-            var h = new Hole { spot = S.holesRoot.GetChild(i) };
+            var h = new Hole { spot = S.holesRoot.GetChild(i), seed = Random.value * 10f };
             for (int k = 0; k < 3; k++)
             {
                 GameObject prefab = S.cocoPrefab;
@@ -87,9 +98,18 @@ public class Minigame_Topo : MinigameBase
                 if (k == 1 && S.cocoGoldPrefab != null) { prefab = S.cocoGoldPrefab; tint = false; }
                 if (k == 2 && S.cocoRottenPrefab != null) { prefab = S.cocoRottenPrefab; tint = false; }
 
-                var go = Spawn(prefab, h.spot.position, h.spot.rotation);
-                if (k == 0) h.height = Mathf.Max(0.01f, GetBounds(go).size.y); 
-                if (tint) Tint(go, k == 1 ? Gold : Rotten);
+                var go = MinigameFX.Prep(Spawn(prefab, h.spot.position, h.spot.rotation), h.spot.position, h.spot.rotation, "Topo: coco");
+                if (tint) MinigameFX.Tint(go, k == 1 ? Gold : Rotten);
+                go.transform.SetPositionAndRotation(h.spot.position, h.spot.rotation);
+                Bounds b = MinigameFX.GetBounds(go);
+                MinigameFX.ProjectExtents(b, go.transform.position, h.spot.up, out float mn, out float mx);
+                float depth = Mathf.Max(0.01f, mx - mn);
+                h.depth[k] = depth;
+                bool sane = Mathf.Abs(mn) <= depth * 2f;
+                h.shownOff[k] = (S.alignBaseToHole && sane) ? -mn : 0f;
+                if (S.alignBaseToHole && !sane)
+                    Debug.LogWarning("Minigame_Topo: la base del coco esta muy lejos de su pivote (hoyo " + i + "). Se usa el pivote del prefab.");
+
                 h.variants[k] = go;
                 h.scale0[k] = go.transform.localScale;
                 go.SetActive(false);
@@ -97,52 +117,51 @@ public class Minigame_Topo : MinigameBase
             holes[i] = h;
         }
 
-        groundPlane = new Plane(Vector3.up, holes[0].spot.position);
         float spacing = holes.Length > 1 ? Vector3.Distance(holes[0].spot.position, holes[1].spot.position) : 1f;
+        unit = Mathf.Max(0.05f, spacing * 0.3f);
+        groundPlane = new Plane(Vector3.up, holes[0].spot.position);
         hammerLift = spacing * 0.35f;
         if (S.hammerPrefab != null)
         {
-            hammer = Spawn(S.hammerPrefab, holes[0].spot.position + Vector3.up * hammerLift, S.hammerPrefab.transform.rotation);
+            hammerPos = hammerTarget = holes[0].spot.position + Vector3.up * hammerLift;
+            hammer = MinigameFX.Prep(Spawn(S.hammerPrefab, hammerPos, S.hammerPrefab.transform.rotation), hammerPos, S.hammerPrefab.transform.rotation, "Topo: martillo");
             hammerBaseRot = hammer.transform.rotation;
+            prevCursor = Cursor.visible;
+            Cursor.visible = false;
+            cursorHidden = true;
         }
     }
 
-    static Bounds GetBounds(GameObject go)
+    Vector3 HolePos(Hole h, int type, float v)
     {
-        var rs = go.GetComponentsInChildren<Renderer>();
-        if (rs.Length == 0) return new Bounds(go.transform.position, Vector3.one * 0.3f);
-        Bounds b = rs[0].bounds;
-        for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
-        return b;
+        float off = h.shownOff[type] - h.depth[type] * (1f - v);
+        return h.spot.position + h.spot.up * off;
     }
 
-    static void Tint(GameObject go, Color c)
+    void Apply(Hole h, int type, float v, float squash, float wobbleDeg)
     {
-        var mpb = new MaterialPropertyBlock();
-        mpb.SetColor("_BaseColor", c); 
-        mpb.SetColor("_Color", c);
-        foreach (var r in go.GetComponentsInChildren<Renderer>()) r.SetPropertyBlock(mpb);
+        Transform tr = h.variants[type].transform;
+        Vector3 s = h.scale0[type];
+        if (S.riseFromHole) tr.position = HolePos(h, type, v);
+        else { tr.position = HolePos(h, type, 1f); s *= Mathf.Max(0f, v); }
+        if (squash > 0f) s = new Vector3(s.x * (1f + 0.3f * squash), s.y * (1f - 0.5f * squash), s.z * (1f + 0.3f * squash));
+        tr.localScale = s;
+        tr.rotation = h.spot.rotation * Quaternion.AngleAxis(wobbleDeg, Vector3.forward);
     }
 
     protected override void Tick(float dt)
     {
+        if (holes == null) return;
+        fx.Tick(dt);
         Camera cam = Stage != null ? Stage.ActiveCamera : null;
-
-        // Martillo
         if (Input.GetMouseButtonDown(0))
         {
-            hammerSwing = SwingTime;
-            if (cam != null) TryHit(cam);
+            swingT = 0f;
+            MinigameFX.PlaySfx("topo_swing");
+            bool hit = cam != null && TryHit(cam);
+            if (!hit) Miss(cam);
         }
-        hammerSwing = Mathf.Max(0f, hammerSwing - dt);
-        if (hammer != null && cam != null)
-        {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (groundPlane.Raycast(ray, out float enter))
-                hammer.transform.position = ray.GetPoint(enter) + Vector3.up * hammerLift;
-            float ang = hammerSwing > 0f ? SwingAngle : 0f;
-            hammer.transform.rotation = Quaternion.AngleAxis(ang, cam.transform.right) * hammerBaseRot;
-        }
+        UpdateHammer(dt, cam);
 
         spawnTimer -= dt;
         if (spawnTimer <= 0f)
@@ -153,25 +172,61 @@ public class Minigame_Topo : MinigameBase
 
         foreach (var h in holes)
         {
+            if (h.dying > 0f)
+            {
+                h.dying -= dt;
+                if (h.dying <= 0f) { h.variants[h.type].SetActive(false); continue; }
+                float k = 1f - Mathf.Clamp01(h.dying / DieTime);
+                Apply(h, h.type, 1f - MinigameFX.EaseInCubic(k), Mathf.Clamp01(k * 5f), 0f);
+                continue;
+            }
             if (!h.active) continue;
+
             h.life -= dt;
             if (h.life <= 0f) { HideHole(h); continue; }
 
             float age = h.maxLife - h.life;
-            float up = Mathf.Min(Mathf.Clamp01(age / PopTime), Mathf.Clamp01(h.life / PopTime));
-            var tr = h.variants[h.type].transform;
-            if (S.riseFromHole)
+            float appear = Mathf.Clamp01(age / PopTime);
+            float leave = Mathf.Clamp01(h.life / PopTime);
+            float v = MinigameFX.EaseOutBack(appear) * Mathf.SmoothStep(0f, 1f, leave);
+            bool urgent = appear >= 1f && h.life < h.maxLife * 0.3f;
+            float wob = Mathf.Sin((Time.time + h.seed) * (urgent ? 38f : 9f)) * (urgent ? 7f : 3f) * (h.type == 2 ? 1.6f : 1f);
+            Apply(h, h.type, v, 0f, wob);
+            if (h.type == 1 && appear >= 1f)
             {
-                tr.position = h.spot.position - h.spot.up * (h.height * (1f - up));
-            }
-            else
-            {
-                tr.position = h.spot.position;
-                tr.localScale = h.scale0[h.type] * up;
+                h.sparkle -= dt;
+                if (h.sparkle <= 0f)
+                {
+                    h.sparkle = 0.1f;
+                    Vector3 p = h.variants[1].transform.position + h.spot.up * (h.depth[1] * Random.Range(0.2f, 1f))
+                                + Random.insideUnitSphere * (h.depth[1] * 0.35f);
+                    fx.Burst(p, Gold, 1, h.depth[1], 0.8f, 0.07f, 0.5f, -0.5f);
+                }
             }
         }
     }
-    void TryHit(Camera cam)
+
+    void UpdateHammer(float dt, Camera cam)
+    {
+        if (swingT < 1f) swingT = Mathf.Min(1f, swingT + dt / SwingTime);
+        if (hammer == null || cam == null) return;
+
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (groundPlane.Raycast(ray, out float enter))
+            hammerTarget = ray.GetPoint(enter) + Vector3.up * hammerLift;
+        hammerPos = Vector3.Lerp(hammerPos, hammerTarget, 1f - Mathf.Exp(-40f * dt));
+        float pose = 0f;
+        if (swingT < 1f)
+        {
+            pose = swingT < StrikeFrac
+                ? MinigameFX.EaseOutCubic(swingT / StrikeFrac)
+                : Mathf.Pow(1f - (swingT - StrikeFrac) / (1f - StrikeFrac), 2f);
+        }
+        hammer.transform.position = hammerPos + Vector3.down * (hammerLift * 0.5f * pose);
+        hammer.transform.rotation = Quaternion.AngleAxis(SwingAngle * pose, cam.transform.right) * hammerBaseRot;
+    }
+
+    bool TryHit(Camera cam)
     {
         Vector2 mouse = Input.mousePosition;
         int best = -1;
@@ -181,29 +236,65 @@ public class Minigame_Topo : MinigameBase
             Hole h = holes[i];
             if (!h.active) continue;
 
-            Bounds b = GetBounds(h.variants[h.type]);
+            Bounds b = MinigameFX.GetBounds(h.variants[h.type]);
             Vector3 sp = cam.WorldToScreenPoint(b.center);
             if (sp.z <= 0f) continue;
             float worldR = Mathf.Max(b.extents.x, b.extents.z, b.extents.y * 0.5f);
             Vector3 spEdge = cam.WorldToScreenPoint(b.center + cam.transform.right * worldR);
-            float r = Mathf.Max(Mathf.Abs(spEdge.x - sp.x), MinHitRadiusPx);
+            float r = Mathf.Max(Mathf.Abs(spEdge.x - sp.x) * HitForgiveness, MinHitRadiusPx);
             float d = Vector2.Distance(mouse, new Vector2(sp.x, sp.y));
             if (d <= r && d < bestD) { best = i; bestD = d; }
         }
-        if (best >= 0) Hit(best);
+        if (best < 0) return false;
+        Hit(holes[best], cam);
+        return true;
     }
 
-    void Hit(int i)
+    void Miss(Camera cam)
     {
-        Hole h = holes[i];
-        if (!h.active) return;
-        points += h.type == 0 ? 1 : h.type == 1 ? 3 : -2;
-        HideHole(h);
+        fx.Burst(hammerTarget - Vector3.up * hammerLift, Dirt, 5, unit, 2.5f, 0.1f, 0.4f, 8f, Vector3.up, 0.8f);
+        MinigameFX.PlaySfx("topo_miss");
+    }
+
+    void Hit(Hole h, Camera cam)
+    {
+        int type = h.type;
+        float u = h.depth[type];
+        Vector3 c = MinigameFX.GetBounds(h.variants[type]).center;
+
+        points += type == 0 ? 1 : type == 1 ? 3 : -2;
+
+        string txt; Color tcol, pcol; float shake; int tsize;
+        if (type == 0) { txt = "+1"; tcol = Color.white; pcol = Juice; shake = 0.12f; tsize = 52; MinigameFX.PlaySfx("topo_hit"); }
+        else if (type == 1)
+        {
+            txt = "+3"; tcol = Gold; pcol = Gold; shake = 0.3f; tsize = 72;
+            fx.Flash(root, new Color(1f, 0.85f, 0.2f, 0.18f), 0.2f);
+            fx.Burst(c, Color.white, 8, u, 5f, 0.08f, 0.6f, 6f);
+            MinigameFX.PlaySfx("topo_gold");
+        }
+        else
+        {
+            txt = "-2"; tcol = Bad; pcol = Rotten; shake = 0.6f; tsize = 64;
+            fx.Flash(root, new Color(1f, 0.15f, 0.15f, 0.28f), 0.25f);
+            MinigameFX.PlaySfx("topo_rotten");
+        }
+
+        fx.Burst(c, pcol, type == 1 ? 14 : 10, u, 4f, 0.14f, 0.65f, 9f, h.spot.up * 0.8f);
+        fx.Burst(h.spot.position, Dirt, 6, u, 3f, 0.1f, 0.5f, 10f, h.spot.up);
+        Stage.Shake(shake, 0.2f);
+
+        if (MinigameFX.WorldToUI(root, cam, c + h.spot.up * (u * 0.5f), out Vector2 ui))
+            fx.Pop(root, ui + Vector2.up * 20f, txt, tcol, tsize);
+
+        h.active = false;
+        h.dying = DieTime;
     }
 
     void HideHole(Hole h)
     {
         h.active = false;
+        h.dying = 0f;
         h.variants[h.type].SetActive(false);
     }
 
@@ -213,20 +304,26 @@ public class Minigame_Topo : MinigameBase
         for (int k = 0; k < holes.Length; k++)
         {
             Hole h = holes[(start + k) % holes.Length];
-            if (h.active) continue;
+            if (h.active || h.dying > 0f) continue;
 
             float rottenChance = Mathf.Clamp((diff - 1f) * 0.1f, 0f, 0.3f);
             float r = Random.value;
             h.type = r < rottenChance ? 2 : r < rottenChance + 0.1f ? 1 : 0;
             h.life = h.maxLife = cocoLife;
+            h.sparkle = 0f;
             h.active = true;
 
-            var go = h.variants[h.type];
-            go.transform.localScale = h.scale0[h.type];
-            go.transform.SetPositionAndRotation(
-                h.spot.position - (S.riseFromHole ? h.spot.up * h.height : Vector3.zero), h.spot.rotation);
-            go.SetActive(true);
+            Apply(h, h.type, 0f, 0f, 0f);
+            h.variants[h.type].SetActive(true);
+            fx.Burst(h.spot.position, Dirt, 4, unit, 2.5f, 0.1f, 0.4f, 9f, h.spot.up, 0.7f);
             return;
         }
+    }
+
+    public override void Cleanup()
+    {
+        fx.Clear();
+        if (cursorHidden) { Cursor.visible = prevCursor; cursorHidden = false; }
+        base.Cleanup();
     }
 }

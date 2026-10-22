@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class Minigame_Machetazo : MinigameBase
 {
@@ -17,21 +16,32 @@ public class Minigame_Machetazo : MinigameBase
     public override bool Is3D => true;
 
     const int Rounds = 8;
-    const float TargetSize = 170f; 
+    const float TargetSize = 170f;
     const float StartSize = 520f;
-    const float FeedbackTime = 0.55f;
-    const float MacheteSwingTime = 0.2f;
+    const float EndSize = 60f;
+    const float Tolerance = 120f; 
+    const float PerfectScore = 0.88f;
+    const float FeedbackTime = 0.85f;
+    const float MacheteSwingTime = 0.16f;
+    const float ReactTime = FeedbackTime - MacheteSwingTime;
+    const float PopInTime = 0.3f;
     const float MacheteStartAngle = 60f;
     const float MacheteEndAngle = -40f;
 
+    static readonly Color Yellow = new Color(1f, 0.85f, 0.2f, 0.95f);
+    static readonly Color Green = new Color(0.45f, 1f, 0.45f, 0.95f);
+    static readonly Color Juice = new Color(0.92f, 0.97f, 1f);
+    static readonly Color Gold = new Color(1f, 0.9f, 0.3f);
+
     enum Step { Shrinking, Feedback }
 
+    readonly MinigameFX fx = new MinigameFX();
+
     Step step;
-    int round;
+    int round, perfectStreak;
     float totalScore;
     float shrinkTime, t;
-    float feedbackTimer, feedbackElapsed;
-    float inputCooldown;
+    float feedbackElapsed, inputCooldown;
 
     MinigameStage.MachetazoSetup S;
     Transform[] spots;
@@ -39,14 +49,18 @@ public class Minigame_Machetazo : MinigameBase
 
     Transform coco;
     Vector3 cocoScale0, cocoLocalCenter, cocoBasePos, cocoCenterWorld;
+    Quaternion cocoBaseRot;
     float cocoHeight;
-    bool lastGood;
+    bool swung, lastGood, impactDone;
+    float lastS;
+    float flashT;
+    float uiFxT = 1f;
 
     GameObject machete;
     Quaternion macheteBaseRot;
 
-    Image ring, target;
-    TMP_Text feedback;
+    Image ring, target, slash, pulse;
+    Vector2 cocoUI;
 
     static Sprite ringSprite;
 
@@ -56,6 +70,7 @@ public class Minigame_Machetazo : MinigameBase
     protected override void Setup()
     {
         round = 0;
+        perfectStreak = 0;
         totalScore = 0f;
         lastSpot = -1;
         shrinkTime = Mathf.Max(0.7f, 1.5f / Scale(0.25f));
@@ -81,38 +96,39 @@ public class Minigame_Machetazo : MinigameBase
         System.Array.Sort(spots, (a, b) =>
             (a.position - centroid).sqrMagnitude.CompareTo((b.position - centroid).sqrMagnitude));
         allowed = Mathf.Clamp(Mathf.CeilToInt(n * Mathf.Lerp(0.4f, 1f, Mathf.InverseLerp(1f, 3.5f, diff))), 1, n);
-        var cGO = Spawn(S.cocoPrefab, spots[0].position, spots[0].rotation);
+
+        var cGO = MinigameFX.Prep(Spawn(S.cocoPrefab, spots[0].position, spots[0].rotation), spots[0].position, spots[0].rotation, "Machetazo: coco");
         coco = cGO.transform;
         cocoScale0 = coco.localScale;
-        Bounds b = GetBounds(cGO);
+        Bounds b = MinigameFX.GetBounds(cGO);
         cocoHeight = Mathf.Max(0.01f, b.size.y);
         cocoLocalCenter = coco.InverseTransformPoint(b.center);
 
         if (S.machetePrefab != null)
         {
-            machete = Spawn(S.machetePrefab, spots[0].position, S.machetePrefab.transform.rotation);
+            machete = MinigameFX.Prep(Spawn(S.machetePrefab, spots[0].position, S.machetePrefab.transform.rotation), spots[0].position, S.machetePrefab.transform.rotation, "Machetazo: machete");
             macheteBaseRot = machete.transform.rotation;
             machete.SetActive(false);
         }
+
         target = MiniUI.Img("Objetivo", root, new Color(0.85f, 0.9f, 0.85f, 0.95f), Vector2.zero, new Vector2(TargetSize, TargetSize));
         target.sprite = RingSprite();
-        ring = MiniUI.Img("Anillo", root, new Color(1f, 0.85f, 0.2f, 0.95f), Vector2.zero, new Vector2(StartSize, StartSize));
+        target.raycastTarget = false;
+        ring = MiniUI.Img("Anillo", root, Yellow, Vector2.zero, new Vector2(StartSize, StartSize));
         ring.sprite = RingSprite();
+        ring.raycastTarget = false;
 
-        feedback = MiniUI.Label(root, "", 64, new Vector2(0, 280), new Vector2(900, 100), new Color(1f, 0.9f, 0.3f));
-        feedback.fontStyle = FontStyles.Bold;
+        pulse = MiniUI.Img("Pulso", root, Color.white, Vector2.zero, new Vector2(TargetSize, TargetSize));
+        pulse.sprite = RingSprite();
+        pulse.raycastTarget = false;
+        pulse.gameObject.SetActive(false);
+        slash = MiniUI.Img("Tajo", root, new Color(1f, 1f, 1f, 0.9f), Vector2.zero, new Vector2(420f, 12f));
+        slash.raycastTarget = false;
+        slash.gameObject.SetActive(false);
 
         StartRound();
     }
 
-    static Bounds GetBounds(GameObject go)
-    {
-        var rs = go.GetComponentsInChildren<Renderer>();
-        if (rs.Length == 0) return new Bounds(go.transform.position, Vector3.one * 0.3f);
-        Bounds b = rs[0].bounds;
-        for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
-        return b;
-    }
     static Sprite RingSprite()
     {
         if (ringSprite != null) return ringSprite;
@@ -153,54 +169,74 @@ public class Minigame_Machetazo : MinigameBase
         coco.SetPositionAndRotation(spot.position, spot.rotation);
         coco.localScale = cocoScale0;
         coco.gameObject.SetActive(true);
+        MinigameFX.ClearTint(coco.gameObject);
         cocoBasePos = coco.position;
+        cocoBaseRot = coco.rotation;
         cocoCenterWorld = coco.TransformPoint(cocoLocalCenter);
-        if (machete != null) machete.SetActive(false);
-        Vector2 local = Vector2.zero;
         Camera cam = Stage != null ? Stage.ActiveCamera : null;
-        if (cam != null)
-        {
-            Vector3 sp = cam.WorldToScreenPoint(cocoCenterWorld);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(root, new Vector2(sp.x, sp.y), null, out local);
-        }
+        Vector2 local = Vector2.zero;
+        MinigameFX.WorldToUI(root, cam, cocoCenterWorld, out local);
+        cocoUI = local;
         ring.rectTransform.anchoredPosition = local;
         target.rectTransform.anchoredPosition = local;
         ring.rectTransform.sizeDelta = new Vector2(StartSize, StartSize);
+        ring.color = new Color(Yellow.r, Yellow.g, Yellow.b, 0f);
         ring.gameObject.SetActive(true);
 
-        feedback.text = "";
+        slash.gameObject.SetActive(false);
+        pulse.gameObject.SetActive(false);
+        uiFxT = 1f;
+        flashT = 0f;
+        swung = lastGood = impactDone = false;
+
+        ApplyPopIn(0f);
+        if (machete != null && cam != null) { machete.SetActive(true); PlaceMachete(cam, 0f, 0f); }
+
         t = 0f;
         inputCooldown = 0.25f;
         step = Step.Shrinking;
     }
+    void ApplyPopIn(float k)
+    {
+        coco.position = cocoBasePos + Vector3.up * (cocoHeight * 1.6f * (1f - MinigameFX.EaseOutCubic(k)));
+        coco.localScale = cocoScale0 * MinigameFX.EaseOutBack(k);
+    }
 
     protected override void Tick(float dt)
     {
+        if (coco == null) return;
+        fx.Tick(dt);
+        dt = fx.Gate(dt);
         inputCooldown -= dt;
+        Camera cam = Stage != null ? Stage.ActiveCamera : null;
 
         if (step == Step.Shrinking)
         {
             t += dt;
             float k = Mathf.Clamp01(t / shrinkTime);
-            float size = Mathf.Lerp(StartSize, 90f, k);
+            float size = Mathf.Lerp(StartSize, EndSize, k);
             ring.rectTransform.sizeDelta = new Vector2(size, size);
+            float closeness = 1f - Mathf.Clamp01(Mathf.Abs(size - TargetSize) / 50f);
+            Color c = Color.Lerp(Yellow, Green, closeness);
+            c.a = Mathf.Min(0.95f, t / 0.15f);
+            ring.color = c;
+            target.rectTransform.sizeDelta = Vector2.one * (TargetSize * (1f + 0.05f * closeness * Mathf.Sin(Time.time * 18f)));
+
+            ApplyPopIn(t / PopInTime);
+            if (machete != null && cam != null)
+                PlaceMachete(cam, 0f, Mathf.Sin(Time.time * 6f) * cocoHeight * 0.04f);
 
             if (inputCooldown <= 0f && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
-            {
                 Judge(size);
-            }
             else if (k >= 1f)
-            {
                 Judge(-1f);
-            }
         }
         else
         {
             feedbackElapsed += dt;
-            AnimateFeedback();
+            AnimateFeedback(dt, cam);
 
-            feedbackTimer -= dt;
-            if (feedbackTimer <= 0f)
+            if (feedbackElapsed >= FeedbackTime)
             {
                 round++;
                 if (round >= Rounds) Finished = true;
@@ -211,45 +247,156 @@ public class Minigame_Machetazo : MinigameBase
 
     void Judge(float size)
     {
-        float s;
-        if (size < 0f) s = 0f;
-        else s = Mathf.Clamp01(1f - Mathf.Abs(size - TargetSize) / 130f);
-
+        float s = size < 0f ? 0f : Mathf.Clamp01(1f - Mathf.Abs(size - TargetSize) / Tolerance);
         totalScore += s;
-        ring.gameObject.SetActive(false);
-        feedback.text = size < 0f ? "¡Muy lento!" : s > 0.9f ? "¡PERFECTO!" : s > 0.6f ? "¡Bien!" : s > 0.25f ? "¡Casi!" : "¡Fallaste!";
-
-        lastGood = size >= 0f && s > 0.25f;
+        lastS = s;
+        swung = size >= 0f;
+        lastGood = swung && s > 0.25f;
+        impactDone = false;
         feedbackElapsed = 0f;
-        feedbackTimer = FeedbackTime;
-        if (machete != null && size >= 0f) machete.SetActive(true);
+        flashT = 0f;
+        ring.gameObject.SetActive(false);
+        target.rectTransform.sizeDelta = Vector2.one * TargetSize;
+        coco.position = cocoBasePos;
+        coco.localScale = cocoScale0;
         step = Step.Feedback;
-    }
-    void AnimateFeedback()
-    {
-        Camera cam = Stage != null ? Stage.ActiveCamera : null;
-        float k = Mathf.Clamp01(feedbackElapsed / FeedbackTime);
 
-        if (lastGood)
+        if (swung) MinigameFX.PlaySfx("machete_swing");
+        else Impact();
+    }
+
+    void Impact()
+    {
+        impactDone = true;
+        Camera cam = Stage != null ? Stage.ActiveCamera : null;
+        float u = cocoHeight;
+        Vector3 bias = cam != null ? (cam.transform.up * 0.7f - cam.transform.right * 0.5f) : Vector3.up;
+
+        string txt; Color col; int size = 64;
+        if (!swung)
         {
-            float e = 1f - (1f - k) * (1f - k);
-            coco.position = cocoBasePos + Vector3.up * (cocoHeight * 2f * e);
-            coco.localScale = cocoScale0 * (1f - k * k);
+            txt = "¡Muy lento!"; col = new Color(0.8f, 0.8f, 0.8f);
+            perfectStreak = 0;
+            MinigameFX.PlaySfx("machete_late");
+        }
+        else if (lastS > PerfectScore)
+        {
+            perfectStreak++;
+            txt = perfectStreak > 1 ? "¡PERFECTO! x" + perfectStreak : "¡PERFECTO!";
+            col = Gold; size = 84;
+            fx.Burst(cocoCenterWorld, Juice, 26, u, 5f, 0.12f, 0.8f, 8f, bias, 1.1f);
+            fx.Confetti(cocoCenterWorld, u, 30);
+            fx.Flash(root, new Color(1f, 0.95f, 0.6f, 0.3f), 0.25f);
+            fx.HitStop(0.08f);
+            Stage.Shake(0.9f, 0.3f);
+            MinigameFX.PlaySfx("machete_perfect");
+        }
+        else if (lastS > 0.6f)
+        {
+            perfectStreak = 0;
+            txt = "¡Bien!"; col = new Color(0.5f, 1f, 0.5f);
+            fx.Burst(cocoCenterWorld, Juice, 16, u, 4.5f, 0.12f, 0.7f, 8f, bias, 1.1f);
+            fx.HitStop(0.05f);
+            Stage.Shake(0.45f, 0.22f);
+            MinigameFX.PlaySfx("machete_good");
+        }
+        else if (lastS > 0.25f)
+        {
+            perfectStreak = 0;
+            txt = "¡Casi!"; col = new Color(1f, 0.75f, 0.3f);
+            fx.Burst(cocoCenterWorld, Juice, 8, u, 3.5f, 0.12f, 0.6f, 8f, bias, 1.1f);
+            fx.HitStop(0.03f);
+            Stage.Shake(0.25f, 0.18f);
+            MinigameFX.PlaySfx("machete_ok");
         }
         else
         {
-            Vector3 right = cam != null ? cam.transform.right : Vector3.right;
-            coco.position = cocoBasePos + right * (Mathf.Sin(k * 40f) * cocoHeight * 0.08f * (1f - k));
+            perfectStreak = 0;
+            txt = "¡Fallaste!"; col = new Color(1f, 0.35f, 0.35f);
+            fx.Burst(cocoCenterWorld, new Color(0.8f, 0.8f, 0.8f), 5, u, 3f, 0.1f, 0.4f, 6f, bias, 1.2f);
+            Stage.Shake(0.12f, 0.15f);
+            MinigameFX.PlaySfx("machete_miss");
+        }
+
+        if (lastGood)
+        {
+            MinigameFX.Tint(coco.gameObject, new Color(2.5f, 2.5f, 2.5f, 1f));
+            flashT = 0.08f;
+        }
+
+        fx.Pop(root, cocoUI + Vector2.up * 190f, txt, col, size, 80f, 1f);
+        slash.rectTransform.anchoredPosition = cocoUI;
+        slash.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 40f);
+        slash.gameObject.SetActive(swung);
+        pulse.rectTransform.anchoredPosition = cocoUI;
+        pulse.color = new Color(col.r, col.g, col.b, 0.9f);
+        pulse.gameObject.SetActive(true);
+        uiFxT = 0f;
+    }
+
+    void AnimateFeedback(float dt, Camera cam)
+    {
+        if (swung && !impactDone && feedbackElapsed >= MacheteSwingTime) Impact();
+
+        if (flashT > 0f)
+        {
+            flashT -= dt;
+            if (flashT <= 0f) MinigameFX.ClearTint(coco.gameObject);
+        }
+
+        if (uiFxT < 1f)
+        {
+            uiFxT = Mathf.Min(1f, uiFxT + dt / 0.3f);
+            float e = MinigameFX.EaseOutCubic(uiFxT);
+            Color pc = pulse.color; pc.a = 0.9f * (1f - uiFxT); pulse.color = pc;
+            pulse.rectTransform.sizeDelta = Vector2.one * (TargetSize * (1f + 1.4f * e));
+            slash.rectTransform.sizeDelta = new Vector2(420f * (0.4f + 0.6f * e), 12f * (1f - uiFxT));
+            Color sc = slash.color; sc.a = 0.9f * (1f - uiFxT); slash.color = sc;
+            if (uiFxT >= 1f) { pulse.gameObject.SetActive(false); slash.gameObject.SetActive(false); }
+        }
+        Vector3 right = cam != null ? cam.transform.right : Vector3.right;
+        Vector3 fwd = cam != null ? cam.transform.forward : Vector3.forward;
+        if (!impactDone)
+        {
+            coco.position = cocoBasePos;
+        }
+        else
+        {
+            float k = Mathf.Clamp01((feedbackElapsed - (swung ? MacheteSwingTime : 0f)) / ReactTime);
+            if (lastGood)
+            {
+                float e = MinigameFX.EaseOutCubic(k);
+                coco.position = cocoBasePos + Vector3.up * (cocoHeight * 2.2f * e) + right * (cocoHeight * 0.6f * k);
+                coco.rotation = Quaternion.AngleAxis(540f * k, fwd) * cocoBaseRot;
+                coco.localScale = cocoScale0 * (1f - k * k);
+            }
+            else
+            {
+                float hop = Mathf.Sin(Mathf.Min(1f, k * 1.6f) * Mathf.PI) * cocoHeight * 0.3f;
+                coco.position = cocoBasePos + Vector3.up * hop + right * (Mathf.Sin(k * 40f) * cocoHeight * 0.08f * (1f - k));
+            }
         }
 
         if (machete != null && machete.activeSelf && cam != null)
-        {
-            float m = Mathf.Clamp01(feedbackElapsed / MacheteSwingTime);
-            float angle = Mathf.Lerp(MacheteStartAngle, MacheteEndAngle, m);
-            machete.transform.position = cocoCenterWorld
-                                         + cam.transform.right * (cocoHeight * 0.8f)
-                                         + cam.transform.up * (cocoHeight * 0.5f);
-            machete.transform.rotation = Quaternion.AngleAxis(angle, cam.transform.forward) * macheteBaseRot;
-        }
+            PlaceMachete(cam, swung ? Mathf.Clamp01(feedbackElapsed / MacheteSwingTime) : 0f, 0f);
+    }
+
+    void PlaceMachete(Camera cam, float m, float bob)
+    {
+        Vector3 c = cocoCenterWorld;
+        Vector3 r = cam.transform.right, u = cam.transform.up;
+        float H = cocoHeight;
+        Vector3 a = c + r * (H * 1.0f) + u * (H * 1.0f);
+        Vector3 b = c - r * (H * 0.3f) - u * (H * 0.1f);
+        float e = MinigameFX.EaseInCubic(m);
+        machete.transform.position = Vector3.Lerp(a, b, e) + u * bob;
+        float ang = Mathf.Lerp(MacheteStartAngle, MacheteEndAngle, e);
+        machete.transform.rotation = Quaternion.AngleAxis(ang, cam.transform.forward) * macheteBaseRot;
+    }
+
+    public override void Cleanup()
+    {
+        fx.Clear();
+        base.Cleanup();
     }
 }
