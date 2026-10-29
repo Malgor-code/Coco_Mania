@@ -593,6 +593,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &19811249
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +744,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &19811254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1000,6 +1010,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &25275072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1661,6 +1676,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &35093172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1936,6 +1956,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &41233399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2442,6 +2467,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &81161920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2975,6 +3005,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &89502266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3363,6 +3398,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &103653753
 GameObject:
   m_ObjectHideFlags: 0
@@ -3706,6 +3746,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &105287175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3855,6 +3900,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &106074742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4025,6 +4075,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &106233215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4623,6 +4678,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &130832011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4884,6 +4944,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &136883567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5280,6 +5345,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &138355849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5541,6 +5611,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &147096588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5940,6 +6015,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &162957224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6580,6 +6660,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &176920689
 GameObject:
   m_ObjectHideFlags: 0
@@ -7089,6 +7174,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &194328371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7611,6 +7701,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &218765465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7886,6 +7981,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &219508937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8976,6 +9076,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f3daac6c1a046428a3969ebcde67c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sfxSource: {fileID: 330585548}
+  countdownAudio:
+    tres: {fileID: 0}
+    dos: {fileID: 0}
+    uno: {fileID: 0}
+    ya: {fileID: 0}
+    volume: 1
+    intervalo: 1
+  buttonHoverClip: {fileID: 0}
+  buttonPressClip: {fileID: 0}
+  buttonClickClip: {fileID: 8300000, guid: ead4746d40d28514592842984d944cf7, type: 3}
+  buttonVolume: 1
+  panelAudios:
+  - panel: 0
+    openClip: {fileID: 8300000, guid: dd3bdf4e204e17046932dfc1d1665db0, type: 3}
+    closeClip: {fileID: 0}
+    volume: 1
+  - panel: 6
+    openClip: {fileID: 8300000, guid: 67b0683d5e052af43b2fbc81f77004a3, type: 3}
+    closeClip: {fileID: 0}
+    volume: 1
+  - panel: 5
+    openClip: {fileID: 8300000, guid: a0b71aa51e83bdf46b0a1124abe40daf, type: 3}
+    closeClip: {fileID: 0}
+    volume: 1
+  - panel: 1
+    openClip: {fileID: 8300000, guid: 61ade4dcce48c194a934b492c023ea2d, type: 3}
+    closeClip: {fileID: 0}
+    volume: 1
+  - panel: 10
+    openClip: {fileID: 8300000, guid: 41a3db79b507318448f8b030228d7c6e, type: 3}
+    closeClip: {fileID: 0}
+    volume: 1
   runDayCount: 0
   currentPhase: 0
   machete: {fileID: 134951792}
@@ -9532,7 +9665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8540c9156e4969641b5d0cf44978cfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  everyNDays: 1
+  everyNDays: 5
   eventsEnabled: 1
   minRewardPercent: 0.1
   maxRewardPercent: 0.3
@@ -9846,6 +9979,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &262290227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10455,6 +10593,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &274132665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10730,6 +10873,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &275452205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10948,6 +11096,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &281853628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11317,6 +11470,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &300629402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11518,6 +11676,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &307379361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11915,6 +12078,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &314473344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12087,6 +12255,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -12212,6 +12381,103 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!82 &330585548
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &338703442
 GameObject:
   m_ObjectHideFlags: 0
@@ -12361,6 +12627,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &338998086
 GameObject:
   m_ObjectHideFlags: 0
@@ -13178,6 +13449,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &365094500
 GameObject:
   m_ObjectHideFlags: 0
@@ -13523,6 +13799,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &366889611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14033,6 +14314,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &375834725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14292,6 +14578,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &378340372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14462,6 +14753,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &381696187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14786,6 +15082,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &398601442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14972,6 +15273,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &403479523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16362,6 +16668,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &448870332
 GameObject:
   m_ObjectHideFlags: 0
@@ -17215,6 +17526,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &461776467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17640,6 +17956,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &466167289
 GameObject:
   m_ObjectHideFlags: 0
@@ -17834,6 +18155,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &466553289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18149,6 +18475,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &474740918
 GameObject:
   m_ObjectHideFlags: 0
@@ -18434,6 +18765,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &480091189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18671,6 +19007,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &486979092
 GameObject:
   m_ObjectHideFlags: 0
@@ -18728,6 +19069,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &486979095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19234,6 +19580,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &505142334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19493,6 +19844,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &507406543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19984,6 +20340,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &523151251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20079,6 +20440,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &528289361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20870,6 +21236,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &552899645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21287,6 +21658,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!222 &558954718
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21973,6 +22349,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &578312721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22195,6 +22576,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &583124702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22485,6 +22871,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &598543967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22808,6 +23199,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &603471665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23220,6 +23616,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &610488617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24031,6 +24432,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &631064153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24182,6 +24588,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &631124503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24497,6 +24908,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &635389170
 GameObject:
   m_ObjectHideFlags: 0
@@ -24844,6 +25260,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &643939684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25832,6 +26253,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &675398806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26061,6 +26487,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &678972368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26444,6 +26875,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &684582070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26541,6 +26977,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &685416554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26856,6 +27297,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &690126165
 GameObject:
   m_ObjectHideFlags: 0
@@ -26913,6 +27359,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &690126168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27404,6 +27855,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &704485734
 GameObject:
   m_ObjectHideFlags: 0
@@ -27598,6 +28054,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &709420558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27873,6 +28334,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &709954570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28059,6 +28525,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &710906520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28422,6 +28893,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &720640362
 GameObject:
   m_ObjectHideFlags: 0
@@ -28890,6 +29366,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &732043233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29166,6 +29647,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &736422813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29392,6 +29878,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &744037868
 GameObject:
   m_ObjectHideFlags: 0
@@ -29447,6 +29938,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &744037871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29615,6 +30111,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &744393964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29914,6 +30415,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &749039441
 GameObject:
   m_ObjectHideFlags: 0
@@ -30181,6 +30687,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &759198751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31140,6 +31651,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &790453883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31585,6 +32101,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &815678655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32268,6 +32789,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &841290115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32669,6 +33195,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &865761568
 GameObject:
   m_ObjectHideFlags: 0
@@ -33000,6 +33531,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &867946537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33380,6 +33916,11 @@ MonoBehaviour:
   hoverScale: 1.2
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &885868827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33896,6 +34437,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &894451668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33991,6 +34537,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &897016473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34427,6 +34978,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &907142976
 GameObject:
   m_ObjectHideFlags: 0
@@ -34847,6 +35403,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &923130059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35081,6 +35642,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &933792148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35479,6 +36045,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &946227126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36028,6 +36599,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &956576547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36125,6 +36701,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &957341750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36508,6 +37089,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &967925682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36659,6 +37245,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &971515936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36845,6 +37436,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &972088601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37029,6 +37625,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &972236812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37645,6 +38246,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &981175404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37831,6 +38437,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &985001140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38017,6 +38628,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &985144867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38871,6 +39487,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1026861513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39146,6 +39767,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1027083079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40199,6 +40825,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1067709820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40860,6 +41491,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1084640223
 GameObject:
   m_ObjectHideFlags: 0
@@ -41160,6 +41796,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1097392453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41633,6 +42274,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1107101287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41803,6 +42449,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1110995537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42117,6 +42768,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1112341602
 GameObject:
   m_ObjectHideFlags: 0
@@ -42210,6 +42866,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1114030965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42993,6 +43654,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1146973506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43196,6 +43862,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1148493767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43455,6 +44126,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1148640676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43780,6 +44456,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1167669628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44254,6 +44935,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1184556066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44726,6 +45412,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1191457210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45157,6 +45848,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1211340107
 GameObject:
   m_ObjectHideFlags: 0
@@ -45343,6 +46039,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1214155331
 GameObject:
   m_ObjectHideFlags: 0
@@ -45400,6 +46101,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1214155334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45584,6 +46290,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1218068089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46229,6 +46940,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1242533358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46418,6 +47134,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1243379911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46596,6 +47317,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1246639223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46903,6 +47629,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1254630239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47626,6 +48357,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1274729516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48048,6 +48784,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1292236440
 GameObject:
   m_ObjectHideFlags: 0
@@ -48105,6 +48846,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1292236443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48708,6 +49454,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1320967806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49031,6 +49782,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1328393576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49421,6 +50177,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1335949682
 GameObject:
   m_ObjectHideFlags: 0
@@ -50175,6 +50936,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1345645444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50477,6 +51243,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1358280270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50752,6 +51523,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1362179589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51891,6 +52667,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1400399600
 GameObject:
   m_ObjectHideFlags: 0
@@ -52085,6 +52866,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1403200053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52400,6 +53186,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1408509092
 GameObject:
   m_ObjectHideFlags: 0
@@ -52701,6 +53492,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1415080869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52980,6 +53776,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1418183937
 GameObject:
   m_ObjectHideFlags: 0
@@ -53174,6 +53975,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1425105874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53925,6 +54731,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1465957981
 GameObject:
   m_ObjectHideFlags: 0
@@ -54169,6 +54980,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1474266811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54839,6 +55655,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1482288838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55144,6 +55965,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1494348441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55615,6 +56441,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1513271596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55938,6 +56769,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1516518936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56333,6 +57169,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1541569546
 GameObject:
   m_ObjectHideFlags: 0
@@ -56501,6 +57342,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1543394241
 GameObject:
   m_ObjectHideFlags: 0
@@ -57092,6 +57938,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1560814932
 GameObject:
   m_ObjectHideFlags: 0
@@ -57185,6 +58036,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1561187302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58023,6 +58879,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1573739908
 GameObject:
   m_ObjectHideFlags: 0
@@ -58263,6 +59124,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1585848939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58861,6 +59727,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1626998096
 GameObject:
   m_ObjectHideFlags: 0
@@ -58918,6 +59789,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1626998099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59314,6 +60190,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1635637790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59785,6 +60666,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1642392249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60017,6 +60903,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1655395158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60292,6 +61183,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1660156682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60536,6 +61432,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1661360129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61471,6 +62372,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1698853781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61836,6 +62742,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1703376173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62070,6 +62981,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1704355575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62984,6 +63900,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1730661402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63081,6 +64002,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1730948858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63356,6 +64282,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1732770421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64035,6 +64966,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1746700726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64708,6 +65644,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1771361994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64892,6 +65833,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1779016989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65355,6 +66301,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1810334642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66077,6 +67028,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1846149384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66520,6 +67476,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1859585539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66617,6 +67578,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1862534273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66972,6 +67938,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1882598480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67978,6 +68949,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1923371843
 GameObject:
   m_ObjectHideFlags: 0
@@ -68218,6 +69194,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1930339021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68570,6 +69551,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1940791066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68738,6 +69724,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1945717920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68908,6 +69899,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1953746324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69667,6 +70663,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &1978948082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69945,6 +70946,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1 &1979993973
 GameObject:
   m_ObjectHideFlags: 0
@@ -70698,6 +71704,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2002744398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70923,6 +71934,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2013351055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71205,6 +72221,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2014244495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71405,6 +72426,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2025598250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71586,6 +72612,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2029077626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71924,6 +72955,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2048732973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72110,6 +73146,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2048794106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72704,6 +73745,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2066574108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72799,6 +73845,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2071759773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73332,6 +74383,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2087093060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73427,6 +74483,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2087540576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73861,6 +74922,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2094791714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74168,6 +75234,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2107611615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75040,6 +76111,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!114 &2140017249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75302,6 +76378,11 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverClipOverride: {fileID: 0}
+  pressClipOverride: {fileID: 0}
+  clickClipOverride: {fileID: 0}
+  overrideVolume: 1
+  silent: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

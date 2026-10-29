@@ -69,6 +69,7 @@ public partial class GameManager : MonoBehaviour
         if (machete != null) machete.SetActive(false);
         if (indicacionesPanel != null) indicacionesPanel.SetActive(false);
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        PlayPanelOpen(PanelAudioId.MenuPrincipal);
         SetCursorVisible(true);
         LoadGame();
         RecalculateAllStats();
@@ -173,6 +174,7 @@ public partial class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(true);
         SetCursorVisible(true);
+        PlayPanelOpen(PanelAudioId.Pausa);
     }
 
     public void ResumeGame()
@@ -181,6 +183,7 @@ public partial class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         SetCursorVisible(currentPhase != Phase.Hitting);
+        PlayPanelClose(PanelAudioId.Pausa);
     }
 
     public void GoToMainMenu()
