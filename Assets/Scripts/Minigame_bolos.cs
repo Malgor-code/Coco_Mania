@@ -1,17 +1,54 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Minigame_Bolos : MinigameBase
 {
-    public override string Name => "�Bolos de Coco!";
-    public override string Controls => "Clic para fijar el �ngulo (centro es lo mejor) y otro clic para la fuerza (zona verde). 3 tiros.";
+    public override string Name => Tr.T("¡Bolos de Coco!", "Coconut Bowling!", "Boliche de Coco!", "Bowling de noix de coco !", "Kokosnuss-Bowling!", "ココナッツボウリング！");
+    public override string Controls => Tr.T("Clic para fijar el ángulo (centro es lo mejor) y otro clic para la fuerza (zona verde). 3 tiros.", "Click to lock the angle (center is best), then click again for power (green zone). 3 throws.", "Clique para fixar o ângulo (o centro é o melhor) e clique de novo para a força (zona verde). 3 lançamentos.", "Clique pour fixer l'angle (le centre est le meilleur), puis clique à nouveau pour la puissance (zone verte). 3 lancers.", "Klicke, um den Winkel festzulegen (die Mitte ist am besten), und noch einmal für die Kraft (grüne Zone). 3 Würfe.", "クリックで角度を決定（中央が最適）、もう一度クリックで力を決定（緑のゾーン）。3投。");
 
-    public override string[] Intros => new[]
+    public override string[] Intros => new[] { IntrosES, IntrosEN, IntrosPT, IntrosFR, IntrosDE, IntrosJA }[Tr.Index];
+
+    static readonly string[] IntrosEN =
     {
-        "La bolera del puerto quebr�, as� que ahora los bolos son botellas y la bola es un coco. Nadie dijo que fuera higi�nico.",
-        "La t�a asegura que ella una vez hizo chuza con un coco. Hoy tienes la oportunidad de superarla.",
-        "Los cocos se cansaron de ser golpeados y exigen revancha: hoy ELLOS son la bola. Qu� iron�a.",
+        "The harbor bowling alley went bust, so now the pins are bottles and the ball is a coconut. Nobody said it was hygienic.",
+        "Your aunt swears she once bowled a strike with a coconut. Today you get the chance to beat her.",
+        "The coconuts got tired of being hit and demand a rematch: today THEY are the ball. How ironic.",
+    };
+
+    static readonly string[] IntrosPT =
+    {
+        "O boliche do porto faliu, então agora os pinos são garrafas e a bola é um coco. Ninguém disse que era higiênico.",
+        "A tia jura que uma vez fez um strike com um coco. Hoje você tem a chance de superá-la.",
+        "Os cocos cansaram de apanhar e exigem revanche: hoje ELES são a bola. Que ironia.",
+    };
+
+    static readonly string[] IntrosFR =
+    {
+        "Le bowling du port a fait faillite, alors maintenant les quilles sont des bouteilles et la boule est une noix de coco. Personne n'a dit que c'était hygiénique.",
+        "Ma tante jure qu'elle a un jour fait un strike avec une noix de coco. Aujourd'hui, tu as l'occasion de faire mieux.",
+        "Les noix de coco en ont assez de se faire frapper et exigent une revanche : aujourd'hui, ELLES sont la boule. Quelle ironie.",
+    };
+
+    static readonly string[] IntrosDE =
+    {
+        "Die Kegelbahn im Hafen ist pleitegegangen, also sind die Kegel jetzt Flaschen und die Kugel ist eine Kokosnuss. Hygienisch sollte es nie sein.",
+        "Die Tante schwört, sie habe einmal mit einer Kokosnuss einen Strike geworfen. Heute kannst du sie übertreffen.",
+        "Die Kokosnüsse haben es satt, geschlagen zu werden, und verlangen Revanche: Heute sind SIE die Kugel. Welche Ironie.",
+    };
+
+    static readonly string[] IntrosJA =
+    {
+        "港のボウリング場が潰れたので、ピンは瓶、ボールはココナッツになった。衛生的だなんて誰も言っていない。",
+        "おばさんは、ココナッツでストライクを出したことがあると言い張っている。今日はそれを超えるチャンスだ。",
+        "ココナッツたちは叩かれるのにうんざりして、リベンジを要求してきた。今日は彼らがボールだ。皮肉なものだ。",
+    };
+
+    static readonly string[] IntrosES =
+    {
+        "La bolera del puerto quebró, así que ahora los bolos son botellas y la bola es un coco. Nadie dijo que fuera higiénico.",
+        "La tía asegura que ella una vez hizo chuza con un coco. Hoy tienes la oportunidad de superarla.",
+        "Los cocos se cansaron de ser golpeados y exigen revancha: hoy ELLOS son la bola. Qué ironía.",
     };
 
     public override bool Is3D => true;
@@ -57,7 +94,7 @@ public class Minigame_Bolos : MinigameBase
     Image angleMarker, powerMarker, angleBar, powerBar;
     float anglePunch = 1f, powerPunch = 1f;
 
-    public override string Hud => "Tiro " + Mathf.Min(throwNumber + 1, Throws) + "/" + Throws + "     Pinos: " + totalPins;
+    public override string Hud => Tr.T("Tiro ", "Throw ", "Lançamento ", "Lancer ", "Wurf ", "投球 ") + Mathf.Min(throwNumber + 1, Throws) + "/" + Throws + Tr.T("     Pinos: ", "     Pins: ", "     Pinos: ", "     Quilles : ", "     Kegel: ", "     ピン：") + totalPins;
     public override float Score01 => Mathf.Clamp01(totalPins / 24f);
 
     protected override void Setup()
@@ -120,8 +157,8 @@ public class Minigame_Bolos : MinigameBase
         powerBar = MiniUI.Img("BarraFuerza", root, BarDark, new Vector2(0, -260), new Vector2(BarWidth, 26));
         MiniUI.Img("ZonaFuerza", root, new Color(0.3f, 0.7f, 0.3f), new Vector2((PowerTarget - 0.5f) * BarWidth, -260), new Vector2(BarWidth * PowerTol * 2f, 26));
         powerMarker = MiniUI.Img("MarcaFuerza", root, Color.white, new Vector2(0, -260), new Vector2(12, 46));
-        MiniUI.Label(root, "�NGULO", 22, new Vector2(-BarWidth / 2f - 70f, -190), new Vector2(120, 30));
-        MiniUI.Label(root, "FUERZA", 22, new Vector2(-BarWidth / 2f - 70f, -260), new Vector2(120, 30));
+        MiniUI.Label(root, Tr.T("ÁNGULO", "ANGLE", "ÂNGULO", "ANGLE", "WINKEL", "角度"), 22, new Vector2(-BarWidth / 2f - 70f, -190), new Vector2(120, 30));
+        MiniUI.Label(root, Tr.T("FUERZA", "POWER", "FORÇA", "PUISSANCE", "KRAFT", "パワー"), 22, new Vector2(-BarWidth / 2f - 70f, -260), new Vector2(120, 30));
 
         StartThrow();
     }
@@ -175,7 +212,7 @@ public class Minigame_Bolos : MinigameBase
                     angleBar.color = BarDark;
                     anglePunch = 0f;
                     bool centered = Mathf.Abs(angleValue - 0.5f) <= CenterTol;
-                    PopOnBar(-190f, centered ? "�Centro!" : "", centered);
+                    PopOnBar(-190f, centered ? Tr.T("¡Centro!", "Centered!", "Centro!", "Centré !", "Mittig!", "中央！") : "", centered);
                     MinigameFX.PlaySfx(centered ? "bolos_lock_good" : "bolos_lock");
                     step = Step.Power;
                     t = 0f;
@@ -194,7 +231,7 @@ public class Minigame_Bolos : MinigameBase
                     powerBar.color = BarDark;
                     powerPunch = 0f;
                     bool good = Mathf.Abs(powerValue - PowerTarget) <= PowerTol;
-                    PopOnBar(-260f, good ? "�Fuerza!" : "", good);
+                    PopOnBar(-260f, good ? Tr.T("¡Fuerza!", "Power!", "Força!", "Puissance !", "Kraft!", "パワー！") : "", good);
                     Launch();
                 }
                 break;
@@ -337,19 +374,19 @@ public class Minigame_Bolos : MinigameBase
         string txt; Color col; int size;
         if (pendingStrike)
         {
-            txt = "�CHUZA!"; col = Gold; size = 96;
+            txt = Tr.T("¡CHUZA!", "STRIKE!", "STRIKE!", "STRIKE !", "STRIKE!", "ストライク！"); col = Gold; size = 96;
             fx.Confetti(S.pinsRoot.position + Vector3.up * (u * 1.5f), u, 50);
             fx.Flash(root, new Color(1f, 0.9f, 0.3f, 0.3f), 0.3f);
             MinigameFX.PlaySfx("bolos_strike");
         }
         else if (pendingPins == 0)
         {
-            txt = "�Canaleta!"; col = new Color(1f, 0.4f, 0.4f); size = 72;
+            txt = Tr.T("¡Canaleta!", "Gutter ball!", "Canaleta!", "Gouttière !", "Rinne!", "ガター！"); col = new Color(1f, 0.4f, 0.4f); size = 72;
             MinigameFX.PlaySfx("bolos_gutter");
         }
         else
         {
-            txt = pendingPins + " pinos"; col = pendingPins >= 7 ? new Color(0.6f, 1f, 0.6f) : Color.white; size = 72;
+            txt = pendingPins + Tr.T(" pinos", pendingPins == 1 ? " pin" : " pins", pendingPins == 1 ? " pino" : " pinos", pendingPins == 1 ? " quille" : " quilles", " Kegel", "本"); col = pendingPins >= 7 ? new Color(0.6f, 1f, 0.6f) : Color.white; size = 72;
             MinigameFX.PlaySfx("bolos_pins");
         }
         fx.Pop(root, new Vector2(0, 60), txt, col, size, 60f, 1.2f);
@@ -388,7 +425,7 @@ public class Minigame_Bolos : MinigameBase
 
             pinT[i] += dt;
             float tt = pinT[i] - pinDelay[i];
-            if (tt < 0f) continue; 
+            if (tt < 0f) continue;
 
             if (!pinStarted[i])
             {

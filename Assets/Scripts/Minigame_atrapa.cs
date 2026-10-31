@@ -1,17 +1,54 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Minigame_Atrapa : MinigameBase
 {
-    public override string Name => "�Lluvia de Cocos!";
+    public override string Name => Tr.T("¡Lluvia de Cocos!", "Coconut Rain!", "Chuva de Cocos!", "Pluie de noix de coco !", "Kokosnussregen!", "ココナッツの雨！");
     public override float Duration => 20f;
-    public override string Controls => "Mueve el mouse para mover la canasta. Atrapa los cocos, dorado = x3, �esquiva las piedras!";
+    public override string Controls => Tr.T("Mueve el mouse para mover la canasta. Atrapa los cocos, dorado = x3, ¡esquiva las piedras!", "Move the mouse to move the basket. Catch the coconuts, golden = x3, dodge the rocks!", "Mova o mouse para mover a cesta. Pegue os cocos, dourado = x3, desvie das pedras!", "Bouge la souris pour déplacer le panier. Attrape les noix de coco, doré = x3, évite les pierres !", "Bewege die Maus, um den Korb zu bewegen. Fange die Kokosnüsse, golden = x3, weiche den Steinen aus!", "マウスでカゴを動かそう。ココナッツをキャッチ、金色は3倍！石は避けて！");
 
-    public override string[] Intros => new[]
+    public override string[] Intros => new[] { IntrosES, IntrosEN, IntrosPT, IntrosFR, IntrosDE, IntrosJA }[Tr.Index];
+
+    static readonly string[] IntrosEN =
     {
-        "Una palmera gigante perdi� la paciencia y empez� a soltar cocos como si no hubiera ma�ana. Agarra una canasta.",
-        "El pron�stico dijo 'lluvia ligera'. El pron�stico minti�: llueven cocos. Y alguna que otra piedra.",
-        "La t�a te prest� su canasta del mandado. Te pidi� que no la rompas. Spoiler: la vas a romper.",
+        "A giant palm tree lost its patience and started dropping coconuts like there's no tomorrow. Grab a basket.",
+        "The forecast said 'light rain'. The forecast lied: it's raining coconuts. And the occasional rock.",
+        "Your aunt lent you her shopping basket. She asked you not to break it. Spoiler: you're going to break it.",
+    };
+
+    static readonly string[] IntrosPT =
+    {
+        "Uma palmeira gigante perdeu a paciência e começou a soltar cocos como se não houvesse amanhã. Pegue uma cesta.",
+        "A previsão dizia 'chuva fraca'. A previsão mentiu: está chovendo cocos. E uma ou outra pedra.",
+        "A tia te emprestou a cesta de compras dela. Pediu que você não quebrasse. Spoiler: você vai quebrar.",
+    };
+
+    static readonly string[] IntrosFR =
+    {
+        "Un palmier géant a perdu patience et s'est mis à lâcher des noix de coco comme s'il n'y avait pas de lendemain. Prends un panier.",
+        "La météo annonçait « légère pluie ». La météo a menti : il pleut des noix de coco. Et quelques pierres.",
+        "Ma tante t'a prêté son panier de courses. Elle t'a demandé de ne pas le casser. Spoiler : tu vas le casser.",
+    };
+
+    static readonly string[] IntrosDE =
+    {
+        "Eine riesige Palme hat die Geduld verloren und lässt Kokosnüsse fallen, als gäbe es kein Morgen. Schnapp dir einen Korb.",
+        "Die Vorhersage sagte 'leichter Regen'. Die Vorhersage hat gelogen: Es regnet Kokosnüsse. Und hin und wieder einen Stein.",
+        "Die Tante hat dir ihren Einkaufskorb geliehen. Sie hat gebeten, ihn nicht kaputt zu machen. Spoiler: Du wirst ihn kaputt machen.",
+    };
+
+    static readonly string[] IntrosJA =
+    {
+        "巨大なヤシの木が我慢の限界を迎え、明日がないかのようにココナッツを落とし始めた。カゴを持て。",
+        "天気予報は「小雨」と言っていた。予報は嘘をついた。降ってくるのはココナッツ。ときどき石も。",
+        "おばさんが買い物カゴを貸してくれた。壊さないでね、と言われた。ネタバレ：壊す。",
+    };
+
+    static readonly string[] IntrosES =
+    {
+        "Una palmera gigante perdió la paciencia y empezó a soltar cocos como si no hubiera mañana. Agarra una canasta.",
+        "El pronóstico dijo 'lluvia ligera'. El pronóstico mintió: llueven cocos. Y alguna que otra piedra.",
+        "La tía te prestó su canasta del mandado. Te pidió que no la rompas. Spoiler: la vas a romper.",
     };
 
     public override bool Is3D => true;
@@ -59,7 +96,7 @@ public class Minigame_Atrapa : MinigameBase
     float lastU = 0.5f;
     int points, streak;
 
-    public override string Hud => "Puntos: " + points;
+    public override string Hud => Tr.T("Puntos: ", "Points: ", "Pontos: ", "Points : ", "Punkte: ", "ポイント：") + points;
 
     public override float Score01
     {
@@ -249,7 +286,7 @@ public class Minigame_Atrapa : MinigameBase
         {
             fx.Pop(root, ui + Vector2.up * 40f, txt, tcol, size);
             if (streak > 0 && streak % 5 == 0)
-                fx.Pop(root, ui + Vector2.up * 150f, "�Racha x" + streak + "!", Gold, 44, 70f, 1f);
+                fx.Pop(root, ui + Vector2.up * 150f, Tr.T("¡Racha x", "Streak x", "Sequência x", "Série x", "Serie x", "連続 x") + streak + "!", Gold, 44, 70f, 1f);
         }
     }
 

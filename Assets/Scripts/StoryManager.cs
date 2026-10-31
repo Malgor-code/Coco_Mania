@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -33,6 +33,7 @@ public class StoryManager : MonoBehaviour
     public RectTransform dialogueBox;
 
     [Header("Ajustes")]
+    [Tooltip("Ya no se usa: el nombre sale de LocalizationManager (clave story_speaker).")]
     public string speakerName = "El Emprendedor";
     public float charsPerSecond = 45f;
     [Range(0f, 1f)] public float dimStrong = 0.6f;
@@ -62,7 +63,7 @@ public class StoryManager : MonoBehaviour
         new Keyword("agua de coco|cocos?",                         new Color(0.31f, 0.84f, 0.91f)),
         new Keyword("machetes?|gacha|monedas?",                    new Color(1f, 0.60f, 0.20f)),
         new Keyword("pedidos?|entregar|entrega",                   new Color(1f, 0.84f, 0.29f)),
-        new Keyword("árbol de mejoras|mejoras?|scroll|tienda",     new Color(0.55f, 0.92f, 0.45f)),
+        new Keyword("Ã¡rbol de mejoras|mejoras?|scroll|tienda",     new Color(0.55f, 0.92f, 0.45f)),
     };
 
     [Header("Sonido (opcional)")]
@@ -76,7 +77,7 @@ public class StoryManager : MonoBehaviour
     GameManager gm;
     bool isShowing, running, nextPressed, skipRequested, lineDone;
     int lastChapterShown = 0;
-    Regex kwRegex;
+    Regex kwRegexLatin, kwRegexJa;
     float[] charRevealTime = new float[256];
 
     void Awake()
@@ -212,7 +213,7 @@ public class StoryManager : MonoBehaviour
     IEnumerator IntroRoutine()
     {
         yield return null;
-        yield return Say(IntroLines, dimStrong, true);
+        yield return Say(StoryTexts.Intro, dimStrong, true);
         Cursor.visible = false;
         PlayerPrefs.SetInt(IntroKey, 1);
         PlayerPrefs.Save();
@@ -232,16 +233,16 @@ public class StoryManager : MonoBehaviour
     IEnumerator TutorialRoutine()
     {
         yield return WaitForFree();
-        yield return Say(TutorialOrderLines, dimStrong, false);
+        yield return Say(StoryTexts.TutorialOrder, dimStrong, false);
         if (gm.deudaPanel != null && !gm.deudaPanel.activeSelf) gm.ToggleDeudaPanel();
         yield return new WaitForSecondsRealtime(0.35f);
-        yield return Say(TutorialDeudaLines, dimLight, false);
+        yield return Say(StoryTexts.TutorialDeuda, dimLight, false);
         while (gm.deudaPanel != null && gm.deudaPanel.activeSelf) yield return null;
         yield return new WaitForSecondsRealtime(0.25f);
-        yield return Say(TutorialUpgradeIntroLines, dimStrong, false);
+        yield return Say(StoryTexts.TutorialUpgradeIntro, dimStrong, false);
         if (gm.upgradeTreePanel != null && !gm.upgradeTreePanel.activeSelf) gm.ToggleUpgradeTreePanel();
         yield return new WaitForSecondsRealtime(0.4f);
-        yield return Say(TutorialTreeLines, dimLight, false);
+        yield return Say(StoryTexts.TutorialTree, dimLight, false);
 
         PlayerPrefs.SetInt(TutorialKey, 1);
         PlayerPrefs.SetInt(ChapterKey + 1, 1);
@@ -251,7 +252,7 @@ public class StoryManager : MonoBehaviour
     IEnumerator ChapterRoutine(int cycle, string key)
     {
         yield return WaitForFree();
-        string[] lines = (cycle >= 0 && cycle < Chapters.Length) ? Chapters[cycle] : null;
+        string[] lines = StoryTexts.Chapter(cycle);
         if (lines != null) yield return Say(lines, dimStrong, false);
         PlayerPrefs.SetInt(key, 1);
         PlayerPrefs.Save();
@@ -263,6 +264,15 @@ public class StoryManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.35f);
         while (CoconutUnlockPanel.BlocksPause || (gm != null && gm.isPaused)) yield return null;
     }
+
+    string SpeakerName()
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc == null) return speakerName;
+        string s = loc.Get("story_speaker");
+        return s == "story_speaker" ? speakerName : s;
+    }
+
     IEnumerator Say(string[] lines, float dim, bool freezeGame)
     {
         if (lines == null || lines.Length == 0 || dialoguePanel == null || bodyText == null) yield break;
@@ -282,7 +292,7 @@ public class StoryManager : MonoBehaviour
             c.a = dim;
             backdrop.color = c;
         }
-        if (speakerText != null) speakerText.text = speakerName;
+        if (speakerText != null) speakerText.text = SpeakerName();
         if (dialogueBox != null)
         {
             const float dur = 0.25f;
@@ -355,32 +365,68 @@ public class StoryManager : MonoBehaviour
         const float c3 = c1 + 1f;
         return 1f + c3 * Mathf.Pow(k - 1f, 3f) + c1 * Mathf.Pow(k - 1f, 2f);
     }
+    static readonly string[] ExtraLatin =
+    {
+        "coconut water|coconuts?|Ã¡gua de coco|eau de coco|noix de coco|Kokoswasser|KokosnÃ¼sse|Kokosnuss",
+        "machetes?|gacha|coins?|moedas?|machettes?|piÃ¨ces?|Macheten?|MÃ¼nzen?",
+        "orders?|deliver|entregar|entrega|commandes?|livrer|livraison|Bestellung(?:en)?|liefern|Lieferung",
+        "upgrade tree|upgrades?|shop|Ã¡rvore de melhorias|melhorias?|rolagem|loja|arbre d'amÃ©liorations|amÃ©liorations?|molette|boutique|Verbesserungsbaum|Verbesserung(?:en)?|Scrollen|Laden"
+    };
+
+    static readonly string[] ExtraJa =
+    {
+        "ã‚³ã‚³ãƒŠãƒƒãƒ„ã‚¦ã‚©ãƒ¼ã‚¿ãƒ¼|ã‚³ã‚³ãƒŠãƒƒãƒ„|ã‚³ã‚³ãƒŠãƒ„",
+        "ãƒžãƒã‚§ãƒ¼ãƒ†|ã‚¬ãƒãƒ£|ã‚³ã‚¤ãƒ³",
+        "æ³¨æ–‡|å±Šã‘ã‚‹|å±Šã‘|é…é”",
+        "ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ãƒ„ãƒªãƒ¼|ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰|ã‚·ãƒ§ãƒƒãƒ—|ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«|ãƒ›ã‚¤ãƒ¼ãƒ«"
+    };
+
     void BuildKeywordRegex()
     {
-        kwRegex = null;
-        if (keywords == null || keywords.Length == 0) return;
+        kwRegexLatin = CompileKeywords(false);
+        kwRegexJa = CompileKeywords(true);
+    }
 
-        var sb = new StringBuilder(@"\b(?:");
-        for (int i = 0; i < keywords.Length; i++)
+    Regex CompileKeywords(bool japanese)
+    {
+        int baseCount = keywords != null ? keywords.Length : 0;
+        int n = Mathf.Max(baseCount, ExtraLatin.Length);
+        var sb = new StringBuilder(japanese ? "(?:" : @"\b(?:");
+        bool any = false;
+        for (int i = 0; i < n; i++)
         {
-            if (keywords[i] == null || string.IsNullOrEmpty(keywords[i].pattern)) continue;
-            if (i > 0) sb.Append('|');
-            sb.Append("(?<k").Append(i).Append('>').Append(keywords[i].pattern).Append(')');
-        }
-        sb.Append(@")\b");
+            string basePattern = (i < baseCount && keywords[i] != null) ? keywords[i].pattern : null;
+            string extra = i < ExtraLatin.Length ? (japanese ? ExtraJa[i] : ExtraLatin[i]) : null;
+            string p;
+            if (japanese) p = extra;
+            else if (!string.IsNullOrEmpty(basePattern) && !string.IsNullOrEmpty(extra)) p = basePattern + "|" + extra;
+            else p = !string.IsNullOrEmpty(basePattern) ? basePattern : extra;
+            if (string.IsNullOrEmpty(p)) continue;
 
-        try { kwRegex = new Regex(sb.ToString(), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); }
-        catch (System.ArgumentException e) { Debug.LogWarning("StoryManager: patron de palabra clave invalido. " + e.Message); }
+            if (any) sb.Append('|');
+            sb.Append("(?<k").Append(i).Append('>').Append(p).Append(')');
+            any = true;
+        }
+        if (!any) return null;
+        sb.Append(japanese ? ")" : @")\b");
+
+        try { return new Regex(sb.ToString(), RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); }
+        catch (System.ArgumentException e)
+        {
+            Debug.LogWarning("StoryManager: patron de palabra clave invalido. " + e.Message);
+            return null;
+        }
     }
 
     string Highlight(string s)
     {
-        if (kwRegex == null) return s;
-        return kwRegex.Replace(s, m =>
+        Regex rx = Tr.Lang == Language.Japanese ? kwRegexJa : kwRegexLatin;
+        if (rx == null) return s;
+        return rx.Replace(s, m =>
         {
             for (int i = 0; i < keywords.Length; i++)
             {
-                if (m.Groups["k" + i].Success)
+                if (keywords[i] != null && m.Groups["k" + i].Success)
                     return "<color=#" + ColorUtility.ToHtmlStringRGB(keywords[i].color) + "><b>" + m.Value + "</b></color>";
             }
             return m.Value;
@@ -392,13 +438,20 @@ public class StoryManager : MonoBehaviour
         return "<color=#" + ColorUtility.ToHtmlStringRGB(numberColor) + "><b>" + value + "</b></color>";
     }
 
+    static readonly string[] DayPlural = { "dÃ­as", "days", "dias", "jours", "Tage", "æ—¥" };
+    static readonly string[] DaySingular = { "dÃ­a", "day", "dia", "jour", "Tag", "æ—¥" };
+
     string Fill(string s)
     {
         s = Highlight(s);
         if (gm == null) return s;
 
         int days = gm.DaysToPlay;
-        return s.Replace("{days} días", Num(days + (days == 1 ? " día" : " días")))
+        int li = Tr.Index;
+        string sep = Tr.Lang == Language.Japanese ? "" : " ";
+        string withWord = "{days}" + sep + DayPlural[li];
+        string shown = days + sep + (days == 1 ? DaySingular[li] : DayPlural[li]);
+        return s.Replace(withWord, Num(shown))
                 .Replace("{days}", Num(days.ToString()))
                 .Replace("{ml}", Num(GameManager.FormatWater(gm.waterTargetML)))
                 .Replace("{cycle}", Num(gm.billCycle.ToString()));
@@ -412,79 +465,4 @@ public class StoryManager : MonoBehaviour
         for (int i = 0; i <= 20; i++) PlayerPrefs.DeleteKey(ChapterKey + i);
         PlayerPrefs.Save();
     }
-
-    static readonly string[] IntroLines =
-    {
-        "Soy un emprendedor del puerto, y si hay algo que disfruto de verdad es destruir cocos.",
-        "Cada coco que parto suelta agua fresca, y esa agua es mi negocio.",
-        "Tengo un machete oxidado, mucha energía y ningún plan mejor. ¡Ayúdame a romper todos los cocos que pueda antes de quedarme sin aliento!"
-    };
-
-    static readonly string[] TutorialOrderLines =
-    {
-        "¡Primera ronda terminada! Ya hay agua de coco en las jarras.",
-        "Pero ojo: tienes que entregar tu pedido.",
-        "Mi tía Rosa me pidió {ml} de agua de coco para su cumpleaños, ¡y la fiesta es dentro de {days} días!",
-        "Vamos a ver cómo va ese pedido."
-    };
-
-    static readonly string[] TutorialDeudaLines =
-    {
-        "Aquí ves cuánta agua te falta y cuántos días te quedan para juntarla.",
-        "Cuando tengas suficiente, el botón de entregar se activa. Cierra este panel cuando estés listo."
-    };
-
-    static readonly string[] TutorialUpgradeIntroLines =
-    {
-        "Con la misma agua también puedes mejorarte: ser más fuerte, más rápido y más listo.",
-        "Echemos un vistazo a las mejoras."
-    };
-
-    static readonly string[] TutorialTreeLines =
-    {
-        "Este es el árbol de mejoras. Muévete con el scroll: la rueda del mouse acerca y aleja, y arrastrando con el botón central te desplazas.",
-        "Desde aquí también puedes comprar machetes en la tienda y probar suerte en la gacha con las monedas que te dan los cocos.",
-        "Pero ojo: todo se paga con la misma agua del pedido, así que elige con cabeza. ¡Ahora sigue tu camino, emprendedor!"
-    };
-
-    static readonly string[][] Chapters =
-    {
-        null,
-        new[] { "Pedido {cycle}: mi tía Rosa quiere {ml} para su cumpleaños. ¡Tengo {days} días!" },
-        new[] { "¡Tía Rosa quedó feliz! La noticia corrió por toda la familia.",
-                "Mi primo Mateo cumple 6 años y quiere una piñata... de coco. Pidió {ml}. Tengo {days} días." },
-        new[] { "La fiesta de Mateo fue un éxito: los niños pedían \"otro coco, otro coco\".",
-                "Ahora la escuela del barrio organiza una kermés y necesita {ml}. ¡{days} días!" },
-        new[] { "Los niños de la kermés salieron saltando de felicidad.",
-                "Mi prima Luna se casa en la playa y quiere brindar con agua de coco fresca: {ml} para dentro de {days} días." },
-        new[] { "Una boda preciosa, y varios invitados preguntaron quién surte el agua.",
-                "Mis abuelos cumplen 50 años de casados y toda la familia llegará al puerto. Piden {ml}. Tengo {days} días." },
-        new[] { "Los abuelos lloraron de emoción (y se tomaron como tres litros).",
-                "Ahora el parque central hará la Gran Fiesta Infantil, con payasos y 200 niños. Piden {ml} en {days} días." },
-        new[] { "200 niños y ni una gota sobrante. Soy un profesional.",
-                "El pueblo entero celebra la Fiesta del Puerto y el comité me pide {ml}. ¡Tengo {days} días!" },
-        new[] { "Todo el pueblo habla de mi agua de coco.",
-                "El alcalde de Villa Marea, el pueblo vecino, quiere {ml} para su feria anual. Plazo: {days} días." },
-        new[] { "Villa Marea me nombró \"Cortador Honorario\".",
-                "La ciudad de San Cocotal organizará su Festival de Faros y necesita {ml}. Plazo: {days} días." },
-        new[] { "Las luces del festival se reflejaban en mi machete.",
-                "Ahora la capital quiere {ml} para el concierto del estadio. Ya no es una fiesta: es una multitud. {days} días." },
-        new[] { "Cincuenta mil personas y ni una sola con sed. Anotado.",
-                "El estado de Costa Dorada va a declarar el Día del Coco y pide {ml}. Tengo {days} días." },
-        new[] { "El gobernador me regaló una medalla de latón con forma de coco.",
-                "Cinco estados se juntan en el Carnaval Unido y piden {ml} entre todos. ¡{days} días!" },
-        new[] { "Los carnavales nunca vieron tanta agua de coco.",
-                "Llega un mensajero real desde el Reino de Palmeralia: la Reina quiere {ml} para su banquete. Plazo: {days} días." },
-        new[] { "La Reina Palmira probó el agua y dijo: \"¡Exquisita!\".",
-                "Pero la República de Cocolandia, su eterna rival, exige {ml} para su Gran Desfile. ¡{days} días!" },
-        new[] { "Las dos naciones firmaron la paz... brindando con coco.",
-                "Las Mil Islas convocan la Cumbre de las Naciones y piden {ml}. Es el pedido más grande hasta ahora: {days} días." },
-        new[] { "Si hasta reyes y presidentes me escriben...",
-                "Último pedido: el Festival Mundial de las Fiestas, el cumpleaños de todos los niños de todos los reinos. Piden {ml} en {days} días.",
-                "Es el pedido de mi vida. ¡Vamos con todo!" },
-        new[] { "¡Lo logré! Entregué el último pedido y el mundo entero brindó con agua de coco.",
-                "Desde el puerto, un emprendedor, un machete y muchísimos cocos hicieron una fiesta para todos.",
-                "¡GRACIAS POR JUGAR!",
-                "El juego sigue en modo infinito, por si quieres romper unos cocos más." }
-    };
 }

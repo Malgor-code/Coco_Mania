@@ -1,15 +1,52 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Minigame_Machetazo : MinigameBase
 {
-    public override string Name => "�Machetazo Perfecto!";
-    public override string Controls => "Clic justo cuando el anillo amarillo llegue al c�rculo gris. 8 cocos, �precisi�n!";
+    public override string Name => Tr.T("¡Machetazo Perfecto!", "Perfect Machete Strike!", "Golpe de Machete Perfeito!", "Coup de machette parfait !", "Perfekter Machetenhieb!", "完璧なマチェーテ斬り！");
+    public override string Controls => Tr.T("Clic justo cuando el anillo amarillo llegue al círculo gris. 8 cocos, ¡precisión!", "Click right when the yellow ring reaches the gray circle. 8 coconuts, precision!", "Clique exatamente quando o anel amarelo chegar ao círculo cinza. 8 cocos, precisão!", "Clique pile quand l'anneau jaune atteint le cercle gris. 8 noix de coco, de la précision !", "Klicke genau, wenn der gelbe Ring den grauen Kreis erreicht. 8 Kokosnüsse, Präzision!", "黄色いリングが灰色の円に重なった瞬間にクリック。ココナッツ8個、狙いは正確に！");
 
-    public override string[] Intros => new[]
+    public override string[] Intros => new[] { IntrosES, IntrosEN, IntrosPT, IntrosFR, IntrosDE, IntrosJA }[Tr.Index];
+
+    static readonly string[] IntrosEN =
     {
-        "El maestro machetero del puerto te reta: 'Un buen corte no se hace r�pido, se hace en el momento exacto'. Luego se fue a comer tacos.",
-        "Un chef gourmet necesita cocos cortados con precisi�n quir�rgica. Paga bien. Pregunta poco.",
+        "The harbor's machete master challenges you: 'A good cut isn't made fast, it's made at the exact moment.' Then he left to eat tacos.",
+        "A gourmet chef needs coconuts cut with surgical precision. Pays well. Asks few questions.",
+        "They say the perfect machete strike makes the coconut sigh with relief. Today we find out.",
+    };
+
+    static readonly string[] IntrosPT =
+    {
+        "O mestre do machete do porto te desafia: 'Um bom corte não se faz rápido, se faz no momento exato'. Depois foi comer tacos.",
+        "Um chef gourmet precisa de cocos cortados com precisão cirúrgica. Paga bem. Pergunta pouco.",
+        "Dizem que o golpe perfeito faz o coco suspirar de alívio. Hoje vamos comprovar.",
+    };
+
+    static readonly string[] IntrosFR =
+    {
+        "Le maître machettiste du port te défie : « Une bonne coupe ne se fait pas vite, elle se fait au moment exact. » Puis il est parti manger des tacos.",
+        "Un chef gastronomique a besoin de noix de coco coupées avec une précision chirurgicale. Il paie bien. Il pose peu de questions.",
+        "On dit que la coupe parfaite fait soupirer la noix de coco de soulagement. Aujourd'hui, on vérifie.",
+    };
+
+    static readonly string[] IntrosDE =
+    {
+        "Der Machetenmeister des Hafens fordert dich heraus: 'Ein guter Schnitt ist nicht schnell, er kommt im genau richtigen Moment.' Dann ging er Tacos essen.",
+        "Ein Gourmet-Koch braucht Kokosnüsse, die mit chirurgischer Präzision geschnitten sind. Zahlt gut. Fragt wenig.",
+        "Man sagt, der perfekte Machetenhieb lässt die Kokosnuss erleichtert aufseufzen. Heute überprüfen wir das.",
+    };
+
+    static readonly string[] IntrosJA =
+    {
+        "港のマチェーテの達人が挑戦してくる。「いい斬りは速さじゃない、ぴったりのタイミングで決まるんだ」。そう言って、タコスを食べに行ってしまった。",
+        "グルメなシェフが、外科手術のような精度で切ったココナッツを求めている。報酬は高い。詮索は少ない。",
+        "完璧な一撃を受けたココナッツは、ほっとして息をつくと言われている。今日、それを確かめよう。",
+    };
+
+    static readonly string[] IntrosES =
+    {
+        "El maestro machetero del puerto te reta: 'Un buen corte no se hace rápido, se hace en el momento exacto'. Luego se fue a comer tacos.",
+        "Un chef gourmet necesita cocos cortados con precisión quirúrgica. Paga bien. Pregunta poco.",
         "Dicen que el machetazo perfecto hace que el coco suspire de alivio. Hoy lo comprobamos.",
     };
 
@@ -19,7 +56,7 @@ public class Minigame_Machetazo : MinigameBase
     const float TargetSize = 170f;
     const float StartSize = 520f;
     const float EndSize = 60f;
-    const float Tolerance = 120f; 
+    const float Tolerance = 120f;
     const float PerfectScore = 0.88f;
     const float FeedbackTime = 0.85f;
     const float MacheteSwingTime = 0.16f;
@@ -64,7 +101,7 @@ public class Minigame_Machetazo : MinigameBase
 
     static Sprite ringSprite;
 
-    public override string Hud => "Coco " + Mathf.Min(round + 1, Rounds) + "/" + Rounds;
+    public override string Hud => Tr.T("Coco ", "Coconut ", "Coco ", "Noix de coco ", "Kokosnuss ", "ココナッツ ") + Mathf.Min(round + 1, Rounds) + "/" + Rounds;
     public override float Score01 => Mathf.Clamp01(totalScore / Rounds);
 
     protected override void Setup()
@@ -275,14 +312,14 @@ public class Minigame_Machetazo : MinigameBase
         string txt; Color col; int size = 64;
         if (!swung)
         {
-            txt = "�Muy lento!"; col = new Color(0.8f, 0.8f, 0.8f);
+            txt = Tr.T("¡Muy lento!", "Too slow!", "Muito lento!", "Trop lent !", "Zu langsam!", "遅すぎ！"); col = new Color(0.8f, 0.8f, 0.8f);
             perfectStreak = 0;
             MinigameFX.PlaySfx("machete_late");
         }
         else if (lastS > PerfectScore)
         {
             perfectStreak++;
-            txt = perfectStreak > 1 ? "�PERFECTO! x" + perfectStreak : "�PERFECTO!";
+            txt = perfectStreak > 1 ? Tr.T("¡PERFECTO! x", "PERFECT! x", "PERFEITO! x", "PARFAIT ! x", "PERFEKT! x", "パーフェクト！ x") + perfectStreak : Tr.T("¡PERFECTO!", "PERFECT!", "PERFEITO!", "PARFAIT !", "PERFEKT!", "パーフェクト！");
             col = Gold; size = 84;
             fx.Burst(cocoCenterWorld, Juice, 26, u, 5f, 0.12f, 0.8f, 8f, bias, 1.1f);
             fx.Confetti(cocoCenterWorld, u, 30);
@@ -294,7 +331,7 @@ public class Minigame_Machetazo : MinigameBase
         else if (lastS > 0.6f)
         {
             perfectStreak = 0;
-            txt = "�Bien!"; col = new Color(0.5f, 1f, 0.5f);
+            txt = Tr.T("¡Bien!", "Nice!", "Bom!", "Bien !", "Gut!", "いいね！"); col = new Color(0.5f, 1f, 0.5f);
             fx.Burst(cocoCenterWorld, Juice, 16, u, 4.5f, 0.12f, 0.7f, 8f, bias, 1.1f);
             fx.HitStop(0.05f);
             Stage.Shake(0.45f, 0.22f);
@@ -303,7 +340,7 @@ public class Minigame_Machetazo : MinigameBase
         else if (lastS > 0.25f)
         {
             perfectStreak = 0;
-            txt = "�Casi!"; col = new Color(1f, 0.75f, 0.3f);
+            txt = Tr.T("¡Casi!", "Almost!", "Quase!", "Presque !", "Fast!", "おしい！"); col = new Color(1f, 0.75f, 0.3f);
             fx.Burst(cocoCenterWorld, Juice, 8, u, 3.5f, 0.12f, 0.6f, 8f, bias, 1.1f);
             fx.HitStop(0.03f);
             Stage.Shake(0.25f, 0.18f);
@@ -312,7 +349,7 @@ public class Minigame_Machetazo : MinigameBase
         else
         {
             perfectStreak = 0;
-            txt = "�Fallaste!"; col = new Color(1f, 0.35f, 0.35f);
+            txt = Tr.T("¡Fallaste!", "Missed!", "Errou!", "Raté !", "Verfehlt!", "ミス！"); col = new Color(1f, 0.35f, 0.35f);
             fx.Burst(cocoCenterWorld, new Color(0.8f, 0.8f, 0.8f), 5, u, 3f, 0.1f, 0.4f, 6f, bias, 1.2f);
             Stage.Shake(0.12f, 0.15f);
             MinigameFX.PlaySfx("machete_miss");

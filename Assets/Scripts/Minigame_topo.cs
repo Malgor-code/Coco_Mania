@@ -1,22 +1,59 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Minigame_Topo : MinigameBase
 {
-    public override string Name => "�Topo-Coco!";
+    public override string Name => Tr.T("¡Topo-Coco!", "Coco-Mole!", "Toupeira-Coco!", "Taupe-Coco !", "Kokos-Maulwurf!", "ココナッツもぐらたたき！");
     public override float Duration => 20f;
-    public override string Controls => "Clic en los cocos que asoman. Dorado = x3. �No le pegues al podrido (morado)!";
+    public override string Controls => Tr.T("Clic en los cocos que asoman. Dorado = x3. ¡No le pegues al podrido (morado)!", "Click the coconuts as they pop up. Golden = x3. Don't hit the rotten one (purple)!", "Clique nos cocos que aparecem. Dourado = x3. Não bata no podre (roxo)!", "Clique sur les noix de coco qui sortent. Doré = x3. Ne tape pas la pourrie (violette) !", "Klicke auf die Kokosnüsse, die auftauchen. Golden = x3. Schlage nicht auf die faule (lila)!", "出てくるココナッツをクリック。金色は3倍！腐ったもの（紫）は叩かないで！");
 
-    public override string[] Intros => new[]
+    public override string[] Intros => new[] { IntrosES, IntrosEN, IntrosPT, IntrosFR, IntrosDE, IntrosJA }[Tr.Index];
+
+    static readonly string[] IntrosEN =
     {
-        "Los cocos se enteraron de que viene el machetero y se escondieron en hoyos. T� tienes un martillo y cero verg�enza. �Dale!",
-        "El t�o Roberto jura que esto es 'un juego tradicional del puerto'. Nadie le cree, pero igual hay premio.",
-        "Los cocos organizaron una fiesta subterr�nea y t� eres el DJ... con martillo. �Que no se escape ninguno!",
+        "The coconuts heard the machete guy is coming and hid in holes. You have a hammer and zero shame. Smash 'em!",
+        "Uncle Roberto swears this is 'a traditional harbor game'. Nobody believes him, but there's still a prize.",
+        "The coconuts threw an underground party and you're the DJ... with a hammer. Don't let a single one escape!",
+    };
+
+    static readonly string[] IntrosPT =
+    {
+        "Os cocos souberam que o machetero está vindo e se esconderam em buracos. Você tem um martelo e zero vergonha. Vai!",
+        "O tio Roberto jura que isso é 'um jogo tradicional do porto'. Ninguém acredita, mas mesmo assim tem prêmio.",
+        "Os cocos organizaram uma festa subterrânea e você é o DJ... com martelo. Não deixe nenhum escapar!",
+    };
+
+    static readonly string[] IntrosFR =
+    {
+        "Les noix de coco ont appris que le machettiste arrive et se sont cachées dans des trous. Toi, tu as un marteau et aucune honte. Vas-y !",
+        "Oncle Roberto jure que c'est « un jeu traditionnel du port ». Personne ne le croit, mais il y a quand même un prix.",
+        "Les noix de coco ont organisé une fête souterraine et tu es le DJ... avec un marteau. Qu'aucune ne s'échappe !",
+    };
+
+    static readonly string[] IntrosDE =
+    {
+        "Die Kokosnüsse haben gehört, dass der Machetenmann kommt, und sich in Löchern versteckt. Du hast einen Hammer und keinerlei Skrupel. Los!",
+        "Onkel Roberto schwört, das sei 'ein traditionelles Hafenspiel'. Niemand glaubt ihm, aber es gibt trotzdem einen Preis.",
+        "Die Kokosnüsse haben eine Untergrundparty organisiert und du bist der DJ... mit Hammer. Lass keine entkommen!",
+    };
+
+    static readonly string[] IntrosJA =
+    {
+        "マチェーテ使いが来ると聞きつけたココナッツたちが、穴に隠れた。きみにはハンマーと、恥じらいゼロの心がある。いけ！",
+        "ロベルトおじさんは、これは「港の伝統的な遊びだ」と言い張っている。誰も信じていないが、賞品は出る。",
+        "ココナッツたちが地下パーティーを開いていて、きみはDJだ……ただしハンマー付き。一個も逃がすな！",
+    };
+
+    static readonly string[] IntrosES =
+    {
+        "Los cocos se enteraron de que viene el machetero y se escondieron en hoyos. Tú tienes un martillo y cero vergüenza. ¡Dale!",
+        "El tío Roberto jura que esto es 'un juego tradicional del puerto'. Nadie le cree, pero igual hay premio.",
+        "Los cocos organizaron una fiesta subterránea y tú eres el DJ... con martillo. ¡Que no se escape ninguno!",
     };
 
     public override bool Is3D => true;
 
     const float PopTime = 0.16f;
-    const float DieTime = 0.18f; 
+    const float DieTime = 0.18f;
     const float SwingTime = 0.22f;
     const float SwingAngle = -60f;
     const float StrikeFrac = 0.35f;
@@ -57,7 +94,7 @@ public class Minigame_Topo : MinigameBase
     Vector3 hammerPos, hammerTarget;
     bool cursorHidden, prevCursor;
 
-    public override string Hud => "Puntos: " + points;
+    public override string Hud => Tr.T("Puntos: ", "Points: ", "Pontos: ", "Points : ", "Punkte: ", "ポイント：") + points;
 
     public override float Score01
     {

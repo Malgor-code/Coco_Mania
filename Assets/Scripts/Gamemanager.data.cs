@@ -4,6 +4,18 @@ using static MacheteData;
 
 public partial class GameManager
 {
+    [Header("Costos del arbol (exponenciales por profundidad)")]
+    [Tooltip("Si esta activo, el costo de cada mejora se calcula solo: treeCostBase * treeCostGrowth ^ profundidad. Desactivalo para usar costos manuales.")]
+    public bool autoTreeCosts = true;
+    [Tooltip("Costo de las mejoras raiz. Aprox. 35-40% del ingreso del primer dia.")]
+    public float treeCostBase = 50f;
+    [Tooltip("Crecimiento por nivel en el INICIO del arbol (hasta treeCostLateStartDepth). Bajo = inicio facil.")]
+    public float treeCostGrowth = 1.5f;
+    [Tooltip("Crecimiento por nivel despues de treeCostLateStartDepth. Alto = el late game no se vuelve barato.")]
+    public float treeCostGrowthLate = 2.4f;
+    [Tooltip("Profundidad donde el crecimiento cambia de treeCostGrowth a treeCostGrowthLate.")]
+    public int treeCostLateStartDepth = 4;
+
     void EnsureDefaultData()
     {
         static SkillNode N(string id, string name, string desc, int cost, SkillEffect effect, float value, params string[] pre)
@@ -194,6 +206,8 @@ public partial class GameManager
                 };
         }
 
+        if (autoTreeCosts) ApplyExponentialTreeCosts();
+
         if (forceDefaultData || perkPool == null || perkPool.Count == 0)
         {
             perkPool = new List<PerkOption>
@@ -236,45 +250,81 @@ public partial class GameManager
             legacyShop = new List<LegacyItem>
         {
             new LegacyItem { itemName = "Anillo del Machetero",   description = "+1 daño permanente.",                      cost = 1, effect = LegacyEffect.PermanentDamageBonus,           value = 1f },
-            new LegacyItem { itemName = "Pulsera de Aguante",     description = "+5 stamina máxima permanente.",            cost = 2, effect = LegacyEffect.PermanentStaminaMaxBonus,       value = 5f },
-            new LegacyItem { itemName = "Amuleto del Cobrador",   description = "+10% agua obtenida permanentemente.",      cost = 3, effect = LegacyEffect.PermanentMoneyMultiplierBonus,  value = 0.10f },
+            new LegacyItem { itemName = "Pulsera de Aguante",     description = "+3 stamina máxima permanente.",            cost = 2, effect = LegacyEffect.PermanentStaminaMaxBonus,       value = 3f },
+            new LegacyItem { itemName = "Amuleto del Cobrador",   description = "+5% agua obtenida permanentemente.",       cost = 3, effect = LegacyEffect.PermanentMoneyMultiplierBonus,  value = 0.05f },
             new LegacyItem { itemName = "Cesta Grande",           description = "+1 coco inicial cada día.",                cost = 4, effect = LegacyEffect.PermanentStartingCoconutBonus,  value = 1f },
-            new LegacyItem { itemName = "Lente del Afortunado",   description = "+3% probabilidad de crítico permanente.",  cost = 2, effect = LegacyEffect.PermanentCritChanceBonus,       value = 0.03f },
+            new LegacyItem { itemName = "Lente del Afortunado",   description = "+2% probabilidad de crítico permanente.",  cost = 2, effect = LegacyEffect.PermanentCritChanceBonus,       value = 0.02f },
             new LegacyItem { itemName = "Moneda Antigua",         description = "+0.5% probabilidad de encontrar monedas.", cost = 1, effect = LegacyEffect.PermanentCoinChanceBonus,       value = 0.005f },
-            new LegacyItem { itemName = "Anillo del Machetero II",   description = "+2 daño permanente.",                    cost = 3, effect = LegacyEffect.PermanentDamageBonus,          value = 2f },
-            new LegacyItem { itemName = "Pulsera de Aguante II",     description = "+8 stamina máxima permanente.",          cost = 4, effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 8f },
-            new LegacyItem { itemName = "Amuleto del Cobrador II",   description = "+15% agua obtenida permanentemente.",    cost = 6, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.15f },
+            new LegacyItem { itemName = "Anillo del Machetero II",   description = "+1 daño permanente.",                    cost = 3, effect = LegacyEffect.PermanentDamageBonus,          value = 1f },
+            new LegacyItem { itemName = "Pulsera de Aguante II",     description = "+4 stamina máxima permanente.",          cost = 4, effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 4f },
+            new LegacyItem { itemName = "Amuleto del Cobrador II",   description = "+8% agua obtenida permanentemente.",     cost = 6, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.08f },
             new LegacyItem { itemName = "Cesta Grande II",           description = "+1 coco inicial cada día.",              cost = 6, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 1f },
-            new LegacyItem { itemName = "Lente del Afortunado II",   description = "+6% probabilidad de crítico permanente.",cost = 5, effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.06f },
+            new LegacyItem { itemName = "Lente del Afortunado II",   description = "+3% probabilidad de crítico permanente.",cost = 5, effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.03f },
             new LegacyItem { itemName = "Moneda Antigua II",         description = "+1% probabilidad de encontrar monedas.", cost = 3, effect = LegacyEffect.PermanentCoinChanceBonus,      value = 0.01f },
-            new LegacyItem { itemName = "Anillo del Machetero III",  description = "+4 daño permanente.",                    cost = 6,  effect = LegacyEffect.PermanentDamageBonus,          value = 4f },
-            new LegacyItem { itemName = "Pulsera de Aguante III",    description = "+12 stamina máxima permanente.",         cost = 8,  effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 12f },
-            new LegacyItem { itemName = "Amuleto del Cobrador III",  description = "+25% agua obtenida permanentemente.",    cost = 10, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.25f },
-            new LegacyItem { itemName = "Cesta Grande III",          description = "+2 cocos iniciales cada día.",           cost = 10, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 2f },
-            new LegacyItem { itemName = "Lente del Afortunado III",  description = "+10% probabilidad de crítico permanente.",cost = 8,  effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.10f },
+            new LegacyItem { itemName = "Anillo del Machetero III",  description = "+2 daño permanente.",                    cost = 6,  effect = LegacyEffect.PermanentDamageBonus,          value = 2f },
+            new LegacyItem { itemName = "Pulsera de Aguante III",    description = "+6 stamina máxima permanente.",          cost = 8,  effect = LegacyEffect.PermanentStaminaMaxBonus,      value = 6f },
+            new LegacyItem { itemName = "Amuleto del Cobrador III",  description = "+12% agua obtenida permanentemente.",    cost = 10, effect = LegacyEffect.PermanentMoneyMultiplierBonus, value = 0.12f },
+            new LegacyItem { itemName = "Cesta Grande III",          description = "+1 coco inicial cada día.",              cost = 10, effect = LegacyEffect.PermanentStartingCoconutBonus, value = 1f },
+            new LegacyItem { itemName = "Lente del Afortunado III",  description = "+5% probabilidad de crítico permanente.",cost = 8,  effect = LegacyEffect.PermanentCritChanceBonus,      value = 0.05f },
             new LegacyItem { itemName = "Moneda Antigua III",        description = "+2% probabilidad de encontrar monedas.", cost = 6,  effect = LegacyEffect.PermanentCoinChanceBonus,      value = 0.02f },
-            new LegacyItem { itemName = "Lente del Afortunado IV",   description = "+12% probabilidad de crítico permanente.",cost = 12, effect = LegacyEffect.PermanentCritChanceBonus,     value = 0.12f },
-            new LegacyItem { itemName = "Sello Ancestral I",   description = "+25% al valor de cada punto de legado.",  cost = 8,  effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.25f },
-            new LegacyItem { itemName = "Sello Ancestral II",  description = "+50% al valor de cada punto de legado.",  cost = 16, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.5f },
-            new LegacyItem { itemName = "Sello Ancestral III", description = "+100% al valor de cada punto de legado.", cost = 30, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 1f },
-            new LegacyItem { itemName = "Reloj de Arena I",       description = "+1 día por ciclo.",                          cost = 8,  effect = LegacyEffect.PermanentExtraDay,        value = 1f },
-            new LegacyItem { itemName = "Reloj de Arena II",      description = "+1 día por ciclo (total +2).",               cost = 16, effect = LegacyEffect.PermanentExtraDay,        value = 1f },
-            new LegacyItem { itemName = "Barril de Reserva I",    description = "Empiezas cada partida con 250 mL.",          cost = 3,  effect = LegacyEffect.PermanentStartingWater,   value = 250f },
-            new LegacyItem { itemName = "Barril de Reserva II",   description = "Empiezas con 750 mL.",                       cost = 6,  effect = LegacyEffect.PermanentStartingWater,   value = 500f },
-            new LegacyItem { itemName = "Barril de Reserva III",  description = "Empiezas con 2000 mL.",                      cost = 10, effect = LegacyEffect.PermanentStartingWater,   value = 1250f },
-            new LegacyItem { itemName = "Trébol de Agua I",       description = "+3% de probabilidad de Jackpot permanente.", cost = 4,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.03f },
-            new LegacyItem { itemName = "Trébol de Agua II",      description = "+5% de probabilidad de Jackpot permanente.", cost = 8,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.05f },
+            new LegacyItem { itemName = "Lente del Afortunado IV",   description = "+6% probabilidad de crítico permanente.",cost = 12, effect = LegacyEffect.PermanentCritChanceBonus,     value = 0.06f },
+            new LegacyItem { itemName = "Sello Ancestral I",   description = "+10% al valor de cada punto de legado.",  cost = 8,  effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.10f },
+            new LegacyItem { itemName = "Sello Ancestral II",  description = "+20% al valor de cada punto de legado.",  cost = 16, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.20f },
+            new LegacyItem { itemName = "Sello Ancestral III", description = "+40% al valor de cada punto de legado.",  cost = 30, effect = LegacyEffect.PermanentLegacyMultiplierBonus, value = 0.40f },
+            new LegacyItem { itemName = "Reloj de Arena I",       description = "+1 día por ciclo.",                          cost = 14, effect = LegacyEffect.PermanentExtraDay,        value = 1f },
+            new LegacyItem { itemName = "Reloj de Arena II",      description = "+1 día por ciclo (total +2).",               cost = 40, effect = LegacyEffect.PermanentExtraDay,        value = 1f },
+            new LegacyItem { itemName = "Barril de Reserva I",    description = "Empiezas cada partida con 100 mL.",          cost = 3,  effect = LegacyEffect.PermanentStartingWater,   value = 100f },
+            new LegacyItem { itemName = "Barril de Reserva II",   description = "Empiezas con 250 mL.",                       cost = 6,  effect = LegacyEffect.PermanentStartingWater,   value = 150f },
+            new LegacyItem { itemName = "Barril de Reserva III",  description = "Empiezas con 500 mL.",                       cost = 10, effect = LegacyEffect.PermanentStartingWater,   value = 250f },
+            new LegacyItem { itemName = "Trébol de Agua I",       description = "+2% de probabilidad de Jackpot permanente.", cost = 4,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.02f },
+            new LegacyItem { itemName = "Trébol de Agua II",      description = "+3% de probabilidad de Jackpot permanente.", cost = 8,  effect = LegacyEffect.PermanentJackpotChance,   value = 0.03f },
             new LegacyItem { itemName = "Ritmo del Machetero I",  description = "+1 acumulación máxima de racha permanente.", cost = 4,  effect = LegacyEffect.PermanentStreakStacks,    value = 1f },
             new LegacyItem { itemName = "Ritmo del Machetero II", description = "+1 acumulación máxima de racha permanente.", cost = 8,  effect = LegacyEffect.PermanentStreakStacks,    value = 1f },
             new LegacyItem { itemName = "Ojo Largo I",            description = "+0.1 de radio de golpe permanente.",         cost = 3,  effect = LegacyEffect.PermanentHitRadius,       value = 0.1f },
             new LegacyItem { itemName = "Ojo Largo II",           description = "+0.15 de radio de golpe permanente.",        cost = 6,  effect = LegacyEffect.PermanentHitRadius,       value = 0.15f },
-            new LegacyItem { itemName = "Contrato Favorable I",   description = "-5% a todos los pedidos.",                   cost = 6,  effect = LegacyEffect.PermanentOrderDiscount,   value = 0.05f },
-            new LegacyItem { itemName = "Contrato Favorable II",  description = "-5% más a todos los pedidos.",               cost = 12, effect = LegacyEffect.PermanentOrderDiscount,   value = 0.05f },
-            new LegacyItem { itemName = "Herencia del Herrero I", description = "Empiezas con el Machete Normal.",            cost = 8,  effect = LegacyEffect.PermanentStartingMachete, value = 1f },
-            new LegacyItem { itemName = "Herencia del Herrero II",description = "Empiezas con el Machete de Acero.",          cost = 20, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
+            new LegacyItem { itemName = "Contrato Favorable I",   description = "-3% a todos los pedidos.",                   cost = 6,  effect = LegacyEffect.PermanentOrderDiscount,   value = 0.03f },
+            new LegacyItem { itemName = "Contrato Favorable II",  description = "-3% más a todos los pedidos.",               cost = 12, effect = LegacyEffect.PermanentOrderDiscount,   value = 0.03f },
+            new LegacyItem { itemName = "Herencia del Herrero I", description = "Empiezas con el Machete Normal.",            cost = 14, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
+            new LegacyItem { itemName = "Herencia del Herrero II",description = "Empiezas con el Machete de Acero.",          cost = 50, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
         };
         }
         StampCoconutUnlocks();
+    }
+
+    void ApplyExponentialTreeCosts()
+    {
+        if (skillTree == null || skillTree.Count == 0) return;
+
+        var byId = new Dictionary<string, SkillNode>();
+        foreach (var n in skillTree) byId[n.id] = n;
+        var depth = new Dictionary<string, int>();
+
+        int Depth(SkillNode n)
+        {
+            if (depth.TryGetValue(n.id, out int d)) return d;
+            depth[n.id] = 0; 
+            int best = 0;
+            if (n.prerequisiteIds != null)
+            {
+                foreach (var p in n.prerequisiteIds)
+                {
+                    if (byId.TryGetValue(p, out var pn))
+                        best = Mathf.Max(best, Depth(pn) + 1);
+                }
+            }
+            depth[n.id] = best;
+            return best;
+        }
+
+        foreach (var n in skillTree)
+        {
+            int dep = Depth(n);
+            int early = Mathf.Min(dep, treeCostLateStartDepth);
+            int late = Mathf.Max(0, dep - treeCostLateStartDepth);
+            float raw = treeCostBase * Mathf.Pow(treeCostGrowth, early) * Mathf.Pow(treeCostGrowthLate, late);
+            float mag = Mathf.Pow(10f, Mathf.Floor(Mathf.Log10(Mathf.Max(raw, 1f))) - 1f);
+            n.cost = Mathf.Max(1, Mathf.RoundToInt(Mathf.Round(raw / mag) * mag));
+        }
     }
 
     private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
