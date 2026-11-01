@@ -8993,9 +8993,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoTreeCosts: 1
-  treeCostBase: 50
-  treeCostGrowth: 2.4
-  treeCostGrowthLate: 3.6
+  treeCostBase: 100
+  treeCostGrowth: 3
+  treeCostGrowthLate: 2.5
   treeCostLateStartDepth: 4
   runDayCount: 0
   currentPhase: 0
@@ -9562,6 +9562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8540c9156e4969641b5d0cf44978cfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minDaysBetweenEvents: 3
+  maxDaysBetweenEvents: 5
   everyNDays: 1
   eventsEnabled: 1
   minRewardPercent: 0.1

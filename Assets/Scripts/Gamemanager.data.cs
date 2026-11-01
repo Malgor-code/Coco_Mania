@@ -8,11 +8,11 @@ public partial class GameManager
     [Tooltip("Si esta activo, el costo de cada mejora se calcula solo: treeCostBase * treeCostGrowth ^ profundidad. Desactivalo para usar costos manuales.")]
     public bool autoTreeCosts = true;
     [Tooltip("Costo de las mejoras raiz. Aprox. 35-40% del ingreso del primer dia.")]
-    public float treeCostBase = 50f;
+    public float treeCostBase = 100f;
     [Tooltip("Crecimiento por nivel en el INICIO del arbol (hasta treeCostLateStartDepth). Bajo = inicio facil.")]
-    public float treeCostGrowth = 1.5f;
+    public float treeCostGrowth = 3f;
     [Tooltip("Crecimiento por nivel despues de treeCostLateStartDepth. Alto = el late game no se vuelve barato.")]
-    public float treeCostGrowthLate = 2.4f;
+    public float treeCostGrowthLate = 2.5f;
     [Tooltip("Profundidad donde el crecimiento cambia de treeCostGrowth a treeCostGrowthLate.")]
     public int treeCostLateStartDepth = 4;
 

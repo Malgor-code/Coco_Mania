@@ -28,9 +28,9 @@ public partial class GameManager
         RecalculateAllStats();
         Log(Loc("log_new_machete", next.macheteName));
         RefreshAllUI();
+        CheckAchievements();
     }
 
-    // ---------------- Arbol de mejoras ----------------
 
     public SkillNode GetSkillNode(string id) => skillTree.Find(n => n.id == id);
 
@@ -69,6 +69,7 @@ public partial class GameManager
         BetaLog("skill_" + id);
         Log(Loc("log_upgrade_bought", node.nodeName));
         RefreshAllUI();
+        CheckAchievements();
     }
 
     void ApplySkillEffect(SkillNode node)
@@ -157,6 +158,7 @@ public partial class GameManager
         OnRecaudacionShown?.Invoke();
         AnnounceNewUnlocks();
         SaveGame();
+        CheckAchievements();
     }
 
     void SetPerkLabel(TMP_Text nameLabel, TMP_Text descLabel, Image iconImage, PerkOption perk)
@@ -315,6 +317,7 @@ public partial class GameManager
         Log(Loc("log_legacy_bought", item.itemName));
         RefreshAllUI();
         SaveGame();
+        CheckAchievements();
     }
 
     void ApplyLegacyEffect(LegacyItem item)
