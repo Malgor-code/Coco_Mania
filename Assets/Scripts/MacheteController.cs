@@ -284,7 +284,7 @@ public class MacheteController : MonoBehaviour
             foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
             {
                 if (coco == null) continue;
-                Vector3 b = coco.transform.position; b.y = 0f;
+                Vector3 b = coco.GetClosestHitPoint(transform.position); b.y = 0f;
                 if ((a - b).sqrMagnitude <= radiusSqr) targets.Add(coco);
             }
 

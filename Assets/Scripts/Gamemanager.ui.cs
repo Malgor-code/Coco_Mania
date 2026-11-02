@@ -73,9 +73,6 @@ public partial class GameManager
         upgradeTreeContent.localScale = Vector3.one;
     }
 
-    // NOTA: passiveDescription viene de los MacheteData (ScriptableObject).
-    // Si quieres que tambien cambie de idioma, agrega un campo passiveDescriptionEn
-    // en MacheteData y usa LocalizationManager.IsEnglish para elegir. (Ver abajo.)
     string PassiveLine(MacheteData m)
     {
         return (m != null && m.passive != MachetePassive.Ninguna && !string.IsNullOrEmpty(m.passiveDescription))
@@ -224,9 +221,6 @@ public partial class GameManager
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
     }
 
-    // ---- Sincronizacion de idioma ----
-    // Llama a SubscribeLanguage() en Start() y a UnsubscribeLanguage() en OnDestroy()
-    // del GameManager principal. Al cambiar el idioma se vuelve a pintar toda la UI.
     void SubscribeLanguage()
     {
         var loc = LocalizationManager.Instance;
