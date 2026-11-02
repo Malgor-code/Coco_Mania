@@ -11,9 +11,9 @@ public class CoconutGallery3D : MonoBehaviour
              "normalmente el que contiene tu botón de la galería. Todos los demás paneles de ese Canvas se desactivan. " +
              "Conecta tu botón a CoconutGallery3D > ToggleGallery().")]
     public GameObject keepActivePanel;
-    [Tooltip("Si tienes otros Canvas distintos en la escena, también se desactivan (excepto el que contiene el panel elegido).")]
-    public bool alsoDisableOtherCanvases = true;
-    public bool pauseGameWhileOpen = false;
+    [Tooltip("Otros paneles/botones que NO deben apagarse al abrir la galería (ej. el panel donde están tus botones para cambiar de panel o salir). " +
+             "Los botones de PanelTabBar se protegen solos.")]
+    public GameObject[] alsoKeepActive;
 
     [Header("Panel de información (el tuyo)")]
     [Tooltip("Arrastra aquí tu panel que tiene Titulo, Descripcion y Price. Los textos se buscan solos por nombre. " +
@@ -62,7 +62,6 @@ public class CoconutGallery3D : MonoBehaviour
     float slideVel;
     int shownIndex = -1;
     int maxCycleReached = 1;
-    float prevTimeScale = 1f;
     Camera prevMainCamera;
     GameObject galleryRoot;
     Transform carousel;
@@ -72,7 +71,9 @@ public class CoconutGallery3D : MonoBehaviour
     bool hintWasActive;
     bool infoResolved;
     readonly List<GameObject> disabledObjects = new List<GameObject>();
-    readonly List<Canvas> disabledCanvases = new List<Canvas>();
+    readonly List<Transform> keepList = new List<Transform>();
+    readonly List<Canvas> reboundCanvases = new List<Canvas>();
+    readonly List<Camera> reboundCameras = new List<Camera>();
     void Awake()
     {
         maxCycleReached = PlayerPrefs.GetInt(PrefKey, 1);
@@ -108,7 +109,7 @@ public class CoconutGallery3D : MonoBehaviour
         if (galleryRoot == null) BuildScene();
 
         isOpen = true;
-        index = 0; 
+        index = 0;
         slideVel = 0f;
         carousel.localPosition = Vector3.zero;
         shownIndex = -1;
@@ -132,12 +133,7 @@ public class CoconutGallery3D : MonoBehaviour
         }
 
         DisableOtherUI();
-
-        if (pauseGameWhileOpen)
-        {
-            prevTimeScale = Time.timeScale;
-            Time.timeScale = 0f;
-        }
+        RebindCanvasCameras();
 
         galleryRoot.SetActive(true);
     }
@@ -147,55 +143,86 @@ public class CoconutGallery3D : MonoBehaviour
         if (isOpen) CloseGallery(); else OpenGallery();
     }
 
+    void LateUpdate()
+    {
+        if (!isOpen) return;
+
+        foreach (var k in keepList)
+        {
+            if (k == null) continue;
+            Transform t = k;
+            while (t != null)
+            {
+                if (!t.gameObject.activeSelf) t.gameObject.SetActive(true);
+                Canvas cv = t.GetComponent<Canvas>();
+                if (cv != null && !cv.enabled) cv.enabled = true;
+                t = t.parent;
+            }
+        }
+    }
+
     void DisableOtherUI()
     {
         disabledObjects.Clear();
-        disabledCanvases.Clear();
 
-        Canvas keepRoot = null;
+        BuildKeepList();
 
-        if (keepActivePanel != null)
+        var keepRoots = new HashSet<Canvas>();
+        foreach (var k in keepList)
         {
-            Canvas c = keepActivePanel.GetComponentInParent<Canvas>();
-            if (c != null) keepRoot = c.rootCanvas;
+            Canvas c = k.GetComponentInParent<Canvas>();
+            if (c != null) keepRoots.Add(c.rootCanvas);
+        }
 
-            if (keepRoot == null)
+        if (keepActivePanel != null && !keepRoots.Contains(keepActivePanel.GetComponentInParent<Canvas>() != null ? keepActivePanel.GetComponentInParent<Canvas>().rootCanvas : null))
+            Debug.LogWarning("CoconutGallery3D: 'Keep Active Panel' no está dentro de un Canvas.");
+
+        foreach (var k in keepList)
+        {
+            Canvas c = k.GetComponentInParent<Canvas>();
+            if (c == null) continue;
+
+            Transform stop = c.rootCanvas.transform;
+            Transform node = k;
+            while (node != null && node != stop)
             {
-                Debug.LogWarning("CoconutGallery3D: 'Keep Active Panel' no está dentro de un Canvas.");
-            }
-            else
-            {
-                Transform stop = keepRoot.transform;
-                Transform node = keepActivePanel.transform;
-                while (node != null && node != stop)
+                Transform parent = node.parent;
+                if (parent == null) break;
+                for (int i = 0; i < parent.childCount; i++)
                 {
-                    Transform parent = node.parent;
-                    if (parent == null) break;
-                    for (int i = 0; i < parent.childCount; i++)
-                    {
-                        Transform sibling = parent.GetChild(i);
-                        if (sibling == node) continue;
-                        if (IsProtected(sibling)) continue;
-                        if (!sibling.gameObject.activeSelf) continue;
-                        sibling.gameObject.SetActive(false);
-                        disabledObjects.Add(sibling.gameObject);
-                    }
-                    node = parent;
+                    Transform sibling = parent.GetChild(i);
+                    if (sibling == node) continue;
+                    if (IsProtected(sibling)) continue;
+                    if (!sibling.gameObject.activeSelf) continue;
+                    sibling.gameObject.SetActive(false);
+                    disabledObjects.Add(sibling.gameObject);
                 }
+                node = parent;
             }
         }
 
-        if (alsoDisableOtherCanvases)
+    }
+
+    void BuildKeepList()
+    {
+        keepList.Clear();
+        AddKeep(keepActivePanel);
+        if (alsoKeepActive != null)
+            foreach (var g in alsoKeepActive) AddKeep(g);
+
+        var bar = FindObjectOfType<PanelTabBar>();
+        if (bar != null)
         {
-            foreach (var c in FindObjectsOfType<Canvas>())
-            {
-                if (c == null || !c.enabled) continue;
-                if (keepRoot != null && c.rootCanvas == keepRoot) continue;
-                if (IsProtected(c.transform)) continue;
-                c.enabled = false;
-                disabledCanvases.Add(c);
-            }
+            if (bar.barContainer != null) AddKeep(bar.barContainer.gameObject);
+            if (bar.tabs != null)
+                foreach (var t in bar.tabs)
+                    if (t != null && t.button != null) AddKeep(t.button.gameObject);
         }
+    }
+
+    void AddKeep(GameObject g)
+    {
+        if (g != null && !keepList.Contains(g.transform)) keepList.Add(g.transform);
     }
 
     bool IsProtected(Transform t)
@@ -203,7 +230,36 @@ public class CoconutGallery3D : MonoBehaviour
         if (t == transform || transform.IsChildOf(t)) return true;
         if (infoPanel != null && infoPanel.transform.IsChildOf(t)) return true;
         if (hintObject != null && hintObject.transform.IsChildOf(t)) return true;
+        foreach (var k in keepList)
+            if (k != null && k.IsChildOf(t)) return true;
         return false;
+    }
+
+    void RebindCanvasCameras()
+    {
+        reboundCanvases.Clear();
+        reboundCameras.Clear();
+        if (galleryCamera == null || prevMainCamera == null) return;
+
+        foreach (var c in FindObjectsOfType<Canvas>())
+        {
+            if (c == null || c.rootCanvas != c) continue;
+            if (c.renderMode == RenderMode.ScreenSpaceOverlay) continue;
+            if (c.worldCamera != prevMainCamera) continue;
+            if (!IsProtected(c.transform)) continue;
+
+            reboundCanvases.Add(c);
+            reboundCameras.Add(c.worldCamera);
+            c.worldCamera = galleryCamera;
+        }
+    }
+
+    void RestoreCanvasCameras()
+    {
+        for (int i = 0; i < reboundCanvases.Count; i++)
+            if (reboundCanvases[i] != null) reboundCanvases[i].worldCamera = reboundCameras[i];
+        reboundCanvases.Clear();
+        reboundCameras.Clear();
     }
 
     void RestoreUI()
@@ -212,9 +268,6 @@ public class CoconutGallery3D : MonoBehaviour
             if (go != null) go.SetActive(true);
         disabledObjects.Clear();
 
-        foreach (var c in disabledCanvases)
-            if (c != null) c.enabled = true;
-        disabledCanvases.Clear();
     }
 
     public void CloseGallery()
@@ -224,13 +277,13 @@ public class CoconutGallery3D : MonoBehaviour
 
         galleryRoot.SetActive(false);
 
+        RestoreCanvasCameras();
         if (prevMainCamera != null) prevMainCamera.enabled = true;
 
         RestoreUI();
         if (infoPanel != null) infoPanel.SetActive(infoPanelWasActive);
         if (hintObject != null) hintObject.SetActive(hintWasActive);
 
-        if (pauseGameWhileOpen) Time.timeScale = prevTimeScale;
     }
 
     public void Move(int dir)
