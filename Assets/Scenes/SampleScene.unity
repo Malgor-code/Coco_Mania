@@ -56542,6 +56542,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6504535090306433762, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: -4454680128501558768, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: -4312910206544252554, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: -2818427116675121817, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: -1297542517118796933, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: -499509674195678683, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
     - target: {fileID: 919132149155446097, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
       propertyPath: m_Name
       value: FBX_MESA2
@@ -56550,6 +56574,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2745052883566756131, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: 3863893685147213893, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
+    - target: {fileID: 6373803968795839958, guid: 5c825f91cc6891f4882f09db9cc0525c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a42092c623002c542b808156cadb3738, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -72796,7 +72832,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 88de30f77d8623d48a216bc4967fedd3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f528fe9e7627fb2438c87acbc6c55f7c, type: 2}
+      objectReference: {fileID: 2100000, guid: 26c3954710f8254448c02b38fce3d93c, type: 2}
     - target: {fileID: 919132149155446097, guid: 88de30f77d8623d48a216bc4967fedd3, type: 3}
       propertyPath: m_Name
       value: Msh_Stick
