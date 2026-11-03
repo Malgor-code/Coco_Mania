@@ -49312,7 +49312,7 @@ PrefabInstance:
     - target: {fileID: 8047604624979337774, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b69c51b79cb141240b7c8603fb8d4675, type: 2}
+      objectReference: {fileID: 2100000, guid: 60bfdc959d2b61841bf022266ba2de80, type: 2}
     - target: {fileID: 8407703409599218683, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
       propertyPath: m_Name
       value: Water Template Genshin
@@ -75172,7 +75172,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fd2ee0126d6029646b7dd6d1f33de7c9, type: 2}
+  - {fileID: 2100000, guid: 8a544410e702666479459d8f7155cd89, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
