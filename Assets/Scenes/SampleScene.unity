@@ -10958,7 +10958,7 @@ MonoBehaviour:
   shakeUnits: 0.15
   shakeStrength: 0.551
   introDollyDistance: 0.6
-  showGizmos: 0
+  showGizmos: 1
   gizmoSize: 0.1
   bolos:
     pinPrefab: {fileID: 8049649540775743635, guid: a4323417dc1be9947a1fadf9b782db82, type: 3}
@@ -28186,7 +28186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &682314498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57171,6 +57171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 40
+<<<<<<< HEAD
   snapRadius: 60
   slowOverButton: 0.45
 --- !u!114 &1381740239
@@ -57190,6 +57191,8 @@ MonoBehaviour:
   panelCreditos: {fileID: 1216211628}
   barraProgreso: {fileID: 0}
   duracionCarga: 2
+=======
+>>>>>>> parent of 32dfb5f (Control y Aña)
 --- !u!1 &1390162353
 GameObject:
   m_ObjectHideFlags: 0

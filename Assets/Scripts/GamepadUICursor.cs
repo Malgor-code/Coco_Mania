@@ -3,27 +3,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[DefaultExecutionOrder(-2000)]
 public class GamepadUICursor : MonoBehaviour
 {
     public float size = 40f;
-    [Tooltip("Distancia (px) a la que el cursor se 'pega' al boton mas cercano.")]
-    public float snapRadius = 60f;
-    [Tooltip("Velocidad del cursor cuando esta sobre un boton (1 = normal).")]
-    [Range(0.2f, 1f)] public float slowOverButton = 0.45f;
 
     GameObject cursorGO;
     RectTransform cursorRT;
     readonly List<RaycastResult> results = new List<RaycastResult>();
-    readonly List<RaycastResult> tmp = new List<RaycastResult>();
     GameObject hovered;
     PointerEventData ped;
-    readonly Vector3[] corners = new Vector3[4];
 
     void Awake()
     {
         var canvasGO = new GameObject("GamepadCursorCanvas", typeof(Canvas));
-        canvasGO.transform.SetParent(null, false);
+        canvasGO.transform.SetParent(transform, false);
         var canvas = canvasGO.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.overrideSorting = true;
@@ -39,13 +32,6 @@ public class GamepadUICursor : MonoBehaviour
         cursorRT.anchorMin = cursorRT.anchorMax = Vector2.zero;
         cursorRT.pivot = new Vector2(0.5f, 0.5f);
         cursorGO.SetActive(false);
-    }
-
-    void OnDestroy()
-    {
-        GameInput.CursorSlow = 1f;
-        if (cursorGO != null && cursorGO.transform.parent != null)
-            Destroy(cursorGO.transform.parent.gameObject);
     }
 
     static Sprite MakeCircle()
@@ -74,110 +60,49 @@ public class GamepadUICursor : MonoBehaviour
     {
         Vector2 pos = GameInput.PointerPosition;
 
-        if (GameInput.UsingGamepad && EventSystem.current != null)
-            EventSystem.current.SetSelectedGameObject(null);
-
         bool inMinigame3D = MinigameStage.Instance != null && MinigameStage.Instance.ActiveCamera != null;
         bool show = GameInput.UsingGamepad && Cursor.visible && !inMinigame3D && EventSystem.current != null;
 
         if (cursorGO.activeSelf != show) cursorGO.SetActive(show);
-        if (!show) { ClearHover(); GameInput.CursorSlow = 1f; return; }
+        if (!show) { ClearHover(); return; }
 
         cursorRT.position = pos;
 
-        if (ped == null) ped = new PointerEventData(EventSystem.current);
+        if (ped == null || ped.currentInputModule == null) ped = new PointerEventData(EventSystem.current);
         ped.position = pos;
         ped.button = PointerEventData.InputButton.Left;
 
-        GameObject target = FindTarget(pos, out RaycastResult hitResult);
-        GameInput.CursorSlow = target != null ? slowOverButton : 1f;
+        results.Clear();
+        EventSystem.current.RaycastAll(ped, results);
+        GameObject hit = null;
+        RaycastResult hitResult = default;
+        foreach (var r in results)
+        {
+            if (r.gameObject != null) { hit = r.gameObject; hitResult = r; break; }
+        }
 
-        if (target != hovered)
+        GameObject enterTarget = hit != null ? ExecuteEvents.GetEventHandler<IPointerEnterHandler>(hit) : null;
+        if (enterTarget != hovered)
         {
             ClearHover();
-            hovered = target;
+            hovered = enterTarget;
             if (hovered != null) ExecuteEvents.Execute(hovered, ped, ExecuteEvents.pointerEnterHandler);
         }
 
-        if (GameInput.ClickDown && target != null)
+        if (GameInput.ClickDown && hit != null)
         {
-            ped.pointerPress = ped.rawPointerPress = target;
-            ped.pointerPressRaycast = ped.pointerCurrentRaycast = hitResult;
-            ped.clickCount = 1;
-            ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerDownHandler);
-            ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerUpHandler);
-            ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerClickHandler);
-            ped.pointerPress = ped.rawPointerPress = null;
-        }
-    }
-    GameObject FindTarget(Vector2 pos, out RaycastResult hitResult)
-    {
-        hitResult = default;
-        GameObject tab = FindTabButton(pos);
-        if (tab != null) return tab;
-        results.Clear();
-        EventSystem.current.RaycastAll(ped, results);
-
-        GameObject top = null;
-        foreach (var r in results)
-            if (r.gameObject != null) { top = r.gameObject; hitResult = r; break; }
-
-        if (top != null)
-        {
-            GameObject direct = ExecuteEvents.GetEventHandler<IPointerClickHandler>(top);
-            if (direct != null)
+            GameObject target = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hit);
+            if (target == null) target = ExecuteEvents.GetEventHandler<IPointerDownHandler>(hit);
+            if (target != null)
             {
-                Selectable s = direct.GetComponent<Selectable>();
-                if (s == null || s.IsInteractable()) return direct;
+                ped.pointerPress = ped.rawPointerPress = target;
+                ped.pointerPressRaycast = ped.pointerCurrentRaycast = hitResult;
+                ped.clickCount = 1;
+                ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerDownHandler);
+                ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(target, ped, ExecuteEvents.pointerClickHandler);
             }
         }
-        Selectable best = null;
-        float bestD = snapRadius;
-        foreach (var s in Selectable.allSelectablesArray)
-        {
-            if (s == null || !s.IsInteractable() || !s.gameObject.activeInHierarchy) continue;
-            var rt = s.transform as RectTransform;
-            if (rt == null) continue;
-            float d = DistanceToRect(rt, pos, out Vector2 center);
-            if (d >= bestD) continue;
-            if (!Reachable(s, center)) continue;
-            best = s; bestD = d;
-        }
-        if (best != null) { hitResult = default; return best.gameObject; }
-        return null;
-    }
-
-    float DistanceToRect(RectTransform rt, Vector2 pos, out Vector2 center)
-    {
-        Canvas c = rt.GetComponentInParent<Canvas>();
-        Camera cam = (c != null && c.rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
-            ? c.rootCanvas.worldCamera : null;
-        rt.GetWorldCorners(corners);
-        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
-        Vector2 max = new Vector2(float.MinValue, float.MinValue);
-        for (int i = 0; i < 4; i++)
-        {
-            Vector2 sp = RectTransformUtility.WorldToScreenPoint(cam, corners[i]);
-            min = Vector2.Min(min, sp);
-            max = Vector2.Max(max, sp);
-        }
-        center = (min + max) * 0.5f;
-        float dx = Mathf.Max(min.x - pos.x, 0f, pos.x - max.x);
-        float dy = Mathf.Max(min.y - pos.y, 0f, pos.y - max.y);
-        return Mathf.Sqrt(dx * dx + dy * dy);
-    }
-
-    bool Reachable(Selectable s, Vector2 screenPoint)
-    {
-        var p = new PointerEventData(EventSystem.current) { position = screenPoint };
-        tmp.Clear();
-        EventSystem.current.RaycastAll(p, tmp);
-        foreach (var r in tmp)
-        {
-            if (r.gameObject == null) continue;
-            return r.gameObject.transform.IsChildOf(s.transform);
-        }
-        return false;
     }
 
     void ClearHover()
@@ -186,25 +111,6 @@ public class GamepadUICursor : MonoBehaviour
             ExecuteEvents.Execute(hovered, ped, ExecuteEvents.pointerExitHandler);
         hovered = null;
     }
-    GameObject FindTabButton(Vector2 pos)
-    {
-        var bar = PanelTabBar.Instance;
-        if (bar == null || bar.tabs == null) return null;
-        if (StoryManager.BlocksPause || CoconutUnlockPanel.BlocksPause) return null;
-        if (GameManager.Instance != null && GameManager.Instance.isPaused) return null;
 
-        Button best = null;
-        float bestD = snapRadius * 0.5f;
-        foreach (var t in bar.tabs)
-        {
-            Button b = t.button;
-            if (b == null || !b.IsInteractable() || !b.gameObject.activeInHierarchy) continue;
-            var rt = b.transform as RectTransform;
-            if (rt == null) continue;
-            float d = DistanceToRect(rt, pos, out Vector2 c);
-            if (d < bestD) { best = b; bestD = d; }
-        }
-        return best != null ? best.gameObject : null;
-    }
     void OnDisable() { ClearHover(); }
 }

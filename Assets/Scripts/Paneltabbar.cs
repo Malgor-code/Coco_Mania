@@ -51,7 +51,7 @@ public class PanelTabBar : MonoBehaviour
     public float barHeight = 70f;
     public float spacing = 8f;
     public int fontSize = 28;
-    public static PanelTabBar Instance;
+
     [Header("Colores")]
     public bool tintButtons = true;
     public Color normalColor = new Color(0.15f, 0.15f, 0.18f, 0.92f);
@@ -65,7 +65,6 @@ public class PanelTabBar : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
         isOpen = new bool[tabs.Count];
         BuildBarIfNeeded();
         WireGalleries();
@@ -93,7 +92,7 @@ public class PanelTabBar : MonoBehaviour
             KeyCode k = tabs[i].hotkey;
             if (k != KeyCode.None && Input.GetKeyDown(k)) Select(i);
         }
-        HandleGamepad();
+
         if (enforceSingleOpen) SyncExternal();
     }
 
@@ -304,40 +303,5 @@ public class PanelTabBar : MonoBehaviour
         tmp.raycastTarget = false;
 
         return btn;
-    }
-    void HandleGamepad()
-    {
-        if (!GameInput.GamepadConnected) return;
-        if (!AnyTabButtonVisible()) return;
-        if (GameManager.Instance != null && GameManager.Instance.isPaused) return;
-        if (StoryManager.BlocksPause || CoconutUnlockPanel.BlocksPause) return;
-
-        if (GameInput.TabNextDown) Cycle(1);
-        else if (GameInput.TabPrevDown) Cycle(-1);
-        else if (GameInput.BackDown && current >= 0) CloseAll();
-    }
-
-    bool AnyTabButtonVisible()
-    {
-        foreach (var t in tabs)
-            if (t.button != null && t.button.gameObject.activeInHierarchy) return true;
-        return false;
-    }
-
-    void Cycle(int dir)
-    {
-        int n = tabs.Count;
-        if (n == 0) return;
-        int idx = current;
-        for (int tries = 0; tries < n; tries++)
-        {
-            idx = idx < 0 ? (dir > 0 ? 0 : n - 1) : (idx + dir + n) % n;
-            var b = tabs[idx].button;
-            if (b == null || b.gameObject.activeInHierarchy)
-            {
-                Select(idx);
-                return;
-            }
-        }
     }
 }

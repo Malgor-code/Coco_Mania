@@ -84,8 +84,9 @@ public class CoconutGallery3D : MonoBehaviour
         TrackMaxCycle();
 
         if (!isOpen) return;
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || GameInput.NavLeftDown) Move(-1);
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || GameInput.NavRightDown) Move(1);
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) Move(-1);
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) Move(1);
         float targetX = -index * spacing;
         float x = Mathf.SmoothDamp(carousel.localPosition.x, targetX, ref slideVel,
                                    slideSmoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
@@ -282,11 +283,7 @@ public class CoconutGallery3D : MonoBehaviour
         RestoreUI();
         if (infoPanel != null) infoPanel.SetActive(infoPanelWasActive);
         if (hintObject != null) hintObject.SetActive(hintWasActive);
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.RefreshAllUI();
-            StartCoroutine(RefreshUINextFrame());
-        }
+
     }
 
     public void Move(int dir)
@@ -552,10 +549,5 @@ public class CoconutGallery3D : MonoBehaviour
         if (m.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", 0f);
         m.DisableKeyword("_EMISSION");
         return m;
-    }
-    System.Collections.IEnumerator RefreshUINextFrame()
-    {
-        yield return null;
-        if (GameManager.Instance != null) GameManager.Instance.RefreshAllUI();
     }
 }
