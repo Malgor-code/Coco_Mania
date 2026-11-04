@@ -159,7 +159,7 @@ public class Minigame_Atrapa : MinigameBase
         float prevT = basketT;
         if (cam != null)
         {
-            Ray ray = cam.ScreenPointToRay(GameInput.PointerPosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (trackPlane.Raycast(ray, out float enter))
             {
                 Vector3 hit = ray.GetPoint(enter);

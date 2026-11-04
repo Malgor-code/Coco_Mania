@@ -176,7 +176,8 @@ public class CoconutUnlockPanel : MonoBehaviour
                     c.a = 0.55f + 0.45f * Mathf.Sin(Time.unscaledTime * 3f);
                     hintText.color = c;
                 }
-                if (t >= minShowTime && (Input.anyKeyDown || GameInput.ClickDown)) break;
+
+                if (t >= minShowTime && Input.anyKeyDown) break;
                 yield return null;
             }
 

@@ -95,6 +95,7 @@ public class CoconutSpawner : MonoBehaviour
             float baseHp = CanonicalTypes[i].hpMultiplier;
             coconutTypes[i].typeName = CanonicalTypes[i].typeName;
             coconutTypes[i].hpMultiplier = baseHp * hpBoost;
+            // Agua = lootBase * vida ^ lootExponent  ->  los cocos grandes pagan mas agua por golpe.
             coconutTypes[i].lootMultiplier = lootBase * Mathf.Pow(baseHp, lootExponent);
             coconutTypes[i].prefab = keepPrefab;
         }

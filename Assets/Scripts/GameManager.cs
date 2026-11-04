@@ -78,7 +78,7 @@ public partial class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (GameInput.PauseDown && currentPhase != Phase.MainMenu && !CoconutUnlockPanel.BlocksPause && !StoryManager.BlocksPause)
+        if (Input.GetKeyDown(KeyCode.Escape) && currentPhase != Phase.MainMenu && !CoconutUnlockPanel.BlocksPause && !StoryManager.BlocksPause)
         {
             if (isPaused) ResumeGame(); else PauseGame();
         }
@@ -112,7 +112,6 @@ public partial class GameManager : MonoBehaviour
 
         UpdateMoneyUI();
         HandleUpgradeTreePanZoom();
-        UpdateAudioContext();
     }
 
     void SetCursorVisible(bool visible)

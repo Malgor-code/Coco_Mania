@@ -106,8 +106,7 @@ public class CoconutTarget : MonoBehaviour
     public Renderer colorRenderer;
     [Header("Ajustes de habilidad: Maldicion (Ancestral)")]
     public float maldicionDuration = 6f;
-    [Header("Collider objetivo (donde se le pega)")]
-    public Collider hitCollider;
+
     [Header("Ajustes de habilidad: Supremo (mini-boss, 3 fases)")]
     [Range(0f, 1f)] public float supremoFase2HpThreshold = 0.7f;
     [Range(0f, 1f)] public float supremoFase3HpThreshold = 0.3f;
@@ -145,7 +144,6 @@ public class CoconutTarget : MonoBehaviour
     {
         originalScale = transform.localScale;
         typedScale = originalScale;
-        if (hitCollider == null) hitCollider = GetComponentInChildren<Collider>();
         wander = GetComponent<CoconutWander>();
         rend = colorRenderer;
         if (rend == null)
@@ -540,7 +538,7 @@ public class CoconutTarget : MonoBehaviour
     void Die()
     {
         isDead = true;
-        if (hitCollider != null) hitCollider.enabled = false;
+
         if (wander != null) wander.enabled = false;
 
         bool hasFragments = fragmentPrefabs != null && fragmentPrefabs.Length > 0;
@@ -718,15 +716,5 @@ public class CoconutTarget : MonoBehaviour
         const float c1 = 1.70158f;
         const float c3 = c1 + 1f;
         return 1f + c3 * Mathf.Pow(x - 1f, 3f) + c1 * Mathf.Pow(x - 1f, 2f);
-    }
-    public Vector3 HitPoint
-    {
-        get { return hitCollider != null ? hitCollider.bounds.center : transform.position; }
-    }
-    public Vector3 GetClosestHitPoint(Vector3 from)
-    {
-        if (hitCollider == null) return transform.position;
-        Vector3 probe = new Vector3(from.x, hitCollider.bounds.center.y, from.z);
-        return hitCollider.ClosestPoint(probe);
     }
 }

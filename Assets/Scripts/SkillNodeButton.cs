@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SkillNodeButton : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class SkillNodeButton : MonoBehaviour
     public string nodeId;
 
     [Header("UI")]
-    public Image iconImage;
+    public TMP_Text label;
     public Button button;
     public Image backgroundImage;
 
@@ -68,7 +69,6 @@ public class SkillNodeButton : MonoBehaviour
     void Awake()
     {
         if (button == null) button = GetComponent<Button>();
-        if (iconImage != null) iconImage.raycastTarget = false;
         if (backgroundImage == null) backgroundImage = GetComponent<Image>();
         rt = GetComponent<RectTransform>();
         parentRt = transform.parent as RectTransform;
@@ -151,6 +151,7 @@ public class SkillNodeButton : MonoBehaviour
         bool canUnlock = GameManager.Instance.CanUnlockSkillPublic(nodeId);
         bool prereqsMet = ArePrerequisitesMet();
 
+        UpdateLabel(unlocked);
         UpdateVisualState(unlocked, canUnlock, prereqsMet);
         UpdateLines();
 
@@ -167,6 +168,12 @@ public class SkillNodeButton : MonoBehaviour
             if (!string.IsNullOrEmpty(pre) && !GameManager.Instance.IsSkillUnlocked(pre)) return false;
         }
         return true;
+    }
+
+    void UpdateLabel(bool unlocked)
+    {
+        if (label == null) return;
+        label.text = unlocked ? cachedNode.nodeName + "\n(comprado)" : cachedNode.nodeName + "\n" + cachedNode.cost + " ml" ;
     }
 
     void UpdateVisualState(bool unlocked, bool canUnlock, bool prereqsMet)
@@ -211,9 +218,11 @@ public class SkillNodeButton : MonoBehaviour
             canvasGroup.blocksRaycasts = visible;
         }
 
-        if (iconImage != null)
+        if (label != null)
         {
-            iconImage.enabled = visible;
+            Color c = label.color;
+            c.a = visible ? 1f : 0f;
+            label.color = c;
         }
     }
 

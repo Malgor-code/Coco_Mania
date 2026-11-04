@@ -6,9 +6,6 @@ using static MacheteData;
 
 public partial class GameManager
 {
-    [Header("Control (mando)")]
-    public float gamepadPanPixelsPerSecond = 900f;
-    public float gamepadZoomPerSecond = 1.2f;
     void HandleUpgradeTreePanZoom()
     {
         if (upgradeTreeContent == null) return;
@@ -38,21 +35,10 @@ public partial class GameManager
             upgradeTreeContent.anchoredPosition = newPos;
             lastPanMousePos = currentMousePos;
         }
-        Vector2 pad = GameInput.PanStick;
-        if (pad.sqrMagnitude > 0f)
-        {
-            Vector2 p = upgradeTreeContent.anchoredPosition - pad * gamepadPanPixelsPerSecond * Time.unscaledDeltaTime;
-            ClampContentPosition(ref p);
-            upgradeTreeContent.anchoredPosition = p;
-        }
-        float zoomDelta = 0f;
         float scroll = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(scroll) > 0.01f) zoomDelta += scroll * zoomSpeed;
-        zoomDelta += GameInput.ZoomAxis * gamepadZoomPerSecond * Time.unscaledDeltaTime;
-
-        if (Mathf.Abs(zoomDelta) > 0.0001f)
+        if (Mathf.Abs(scroll) > 0.01f)
         {
-            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + zoomDelta, minZoom, maxZoom);
+            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + scroll * zoomSpeed, minZoom, maxZoom);
             upgradeTreeContent.localScale = new Vector3(newScale, newScale, upgradeTreeContent.localScale.z);
             Vector2 clampedPos = upgradeTreeContent.anchoredPosition;
             ClampContentPosition(ref clampedPos);
@@ -87,6 +73,9 @@ public partial class GameManager
         upgradeTreeContent.localScale = Vector3.one;
     }
 
+    // NOTA: passiveDescription viene de los MacheteData (ScriptableObject).
+    // Si quieres que tambien cambie de idioma, agrega un campo passiveDescriptionEn
+    // en MacheteData y usa LocalizationManager.IsEnglish para elegir. (Ver abajo.)
     string PassiveLine(MacheteData m)
     {
         return (m != null && m.passive != MachetePassive.Ninguna && !string.IsNullOrEmpty(m.passiveDescription))
@@ -126,7 +115,7 @@ public partial class GameManager
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
     }
 
-    public void RefreshAllUI()
+    void RefreshAllUI()
     {
         if (indicacionesPanel != null)
         {
@@ -235,6 +224,9 @@ public partial class GameManager
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
     }
 
+    // ---- Sincronizacion de idioma ----
+    // Llama a SubscribeLanguage() en Start() y a UnsubscribeLanguage() en OnDestroy()
+    // del GameManager principal. Al cambiar el idioma se vuelve a pintar toda la UI.
     void SubscribeLanguage()
     {
         var loc = LocalizationManager.Instance;

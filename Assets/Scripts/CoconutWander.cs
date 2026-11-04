@@ -5,21 +5,21 @@ public class CoconutWander : MonoBehaviour
 {
     public enum MoveStyle
     {
-        Despreocupado,  
-        Perezoso,    
-        Terco,   
-        Nervioso,  
-        Rodante, 
-        Persistente, 
-        Vigilante,  
-        Saltarin, 
-        Robotico,    
-        Implacable,  
-        Asustadizo,  
-        Huidizo,   
-        Sigiloso,  
-        Embrujado,  
-        Jefe  
+        Despreocupado,  // Coco Verde
+        Perezoso,       // Maduro
+        Terco,          // Correoso
+        Nervioso,       // Fibroso
+        Rodante,        // Petreo
+        Persistente,    // Curtido
+        Vigilante,      // Blindado
+        Saltarin,       // Hierro
+        Robotico,       // Acero
+        Implacable,     // Titanio
+        Asustadizo,     // Diamante
+        Huidizo,        // Legendario
+        Sigiloso,       // Mitico
+        Embrujado,      // Ancestral
+        Jefe            // Supremo
     }
 
     [Header("Ajustes generales")]
@@ -113,6 +113,7 @@ public class CoconutWander : MonoBehaviour
                            | RigidbodyConstraints.FreezeRotationZ;
         }
 
+        // personalidad por coco
         speedMult = 1f + Random.Range(-speedVariation, speedVariation);
         lazy = Mathf.Lerp(1f, Random.Range(0.4f, 1.9f), personalityVariation);
 

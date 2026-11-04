@@ -186,7 +186,8 @@ public class Minigame_Bolos : MinigameBase
         powerMarker.color = Color.white;
         anglePunch = powerPunch = 1f;
     }
-    bool Clicked() => inputCooldown <= 0f && GameInput.ActionDown;
+
+    bool Clicked() => inputCooldown <= 0f && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space));
 
     protected override void Tick(float dt)
     {

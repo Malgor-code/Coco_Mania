@@ -24,10 +24,6 @@ public partial class GameManager
         if (waterCurrentML < next.unlockCost) return;
         waterCurrentML -= next.unlockCost;
         equippedMacheteIndex++;
-
-        if (machete != null && machete.activeInHierarchy && MacheteController.Instance != null)
-            MacheteController.Instance.EquipModel(equippedMacheteIndex);
-
         BetaLog("machete_" + equippedMacheteIndex);
         RecalculateAllStats();
         Log(Loc("log_new_machete", next.macheteName));
