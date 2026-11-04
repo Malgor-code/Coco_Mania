@@ -6,6 +6,9 @@ using static MacheteData;
 
 public partial class GameManager
 {
+    [Header("Control (mando)")]
+    public float gamepadPanPixelsPerSecond = 900f;
+    public float gamepadZoomPerSecond = 1.2f;
     void HandleUpgradeTreePanZoom()
     {
         if (upgradeTreeContent == null) return;
@@ -35,10 +38,21 @@ public partial class GameManager
             upgradeTreeContent.anchoredPosition = newPos;
             lastPanMousePos = currentMousePos;
         }
-        float scroll = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(scroll) > 0.01f)
+        Vector2 pad = GameInput.PanStick;
+        if (pad.sqrMagnitude > 0f)
         {
-            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + scroll * zoomSpeed, minZoom, maxZoom);
+            Vector2 p = upgradeTreeContent.anchoredPosition - pad * gamepadPanPixelsPerSecond * Time.unscaledDeltaTime;
+            ClampContentPosition(ref p);
+            upgradeTreeContent.anchoredPosition = p;
+        }
+        float zoomDelta = 0f;
+        float scroll = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(scroll) > 0.01f) zoomDelta += scroll * zoomSpeed;
+        zoomDelta += GameInput.ZoomAxis * gamepadZoomPerSecond * Time.unscaledDeltaTime;
+
+        if (Mathf.Abs(zoomDelta) > 0.0001f)
+        {
+            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + zoomDelta, minZoom, maxZoom);
             upgradeTreeContent.localScale = new Vector3(newScale, newScale, upgradeTreeContent.localScale.z);
             Vector2 clampedPos = upgradeTreeContent.anchoredPosition;
             ClampContentPosition(ref clampedPos);
@@ -72,6 +86,7 @@ public partial class GameManager
         upgradeTreeContent.anchoredPosition = Vector2.zero;
         upgradeTreeContent.localScale = Vector3.one;
     }
+
     string PassiveLine(MacheteData m)
     {
         return (m != null && m.passive != MachetePassive.Ninguna && !string.IsNullOrEmpty(m.passiveDescription))
@@ -85,9 +100,9 @@ public partial class GameManager
         float dSwing = next.baseSwingInterval - (cur != null ? cur.baseSwingInterval : next.baseSwingInterval);
         float dRadius = next.baseHitRadius - (cur != null ? cur.baseHitRadius : 0f);
 
-        return "\nDaño " + Signed(dDmg)
-             + "  |  Golpe " + Signed(dSwing) + " s"
-             + "  |  Radio " + Signed(dRadius);
+        return "\n" + Loc("stat_damage") + " " + Signed(dDmg)
+             + "  |  " + Loc("stat_swing") + " " + Signed(dSwing) + " s"
+             + "  |  " + Loc("stat_radius") + " " + Signed(dRadius);
     }
 
     static string Signed(float v) => (v >= 0f ? "+" : "") + v.ToString("0.##");
@@ -110,7 +125,8 @@ public partial class GameManager
         if (moneyText3 != null) moneyText3.text = Loc("collection_current_money", FormatWater(displayedMoney));
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
     }
-    void RefreshAllUI()
+
+    public void RefreshAllUI()
     {
         if (indicacionesPanel != null)
         {
@@ -127,7 +143,7 @@ public partial class GameManager
         if (accuracyText != null)
         {
             float accuracyPercent = daySwings > 0 ? (dayHits / (float)daySwings) * 100f : 0f;
-            accuracyText.text = Mathf.RoundToInt(accuracyPercent) + "% de punteria";
+            accuracyText.text = Loc("run_accuracy", Mathf.RoundToInt(accuracyPercent));
         }
 
         if (dayCoinsText != null)
@@ -135,9 +151,7 @@ public partial class GameManager
             bool gotCoinsToday = dayCoinsFound > 0;
             dayCoinsText.gameObject.SetActive(gotCoinsToday);
             if (gotCoinsToday)
-            {
-                dayCoinsText.text = "+" + dayCoinsFound + (dayCoinsFound == 1 ? " moneda encontrada" : " monedas encontradas");
-            }
+                dayCoinsText.text = Loc(dayCoinsFound == 1 ? "coins_found_one" : "coins_found_many", dayCoinsFound);
         }
 
         CoconutUnlockThreshold nextUnlock = GetNextLockedCoconut();
@@ -159,7 +173,7 @@ public partial class GameManager
         {
             bool showText = nextUnlock != null;
             nextUnlockPercentText.gameObject.SetActive(showText);
-            if (showText) nextUnlockPercentText.text = "Pedido " + nextUnlock.cycleRequired;
+            if (showText) nextUnlockPercentText.text = Loc("unlock_order", nextUnlock.cycleRequired);
         }
 
         if (deudaMoneyText != null) deudaMoneyText.text = Loc("collection_current_money", FormatWater(waterCurrentML));
@@ -168,11 +182,11 @@ public partial class GameManager
 
         if (deudaBillText != null)
         {
-            if (readyToDeliver) deudaBillText.text = "¡Pedido listo! Entregalo";
+            if (readyToDeliver) deudaBillText.text = Loc("deuda_ready");
             else
             {
                 float remaining = Mathf.Max(0f, waterTargetML - waterCurrentML);
-                deudaBillText.text = "Faltan " + FormatWater(remaining);
+                deudaBillText.text = Loc("deuda_remaining", FormatWater(remaining));
             }
         }
 
@@ -181,17 +195,17 @@ public partial class GameManager
             int daysToPlay = DaysToPlay;
             if (forcedOrderDecision)
             {
-                deudaDaysLeftText.text = readyToDeliver ? "¡ÚLTIMO DÍA! Paga o bancarrota" : "¡ÚLTIMO DÍA! No alcanza: bancarrota";
+                deudaDaysLeftText.text = Loc(readyToDeliver ? "deuda_last_day_pay" : "deuda_last_day_short");
                 deudaDaysLeftText.color = urgentColor;
             }
             else if (!readyToDeliver && daysToPlay <= 1)
             {
-                deudaDaysLeftText.text = "¡ÚLTIMO DÍA PARA JUNTAR EL AGUA!";
+                deudaDaysLeftText.text = Loc("deuda_last_day_collect");
                 deudaDaysLeftText.color = urgentColor;
             }
             else
             {
-                deudaDaysLeftText.text = daysToPlay + (daysToPlay == 1 ? " día restante" : " días restantes");
+                deudaDaysLeftText.text = Loc(daysToPlay == 1 ? "days_left_one" : "days_left_many", daysToPlay);
                 deudaDaysLeftText.color = normalDaysColor;
             }
         }
@@ -220,6 +234,19 @@ public partial class GameManager
 
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", legacyPoints);
     }
+
+    void SubscribeLanguage()
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc != null) loc.OnLanguageChanged += RefreshAllUI;
+    }
+
+    void UnsubscribeLanguage()
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc != null) loc.OnLanguageChanged -= RefreshAllUI;
+    }
+
     public CoconutAbility GetAbilityForCoconutName(string name)
     {
         if (coconutUnlocks == null || string.IsNullOrEmpty(name)) return CoconutAbility.Ninguna;

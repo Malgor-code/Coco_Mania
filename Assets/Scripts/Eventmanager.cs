@@ -10,8 +10,11 @@ public class EventManager : MonoBehaviour
     public static EventManager Instance;
 
     [Header("Frecuencia")]
-    [Tooltip("Cada cuantos dias jugados sale un evento.")]
-    public int everyNDays = 5;
+    [Tooltip("Minimo de dias jugados entre un evento y el siguiente.")]
+    public int minDaysBetweenEvents = 3;
+    [Tooltip("Maximo de dias jugados entre un evento y el siguiente. Cada vez se sortea un numero entre minimo y maximo (ambos incluidos). Pon el mismo numero en los dos para que sea fijo.")]
+    public int maxDaysBetweenEvents = 5;
+    [HideInInspector] public int everyNDays = 5;
     public bool eventsEnabled = true;
     bool UseStory => StoryManager.Instance != null && StoryManager.Instance.dialoguePanel != null;
     [Header("Recompensa (% del pedido actual)")]
@@ -33,12 +36,12 @@ public class EventManager : MonoBehaviour
     int eventCount = 0;
     int round = 0;
     int lastEventDay = -1;
+    int nextEventDay = -1;
     Action onFinished;
     MinigameBase current;
     float currentDifficulty = 1f;
     float rewardMl;
 
-    // UI
     static readonly Color DimColor = new Color(0f, 0f, 0f, 0.8f);
     static readonly Color AreaColor = new Color(0.12f, 0.2f, 0.13f, 1f);
     Canvas canvas;
@@ -111,12 +114,24 @@ public class EventManager : MonoBehaviour
         eventCount = 0;
         round = 0;
         lastEventDay = -1;
+        nextEventDay = -1;
         bag.Clear();
     }
+
+    int RollGap()
+    {
+        int lo = Mathf.Max(1, minDaysBetweenEvents);
+        int hi = Mathf.Max(lo, maxDaysBetweenEvents);
+        return UnityEngine.Random.Range(lo, hi + 1);
+    }
+
     public bool ShouldTrigger(int daysPlayed)
     {
-        if (!eventsEnabled || everyNDays <= 0 || state != State.None) return false;
-        return daysPlayed > 0 && daysPlayed % everyNDays == 0 && daysPlayed != lastEventDay;
+        if (!eventsEnabled || state != State.None) return false;
+        if (daysPlayed <= 0) return false;
+        if (nextEventDay < 0) nextEventDay = RollGap();
+
+        return daysPlayed >= nextEventDay && daysPlayed != lastEventDay;
     }
 
     public void StartEvent(Action finishedCallback)
@@ -125,6 +140,7 @@ public class EventManager : MonoBehaviour
         onFinished = finishedCallback;
         lastEventDay = GameManager.Instance != null ? GameManager.Instance.runDayCount : -1;
         eventCount++;
+        if (lastEventDay >= 0) nextEventDay = lastEventDay + RollGap();
 
         current = PickNext();
         currentDifficulty = Mathf.Min(difficultyCap,
@@ -291,6 +307,7 @@ public class EventManager : MonoBehaviour
         cardExtra = MiniUI.Label(card.transform, "", 34, new Vector2(0, -150), new Vector2(1050, 130), new Color(0.9f, 0.9f, 0.85f));
         cardButton = MiniUI.Btn(card.transform, "¡A jugar!", new Vector2(0, -280), new Vector2(380, 90), new Color(0.2f, 0.6f, 0.25f), null);
         cardButtonLabel = cardButton.GetComponentInChildren<TMP_Text>();
+        card.AddComponent<GamepadFocus>();
         areaImg = MiniUI.Img("GameArea", dim.transform, AreaColor, Vector2.zero, new Vector2(1400, 720));
         gameArea = areaImg.gameObject;
         gameRoot = areaImg.rectTransform;
