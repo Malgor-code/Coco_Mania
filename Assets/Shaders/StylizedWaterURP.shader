@@ -1,4 +1,19 @@
-
+// =====================================================================================
+//  Stylized/Water URP  -  Unity 6 (URP 17)
+//  Agua estilizada, optimizada para cámara inclinada (vista tipo "juego casual").
+//
+//  OPTIMIZACIÓN
+//   - 1 solo pass, sin luces adicionales, sin sombras, sin GrabPass.
+//   - Todas las funciones pesadas son shader_feature_local: lo que apagas NO cuesta nada
+//     y los variantes sin usar se eliminan del build.
+//   - Un único sampler (LinearRepeat) para todas las texturas.
+//   - UVs y animación de normales calculados en el vertex shader.
+//   - Compatible con SRP Batcher (todo en UnityPerMaterial).
+//   - Patrón Voronoi procedural = 0 texturas (o usa una textura: 2 samples).
+//
+//  REQUISITOS URP Asset:  Depth Texture (profundidad/espuma)  y  Opaque Texture (solo refracción)
+//  Malla recomendada: plano subdividido (ej. 64x64) si usas olas de vértice.
+// =====================================================================================
 Shader "Stylized/Water URP"
 {
     Properties
@@ -15,7 +30,7 @@ Shader "Stylized/Water URP"
         // ---- Patrón (caustics / celdas) ----
         _PatternColor      ("Pattern Color", Color) = (0.70, 0.95, 0.97, 1)
         _PatternIntensity  ("Pattern Intensity", Range(0, 1)) = 0.55
-        _PatternScale      ("Pattern Scale", Range(0, 1)) = 0.6
+        _PatternScale      ("Pattern Scale", Range(0.05, 5)) = 0.6
         _PatternSpeed      ("Pattern Speed", Range(0, 2)) = 0.25
         _PatternLineWidth  ("Line Width", Range(0.01, 0.5)) = 0.12
         _PatternSoftness   ("Line Softness", Range(0.001, 0.5)) = 0.08
