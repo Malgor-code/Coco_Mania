@@ -547,6 +547,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 301885127590024273}
     m_Modifications:
+    - target: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f1ecaa4826f4b3c4baa14791082c1bcd, type: 2}
     - target: {fileID: 704204481458553677, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -555,6 +559,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3447186039631569728, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: beeeea12954365f43a1263cb700cba9c, type: 2}
+    - target: {fileID: 3588399578531169029, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 39c9d11e94e20d54297645ee29e2dddc, type: 2}
+    - target: {fileID: 3614740599302803077, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 39c9d11e94e20d54297645ee29e2dddc, type: 2}
     - target: {fileID: 6205389778159658485, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -603,6 +619,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7968071520394269326, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: beeeea12954365f43a1263cb700cba9c, type: 2}
     - target: {fileID: 8049649540775743635, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Name
       value: Msh_Coco
