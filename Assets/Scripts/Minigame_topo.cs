@@ -248,7 +248,7 @@ public class Minigame_Topo : MinigameBase
         if (swingT < 1f) swingT = Mathf.Min(1f, swingT + dt / SwingTime);
         if (hammer == null || cam == null) return;
 
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(GameInput.PointerPosition);
         if (groundPlane.Raycast(ray, out float enter))
             hammerTarget = ray.GetPoint(enter) + Vector3.up * hammerLift;
         hammerPos = Vector3.Lerp(hammerPos, hammerTarget, 1f - Mathf.Exp(-40f * dt));
@@ -265,7 +265,7 @@ public class Minigame_Topo : MinigameBase
 
     bool TryHit(Camera cam)
     {
-        Vector2 mouse = Input.mousePosition;
+        Vector2 mouse = GameInput.PointerPosition;
         int best = -1;
         float bestD = float.MaxValue;
         for (int i = 0; i < holes.Length; i++)

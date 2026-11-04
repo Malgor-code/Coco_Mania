@@ -307,6 +307,7 @@ public class EventManager : MonoBehaviour
         cardExtra = MiniUI.Label(card.transform, "", 34, new Vector2(0, -150), new Vector2(1050, 130), new Color(0.9f, 0.9f, 0.85f));
         cardButton = MiniUI.Btn(card.transform, "¡A jugar!", new Vector2(0, -280), new Vector2(380, 90), new Color(0.2f, 0.6f, 0.25f), null);
         cardButtonLabel = cardButton.GetComponentInChildren<TMP_Text>();
+        card.AddComponent<GamepadFocus>();
         areaImg = MiniUI.Img("GameArea", dim.transform, AreaColor, Vector2.zero, new Vector2(1400, 720));
         gameArea = areaImg.gameObject;
         gameRoot = areaImg.rectTransform;
