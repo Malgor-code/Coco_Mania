@@ -11,7 +11,7 @@ public static class GameInput
     static Vector2 virtualPos, lastMouse;
     static int lastFrame = -1;
     static bool initialized;
-
+    public static float CursorSlow = 1f;
     public static bool UsingGamepad { get; private set; }
 
     public static bool GamepadConnected
@@ -75,13 +75,12 @@ public static class GameInput
     {
         get
         {
+            if (Input.GetKeyDown(KeyCode.JoystickButton0)) return true;
 #if ENABLE_INPUT_SYSTEM
             var gp = Gamepad.current;
-            return gp != null && (gp.buttonSouth.wasPressedThisFrame
-                               || gp.buttonWest.wasPressedThisFrame
-                               || gp.rightTrigger.wasPressedThisFrame);
+            return gp != null && gp.buttonSouth.wasPressedThisFrame;
 #else
-            return false;
+        return false;
 #endif
         }
     }
@@ -126,9 +125,73 @@ public static class GameInput
         {
             float mag = stick.magnitude;
             Vector2 dir = stick / mag;
-            virtualPos += dir * (mag * mag) * Screen.height * CursorSpeedScreenHeights * Time.unscaledDeltaTime;
+            virtualPos += dir * (mag * mag) * Screen.height * CursorSpeedScreenHeights * CursorSlow * Time.unscaledDeltaTime;
             virtualPos.x = Mathf.Clamp(virtualPos.x, 0f, Screen.width);
             virtualPos.y = Mathf.Clamp(virtualPos.y, 0f, Screen.height);
+        }
+    }
+    public static bool NavLeftDown
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM
+            var gp = Gamepad.current;
+            return gp != null && gp.dpad.left.wasPressedThisFrame;
+#else
+        return false;
+#endif
+        }
+    }
+
+    public static bool NavRightDown
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM
+            var gp = Gamepad.current;
+            return gp != null && gp.dpad.right.wasPressedThisFrame;
+#else
+        return false;
+#endif
+        }
+    }
+
+    public static bool TabPrevDown
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM
+            var gp = Gamepad.current;
+            return gp != null && gp.leftShoulder.wasPressedThisFrame;
+#else
+        return false;
+#endif
+        }
+    }
+
+    public static bool TabNextDown
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM
+            var gp = Gamepad.current;
+            return gp != null && gp.rightShoulder.wasPressedThisFrame;
+#else
+        return false;
+#endif
+        }
+    }
+
+    public static bool BackDown
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM
+            var gp = Gamepad.current;
+            return gp != null && gp.buttonEast.wasPressedThisFrame;
+#else
+        return false;
+#endif
         }
     }
 }

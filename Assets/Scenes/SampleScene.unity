@@ -10631,7 +10631,7 @@ MonoBehaviour:
   shakeUnits: 0.15
   shakeStrength: 0.551
   introDollyDistance: 0.6
-  showGizmos: 1
+  showGizmos: 0
   gizmoSize: 0.1
   bolos:
     pinPrefab: {fileID: 8049649540775743635, guid: a4323417dc1be9947a1fadf9b782db82, type: 3}
@@ -27695,7 +27695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &682314498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55845,6 +55845,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 40
+  snapRadius: 60
+  slowOverButton: 0.45
 --- !u!1 &1390162353
 GameObject:
   m_ObjectHideFlags: 0

@@ -122,10 +122,8 @@ public class MacheteGallery3D : MonoBehaviour
     void Update()
     {
         if (!isOpen) return;
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) Move(-1);
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) Move(1);
-
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || GameInput.NavLeftDown) Move(-1);
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || GameInput.NavRightDown) Move(1);
         float targetX = -index * spacing;
         float x = Mathf.SmoothDamp(carousel.localPosition.x, targetX, ref slideVel,
                                    slideSmoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
@@ -223,9 +221,12 @@ public class MacheteGallery3D : MonoBehaviour
             }
             buyButton.gameObject.SetActive(buyButtonWasActive);
         }
-
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RefreshAllUI();
+            StartCoroutine(RefreshUINextFrame());
+        }
         RestoreHidden();
-
     }
 
     public void Move(int dir)
@@ -710,5 +711,10 @@ public class MacheteGallery3D : MonoBehaviour
         Bounds b = rs[0].bounds;
         for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
         return b;
+    }
+    System.Collections.IEnumerator RefreshUINextFrame()
+    {
+        yield return null;
+        if (GameManager.Instance != null) GameManager.Instance.RefreshAllUI();
     }
 }

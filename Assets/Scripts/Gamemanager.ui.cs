@@ -126,7 +126,7 @@ public partial class GameManager
         if (coinCountText != null) coinCountText.text = Loc("collection_coins", coconutCoins);
     }
 
-    void RefreshAllUI()
+    public void RefreshAllUI()
     {
         if (indicacionesPanel != null)
         {
