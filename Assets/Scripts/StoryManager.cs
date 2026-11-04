@@ -114,7 +114,7 @@ public class StoryManager : MonoBehaviour
     {
         if (!isShowing) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || GameInput.ClickDown)
             nextPressed = true;
         if (nextButton != null)
         {

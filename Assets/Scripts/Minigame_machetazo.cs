@@ -263,7 +263,7 @@ public class Minigame_Machetazo : MinigameBase
             if (machete != null && cam != null)
                 PlaceMachete(cam, 0f, Mathf.Sin(Time.time * 6f) * cocoHeight * 0.04f);
 
-            if (inputCooldown <= 0f && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space)))
+            if (inputCooldown <= 0f && GameInput.ActionDown)
                 Judge(size);
             else if (k >= 1f)
                 Judge(-1f);

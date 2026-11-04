@@ -41,7 +41,7 @@ public class MacheteController : MonoBehaviour
     public bool useAnimationEvent = false;
     [Tooltip("En que punto del clip ocurre el golpe (0 = inicio, 1 = final). Ej: 0.45")]
     [Range(0f, 1f)] public float impactNormalizedTime = 0.45f;
-
+    public GameObject[] macheteModels;
     [Header("Sonido de golpe (opcional)")]
     public AudioClip[] swingSounds;
     [Range(0f, 0.3f)] public float swingPitchVariation = 0.08f;
@@ -164,7 +164,7 @@ public class MacheteController : MonoBehaviour
     {
         if (Camera.main == null) return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(GameInput.PointerPosition);
         if (groundPlane.Raycast(ray, out float distance))
         {
             Vector3 targetPoint = ray.GetPoint(distance);
@@ -212,9 +212,34 @@ public class MacheteController : MonoBehaviour
         timer = 0f;
         impactPending = false;
         if (impactRoutine != null) { StopCoroutine(impactRoutine); impactRoutine = null; }
+
+        if (GameManager.Instance != null)
+            EquipModel(GameManager.Instance.equippedMacheteIndex);
+
         if (animator != null) SetAnimSpeed(1f);
     }
+    public void EquipModel(int index)
+    {
+        if (macheteModels == null || macheteModels.Length == 0) return;
 
+        index = Mathf.Clamp(index, 0, macheteModels.Length - 1);
+
+        for (int i = 0; i < macheteModels.Length; i++)
+        {
+            if (macheteModels[i] != null)
+                macheteModels[i].SetActive(i == index);
+        }
+
+        GameObject model = macheteModels[index];
+        if (model != null)
+        {
+            Animator a = model.GetComponentInChildren<Animator>(true);
+            if (a != null) animator = a;
+        }
+
+        if (animator != null) animator.applyRootMotion = false;
+        cachedClipLength = ResolveClipLength();
+    }
     void SetAnimSpeed(float s)
     {
         if (!string.IsNullOrEmpty(speedParameterName)) animator.SetFloat(speedParameterName, s);
@@ -284,7 +309,7 @@ public class MacheteController : MonoBehaviour
             foreach (var coco in CoconutSpawner.Instance.GetActiveCoconuts())
             {
                 if (coco == null) continue;
-                Vector3 b = coco.transform.position; b.y = 0f;
+                Vector3 b = coco.GetClosestHitPoint(transform.position); b.y = 0f;
                 if ((a - b).sqrMagnitude <= radiusSqr) targets.Add(coco);
             }
 
