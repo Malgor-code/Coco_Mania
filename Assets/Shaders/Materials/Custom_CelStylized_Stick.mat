@@ -67,7 +67,7 @@ Material:
     - _MidThreshold: 0.731
     - _Normal: 0
     - _NormalStrength: 1
-    - _OutlineWidth: 1.5
+    - _OutlineWidth: 0
     - _RimLightInfluence: 0.6
     - _RimSoftness: 0.2
     - _RimThreshold: 0.873
@@ -84,10 +84,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.79622644, g: 0.5522846, b: 0.33501598, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MidColor: {r: 0.87169814, g: 0.87169814, b: 0.87169814, a: 1}
+    - _MidColor: {r: 0.802826, g: 0.70825917, b: 0.8679245, a: 1}
     - _OutlineColor: {r: 0.11999995, g: 0.06999998, b: 0.049999982, a: 1}
     - _RimColor: {r: 1, g: 0.8, b: 0.9, a: 1}
-    - _ShadowColor: {r: 0.5698112, g: 0.5698112, b: 0.5698112, a: 1}
+    - _ShadowColor: {r: 0.68317306, g: 0.59278214, b: 0.7264151, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

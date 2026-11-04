@@ -64,15 +64,17 @@ Material:
     - _BloomBoost: 1.5
     - _Masks: 0
     - _Metallic: 0
+    - _MidThreshold: 0.68
     - _Normal: 0
     - _NormalStrength: 1
-    - _OutlineWidth: 1.5
+    - _OutlineWidth: 0
     - _RimLightInfluence: 0.6
     - _RimSoftness: 0.05
     - _RimThreshold: 0.65
     - _Roughness: 0.5
     - _ShadeSoftness: 0.02
     - _ShadeThreshold: 0.35
+    - _ShadowSaturation: 0.6
     - _SpecSize: 0.12
     - _SpecSoftness: 0.01
     - _UseEmission: 0
@@ -82,6 +84,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MidColor: {r: 0.88, g: 0.82, b: 0.95, a: 1}
     - _OutlineColor: {r: 0.11999995, g: 0.06999998, b: 0.049999982, a: 1}
     - _RimColor: {r: 1, g: 0.8, b: 0.9, a: 1}
     - _ShadowColor: {r: 0.54999995, g: 0.45, b: 0.75, a: 1}
