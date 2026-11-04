@@ -6,6 +6,9 @@ using static MacheteData;
 
 public partial class GameManager
 {
+    [Header("Control (mando)")]
+    public float gamepadPanPixelsPerSecond = 900f;
+    public float gamepadZoomPerSecond = 1.2f;
     void HandleUpgradeTreePanZoom()
     {
         if (upgradeTreeContent == null) return;
@@ -35,10 +38,21 @@ public partial class GameManager
             upgradeTreeContent.anchoredPosition = newPos;
             lastPanMousePos = currentMousePos;
         }
-        float scroll = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(scroll) > 0.01f)
+        Vector2 pad = GameInput.PanStick;
+        if (pad.sqrMagnitude > 0f)
         {
-            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + scroll * zoomSpeed, minZoom, maxZoom);
+            Vector2 p = upgradeTreeContent.anchoredPosition - pad * gamepadPanPixelsPerSecond * Time.unscaledDeltaTime;
+            ClampContentPosition(ref p);
+            upgradeTreeContent.anchoredPosition = p;
+        }
+        float zoomDelta = 0f;
+        float scroll = Input.mouseScrollDelta.y;
+        if (Mathf.Abs(scroll) > 0.01f) zoomDelta += scroll * zoomSpeed;
+        zoomDelta += GameInput.ZoomAxis * gamepadZoomPerSecond * Time.unscaledDeltaTime;
+
+        if (Mathf.Abs(zoomDelta) > 0.0001f)
+        {
+            float newScale = Mathf.Clamp(upgradeTreeContent.localScale.x + zoomDelta, minZoom, maxZoom);
             upgradeTreeContent.localScale = new Vector3(newScale, newScale, upgradeTreeContent.localScale.z);
             Vector2 clampedPos = upgradeTreeContent.anchoredPosition;
             ClampContentPosition(ref clampedPos);

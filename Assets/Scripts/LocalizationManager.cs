@@ -142,6 +142,7 @@ public class LocalizationManager : MonoBehaviour
         Add("coins_found_one", "+{0} moneda encontrada", "+{0} coin found", "+{0} moeda encontrada", "+{0} pièce trouvée", "+{0} Münze gefunden", "+{0}枚のコインを発見");
         Add("coins_found_many", "+{0} monedas encontradas", "+{0} coins found", "+{0} moedas encontradas", "+{0} pièces trouvées", "+{0} Münzen gefunden", "+{0}枚のコインを発見");
         Add("unlock_order", "Pedido {0}", "Order {0}", "Pedido {0}", "Commande {0}", "Bestellung {0}", "注文 {0}");
+        Add("collection_Desbloquear", "Para desbloquear el siguiente", "To unlock the next one", "Para desbloquear o próximo", "Pour débloquer le suivant", "Um das Nächste freizuschalten", "次のロックを解除するには");
 
         // ---------- Panel de Deuda ----------
         Add("debt_title", "Deuda", "Debt", "Dívida", "Dette", "Schulden", "借金");
