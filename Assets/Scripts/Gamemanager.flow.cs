@@ -187,6 +187,7 @@ public partial class GameManager
         RefreshAllUI();
     }
 
+    // ---------------- Pedido / bancarrota ----------------
 
     public void PayDebt()
     {
