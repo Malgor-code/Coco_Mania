@@ -128,7 +128,7 @@ public class LocalizationManager : MonoBehaviour
         // ---------- Pantalla de Recaudacion (fin de energia) ----------
         Add("collection_title", "Recaudacion", "Collection", "Arrecadação", "Bilan", "Tagesbilanz", "集計");
         Add("collection_coconuts_killed", "Cocos destruidos: {0}", "Coconuts destroyed: {0}", "Cocos destruídos: {0}", "Noix de coco détruites : {0}", "Zerstörte Kokosnüsse: {0}", "壊したココナッツ：{0}");
-        Add("collection_money_earned", "Dinero conseguido: ${0}", "Money earned: ${0}", "Dinheiro ganho: ${0}", "Argent gagné : ${0}", "Verdientes Geld: ${0}", "獲得金額：${0}");
+        Add("collection_money_earned", "Dinero conseguido: {0}", "Money earned: {0}", "Dinheiro ganho: {0}", "Argent gagné : {0}", "Verdientes Geld: {0}", "獲得金額：{0}");
         Add("collection_lechita_earned", "Agua conseguida: {0}", "Water earned: {0}", "Água obtida: {0}", "Eau récoltée : {0}", "Gewonnenes Wasser: {0}", "獲得した水：{0}");
         Same("collection_current_money", "{0}");
         Same("collection_coins", "{0}");
