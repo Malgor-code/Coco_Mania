@@ -52610,7 +52610,6 @@ GameObject:
   - component: {fileID: 1316515131}
   - component: {fileID: 1316515134}
   - component: {fileID: 1316515133}
-  - component: {fileID: 1316515132}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -52637,19 +52636,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1316515132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1316515130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c7c521c62e98054fb79835136a162c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: menu_settings
 --- !u!114 &1316515133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66817,7 +66803,6 @@ GameObject:
   - component: {fileID: 1609466481}
   - component: {fileID: 1609466484}
   - component: {fileID: 1609466483}
-  - component: {fileID: 1609466482}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -66844,19 +66829,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1609466482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609466480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c7c521c62e98054fb79835136a162c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: menu_settings
 --- !u!114 &1609466483
 MonoBehaviour:
   m_ObjectHideFlags: 0
