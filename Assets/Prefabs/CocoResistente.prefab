@@ -445,7 +445,7 @@ MonoBehaviour:
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
-  colorRenderer: {fileID: 7615688705278271982}
+  colorRenderer: {fileID: 2070583631264509281}
   maldicionDuration: 6
   hitCollider: {fileID: 9187959422996958801}
   supremoFase2HpThreshold: 0.7
@@ -608,6 +608,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+--- !u!23 &2070583631264509281 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4541808395589612309, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+  m_PrefabInstance: {fileID: 2574808273089928820}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3016670676799121060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 749518955595561168, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
@@ -821,10 +826,5 @@ PrefabInstance:
 --- !u!4 &647359988313350105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
-  m_PrefabInstance: {fileID: 7783956618350466544}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &7615688705278271982 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
   m_PrefabInstance: {fileID: 7783956618350466544}
   m_PrefabAsset: {fileID: 0}

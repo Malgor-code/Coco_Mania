@@ -300,8 +300,8 @@ public partial class GameManager
     }
     public void RestartRun()
     {
+        phaseBeforeMenu = Phase.MainMenu;
         BetaLog("run_restart");
-
         currentPhase = Phase.MainMenu;
         isChoosingPerk = false;
         pendingPerkOffers = 0;

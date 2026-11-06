@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -79,7 +79,8 @@ public class DamageNumberPopup : MonoBehaviour
                 scaleMul = coinScale;
                 break;
         }
-
+        if (style == PopupStyle.Damage && !string.IsNullOrEmpty(text))
+            text = text.TrimStart('-', '−'); 
         label.text = text;
         label.color = baseColor;
         transform.localScale = Vector3.zero;

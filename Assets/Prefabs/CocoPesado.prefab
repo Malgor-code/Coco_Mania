@@ -445,7 +445,7 @@ MonoBehaviour:
   camuflajeVisibleDuration: 3
   camuflajeHiddenDuration: 2
   camuflajeHiddenAlpha: 0.2
-  colorRenderer: {fileID: 7615688705278271982}
+  colorRenderer: {fileID: 6298536485472194815}
   maldicionDuration: 6
   hitCollider: {fileID: 5687096689276062571}
   supremoFase2HpThreshold: 0.7
@@ -613,6 +613,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7784946175770150314, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
   m_PrefabInstance: {fileID: 7239240226468323557}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &6298536485472194815 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3683407033772847130, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+  m_PrefabInstance: {fileID: 7239240226468323557}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7783956618350466544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -723,11 +728,6 @@ PrefabInstance:
 --- !u!4 &647359988313350105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
-  m_PrefabInstance: {fileID: 7783956618350466544}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &7615688705278271982 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
   m_PrefabInstance: {fileID: 7783956618350466544}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8633033917453958505

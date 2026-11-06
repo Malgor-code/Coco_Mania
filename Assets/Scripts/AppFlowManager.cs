@@ -10,17 +10,24 @@ public class AppFlowManager : MonoBehaviour
     {
         ShowMainMenu();
     }
-
     public void OnPlayPressed()
     {
         if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(false);
 
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.BeginNewGame();
-        }
+        GameManager gm = GameManager.Instance;
+        if (gm == null) return;
+
+        if (gm.HasRunToResume()) gm.ResumeRun();
+        else gm.BeginNewGame();
     }
+    public void OnNewGamePressed()
+    {
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (GameManager.Instance != null) GameManager.Instance.StartFreshRun();
+    }
+
     public void ShowMainMenu()
     {
         if (mainMenuPanel != null) mainMenuPanel.SetActive(true);

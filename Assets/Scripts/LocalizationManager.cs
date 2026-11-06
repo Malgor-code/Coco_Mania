@@ -157,7 +157,7 @@ public class LocalizationManager : MonoBehaviour
         Add("deuda_last_day_collect", "¡ÚLTIMO DÍA PARA JUNTAR EL AGUA!", "LAST DAY TO COLLECT THE WATER!", "ÚLTIMO DIA PARA JUNTAR A ÁGUA!", "DERNIER JOUR POUR RÉCOLTER L'EAU !", "LETZTER TAG, UM WASSER ZU SAMMELN!", "水を集める最終日！");
         Add("days_left_one", "{0} día restante", "{0} day left", "{0} dia restante", "{0} jour restant", "{0} Tag übrig", "残り{0}日");
         Add("days_left_many", "{0} días restantes", "{0} days left", "{0} dias restantes", "{0} jours restants", "{0} Tage übrig", "残り{0}日");
-
+        Add("debt_total", "Debes: {0}", "You owe: {0}", "Você deve: {0}", "Tu dois : {0}", "Du schuldest: {0}", "借金：{0}");
         // ---------- Panel de Mejoras / Tienda ----------
         Add("upgrades_title", "Mejoras", "Upgrades", "Melhorias", "Améliorations", "Verbesserungen", "アップグレード");
         Add("shop_title", "Tienda", "Shop", "Loja", "Boutique", "Shop", "ショップ");

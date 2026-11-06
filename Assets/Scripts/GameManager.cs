@@ -137,8 +137,7 @@ public partial class GameManager : MonoBehaviour
 
     public static string FormatWater(float ml)
     {
-        if (ml >= 1000f) return (ml / 1000f).ToString("0.0") + " L";
-        return Mathf.RoundToInt(ml) + " mL";
+        return Mathf.RoundToInt(ml).ToString("N0", System.Globalization.CultureInfo.InvariantCulture) + " mL";
     }
 
     public bool PlayWaterDropEffect(Vector3 worldPosition, float waterAmountML, GameObject deathFx = null)
