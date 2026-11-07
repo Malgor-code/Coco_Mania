@@ -16,11 +16,11 @@ public class RewardMachineManager : MonoBehaviour
     public int slotCount = 3;
 
     [Header("Probabilidades base (deberian sumar 100)")]
-    [Range(0f, 100f)] public float commonChance = 55f;
-    [Range(0f, 100f)] public float uncommonChance = 28f;
-    [Range(0f, 100f)] public float rareChance = 12f;
-    [Range(0f, 100f)] public float epicChance = 4f;
-    [Range(0f, 100f)] public float legendaryChance = 1f;
+    [Range(0f, 100f)] public float commonChance = 0f;
+    [Range(0f, 100f)] public float uncommonChance = 0f;
+    [Range(0f, 100f)] public float rareChance = 0f;
+    [Range(0f, 100f)] public float epicChance = 0f;
+    [Range(0f, 100f)] public float legendaryChance = 100f;
 
     [Header("Pity / garantia")]
     public int pityEpicThreshold = 20;
@@ -202,8 +202,17 @@ public class RewardMachineManager : MonoBehaviour
     }
     bool GrantReward(RewardData data)
     {
+        if (data.IsWorldObject)
+        {
+            if (LegendaryWorldSpawner.Instance == null)
+            {
+                Debug.LogWarning("[RewardMachineManager] Falta LegendaryWorldSpawner en la escena. Se devuelve la moneda.");
+                return true;
+            }
+            persistent.unlockedRewardIds.Add(data.id);
+            return !LegendaryWorldSpawner.Instance.Spawn(data);
+        }
         bool isTemporary = data.category == RewardCategory.Temporary;
-
         if (!isTemporary && IsRelicOwned(data.id)) return true;
 
         persistent.unlockedRewardIds.Add(data.id);
@@ -317,7 +326,7 @@ public class RewardMachineManager : MonoBehaviour
         currentRun.pullsSinceLegendary = 0;
         currentRun.bag.Clear();
         foreach (var slot in currentRun.slots) slot.Clear();
-
+        if (LegendaryWorldSpawner.Instance != null) LegendaryWorldSpawner.Instance.ClearAll();
         OnStateChanged?.Invoke();
     }
 }

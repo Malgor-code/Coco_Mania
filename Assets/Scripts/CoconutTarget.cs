@@ -32,13 +32,25 @@ public class CoconutTarget : MonoBehaviour
     [Header("Fragmentos al romperse (como los cerdos)")]
     [Tooltip("Prefabs de los pedazos rotos del coco. Cada uno necesita un Collider y (opcional) un Rigidbody, se le agrega uno automaticamente si le falta. Se instancian TODOS al morir y salen disparados como una explosion. Mientras esto este vacio (tu artista todavia no te paso los pedazos), el coco simplemente desaparece al morir, sin salir volando.")]
     public GameObject[] fragmentPrefabs;
-    public float fragmentExplosionForce = 5f;
-    public float fragmentTorque = 8f;
+    [Header("Corte de machete (como se separan los pedazos)")]
+    public float fragmentSeparationForce = 0.5f;
+    public float fragmentFollowThroughForce = 0.7f;
+    public float fragmentUpForce = 0.25f;
+    public float fragmentDrag = 4f;
+    public float fragmentAngularDrag = 5f;
+    public float fragmentExtraGravity = 15f;
+    public float fragmentTorque = 1.5f;
+    [Range(0f, 1f)] public float fragmentRandomness = 0.25f;
+    private Vector3 lastHitFrom;
+    private bool hitFromExplicit;
     [Tooltip("Cuanto tiempo quedan los fragmentos en el suelo antes de desaparecer.")]
     public float fragmentLifetime = 3f;
     [Header("Habilidad (de solo lectura -- se resuelve automaticamente por nombre en ApplyType)")]
     public GameManager.CoconutAbility ability = GameManager.CoconutAbility.Ninguna;
-
+    [Header("Desvanecido de fragmentos")]
+    [Tooltip("Ultimo tramo de 'Fragment Lifetime' en que se desvanecen.")]
+    public float fragmentFadeDuration = 1.2f;
+    [Range(0f, 1f)] public float fragmentShrinkTo = 0.6f;
     [Header("Ajustes de habilidad: Resistente (Correoso) / Armadura (Blindado) / Fragil (Diamante)")]
     [Range(0f, 1f)] public float resistenteDamageReduction = 0.30f;
     [Range(0f, 1f)] public float armaduraDamageReduction = 0.50f;
@@ -143,9 +155,18 @@ public class CoconutTarget : MonoBehaviour
 
     void Awake()
     {
+        HideChildFragments();
         originalScale = transform.localScale;
         typedScale = originalScale;
-        if (hitCollider == null) hitCollider = GetComponentInChildren<Collider>();
+        if (hitCollider == null)
+        {
+            foreach (var c in GetComponentsInChildren<Collider>())
+            {
+                if (c.GetComponentInParent<FragmentFader>() != null) continue;
+                hitCollider = c;
+                break;
+            }
+        }
         wander = GetComponent<CoconutWander>();
         rend = colorRenderer;
         if (rend == null)
@@ -153,6 +174,7 @@ public class CoconutTarget : MonoBehaviour
             foreach (var r in GetComponentsInChildren<Renderer>())
             {
                 if (r is ParticleSystemRenderer) continue;
+                if (r.GetComponentInParent<FragmentFader>() != null) continue;
                 rend = r;
                 break;
             }
@@ -444,6 +466,10 @@ public class CoconutTarget : MonoBehaviour
     public bool TakeDamage(int amount, bool isCritical = false)
     {
         if (isDead) return false;
+        if (!hitFromExplicit)
+            lastHitFrom = MacheteController.Instance != null
+                ? MacheteController.Instance.transform.position
+                : transform.position - transform.forward;
         float hpPercentNow = hpMax > 0 ? (float)hp / hpMax : 1f;
         float executeMult = GameManager.Instance != null
             ? GameManager.Instance.GetExecuteDamageMultiplier(hpPercentNow)
@@ -498,6 +524,14 @@ public class CoconutTarget : MonoBehaviour
 
         return killedNow;
     }
+    public bool TakeDamage(int amount, bool isCritical, Vector3 hitFrom)
+    {
+        lastHitFrom = hitFrom;
+        hitFromExplicit = true;
+        bool killed = TakeDamage(amount, isCritical);
+        hitFromExplicit = false;
+        return killed;
+    }
 
     void TriggerRebote()
     {
@@ -543,11 +577,13 @@ public class CoconutTarget : MonoBehaviour
         if (hitCollider != null) hitCollider.enabled = false;
         if (wander != null) wander.enabled = false;
 
-        bool hasFragments = fragmentPrefabs != null && fragmentPrefabs.Length > 0;
+        FragmentFader[] pieces = GetComponentsInChildren<FragmentFader>(true);
+        bool hasFragments = pieces.Length > 0 || (fragmentPrefabs != null && fragmentPrefabs.Length > 0);
 
         if (hasFragments)
         {
-            SpawnFragments();
+            if (pieces.Length > 0) SpawnChildFragments(pieces);
+            else SpawnFragments();
             if (rend != null) rend.enabled = false;
         }
 
@@ -624,9 +660,73 @@ public class CoconutTarget : MonoBehaviour
         }
         return max > 0f ? Mathf.Min(max + 0.5f, 10f) : 3f;
     }
+    void HideChildFragments()
+    {
+        foreach (var p in GetComponentsInChildren<FragmentFader>(true))
+        {
+            foreach (var r in p.GetComponentsInChildren<Renderer>(true))
+                if (!(r is ParticleSystemRenderer)) r.enabled = false;
+            foreach (var c in p.GetComponentsInChildren<Collider>(true))
+                c.enabled = false;
+            var rb = p.GetComponent<Rigidbody>();
+            if (rb != null) rb.isKinematic = true;
+        }
+    }
+    void GetSlashBasis(out Vector3 slashDir, out Vector3 side)
+    {
+        slashDir = transform.position - lastHitFrom;
+        slashDir.y = 0f;
+        if (slashDir.sqrMagnitude < 0.0001f)
+        {
+            Vector2 r = Random.insideUnitCircle.normalized;
+            slashDir = new Vector3(r.x, 0f, r.y);
+        }
+        slashDir.Normalize();
+        side = Vector3.Cross(Vector3.up, slashDir);
+    }
+
+    void LaunchFragment(GameObject frag, Vector3 worldPos, Vector3 slashDir, Vector3 side)
+    {
+        Rigidbody rb = frag.GetComponent<Rigidbody>();
+        if (rb == null) rb = frag.AddComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.linearDamping = fragmentDrag;
+        rb.angularDamping = fragmentAngularDrag;
+        rb.maxDepenetrationVelocity = 1f;
+        var cf = frag.GetComponent<ConstantForce>();
+        if (cf == null) cf = frag.AddComponent<ConstantForce>();
+        cf.force = Vector3.down * rb.mass * fragmentExtraGravity;
+        Vector3 off = worldPos - transform.position;
+        off.y = 0f;
+        float s = Vector3.Dot(off, side);
+        float sign = Mathf.Abs(s) > 0.01f ? Mathf.Sign(s) : (Random.value < 0.5f ? -1f : 1f);
+
+        float k = 1f + Random.Range(-fragmentRandomness, fragmentRandomness);
+        Vector3 velocity = side * sign * fragmentSeparationForce
+                         + slashDir * fragmentFollowThroughForce
+                         + Vector3.up * fragmentUpForce;
+        rb.AddForce(velocity * k, ForceMode.VelocityChange);
+        rb.AddTorque(Random.insideUnitSphere * fragmentTorque, ForceMode.VelocityChange);
+
+        FragmentFader.Attach(frag, fragmentLifetime, fragmentFadeDuration, fragmentShrinkTo);
+    }
+
+    void IgnoreFragmentCollisions(List<GameObject> frags)
+    {
+        var cols = new List<Collider>();
+        foreach (var f in frags) cols.AddRange(f.GetComponentsInChildren<Collider>());
+        for (int i = 0; i < cols.Count; i++)
+            for (int j = i + 1; j < cols.Count; j++)
+                Physics.IgnoreCollision(cols[i], cols[j]);
+    }
 
     void SpawnFragments()
     {
+        GetSlashBasis(out Vector3 slashDir, out Vector3 side);
+        float sizeRatio = originalScale.x > 0.0001f ? typedScale.x / originalScale.x : 1f;
+        var spawned = new List<GameObject>();
+
         foreach (var prefab in fragmentPrefabs)
         {
             if (prefab == null) continue;
@@ -634,22 +734,16 @@ public class CoconutTarget : MonoBehaviour
             Quaternion worldRot = transform.rotation * prefab.transform.localRotation;
 
             GameObject frag = Instantiate(prefab, worldPos, worldRot);
-
-            float sizeRatio = originalScale.x > 0.0001f ? typedScale.x / originalScale.x : 1f;
+            frag.SetActive(true);
+            foreach (var rr in frag.GetComponentsInChildren<Renderer>(true))
+                if (!(rr is ParticleSystemRenderer)) rr.enabled = true;
             frag.transform.localScale *= sizeRatio;
-
-            Rigidbody fragRb = frag.GetComponent<Rigidbody>();
-            if (fragRb == null) fragRb = frag.AddComponent<Rigidbody>();
-
-            Vector3 outDir = worldPos - transform.position;
-            if (outDir.sqrMagnitude < 0.0001f) outDir = Random.onUnitSphere;
-            outDir = (outDir.normalized + Vector3.up * 0.6f).normalized;
-
-            fragRb.AddForce(outDir * fragmentExplosionForce, ForceMode.Impulse);
-            fragRb.AddTorque(Random.insideUnitSphere * fragmentTorque, ForceMode.Impulse);
-
-            Destroy(frag, fragmentLifetime);
+            spawned.Add(frag);
         }
+
+        IgnoreFragmentCollisions(spawned);
+        foreach (var frag in spawned)
+            LaunchFragment(frag, frag.transform.position, slashDir, side);
     }
 
     protected virtual void OnSpecialAbilityTrigger()
@@ -728,5 +822,51 @@ public class CoconutTarget : MonoBehaviour
         if (hitCollider == null) return transform.position;
         Vector3 probe = new Vector3(from.x, hitCollider.bounds.center.y, from.z);
         return hitCollider.ClosestPoint(probe);
+    }
+    void SpawnChildFragments(FragmentFader[] pieces)
+    {
+        Vector3 slashDir = transform.position - lastHitFrom;
+        slashDir.y = 0f;
+        if (slashDir.sqrMagnitude < 0.0001f)
+        {
+            Vector2 r = Random.insideUnitCircle.normalized;
+            slashDir = new Vector3(r.x, 0f, r.y);
+        }
+        slashDir.Normalize();
+        Vector3 side = Vector3.Cross(Vector3.up, slashDir);
+
+        foreach (var piece in pieces)
+        {
+            GameObject frag = piece.gameObject;
+            Vector3 worldPos = frag.transform.position;
+            frag.transform.SetParent(null, true);
+            frag.SetActive(true);
+            foreach (var rr in frag.GetComponentsInChildren<Renderer>(true))
+                if (!(rr is ParticleSystemRenderer)) rr.enabled = true;
+
+            var cols = frag.GetComponentsInChildren<Collider>(true);
+            if (cols.Length == 0) frag.AddComponent<BoxCollider>();
+            else foreach (var c in cols) c.enabled = true;
+
+            Rigidbody fragRb = frag.GetComponent<Rigidbody>();
+            if (fragRb == null) fragRb = frag.AddComponent<Rigidbody>();
+            fragRb.linearDamping = fragmentDrag;
+            fragRb.angularDamping = fragmentAngularDrag;
+
+            Vector3 off = worldPos - transform.position;
+            off.y = 0f;
+            Vector3 outDir = off.sqrMagnitude > 0.0004f
+                ? off.normalized
+                : side * (Random.value < 0.5f ? -1f : 1f);
+
+            float k = 1f + Random.Range(-fragmentRandomness, fragmentRandomness);
+            Vector3 velocity = outDir * fragmentSeparationForce
+                             + slashDir * fragmentFollowThroughForce
+                             + Vector3.up * fragmentUpForce;
+            fragRb.AddForce(velocity * k, ForceMode.VelocityChange);
+            fragRb.AddTorque(Random.insideUnitSphere * fragmentTorque, ForceMode.VelocityChange);
+
+            FragmentFader.Attach(frag, fragmentLifetime, fragmentFadeDuration, fragmentShrinkTo);
+        }
     }
 }

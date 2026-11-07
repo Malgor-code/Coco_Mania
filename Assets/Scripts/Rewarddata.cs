@@ -17,10 +17,17 @@ public class RewardData : ScriptableObject
     public RewardEffect effect;
 
     [Header("Magnitud del efecto")]
-    [Tooltip("Valor generico segun 'effect': +dano (2), +% critico (0.05 = 5%), +% agua (0.15 = 15%), +stamina (3), +radio (0.1), etc.")]
+    [Tooltip("Valor generico segun 'effect': +dano (2), +% critico (0.05 = 5%), +% agua (0.15 = 15%), +stamina (3), +radio (0.1), etc. Para legendarios fisicos es la magnitud de la habilidad.")]
     public float value;
 
     [Header("Duracion (solo categoria Temporary)")]
     [Tooltip("Cuantos DIAS dura el efecto una vez colocado en una ranura. Se descuenta 1 cada vez que arranca un nuevo dia.")]
     public int durationDays = 1;
+
+    [Header("Objeto fisico (legendarios)")]
+    [Tooltip("Si se asigna, este premio NO da estadisticas: aparece como objeto en el mapa con su habilidad.")]
+    public GameObject worldPrefab;
+    public LegendaryAbility ability;
+
+    public bool IsWorldObject => worldPrefab != null;
 }

@@ -792,6 +792,7 @@ MonoBehaviour:
   camuflajeHiddenAlpha: 0.2
   colorRenderer: {fileID: 0}
   maldicionDuration: 6
+  hitCollider: {fileID: 0}
   supremoFase2HpThreshold: 0.7
   supremoFase3HpThreshold: 0.3
   supremoFase1DamageReduction: 0.2
