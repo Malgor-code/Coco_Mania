@@ -83,12 +83,12 @@ Material:
     - _UseRim: 0
     - _UseSpec: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.9452368, g: 0.8915094, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MidColor: {r: 0.8872347, g: 0.7877358, b: 1, a: 1}
+    - _MidColor: {r: 0.8505416, g: 0.7216981, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0.8150787, g: 0.8, b: 1, a: 1}
-    - _ShadowColor: {r: 0.8917146, g: 0.8443396, b: 1, a: 1}
-    - _SpecColor: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 1}
+    - _RimColor: {r: 1, g: 0.9464046, b: 0.6745098, a: 1}
+    - _ShadowColor: {r: 0.8183963, g: 0.740566, b: 1, a: 1}
+    - _SpecColor: {r: 1.6944983, g: 1.5943396, b: 2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
