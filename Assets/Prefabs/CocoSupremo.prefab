@@ -410,10 +410,18 @@ MonoBehaviour:
   lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   lowHpBlinksPerSecond: 4
   fragmentPrefabs: []
-  fragmentExplosionForce: 5
+  fragmentSeparationForce: 0.5
+  fragmentFollowThroughForce: 0.7
+  fragmentUpForce: 0.25
+  fragmentDrag: 4
+  fragmentAngularDrag: 5
+  fragmentExtraGravity: 15
   fragmentTorque: 8
+  fragmentRandomness: 0.25
   fragmentLifetime: 3
   ability: 14
+  fragmentFadeDuration: 1.2
+  fragmentShrinkTo: 0.6
   resistenteDamageReduction: 0.3
   armaduraDamageReduction: 0.5
   diamanteDamageReduction: 0.9
@@ -599,6 +607,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -251664392905880587, guid: 8b474a9a417a11048821f6320ab5ed02, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -251664392905880587, guid: 8b474a9a417a11048821f6320ab5ed02, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ff91dde003e1e4346abd6893cd3f023f, type: 2}
+    - target: {fileID: -251664392905880587, guid: 8b474a9a417a11048821f6320ab5ed02, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2ea292bf97fd2a54a953fbdd434b9551, type: 2}
     - target: {fileID: 919132149155446097, guid: 8b474a9a417a11048821f6320ab5ed02, type: 3}
       propertyPath: m_Name
       value: Crown HoD
@@ -622,6 +642,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 301885127590024273}
     m_Modifications:
+    - target: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 17741313d136a37429ba51d0427ee346, type: 2}
     - target: {fileID: 704204481458553677, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -630,6 +654,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3588399578531169029, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fd8ea5a292c44ca48a5afe8e9b644c39, type: 2}
+    - target: {fileID: 3614740599302803077, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fd8ea5a292c44ca48a5afe8e9b644c39, type: 2}
     - target: {fileID: 6205389778159658485, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -678,6 +710,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7968071520394269326, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 134e0af7588b7d04ea2194b753a139ac, type: 2}
     - target: {fileID: 8049649540775743635, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Name
       value: Msh_Coco
