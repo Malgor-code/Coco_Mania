@@ -68,15 +68,15 @@ Material:
     - _Normal: 0
     - _NormalStrength: 1
     - _OutlineWidth: 0
-    - _RimLightInfluence: 0.6
-    - _RimSoftness: 0.05
-    - _RimThreshold: 0.65
+    - _RimLightInfluence: 1
+    - _RimSoftness: 0.2
+    - _RimThreshold: 0.72
     - _Roughness: 0.5
     - _ShadeSoftness: 0.001
     - _ShadeThreshold: 0.401
     - _ShadowSaturation: 0.6
-    - _SpecSize: 0.12
-    - _SpecSoftness: 0.01
+    - _SpecSize: 0.01
+    - _SpecSoftness: 0.1
     - _UseEmission: 0
     - _UseRamp: 0
     - _UseRim: 0
@@ -85,7 +85,7 @@ Material:
     - _BaseColor: {r: 0.6790124, g: 0.9245283, b: 0.63234246, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MidColor: {r: 0.88, g: 0.82, b: 0.95, a: 1}
-    - _OutlineColor: {r: 0.24528301, g: 0.12395276, b: 0.07728728, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 1, g: 0.8, b: 0.9, a: 1}
     - _ShadowColor: {r: 0.49803925, g: 0.5294118, b: 0.33333334, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
