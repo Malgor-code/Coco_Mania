@@ -67,7 +67,7 @@ Material:
     - _MidThreshold: 0.7
     - _Normal: 0
     - _NormalStrength: 1
-    - _OutlineWidth: 1.5
+    - _OutlineWidth: 0
     - _RimLightInfluence: 0.6
     - _RimSoftness: 0
     - _RimThreshold: 0.72
