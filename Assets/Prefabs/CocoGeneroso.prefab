@@ -410,10 +410,18 @@ MonoBehaviour:
   lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   lowHpBlinksPerSecond: 4
   fragmentPrefabs: []
-  fragmentExplosionForce: 5
+  fragmentSeparationForce: 0.5
+  fragmentFollowThroughForce: 0.7
+  fragmentUpForce: 0.25
+  fragmentDrag: 4
+  fragmentAngularDrag: 5
+  fragmentExtraGravity: 15
   fragmentTorque: 8
+  fragmentRandomness: 0.25
   fragmentLifetime: 3
   ability: 1
+  fragmentFadeDuration: 1.2
+  fragmentShrinkTo: 0.6
   resistenteDamageReduction: 0.3
   armaduraDamageReduction: 0.5
   diamanteDamageReduction: 0.9
@@ -551,6 +559,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: CocoVerde
       objectReference: {fileID: 0}
+    - target: {fileID: 2914964783601099574, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d4882fdac4ad13e468c737ae8099e75d, type: 2}
+    - target: {fileID: 3534155285156842206, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 4621554052996746881, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
     - target: {fileID: 5520330541556972312, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1273671
@@ -603,6 +623,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5771873594859388130, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 5985008163155426828, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f7e83ee6e0e97b946bddf39ac9a2434b, type: 2}
+    - target: {fileID: 6564390954563372597, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d805cfa1229bb494b937d0af40081453, type: 2}
+    - target: {fileID: 6581730111282007652, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 6820061615949353758, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 6937045957914957984, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 7821298814940832733, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d4882fdac4ad13e468c737ae8099e75d, type: 2}
+    - target: {fileID: 8404823513588826338, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f7e83ee6e0e97b946bddf39ac9a2434b, type: 2}
+    - target: {fileID: 9150443176161741129, guid: e89caa9bce2520a42b668d937cd65ac8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 107f04fd9a841634ab1122aa8a2620e4, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

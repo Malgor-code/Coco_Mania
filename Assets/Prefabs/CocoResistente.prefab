@@ -410,10 +410,18 @@ MonoBehaviour:
   lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   lowHpBlinksPerSecond: 4
   fragmentPrefabs: []
-  fragmentExplosionForce: 5
+  fragmentSeparationForce: 0.5
+  fragmentFollowThroughForce: 0.7
+  fragmentUpForce: 0.25
+  fragmentDrag: 4
+  fragmentAngularDrag: 5
+  fragmentExtraGravity: 15
   fragmentTorque: 8
+  fragmentRandomness: 0.25
   fragmentLifetime: 3
   ability: 2
+  fragmentFadeDuration: 1.2
+  fragmentShrinkTo: 0.6
   resistenteDamageReduction: 0.3
   armaduraDamageReduction: 0.5
   diamanteDamageReduction: 0.9
@@ -547,6 +555,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 647359988313350105}
     m_Modifications:
+    - target: {fileID: 198097900345831738, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
     - target: {fileID: 749518955595561168, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.12755
@@ -599,10 +611,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1132384249558921754, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 1749296480173239367, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
+    - target: {fileID: 3589593271679089058, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
+    - target: {fileID: 4541808395589612309, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
+    - target: {fileID: 4833042652818021630, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d299b7d5c90b1aa47b69a361b424cc3c, type: 2}
+    - target: {fileID: 5456436607029830078, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
+    - target: {fileID: 6073124076757528693, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
     - target: {fileID: 6346673844443896227, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
       propertyPath: m_Name
       value: coco_maduro (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6773733329916826938, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a874da0b3a92c064eb10170c0a02dbc6, type: 2}
+    - target: {fileID: 8632374913621579740, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 8825524632748965052, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 8891578902765964669, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

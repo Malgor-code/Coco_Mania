@@ -410,10 +410,18 @@ MonoBehaviour:
   lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   lowHpBlinksPerSecond: 4
   fragmentPrefabs: []
-  fragmentExplosionForce: 5
+  fragmentSeparationForce: 0.5
+  fragmentFollowThroughForce: 0.7
+  fragmentUpForce: 0.25
+  fragmentDrag: 4
+  fragmentAngularDrag: 5
+  fragmentExtraGravity: 15
   fragmentTorque: 8
+  fragmentRandomness: 0.25
   fragmentLifetime: 3
   ability: 4
+  fragmentFadeDuration: 1.2
+  fragmentShrinkTo: 0.6
   resistenteDamageReduction: 0.3
   armaduraDamageReduction: 0.5
   diamanteDamageReduction: 0.9
@@ -547,10 +555,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 647359988313350105}
     m_Modifications:
+    - target: {fileID: 16874317545919528, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bec05f86456710d44a0a82d665b7b149, type: 2}
+    - target: {fileID: 1392845994134648320, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bec05f86456710d44a0a82d665b7b149, type: 2}
     - target: {fileID: 1524900452183810558, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
       propertyPath: m_Name
       value: sandia (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3683407033772847130, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4622bd2bfe8332846be9d11ac8d28661, type: 2}
+    - target: {fileID: 4593684621045698987, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f9094ef7f8486994599bc40fd364f4ca, type: 2}
     - target: {fileID: 7784946175770150314, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.1115725
@@ -603,6 +627,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8645806589543977427, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bde6c079c45e16649bd4decf339c1e4a, type: 2}
+    - target: {fileID: 8834134828565824972, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bde6c079c45e16649bd4decf339c1e4a, type: 2}
+    - target: {fileID: 8921452155983783531, guid: a2c9ff017fe6eaa4198e90162d28e17f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f9094ef7f8486994599bc40fd364f4ca, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

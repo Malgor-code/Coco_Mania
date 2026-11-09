@@ -7,14 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_CelStylized_CocoNormal_Iris
+  m_Name: CocoVerde_Pupils_MAT
   m_Shader: {fileID: 4800000, guid: e90a85d3e0c7c7b4ca9a264d67e2c8d4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _MASKS_OFF
   - _NORMAL_OFF
-  - _SPECULAR
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -37,7 +36,7 @@ Material:
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: -0.55, y: 3.37}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -61,34 +60,34 @@ Material:
     m_Ints: []
     m_Floats:
     - _AOStrength: 1
-    - _AmbientInfluence: 1
+    - _AmbientInfluence: 0.5
     - _BloomBoost: 1.5
     - _Masks: 0
     - _Metallic: 0
-    - _MidThreshold: 0
+    - _MidThreshold: 0.68
     - _Normal: 0
     - _NormalStrength: 1
     - _OutlineWidth: 0
-    - _RimLightInfluence: 1
-    - _RimSoftness: 0.5
-    - _RimThreshold: 0.736
-    - _Roughness: 1
-    - _ShadeSoftness: 0
-    - _ShadeThreshold: 0
-    - _ShadowSaturation: 0
-    - _SpecSize: 0.5
-    - _SpecSoftness: 0.1
+    - _RimLightInfluence: 0.6
+    - _RimSoftness: 0.05
+    - _RimThreshold: 0.65
+    - _Roughness: 0.5
+    - _ShadeSoftness: 0.02
+    - _ShadeThreshold: 0.35
+    - _ShadowSaturation: 0.6
+    - _SpecSize: 0.12
+    - _SpecSoftness: 0.01
     - _UseEmission: 0
     - _UseRamp: 0
     - _UseRim: 0
-    - _UseSpec: 1
+    - _UseSpec: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MidColor: {r: 0.8872347, g: 0.7877358, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0.8150787, g: 0.8, b: 1, a: 1}
-    - _ShadowColor: {r: 0.8917146, g: 0.8443396, b: 1, a: 1}
-    - _SpecColor: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 1}
+    - _MidColor: {r: 0.88, g: 0.82, b: 0.95, a: 1}
+    - _OutlineColor: {r: 0.11999995, g: 0.06999998, b: 0.049999982, a: 1}
+    - _RimColor: {r: 1, g: 0.8, b: 0.9, a: 1}
+    - _ShadowColor: {r: 0.54999995, g: 0.45, b: 0.75, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

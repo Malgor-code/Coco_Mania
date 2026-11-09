@@ -410,10 +410,18 @@ MonoBehaviour:
   lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   lowHpBlinksPerSecond: 4
   fragmentPrefabs: []
-  fragmentExplosionForce: 5
+  fragmentSeparationForce: 0.5
+  fragmentFollowThroughForce: 0.7
+  fragmentUpForce: 0.25
+  fragmentDrag: 4
+  fragmentAngularDrag: 5
+  fragmentExtraGravity: 15
   fragmentTorque: 8
+  fragmentRandomness: 0.25
   fragmentLifetime: 3
   ability: 10
+  fragmentFadeDuration: 1.2
+  fragmentShrinkTo: 0.6
   resistenteDamageReduction: 0.3
   armaduraDamageReduction: 0.5
   diamanteDamageReduction: 0.9
@@ -602,7 +610,7 @@ PrefabInstance:
     - target: {fileID: -2356618994049303564, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f1085db6d79df2e49beaa7a0d8c5016d, type: 2}
+      objectReference: {fileID: 2100000, guid: f79a279e8a999cf468dac13e5547f8d7, type: 2}
     - target: {fileID: 919132149155446097, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: m_Name
       value: casa_baja_ventanas
@@ -610,19 +618,19 @@ PrefabInstance:
     - target: {fileID: 2571116086939446297, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f1085db6d79df2e49beaa7a0d8c5016d, type: 2}
+      objectReference: {fileID: 2100000, guid: c0e248b8d34116748bf4130e18f99983, type: 2}
     - target: {fileID: 3124558915713942164, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f1085db6d79df2e49beaa7a0d8c5016d, type: 2}
+      objectReference: {fileID: 2100000, guid: 2f68e5cce2125ca42877391a9abc770b, type: 2}
     - target: {fileID: 4805906906150876595, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f1085db6d79df2e49beaa7a0d8c5016d, type: 2}
+      objectReference: {fileID: 2100000, guid: 17c6b702204a4314abdd05de6bca3ea1, type: 2}
     - target: {fileID: 6216349256402141590, guid: d8829513693901341a8620a1f6546404, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f1085db6d79df2e49beaa7a0d8c5016d, type: 2}
+      objectReference: {fileID: 2100000, guid: 46a32898772747d4a96a93b510724e37, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -641,6 +649,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 301885127590024273}
     m_Modifications:
+    - target: {fileID: 411648127595213854, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a0bdeb830f2ea64f8872d993e831652, type: 2}
     - target: {fileID: 704204481458553677, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -649,6 +661,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3447186039631569728, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1bdc4e9302d8ec14f89175cc55852209, type: 2}
+    - target: {fileID: 3588399578531169029, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a83c8dcb620c71342bf16a1708b89e51, type: 2}
+    - target: {fileID: 3614740599302803077, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a83c8dcb620c71342bf16a1708b89e51, type: 2}
     - target: {fileID: 6205389778159658485, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -697,6 +721,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7968071520394269326, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1bdc4e9302d8ec14f89175cc55852209, type: 2}
     - target: {fileID: 8049649540775743635, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       propertyPath: m_Name
       value: Msh_Coco
