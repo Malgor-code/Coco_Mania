@@ -90,6 +90,13 @@ public class CoconutTarget : MonoBehaviour
     [Header("Animacion al recibir golpe")]
     [Tooltip("Animator que se activa al golpear. Si el objeto es hijo del prefab, arrastralo aqui. Si esta en la escena, dejalo vacio y asignalo en CoconutSpawner: el spawner lo pasa solo.")]
     public Animator hitAnimator;
+    [Header("Animacion al aparecer (spawn)")]
+    [Tooltip("Nombre EXACTO del estado de spawn en el Animator Controller. Vacio = no se reproduce nada.")]
+    public string spawnStateName = "";
+    [Tooltip("Segundos que el coco se queda quieto (sin caminar) mientras dura la animacion de aparicion. 0 = no se detiene.")]
+    public float spawnStunDuration = 0f;
+    private int spawnStateHash;
+    private bool warnedMissingSpawnState = false;
     [Tooltip("Nombre EXACTO del estado de la animacion en el Animator Controller.")]
     public string hitStateName = "Hit";
     [Header("Ajustes de habilidad: Regeneracion (Legendario, y parcial en Supremo fase 2)")]
@@ -243,6 +250,7 @@ public class CoconutTarget : MonoBehaviour
         }
 
         if (rend != null) rend.enabled = true;
+        PlaySpawnAnimation();
     }
 
     void ResetAbilityState()
@@ -365,7 +373,27 @@ public class CoconutTarget : MonoBehaviour
         hitAnimator.Play(hitStateHash, 0, hitAnimStartNormalized);
         hitAnimator.Update(0f); 
     }
+    void PlaySpawnAnimation()
+    {
+        if (hitAnimator == null || string.IsNullOrEmpty(spawnStateName)) return;
 
+        if (spawnStateHash == 0) spawnStateHash = Animator.StringToHash(spawnStateName);
+
+        if (!hitAnimator.HasState(0, spawnStateHash))
+        {
+            if (!warnedMissingSpawnState)
+            {
+                warnedMissingSpawnState = true;
+                Debug.LogWarning("[CoconutTarget] El Animator no tiene el estado '" + spawnStateName + "'. Revisa 'Spawn State Name'.", this);
+            }
+            return;
+        }
+
+        hitAnimator.Play(spawnStateHash, 0, 0f);
+        hitAnimator.Update(0f);
+
+        if (spawnStunDuration > 0f && wander != null) wander.Stun(spawnStunDuration);
+    }
     float ResolveHitClipLength()
     {
         if (hitAnimator == null || hitAnimator.runtimeAnimatorController == null) return 0f;

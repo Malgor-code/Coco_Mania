@@ -571,6 +571,8 @@ MonoBehaviour:
   implacableBuffDuration: 2
   implacableDamageReduction: 0.3
   hitAnimator: {fileID: 1747711446717148761}
+  spawnStateName: Spawn_Coco
+  spawnStunDuration: 0
   hitStateName: Hit_Coco
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
@@ -709,15 +711,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.93813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.93813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.93813
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -729,7 +731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.734
+      value: 0.698
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d8fde90b4cc307b4a9cd69c9e0c35cc3, type: 3}
       propertyPath: m_LocalRotation.w
