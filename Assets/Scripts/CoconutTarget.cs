@@ -133,7 +133,6 @@ public class CoconutTarget : MonoBehaviour
     [Range(0f, 1f)] public float supremoFase1DamageReduction = 0.2f;
     [Range(0f, 1f)] public float supremoFase3DamageReduction = 0.35f;
     private int supremoCurrentPhase = 1;
-
     public int hp;
     public int hpMax;
     [Header("Moneda 3D (cuando el coco suelta moneda)")]
@@ -157,12 +156,38 @@ public class CoconutTarget : MonoBehaviour
     private Renderer rend;
     private AudioSource audioSource;
     private Animator animator;
-
+    [Header("Decals de daño (arrastra aqui, en orden: 1er golpe, 2do, 3ro)")]
+    [Tooltip("Cada golpe activa el siguiente decal. Si el coco muere en 2 golpes, solo se ven los 2 primeros.")]
+    public GameObject[] damageDecals;
+    private int decalsShown = 0;
     private Coroutine blinkCoroutine;
-
+    [Header("Colocacion automatica de decals")]
+    public bool autoPlaceDecals = true;
+    [Tooltip("Que tan despegado de la superficie (0.01 para quad/sprite, 0 para Decal Projector).")]
+    public float decalSurfaceOffset = 0.01f;
+    [Tooltip("Que tan dispersos salen respecto a la camara (0 = todos al centro, 0.5 = muy repartidos).")]
+    [Range(0f, 1f)] public float decalSpread = 0.4f;
+    [Tooltip("Marca esto si el decal se ve de espaldas (quad/sprite volteado).")]
+    public bool flipDecalFacing = false;
+    [Header("Decals de daño (arrastra SPRITES, en orden: 1er golpe, 2do, 3ro)")]
+    public Sprite[] damageDecalSprites;
+    [Tooltip("Tamaño del decal en unidades de mundo.")]
+    public float decalSize = 0.5f;
+    [Header("Decals de daño (arrastra MESHES/PREFABS, en orden: 1er golpe, 2do, 3ro)")]
+    public GameObject[] damageDecalPrefabs;
+    [Tooltip("Multiplicador del tamaño original del prefab.")]
+    public float decalScale = 1f;
+    [Tooltip("Corrige la orientacion si tu mesh sale de lado o al reves. Prueba (90,0,0), (-90,0,0) o (180,0,0).")]
+    public Vector3 decalRotationOffset = Vector3.zero;
+    public bool randomSpin = true;
+    private readonly List<GameObject> spawnedDecals = new List<GameObject>();
+    public Color decalColor = Color.white;
+    public int decalSortingOrder = 100;
+    public Renderer decalTarget;
     void Awake()
     {
         HideChildFragments();
+        ResetDecals();
         originalScale = transform.localScale;
         typedScale = originalScale;
         if (hitCollider == null)
@@ -255,6 +280,7 @@ public class CoconutTarget : MonoBehaviour
 
     void ResetAbilityState()
     {
+        ResetDecals();
         fibraDuraCurrentStack = 0f;
         fibraDuraLastHitTime = -999f;
         reboteHitCounter = 0;
@@ -535,6 +561,7 @@ public class CoconutTarget : MonoBehaviour
         }
         PlaySound(hitSounds);
         PlayHitAnimation();
+        ShowNextDecal();
         if (JuiceManager.Instance != null)
         {
             JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.5f, "-" + finalDamage, false);
@@ -896,5 +923,154 @@ public class CoconutTarget : MonoBehaviour
 
             FragmentFader.Attach(frag, fragmentLifetime, fragmentFadeDuration, fragmentShrinkTo);
         }
+    }
+    void ResetDecals()
+    {
+        decalsShown = 0;
+        foreach (var d in spawnedDecals)
+            if (d != null) Destroy(d);
+        spawnedDecals.Clear();
+    }
+
+    void ShowNextDecal()
+    {
+        if (damageDecalSprites == null || decalsShown >= damageDecalSprites.Length) return;
+        Sprite sprite = damageDecalSprites[decalsShown];
+        if (sprite == null) { decalsShown++; return; }
+
+        Renderer target = decalTarget != null ? decalTarget : rend;
+        if (target == null) return;
+
+        Bounds b = target.bounds;
+        Vector3 center = b.center;
+        float far = b.extents.magnitude * 3f;
+
+        Camera cam = Camera.main;
+        Vector3 baseDir = cam != null ? (cam.transform.position - center).normalized : Vector3.up;
+        Vector3 dir = (baseDir + Random.insideUnitSphere * decalSpread).normalized;
+
+        Vector3 point, normal;
+        bool found = RaycastRendererMesh(target, new Ray(center + dir * far, -dir), out point, out normal);
+        if (!found) found = RaycastRendererMesh(target, new Ray(center + baseDir * far, -baseDir), out point, out normal);
+
+        if (!found)
+        {
+            Vector3 ext = Vector3.Max(b.extents, Vector3.one * 0.0001f);
+            float k = Mathf.Sqrt(dir.x * dir.x / (ext.x * ext.x) + dir.y * dir.y / (ext.y * ext.y) + dir.z * dir.z / (ext.z * ext.z));
+            point = center + dir / Mathf.Max(0.0001f, k);
+            Vector3 q = point - center;
+            normal = new Vector3(q.x / (ext.x * ext.x), q.y / (ext.y * ext.y), q.z / (ext.z * ext.z)).normalized;
+        }
+
+        GameObject go = new GameObject("DamageDecal_" + (decalsShown + 1));
+        go.transform.SetParent(target.transform, true);
+        go.transform.position = point + normal * decalSurfaceOffset;
+        go.transform.rotation = Quaternion.LookRotation(-normal) * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+
+        Vector3 ps = target.transform.lossyScale;
+        float avg = Mathf.Max(0.0001f, (Mathf.Abs(ps.x) + Mathf.Abs(ps.y) + Mathf.Abs(ps.z)) / 3f);
+        float spriteSize = Mathf.Max(0.0001f, Mathf.Max(sprite.bounds.size.x, sprite.bounds.size.y));
+        go.transform.localScale = Vector3.one * (decalSize / spriteSize / avg);
+
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.color = decalColor;
+        sr.sortingOrder = decalSortingOrder + decalsShown;
+
+        spawnedDecals.Add(go);
+        decalsShown++;
+    }
+
+    bool warnedUnreadableMesh = false;
+
+    bool RaycastRendererMesh(Renderer target, Ray ray, out Vector3 point, out Vector3 normal)
+    {
+        point = Vector3.zero;
+        normal = Vector3.up;
+
+        Mesh mesh;
+        Matrix4x4 l2w;
+        bool temp = false;
+
+        if (target is SkinnedMeshRenderer smr)
+        {
+            mesh = new Mesh();
+            smr.BakeMesh(mesh);
+            temp = true;
+            Transform t = smr.transform;
+            l2w = Matrix4x4.TRS(t.position, t.rotation, t.lossyScale);
+        }
+        else
+        {
+            MeshFilter mf = target.GetComponent<MeshFilter>();
+            if (mf == null || mf.sharedMesh == null) return false;
+            mesh = mf.sharedMesh;
+            if (!mesh.isReadable)
+            {
+                if (!warnedUnreadableMesh)
+                {
+                    warnedUnreadableMesh = true;
+                    Debug.LogWarning("[CoconutTarget] El mesh '" + mesh.name + "' no es legible. Activa 'Read/Write' en el import del modelo para que los decals queden pegados.", this);
+                }
+                return false;
+            }
+            l2w = target.transform.localToWorldMatrix;
+        }
+
+        Vector3[] verts = mesh.vertices;
+        int[] tris = mesh.triangles;
+        if (temp) Destroy(mesh);
+
+        float bestT = float.MaxValue;
+        bool hit = false;
+
+        for (int i = 0; i < tris.Length; i += 3)
+        {
+            Vector3 v0 = l2w.MultiplyPoint3x4(verts[tris[i]]);
+            Vector3 v1 = l2w.MultiplyPoint3x4(verts[tris[i + 1]]);
+            Vector3 v2 = l2w.MultiplyPoint3x4(verts[tris[i + 2]]);
+
+            // Moller-Trumbore
+            Vector3 e1 = v1 - v0, e2 = v2 - v0;
+            Vector3 p = Vector3.Cross(ray.direction, e2);
+            float det = Vector3.Dot(e1, p);
+            if (Mathf.Abs(det) < 1e-8f) continue;
+            float inv = 1f / det;
+            Vector3 s = ray.origin - v0;
+            float u = Vector3.Dot(s, p) * inv;
+            if (u < 0f || u > 1f) continue;
+            Vector3 qv = Vector3.Cross(s, e1);
+            float v = Vector3.Dot(ray.direction, qv) * inv;
+            if (v < 0f || u + v > 1f) continue;
+            float tt = Vector3.Dot(e2, qv) * inv;
+            if (tt > 0f && tt < bestT)
+            {
+                bestT = tt;
+                hit = true;
+                Vector3 n = Vector3.Cross(e1, e2).normalized;
+                if (Vector3.Dot(n, ray.direction) > 0f) n = -n;
+                normal = n;
+            }
+        }
+
+        if (hit) point = ray.origin + ray.direction * bestT;
+        return hit;
+    }
+
+    void PlaceDecal(Transform decal)
+    {
+        if (hitCollider == null) return;
+
+        Vector3 center = hitCollider.bounds.center;
+        float radius = hitCollider.bounds.extents.magnitude;
+        Camera cam = Camera.main;
+        Vector3 dir = cam != null ? (cam.transform.position - center).normalized : Vector3.up;
+        dir = (dir + Random.insideUnitSphere * decalSpread).normalized;
+        Vector3 origin = center + dir * (radius * 2f);
+        Ray ray = new Ray(origin, -dir);
+        if (!hitCollider.Raycast(ray, out RaycastHit hit, radius * 4f)) return;
+        Vector3 normal = flipDecalFacing ? -hit.normal : hit.normal;
+        decal.position = hit.point + hit.normal * decalSurfaceOffset;
+        decal.rotation = Quaternion.LookRotation(-normal) * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
     }
 }
