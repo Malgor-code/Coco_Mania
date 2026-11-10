@@ -14,7 +14,7 @@ Material:
   m_ValidKeywords:
   - _MASKS_OFF
   - _NORMAL_OFF
-  - _SPECULAR
+  - _RIM
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -69,10 +69,10 @@ Material:
     - _Normal: 0
     - _NormalStrength: 1
     - _OutlineWidth: 0
-    - _RimLightInfluence: 0.6
+    - _RimLightInfluence: 1
     - _RimSoftness: 0.2
-    - _RimThreshold: 0.873
-    - _Roughness: 0.5
+    - _RimThreshold: 0.782
+    - _Roughness: 1
     - _ShadeSoftness: 0
     - _ShadeThreshold: 0.35
     - _ShadowSaturation: 0
@@ -80,14 +80,14 @@ Material:
     - _SpecSoftness: 0
     - _UseEmission: 0
     - _UseRamp: 0
-    - _UseRim: 0
-    - _UseSpec: 1
+    - _UseRim: 1
+    - _UseSpec: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MidColor: {r: 0.802826, g: 0.70825917, b: 0.8679245, a: 1}
     - _OutlineColor: {r: 0.11999995, g: 0.06999998, b: 0.049999982, a: 1}
-    - _RimColor: {r: 1, g: 0.8, b: 0.9, a: 1}
+    - _RimColor: {r: 1, g: 0.71115315, b: 0.2688679, a: 1}
     - _ShadowColor: {r: 0.68317306, g: 0.59278214, b: 0.7264151, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
