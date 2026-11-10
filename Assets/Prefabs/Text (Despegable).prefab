@@ -198,9 +198,9 @@ MonoBehaviour:
   popOvershoot: 2.2
   fadeStart: 0.55
   wobbleDegrees: 8
-  normalColor: {r: 1, g: 0.8137255, b: 0, a: 1}
-  bigColor: {r: 0.9622642, g: 0.046402372, b: 0.027233727, a: 1}
-  waterColor: {r: 0.35, g: 0.8, b: 1, a: 1}
+  normalColor: {r: 1, g: 0.8806014, b: 0.36320752, a: 1}
+  bigColor: {r: 1, g: 0.33040667, b: 0.3160377, a: 1}
+  waterColor: {r: 0.43921566, g: 0.9586617, b: 1, a: 1}
   rainbowSpeed: 1.5
   rainbowCharOffset: 0.12
   bigScale: 1.4

@@ -14,6 +14,7 @@ Material:
   m_ValidKeywords:
   - _MASKS_OFF
   - _NORMAL_OFF
+  - _RIM
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -79,7 +80,7 @@ Material:
     - _SpecSoftness: 0.01
     - _UseEmission: 0
     - _UseRamp: 0
-    - _UseRim: 0
+    - _UseRim: 1
     - _UseSpec: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
