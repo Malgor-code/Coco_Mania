@@ -868,7 +868,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e6891cd9f0cb1094da2567db63cdf3b7, type: 3}
   - {fileID: 21300000, guid: c0fff7225fbeae848acd5273e5cf0dcb, type: 3}
   - {fileID: 21300000, guid: c5c2d6350a985784c9d05dcf2d3f3c1f, type: 3}
-  decalSize: 0.5
+  decalSize: 1.5
   damageDecalPrefabs: []
   decalScale: 1
   decalRotationOffset: {x: 0, y: 0, z: 0}
@@ -876,6 +876,9 @@ MonoBehaviour:
   decalColor: {r: 1, g: 1, b: 1, a: 1}
   decalSortingOrder: 100
   decalTarget: {fileID: 7615688705278271982}
+  decalSizeStep: 0.2
+  keepSameDecalPlace: 1
+  decalCurveResolution: 12
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0

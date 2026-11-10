@@ -184,6 +184,21 @@ public class CoconutTarget : MonoBehaviour
     public Color decalColor = Color.white;
     public int decalSortingOrder = 100;
     public Renderer decalTarget;
+    [Header("Crecimiento del decal por golpe")]
+    [Tooltip("Cuanto crece el decal en cada golpe (en unidades de mundo). Golpe 1 = Decal Size, golpe 2 = Decal Size + este valor, etc.")]
+    public float decalSizeStep = 0.2f;
+    [Tooltip("Si esta activo, cada decal nuevo sale en el MISMO lugar que el primero (la marca va creciendo). Si no, sale en otro punto.")]
+    public bool keepSameDecalPlace = true;
+    private bool decalPlaced = false;
+    [Header("Decal curvo")]
+    [Range(4, 24)] public int decalCurveResolution = 12;
+    private Vector3 anchorLocalPoint;
+    private Vector3 anchorLocalNormal;
+    private float anchorSpin;
+    private Vector3[] cachedWorldVerts;
+    private int[] cachedTris;
+    private Vector3 cachedSphereCenter;
+    private float cachedSphereRadius;
     void Awake()
     {
         HideChildFragments();
@@ -397,7 +412,7 @@ public class CoconutTarget : MonoBehaviour
         }
 
         hitAnimator.Play(hitStateHash, 0, hitAnimStartNormalized);
-        hitAnimator.Update(0f); 
+        hitAnimator.Update(0f);
     }
     void PlaySpawnAnimation()
     {
@@ -534,7 +549,7 @@ public class CoconutTarget : MonoBehaviour
 
         hp -= finalDamage;
         if (executeMult > 1f && JuiceManager.Instance != null)
-    JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.9f, "¡REMATE!", true);
+            JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 0.9f, "¡REMATE!", true);
         if (ability == GameManager.CoconutAbility.Rebote)
         {
             reboteHitCounter++;
@@ -624,6 +639,7 @@ public class CoconutTarget : MonoBehaviour
     }
     void OnDestroy()
     {
+        ClearSpawnedDecals();
         foreach (var m in flashMats) if (m != null) Destroy(m);
     }
     void Die()
@@ -697,7 +713,7 @@ public class CoconutTarget : MonoBehaviour
         rb.AddForce(dir * coinPopForce, ForceMode.Impulse);
         rb.AddTorque(Random.insideUnitSphere * 2f, ForceMode.Impulse);
 
-        Destroy(coin, coinLifetime); 
+        Destroy(coin, coinLifetime);
     }
     static void AutoDestroyFx(GameObject fx)
     {
@@ -924,69 +940,165 @@ public class CoconutTarget : MonoBehaviour
             FragmentFader.Attach(frag, fragmentLifetime, fragmentFadeDuration, fragmentShrinkTo);
         }
     }
+    void ClearSpawnedDecals()
+    {
+        foreach (var d in spawnedDecals)
+        {
+            if (d == null) continue;
+            var mf = d.GetComponent<MeshFilter>();
+            var mr = d.GetComponent<MeshRenderer>();
+            if (mf != null && mf.sharedMesh != null) Destroy(mf.sharedMesh);
+            if (mr != null && mr.sharedMaterial != null) Destroy(mr.sharedMaterial);
+            Destroy(d);
+        }
+        spawnedDecals.Clear();
+    }
+
     void ResetDecals()
     {
         decalsShown = 0;
-        foreach (var d in spawnedDecals)
-            if (d != null) Destroy(d);
-        spawnedDecals.Clear();
+        decalPlaced = false;
+        ClearSpawnedDecals();
     }
 
     void ShowNextDecal()
     {
-        if (damageDecalSprites == null || decalsShown >= damageDecalSprites.Length) return;
-        Sprite sprite = damageDecalSprites[decalsShown];
-        if (sprite == null) { decalsShown++; return; }
+        if (damageDecalSprites == null || damageDecalSprites.Length == 0) return;
 
         Renderer target = decalTarget != null ? decalTarget : rend;
         if (target == null) return;
 
-        Bounds b = target.bounds;
-        Vector3 center = b.center;
-        float far = b.extents.magnitude * 3f;
+        int hitIndex = decalsShown;
+        Sprite sprite = damageDecalSprites[Mathf.Min(hitIndex, damageDecalSprites.Length - 1)];
+        if (sprite == null) { decalsShown++; return; }
 
-        Camera cam = Camera.main;
-        Vector3 baseDir = cam != null ? (cam.transform.position - center).normalized : Vector3.up;
-        Vector3 dir = (baseDir + Random.insideUnitSphere * decalSpread).normalized;
+        ClearSpawnedDecals();
+        PrepareMeshData(target);
 
-        Vector3 point, normal;
-        bool found = RaycastRendererMesh(target, new Ray(center + dir * far, -dir), out point, out normal);
-        if (!found) found = RaycastRendererMesh(target, new Ray(center + baseDir * far, -baseDir), out point, out normal);
-
-        if (!found)
+        // Ancla: donde se pega el decal (se calcula una vez y se conserva)
+        if (!decalPlaced || !keepSameDecalPlace)
         {
-            Vector3 ext = Vector3.Max(b.extents, Vector3.one * 0.0001f);
-            float k = Mathf.Sqrt(dir.x * dir.x / (ext.x * ext.x) + dir.y * dir.y / (ext.y * ext.y) + dir.z * dir.z / (ext.z * ext.z));
-            point = center + dir / Mathf.Max(0.0001f, k);
-            Vector3 q = point - center;
-            normal = new Vector3(q.x / (ext.x * ext.x), q.y / (ext.y * ext.y), q.z / (ext.z * ext.z)).normalized;
+            Camera cam = Camera.main;
+            Vector3 baseDir = cam != null ? (cam.transform.position - cachedSphereCenter).normalized : Vector3.up;
+            Vector3 dir = (baseDir + Random.insideUnitSphere * decalSpread).normalized;
+            float far = cachedSphereRadius * 3f;
+
+            Vector3 point, normal;
+            if (!RaycastCached(new Ray(cachedSphereCenter + dir * far, -dir), out point, out normal) &&
+                !RaycastCached(new Ray(cachedSphereCenter + baseDir * far, -baseDir), out point, out normal))
+            {
+                decalsShown++;
+                return;
+            }
+
+            anchorLocalPoint = target.transform.InverseTransformPoint(point);
+            anchorLocalNormal = target.transform.InverseTransformDirection(normal).normalized;
+            anchorSpin = Random.Range(0f, 360f);
+            decalPlaced = true;
         }
 
-        GameObject go = new GameObject("DamageDecal_" + (decalsShown + 1));
-        go.transform.SetParent(target.transform, true);
-        go.transform.position = point + normal * decalSurfaceOffset;
-        go.transform.rotation = Quaternion.LookRotation(-normal) * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+        Vector3 wPoint = target.transform.TransformPoint(anchorLocalPoint);
+        Vector3 wNormal = target.transform.TransformDirection(anchorLocalNormal).normalized;
+        float worldSize = decalSize + decalSizeStep * hitIndex;
 
-        Vector3 ps = target.transform.lossyScale;
-        float avg = Mathf.Max(0.0001f, (Mathf.Abs(ps.x) + Mathf.Abs(ps.y) + Mathf.Abs(ps.z)) / 3f);
-        float spriteSize = Mathf.Max(0.0001f, Mathf.Max(sprite.bounds.size.x, sprite.bounds.size.y));
-        go.transform.localScale = Vector3.one * (decalSize / spriteSize / avg);
+        Mesh mesh = BuildCurvedDecalMesh(target.transform, wPoint, wNormal, anchorSpin, worldSize, sprite);
 
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
-        sr.color = decalColor;
-        sr.sortingOrder = decalSortingOrder + decalsShown;
+        GameObject go = new GameObject("DamageDecal_" + (hitIndex + 1));
+        go.transform.SetParent(target.transform, false);
+        go.AddComponent<MeshFilter>().sharedMesh = mesh;
+
+        Shader sh = Shader.Find("Sprites/Default");
+        Material mat = new Material(sh);
+        mat.mainTexture = sprite.texture;
+        mat.color = decalColor;
+
+        MeshRenderer mr = go.AddComponent<MeshRenderer>();
+        mr.sharedMaterial = mat;
+        mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        mr.receiveShadows = false;
+        mr.sortingOrder = decalSortingOrder;
 
         spawnedDecals.Add(go);
         decalsShown++;
     }
 
+    Mesh BuildCurvedDecalMesh(Transform parent, Vector3 wPoint, Vector3 wNormal, float spin, float size, Sprite sprite)
+    {
+        int n = Mathf.Max(2, decalCurveResolution);
+
+        Vector3 refUp = Mathf.Abs(Vector3.Dot(wNormal, Vector3.up)) > 0.95f ? Vector3.right : Vector3.up;
+        Vector3 right = Vector3.Cross(refUp, wNormal).normalized;
+        Vector3 upT = Vector3.Cross(wNormal, right).normalized;
+        Quaternion q = Quaternion.AngleAxis(spin, wNormal);
+        right = q * right;
+        upT = q * upT;
+
+        Rect r = sprite.rect;
+        Texture2D tex = sprite.texture;
+        float aspect = r.height > 0f ? r.width / r.height : 1f;
+        float w = aspect >= 1f ? size : size * aspect;
+        float h = aspect >= 1f ? size / aspect : size;
+
+        float far = cachedSphereRadius * 3f;
+        int side = n + 1;
+        var verts = new Vector3[side * side];
+        var uvs = new Vector2[side * side];
+
+        for (int j = 0; j <= n; j++)
+        {
+            for (int i = 0; i <= n; i++)
+            {
+                float fx = i / (float)n;
+                float fy = j / (float)n;
+
+                // Punto plano sobre el plano tangente, proyectado hacia la superficie del coco
+                Vector3 g = wPoint + right * ((fx - 0.5f) * w) + upT * ((fy - 0.5f) * h);
+                Vector3 origin = g + wNormal * far;
+                Vector3 dir = (cachedSphereCenter - origin).normalized;
+
+                Vector3 world = g;
+                Vector3 hp, hn;
+                if (RaycastCached(new Ray(origin, dir), out hp, out hn))
+                    world = hp + hn * decalSurfaceOffset;
+
+                verts[j * side + i] = parent.InverseTransformPoint(world);
+                uvs[j * side + i] = new Vector2((r.x + fx * r.width) / tex.width, (r.y + fy * r.height) / tex.height);
+            }
+        }
+
+        var tris = new int[n * n * 6];
+        int t = 0;
+        for (int j = 0; j < n; j++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                int a = j * side + i;
+                int b = a + 1;
+                int c = a + side;
+                int d = c + 1;
+                tris[t++] = a; tris[t++] = c; tris[t++] = b;
+                tris[t++] = b; tris[t++] = c; tris[t++] = d;
+            }
+        }
+
+        Mesh m = new Mesh();
+        m.vertices = verts;
+        m.uv = uvs;
+        m.triangles = tris;
+        m.RecalculateBounds();
+        return m;
+    }
+
     bool warnedUnreadableMesh = false;
 
-    bool RaycastRendererMesh(Renderer target, Ray ray, out Vector3 point, out Vector3 normal)
+    void PrepareMeshData(Renderer target)
     {
-        point = Vector3.zero;
-        normal = Vector3.up;
+        cachedWorldVerts = null;
+        cachedTris = null;
+
+        Bounds b = target.bounds;
+        cachedSphereCenter = b.center;
+        cachedSphereRadius = Mathf.Max(b.extents.x, Mathf.Max(b.extents.y, b.extents.z));
 
         Mesh mesh;
         Matrix4x4 l2w;
@@ -1003,34 +1115,56 @@ public class CoconutTarget : MonoBehaviour
         else
         {
             MeshFilter mf = target.GetComponent<MeshFilter>();
-            if (mf == null || mf.sharedMesh == null) return false;
+            if (mf == null || mf.sharedMesh == null) return;
             mesh = mf.sharedMesh;
             if (!mesh.isReadable)
             {
                 if (!warnedUnreadableMesh)
                 {
                     warnedUnreadableMesh = true;
-                    Debug.LogWarning("[CoconutTarget] El mesh '" + mesh.name + "' no es legible. Activa 'Read/Write' en el import del modelo para que los decals queden pegados.", this);
+                    Debug.LogWarning("[CoconutTarget] El mesh '" + mesh.name + "' no es legible. Activa 'Read/Write' en el import del modelo; mientras tanto se usa una esfera aproximada.", this);
                 }
-                return false;
+                return;
             }
             l2w = target.transform.localToWorldMatrix;
         }
 
-        Vector3[] verts = mesh.vertices;
-        int[] tris = mesh.triangles;
+        Vector3[] v = mesh.vertices;
+        cachedTris = mesh.triangles;
+        cachedWorldVerts = new Vector3[v.Length];
+        for (int i = 0; i < v.Length; i++) cachedWorldVerts[i] = l2w.MultiplyPoint3x4(v[i]);
         if (temp) Destroy(mesh);
+    }
+
+    bool RaycastCached(Ray ray, out Vector3 point, out Vector3 normal)
+    {
+        point = Vector3.zero;
+        normal = Vector3.up;
+
+        // Sin mesh legible: esfera aproximada
+        if (cachedWorldVerts == null)
+        {
+            Vector3 oc = ray.origin - cachedSphereCenter;
+            float bq = Vector3.Dot(oc, ray.direction);
+            float c = Vector3.Dot(oc, oc) - cachedSphereRadius * cachedSphereRadius;
+            float disc = bq * bq - c;
+            if (disc < 0f) return false;
+            float tS = -bq - Mathf.Sqrt(disc);
+            if (tS < 0f) return false;
+            point = ray.origin + ray.direction * tS;
+            normal = (point - cachedSphereCenter).normalized;
+            return true;
+        }
 
         float bestT = float.MaxValue;
         bool hit = false;
 
-        for (int i = 0; i < tris.Length; i += 3)
+        for (int i = 0; i < cachedTris.Length; i += 3)
         {
-            Vector3 v0 = l2w.MultiplyPoint3x4(verts[tris[i]]);
-            Vector3 v1 = l2w.MultiplyPoint3x4(verts[tris[i + 1]]);
-            Vector3 v2 = l2w.MultiplyPoint3x4(verts[tris[i + 2]]);
+            Vector3 v0 = cachedWorldVerts[cachedTris[i]];
+            Vector3 v1 = cachedWorldVerts[cachedTris[i + 1]];
+            Vector3 v2 = cachedWorldVerts[cachedTris[i + 2]];
 
-            // Moller-Trumbore
             Vector3 e1 = v1 - v0, e2 = v2 - v0;
             Vector3 p = Vector3.Cross(ray.direction, e2);
             float det = Vector3.Dot(e1, p);
