@@ -921,9 +921,9 @@ public class CoconutTarget : MonoBehaviour
 
             Rigidbody fragRb = frag.GetComponent<Rigidbody>();
             if (fragRb == null) fragRb = frag.AddComponent<Rigidbody>();
+            fragRb.isKinematic = false; 
             fragRb.linearDamping = fragmentDrag;
             fragRb.angularDamping = fragmentAngularDrag;
-
             Vector3 off = worldPos - transform.position;
             off.y = 0f;
             Vector3 outDir = off.sqrMagnitude > 0.0004f
@@ -932,8 +932,8 @@ public class CoconutTarget : MonoBehaviour
 
             float k = 1f + Random.Range(-fragmentRandomness, fragmentRandomness);
             Vector3 velocity = outDir * fragmentSeparationForce
-                             + slashDir * fragmentFollowThroughForce
-                             + Vector3.up * fragmentUpForce;
+                 + slashDir * (fragmentFollowThroughForce * 0.5f)
+                 + Vector3.up * fragmentUpForce;
             fragRb.AddForce(velocity * k, ForceMode.VelocityChange);
             fragRb.AddTorque(Random.insideUnitSphere * fragmentTorque, ForceMode.VelocityChange);
 
@@ -975,7 +975,6 @@ public class CoconutTarget : MonoBehaviour
         ClearSpawnedDecals();
         PrepareMeshData(target);
 
-        // Ancla: donde se pega el decal (se calcula una vez y se conserva)
         if (!decalPlaced || !keepSameDecalPlace)
         {
             Camera cam = Camera.main;
@@ -1050,8 +1049,6 @@ public class CoconutTarget : MonoBehaviour
             {
                 float fx = i / (float)n;
                 float fy = j / (float)n;
-
-                // Punto plano sobre el plano tangente, proyectado hacia la superficie del coco
                 Vector3 g = wPoint + right * ((fx - 0.5f) * w) + upT * ((fy - 0.5f) * h);
                 Vector3 origin = g + wNormal * far;
                 Vector3 dir = (cachedSphereCenter - origin).normalized;
@@ -1140,8 +1137,6 @@ public class CoconutTarget : MonoBehaviour
     {
         point = Vector3.zero;
         normal = Vector3.up;
-
-        // Sin mesh legible: esfera aproximada
         if (cachedWorldVerts == null)
         {
             Vector3 oc = ray.origin - cachedSphereCenter;

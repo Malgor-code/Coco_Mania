@@ -796,13 +796,13 @@ MonoBehaviour:
   - {fileID: 3691370913722623438}
   - {fileID: 5928527668230130474}
   - {fileID: 7654796682894702817}
-  fragmentSeparationForce: 0.8
+  fragmentSeparationForce: 1.5
   fragmentFollowThroughForce: 1
-  fragmentUpForce: 1.5
-  fragmentDrag: 8
-  fragmentAngularDrag: 3
-  fragmentExtraGravity: 200
-  fragmentTorque: 1
+  fragmentUpForce: 0.8
+  fragmentDrag: 1
+  fragmentAngularDrag: 1
+  fragmentExtraGravity: 20
+  fragmentTorque: 3
   fragmentRandomness: 0.2
   fragmentLifetime: 4
   ability: 0
@@ -868,7 +868,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e6891cd9f0cb1094da2567db63cdf3b7, type: 3}
   - {fileID: 21300000, guid: c0fff7225fbeae848acd5273e5cf0dcb, type: 3}
   - {fileID: 21300000, guid: c5c2d6350a985784c9d05dcf2d3f3c1f, type: 3}
-  decalSize: 1.5
+  decalSize: 3
   damageDecalPrefabs: []
   decalScale: 1
   decalRotationOffset: {x: 0, y: 0, z: 0}
@@ -876,7 +876,7 @@ MonoBehaviour:
   decalColor: {r: 1, g: 1, b: 1, a: 1}
   decalSortingOrder: 100
   decalTarget: {fileID: 7615688705278271982}
-  decalSizeStep: 0.2
+  decalSizeStep: 3
   keepSameDecalPlace: 1
   decalCurveResolution: 12
 --- !u!54 &2400966598480240970

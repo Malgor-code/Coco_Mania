@@ -75,8 +75,6 @@ public class AudioManager : MonoBehaviour
 
     AudioContext current = AudioContext.None;
     Dictionary<AudioContext, ContextAudio> map = new Dictionary<AudioContext, ContextAudio>();
-
-    // Efectos ambientales
     ContextAudio ambientEntry;
     float ambientTimer;
     int lastAmbientIndex = -1;
@@ -91,7 +89,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         for (int i = 0; i < 2; i++)
         {

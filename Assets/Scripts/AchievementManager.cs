@@ -31,7 +31,6 @@ public class AchievementManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
         string csv = PlayerPrefs.GetString(KeyUnlocked, "");
         foreach (var s in csv.Split(',')) if (s.Length > 0) unlocked.Add(s);
     }
