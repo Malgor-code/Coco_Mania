@@ -295,16 +295,16 @@ MonoBehaviour:
   button: {fileID: 6578724}
   backgroundImage: {fileID: 6578723}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1049948498}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -907,16 +907,16 @@ MonoBehaviour:
   button: {fileID: 18362353}
   backgroundImage: {fileID: 18362352}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1587400059}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -1443,16 +1443,16 @@ MonoBehaviour:
   button: {fileID: 32379027}
   backgroundImage: {fileID: 32379026}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 456260321}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -1630,16 +1630,16 @@ MonoBehaviour:
   button: {fileID: 32389374}
   backgroundImage: {fileID: 32389373}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 64601057}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -2481,16 +2481,16 @@ MonoBehaviour:
   button: {fileID: 53825598}
   backgroundImage: {fileID: 53825597}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1221584004}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -2743,16 +2743,16 @@ MonoBehaviour:
   button: {fileID: 64601059}
   backgroundImage: {fileID: 64601058}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1324421176}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -3552,16 +3552,16 @@ MonoBehaviour:
   button: {fileID: 91617057}
   backgroundImage: {fileID: 91617056}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1642598439}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -4690,17 +4690,17 @@ MonoBehaviour:
   button: {fileID: 111368451}
   backgroundImage: {fileID: 111368452}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1220065053}
   - {fileID: 364237867}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -5134,16 +5134,16 @@ MonoBehaviour:
   button: {fileID: 121755071}
   backgroundImage: {fileID: 121755072}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1453466348}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -5439,16 +5439,16 @@ MonoBehaviour:
   button: {fileID: 124049651}
   backgroundImage: {fileID: 124049652}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1600851579}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -5776,16 +5776,16 @@ MonoBehaviour:
   button: {fileID: 134893852}
   backgroundImage: {fileID: 134893853}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1393524730}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -6086,7 +6086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e252c4256ba635646b39e18d8f78aedd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6560,16 +6560,16 @@ MonoBehaviour:
   button: {fileID: 152314735}
   backgroundImage: {fileID: 152314736}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1983790455}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -7260,16 +7260,16 @@ MonoBehaviour:
   button: {fileID: 168295737}
   backgroundImage: {fileID: 168295736}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 820641410}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -7447,16 +7447,16 @@ MonoBehaviour:
   button: {fileID: 168852631}
   backgroundImage: {fileID: 168852630}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 961919653}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -7946,16 +7946,16 @@ MonoBehaviour:
   button: {fileID: 173790937}
   backgroundImage: {fileID: 173790936}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2077539775}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -8634,16 +8634,16 @@ MonoBehaviour:
   button: {fileID: 205624998}
   backgroundImage: {fileID: 205624997}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1493635010}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -9587,16 +9587,16 @@ MonoBehaviour:
   button: {fileID: 229742040}
   backgroundImage: {fileID: 229742039}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1261255702}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -11536,16 +11536,16 @@ MonoBehaviour:
   button: {fileID: 255399577}
   backgroundImage: {fileID: 255399576}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 511588069}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -11923,16 +11923,16 @@ MonoBehaviour:
   button: {fileID: 261809291}
   backgroundImage: {fileID: 261809290}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 511588069}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -12307,7 +12307,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.07
+      value: -59.77
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.y
@@ -12315,7 +12315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.04
+      value: -4.84
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13306,16 +13306,16 @@ MonoBehaviour:
   button: {fileID: 293311932}
   backgroundImage: {fileID: 293311931}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1785243065}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -13710,6 +13710,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2007618436}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &307505918
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.3564196
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5899992
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.8634977
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661746383814953141, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
+      propertyPath: m_Name
+      value: CocoPesado
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
 --- !u!1 &310084820
 GameObject:
   m_ObjectHideFlags: 0
@@ -15580,16 +15637,16 @@ MonoBehaviour:
   button: {fileID: 357909559}
   backgroundImage: {fileID: 357909558}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 18362351}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -15842,17 +15899,17 @@ MonoBehaviour:
   button: {fileID: 362988694}
   backgroundImage: {fileID: 362988693}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 205624996}
   - {fileID: 1329015220}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -16035,16 +16092,16 @@ MonoBehaviour:
   button: {fileID: 364237869}
   backgroundImage: {fileID: 364237868}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 520458526}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -16909,16 +16966,16 @@ MonoBehaviour:
   button: {fileID: 372923045}
   backgroundImage: {fileID: 372923044}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 32379025}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -17551,16 +17608,16 @@ MonoBehaviour:
   button: {fileID: 394619892}
   backgroundImage: {fileID: 394619891}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 908314139}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -18176,7 +18233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7607843}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19393,7 +19450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &453264967
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19627,16 +19684,16 @@ MonoBehaviour:
   button: {fileID: 456260323}
   backgroundImage: {fileID: 456260322}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 908826049}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -19814,16 +19871,16 @@ MonoBehaviour:
   button: {fileID: 456865589}
   backgroundImage: {fileID: 456865588}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 261809289}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -20642,16 +20699,16 @@ MonoBehaviour:
   button: {fileID: 466859481}
   backgroundImage: {fileID: 466859480}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1293551405}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -21432,12 +21489,12 @@ RectTransform:
   - {fileID: 921915075}
   - {fileID: 1762432638}
   - {fileID: 513981348}
-  m_Father: {fileID: 1381740236}
+  m_Father: {fileID: 1802044344}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 3.9628906, y: -15.851074}
-  m_SizeDelta: {x: -1822.9222, y: -957.5724}
+  m_SizeDelta: {x: -2.9222412, y: 22.427612}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &499849953
 MonoBehaviour:
@@ -21789,16 +21846,16 @@ MonoBehaviour:
   button: {fileID: 511588071}
   backgroundImage: {fileID: 511588070}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1129567178}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -22299,16 +22356,16 @@ MonoBehaviour:
   button: {fileID: 516601641}
   backgroundImage: {fileID: 516601640}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1621045799}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -22578,16 +22635,16 @@ MonoBehaviour:
   button: {fileID: 520458528}
   backgroundImage: {fileID: 520458527}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2140226763}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -23582,8 +23639,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -24197,16 +24254,16 @@ MonoBehaviour:
   button: {fileID: 571785636}
   backgroundImage: {fileID: 571785635}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1838709558}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -26203,16 +26260,16 @@ MonoBehaviour:
   button: {fileID: 623933873}
   backgroundImage: {fileID: 623933872}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1465646673}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -27645,16 +27702,16 @@ MonoBehaviour:
   button: {fileID: 660913014}
   backgroundImage: {fileID: 660913013}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1891244262}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -28383,6 +28440,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74552b8e95498104db25c5adb8a2ac24, type: 3}
+--- !u!1001 &675334559
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.8026686
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.6699753
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.15743083
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0385892
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9584038
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.23492244
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -27.545
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 161.343
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661746383814953141, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+      propertyPath: m_Name
+      value: CocoGeneroso
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
 --- !u!1 &676383581
 GameObject:
   m_ObjectHideFlags: 0
@@ -28422,16 +28536,16 @@ MonoBehaviour:
   button: {fileID: 676383584}
   backgroundImage: {fileID: 676383583}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1221584004}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -29532,16 +29646,16 @@ MonoBehaviour:
   button: {fileID: 700361043}
   backgroundImage: {fileID: 700361042}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 466859479}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -30218,16 +30332,16 @@ MonoBehaviour:
   button: {fileID: 721070430}
   backgroundImage: {fileID: 721070429}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1418740871}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -31523,16 +31637,16 @@ MonoBehaviour:
   button: {fileID: 780280271}
   backgroundImage: {fileID: 780280272}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1916346584}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -32716,16 +32830,16 @@ MonoBehaviour:
   button: {fileID: 808525447}
   backgroundImage: {fileID: 808525448}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1155900731}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -33066,7 +33180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7176471}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -33236,16 +33350,16 @@ MonoBehaviour:
   button: {fileID: 820641412}
   backgroundImage: {fileID: 820641411}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1111757938}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -33724,16 +33838,16 @@ MonoBehaviour:
   button: {fileID: 834866369}
   backgroundImage: {fileID: 834866368}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 700361041}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -34672,16 +34786,16 @@ MonoBehaviour:
   button: {fileID: 843615737}
   backgroundImage: {fileID: 843615738}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2007253021}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -35138,16 +35252,16 @@ MonoBehaviour:
   button: {fileID: 848299955}
   backgroundImage: {fileID: 848299954}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2003450115}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -36266,7 +36380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &880427862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36274,13 +36388,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 880427861}
-  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalRotation: {x: 0.05547891, y: -0.05547891, z: -0.704927, w: 0.704927}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 873923494}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
+  m_LocalEulerAnglesHint: {x: 0, y: -9, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.000061035156, y: 0.00012207031}
@@ -36299,7 +36413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.27058825}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.21960784}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -36976,11 +37090,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1650531119}
+  - {fileID: 915787013}
   m_Father: {fileID: 1567960682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.438128, y: 3.701065}
+  m_AnchoredPosition: {x: 2.183, y: 3.701065}
   m_SizeDelta: {x: 280.39108, y: 53.92128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &889278584
@@ -37183,16 +37298,16 @@ MonoBehaviour:
   button: {fileID: 898869910}
   backgroundImage: {fileID: 898869911}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1316790323}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -37808,16 +37923,16 @@ MonoBehaviour:
   button: {fileID: 908314141}
   backgroundImage: {fileID: 908314140}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 168295735}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -37995,16 +38110,16 @@ MonoBehaviour:
   button: {fileID: 908826051}
   backgroundImage: {fileID: 908826050}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1463639911}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -38310,6 +38425,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911704055}
+  m_CullTransparentMesh: 1
+--- !u!1 &915787012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 915787013}
+  - component: {fileID: 915787015}
+  - component: {fileID: 915787014}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &915787013
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915787012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.76139, y: 0.76139, z: 0.76139}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 889278583}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 165.3, y: -0.7}
+  m_SizeDelta: {x: 68.8026, y: 59.0967}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &915787014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915787012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 6e283da0f89dd7243858488273f63d65, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &915787015
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915787012}
   m_CullTransparentMesh: 1
 --- !u!1 &916001556
 GameObject:
@@ -39088,6 +39278,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927851543}
   m_CullTransparentMesh: 1
+--- !u!1001 &932863680
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.929646
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5899992
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.3181334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661746383814953141, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+      propertyPath: m_Name
+      value: CocoFibraDura
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
 --- !u!1 &934834842
 GameObject:
   m_ObjectHideFlags: 0
@@ -39732,16 +39979,16 @@ MonoBehaviour:
   button: {fileID: 961919655}
   backgroundImage: {fileID: 961919654}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1390162354}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -40175,16 +40422,16 @@ MonoBehaviour:
   button: {fileID: 972671195}
   backgroundImage: {fileID: 972671194}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 908314139}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -40577,16 +40824,16 @@ MonoBehaviour:
   button: {fileID: 975160973}
   backgroundImage: {fileID: 975160974}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 64601057}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -41801,16 +42048,16 @@ MonoBehaviour:
   button: {fileID: 1007341681}
   backgroundImage: {fileID: 1007341682}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1111757938}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -42466,16 +42713,16 @@ MonoBehaviour:
   button: {fileID: 1031625721}
   backgroundImage: {fileID: 1031625722}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1738851165}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -43039,6 +43286,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036338522}
   m_CullTransparentMesh: 1
+--- !u!1001 &1044526369
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.9198701
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.58999944
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.2682388
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661746383814953141, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
+      propertyPath: m_Name
+      value: CocoTenazz
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
 --- !u!1 &1047262817
 GameObject:
   m_ObjectHideFlags: 0
@@ -43228,16 +43532,16 @@ MonoBehaviour:
   button: {fileID: 1049948500}
   backgroundImage: {fileID: 1049948499}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1844531991}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -43691,7 +43995,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.44
+      value: -50.14
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.y
@@ -43699,7 +44003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.18
+      value: -3.7
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalRotation.w
@@ -44732,16 +45036,16 @@ MonoBehaviour:
   button: {fileID: 1104755069}
   backgroundImage: {fileID: 1104755068}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 362988692}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -45008,16 +45312,16 @@ MonoBehaviour:
   button: {fileID: 1108454974}
   backgroundImage: {fileID: 1108454975}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 660913012}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -45147,15 +45451,15 @@ MonoBehaviour:
   button: {fileID: 1111757939}
   backgroundImage: {fileID: 1111757940}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons: []
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -45809,16 +46113,16 @@ MonoBehaviour:
   button: {fileID: 1129567180}
   backgroundImage: {fileID: 1129567179}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1111757938}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -46674,16 +46978,16 @@ MonoBehaviour:
   button: {fileID: 1155900733}
   backgroundImage: {fileID: 1155900732}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 721070428}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -48918,16 +49222,16 @@ MonoBehaviour:
   button: {fileID: 1220065055}
   backgroundImage: {fileID: 1220065054}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1972781364}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -49153,16 +49457,16 @@ MonoBehaviour:
   button: {fileID: 1220851274}
   backgroundImage: {fileID: 1220851275}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2072979617}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -49292,16 +49596,16 @@ MonoBehaviour:
   button: {fileID: 1221584006}
   backgroundImage: {fileID: 1221584005}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2079431882}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -49817,16 +50121,16 @@ MonoBehaviour:
   button: {fileID: 1227836241}
   backgroundImage: {fileID: 1227836240}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2079431882}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -51189,16 +51493,16 @@ MonoBehaviour:
   button: {fileID: 1246853439}
   backgroundImage: {fileID: 1246853440}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1514551956}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -51328,16 +51632,16 @@ MonoBehaviour:
   button: {fileID: 1247449890}
   backgroundImage: {fileID: 1247449889}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 32389372}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -51651,16 +51955,16 @@ MonoBehaviour:
   button: {fileID: 1261255704}
   backgroundImage: {fileID: 1261255703}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1418057589}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -52361,16 +52665,16 @@ MonoBehaviour:
   button: {fileID: 1273036102}
   backgroundImage: {fileID: 1273036101}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1227836239}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -52596,16 +52900,16 @@ MonoBehaviour:
   button: {fileID: 1274775953}
   backgroundImage: {fileID: 1274775954}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 676383582}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -53523,16 +53827,16 @@ MonoBehaviour:
   button: {fileID: 1293551407}
   backgroundImage: {fileID: 1293551406}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1400436028}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -53927,15 +54231,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 94754087435e90f42becbc7502537f81, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -54143,16 +54447,16 @@ MonoBehaviour:
   button: {fileID: 1316790325}
   backgroundImage: {fileID: 1316790324}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 6578722}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -54330,16 +54634,16 @@ MonoBehaviour:
   button: {fileID: 1316896849}
   backgroundImage: {fileID: 1316896848}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1629854322}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -54592,16 +54896,16 @@ MonoBehaviour:
   button: {fileID: 1321533514}
   backgroundImage: {fileID: 1321533513}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1293551405}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -54916,16 +55220,16 @@ MonoBehaviour:
   button: {fileID: 1324421178}
   backgroundImage: {fileID: 1324421177}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 848299953}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -55345,16 +55649,16 @@ MonoBehaviour:
   button: {fileID: 1329015222}
   backgroundImage: {fileID: 1329015221}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1493635010}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -57133,16 +57437,16 @@ MonoBehaviour:
   button: {fileID: 1370697041}
   backgroundImage: {fileID: 1370697040}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 820641410}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -57625,16 +57929,16 @@ MonoBehaviour:
   button: {fileID: 1375630217}
   backgroundImage: {fileID: 1375630216}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1104755067}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -58014,16 +58318,16 @@ MonoBehaviour:
   button: {fileID: 1378501464}
   backgroundImage: {fileID: 1378501463}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 173790935}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -58262,7 +58566,6 @@ RectTransform:
   - {fileID: 1141519675}
   - {fileID: 835882969}
   - {fileID: 1802044344}
-  - {fileID: 499849952}
   - {fileID: 236165512}
   - {fileID: 1665184473}
   - {fileID: 1567960682}
@@ -58370,16 +58673,16 @@ MonoBehaviour:
   button: {fileID: 1390162356}
   backgroundImage: {fileID: 1390162355}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 261809289}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -58906,16 +59209,16 @@ MonoBehaviour:
   button: {fileID: 1393524732}
   backgroundImage: {fileID: 1393524731}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1273036100}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -59620,16 +59923,16 @@ MonoBehaviour:
   button: {fileID: 1400436030}
   backgroundImage: {fileID: 1400436029}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 972671193}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -60275,16 +60578,16 @@ MonoBehaviour:
   button: {fileID: 1418057591}
   backgroundImage: {fileID: 1418057590}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1463639911}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -60599,16 +60902,16 @@ MonoBehaviour:
   button: {fileID: 1418740874}
   backgroundImage: {fileID: 1418740875}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 91617055}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -61939,16 +62242,16 @@ MonoBehaviour:
   button: {fileID: 1453466350}
   backgroundImage: {fileID: 1453466349}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1378501462}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -62201,16 +62504,16 @@ MonoBehaviour:
   button: {fileID: 1463639913}
   backgroundImage: {fileID: 1463639912}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1129567178}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -62388,16 +62691,16 @@ MonoBehaviour:
   button: {fileID: 1465646675}
   backgroundImage: {fileID: 1465646674}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1600851579}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -63651,16 +63954,16 @@ MonoBehaviour:
   button: {fileID: 1492379644}
   backgroundImage: {fileID: 1492379645}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1465646673}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -63790,16 +64093,16 @@ MonoBehaviour:
   button: {fileID: 1493635012}
   backgroundImage: {fileID: 1493635011}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 456865587}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -64432,16 +64735,16 @@ MonoBehaviour:
   button: {fileID: 1503222090}
   backgroundImage: {fileID: 1503222089}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 53825596}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -64906,16 +65209,16 @@ MonoBehaviour:
   button: {fileID: 1514551958}
   backgroundImage: {fileID: 1514551957}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 394619890}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -65334,16 +65637,16 @@ MonoBehaviour:
   button: {fileID: 1521204047}
   backgroundImage: {fileID: 1521204048}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1655599966}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -66235,16 +66538,16 @@ MonoBehaviour:
   button: {fileID: 1546920276}
   backgroundImage: {fileID: 1546920275}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 623933871}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -66559,16 +66862,16 @@ MonoBehaviour:
   button: {fileID: 1555794454}
   backgroundImage: {fileID: 1555794453}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1329015220}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -67222,8 +67525,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -67683,16 +67986,16 @@ MonoBehaviour:
   button: {fileID: 1587400061}
   backgroundImage: {fileID: 1587400060}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1418057589}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -68234,16 +68537,16 @@ MonoBehaviour:
   button: {fileID: 1600851581}
   backgroundImage: {fileID: 1600851580}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 676383582}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -68960,16 +69263,16 @@ MonoBehaviour:
   button: {fileID: 1621045801}
   backgroundImage: {fileID: 1621045800}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1745640432}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -69297,16 +69600,16 @@ MonoBehaviour:
   button: {fileID: 1629854324}
   backgroundImage: {fileID: 1629854323}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1321533512}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -70089,16 +70392,16 @@ MonoBehaviour:
   button: {fileID: 1642598441}
   backgroundImage: {fileID: 1642598440}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1370697039}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -70323,16 +70626,16 @@ MonoBehaviour:
   button: {fileID: 1643861471}
   backgroundImage: {fileID: 1643861472}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1247449888}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -70736,16 +71039,16 @@ MonoBehaviour:
   button: {fileID: 1655599968}
   backgroundImage: {fileID: 1655599967}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 168852629}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -72562,16 +72865,16 @@ MonoBehaviour:
   button: {fileID: 1700798046}
   backgroundImage: {fileID: 1700798047}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1221584004}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -73461,16 +73764,16 @@ MonoBehaviour:
   button: {fileID: 1738026489}
   backgroundImage: {fileID: 1738026488}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 394619890}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -73648,16 +73951,16 @@ MonoBehaviour:
   button: {fileID: 1738851167}
   backgroundImage: {fileID: 1738851166}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1555794452}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -73883,16 +74186,16 @@ MonoBehaviour:
   button: {fileID: 1741312295}
   backgroundImage: {fileID: 1741312296}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 516601639}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -74234,16 +74537,16 @@ MonoBehaviour:
   button: {fileID: 1745640434}
   backgroundImage: {fileID: 1745640433}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 293311930}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -76629,6 +76932,7 @@ RectTransform:
   - {fileID: 400113388}
   - {fileID: 1278398711}
   - {fileID: 1749301705}
+  - {fileID: 499849952}
   m_Father: {fileID: 1381740236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -76924,16 +77228,16 @@ MonoBehaviour:
   button: {fileID: 1808556332}
   backgroundImage: {fileID: 1808556333}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2126749124}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -77643,16 +77947,16 @@ MonoBehaviour:
   button: {fileID: 1822235075}
   backgroundImage: {fileID: 1822235076}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 229742038}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -77888,16 +78192,16 @@ MonoBehaviour:
   button: {fileID: 1838709560}
   backgroundImage: {fileID: 1838709559}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 511588069}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -78107,16 +78411,16 @@ MonoBehaviour:
   button: {fileID: 1844531993}
   backgroundImage: {fileID: 1844531992}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1316896847}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -78722,16 +79026,16 @@ MonoBehaviour:
   button: {fileID: 1854659607}
   backgroundImage: {fileID: 1854659608}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 2048335048}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -79632,16 +79936,16 @@ MonoBehaviour:
   button: {fileID: 1891244264}
   backgroundImage: {fileID: 1891244263}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1503222088}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -80783,16 +81087,16 @@ MonoBehaviour:
   button: {fileID: 1916346586}
   backgroundImage: {fileID: 1916346585}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1375630215}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -81394,7 +81698,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.28
+      value: -54.980003
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.y
@@ -81402,7 +81706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.61
+      value: -4.27
       objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalRotation.w
@@ -81875,6 +82179,63 @@ RectTransform:
   m_AnchoredPosition: {x: 0.1, y: -0.4}
   m_SizeDelta: {x: 52.4466, y: 48.7476}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &1940694809
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.826575
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5899992
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.306172
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6523585894159995226, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661746383814953141, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+      propertyPath: m_Name
+      value: CocoResistente
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
 --- !u!1 &1944811921
 GameObject:
   m_ObjectHideFlags: 0
@@ -83051,16 +83412,16 @@ MonoBehaviour:
   button: {fileID: 1972781366}
   backgroundImage: {fileID: 1972781365}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 571785634}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -83773,16 +84134,16 @@ MonoBehaviour:
   button: {fileID: 1983790457}
   backgroundImage: {fileID: 1983790456}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 357909557}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -84790,16 +85151,16 @@ MonoBehaviour:
   button: {fileID: 2003450117}
   backgroundImage: {fileID: 2003450116}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1007341680}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -85012,16 +85373,16 @@ MonoBehaviour:
   button: {fileID: 2007253023}
   backgroundImage: {fileID: 2007253022}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1738026487}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -85616,16 +85977,16 @@ MonoBehaviour:
   button: {fileID: 2019046134}
   backgroundImage: {fileID: 2019046135}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1546920274}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -86420,16 +86781,16 @@ MonoBehaviour:
   button: {fileID: 2034497410}
   backgroundImage: {fileID: 2034497411}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 834866367}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -87022,16 +87383,16 @@ MonoBehaviour:
   button: {fileID: 2048335050}
   backgroundImage: {fileID: 2048335049}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 91617055}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -87394,16 +87755,16 @@ MonoBehaviour:
   button: {fileID: 2049275616}
   backgroundImage: {fileID: 2049275617}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 372923043}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -88002,16 +88363,16 @@ MonoBehaviour:
   button: {fileID: 2072979619}
   backgroundImage: {fileID: 2072979618}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 255399575}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -88357,16 +88718,16 @@ MonoBehaviour:
   button: {fileID: 2077539777}
   backgroundImage: {fileID: 2077539776}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 456260321}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -88544,16 +88905,16 @@ MonoBehaviour:
   button: {fileID: 2079431884}
   backgroundImage: {fileID: 2079431883}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1111757938}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -90819,16 +91180,16 @@ MonoBehaviour:
   button: {fileID: 2126749126}
   backgroundImage: {fileID: 2126749125}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 1587400059}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -91311,16 +91672,16 @@ MonoBehaviour:
   button: {fileID: 2140226765}
   backgroundImage: {fileID: 2140226764}
   lockedOverlay: {fileID: 0}
-  colorComprado: {r: 0.3, g: 0.85, b: 0.3, a: 1}
-  colorDisponible: {r: 0.9529412, g: 0.46666667, b: 0.21568628, a: 1}
-  colorBloqueado: {r: 0.35, g: 0.35, b: 0.35, a: 1}
-  colorSinDinero: {r: 0.55, g: 0.3, b: 0.3, a: 1}
+  colorComprado: {r: 0, g: 0.47356632, b: 0.6132076, a: 1}
+  colorDisponible: {r: 0, g: 0.7329545, b: 0.8113208, a: 1}
+  colorBloqueado: {r: 0.27241868, g: 0.2707369, b: 0.33962262, a: 1}
+  colorSinDinero: {r: 0.21693662, g: 0.22198309, b: 0.3679245, a: 1}
   canvasGroup: {fileID: 0}
   prerequisiteButtons:
   - {fileID: 571785634}
   lineWidth: 0.01
-  lineColorInactiva: {r: 1, g: 0, b: 0, a: 0.078431375}
-  lineColorActiva: {r: 1, g: 0.8156863, b: 0, a: 0.47058824}
+  lineColorInactiva: {r: 0.060742244, g: 0.16770431, b: 0.3679245, a: 0.078431375}
+  lineColorActiva: {r: 0, g: 0.5415806, b: 0.6698113, a: 0.47058824}
   popStrengthDisponible: 0.25
   popDurationDisponible: 0.25
   purchaseShrinkScale: 0.6
@@ -91631,3 +91992,8 @@ SceneRoots:
   - {fileID: 1066036583}
   - {fileID: 1922364182}
   - {fileID: 265983117}
+  - {fileID: 675334559}
+  - {fileID: 1044526369}
+  - {fileID: 932863680}
+  - {fileID: 307505918}
+  - {fileID: 1940694809}

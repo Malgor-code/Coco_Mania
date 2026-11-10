@@ -441,6 +441,8 @@ MonoBehaviour:
   implacableBuffDuration: 2
   implacableDamageReduction: 0.3
   hitAnimator: {fileID: 1747711446717148761}
+  spawnStateName: 
+  spawnStunDuration: 0
   hitStateName: Hit_Coco
   regeneracionDelayAfterHit: 2
   regeneracionPercentPerSecond: 0.03
@@ -471,6 +473,20 @@ MonoBehaviour:
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashEmission: 1.5
   hitFlashTintBoost: 3
+  damageDecals: []
+  autoPlaceDecals: 1
+  decalSurfaceOffset: 0.01
+  decalSpread: 0.4
+  flipDecalFacing: 0
+  damageDecalSprites: []
+  decalSize: 0.5
+  damageDecalPrefabs: []
+  decalScale: 1
+  decalRotationOffset: {x: 0, y: 0, z: 0}
+  randomSpin: 1
+  decalColor: {r: 1, g: 1, b: 1, a: 1}
+  decalSortingOrder: 100
+  decalTarget: {fileID: 0}
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -634,7 +650,7 @@ PrefabInstance:
     - target: {fileID: 5456436607029830078, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
+      objectReference: {fileID: 2100000, guid: 39c9d11e94e20d54297645ee29e2dddc, type: 2}
     - target: {fileID: 6073124076757528693, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -658,7 +674,7 @@ PrefabInstance:
     - target: {fileID: 8891578902765964669, guid: a948793476cd77f41aff5857a4ad5b61, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
+      objectReference: {fileID: 2100000, guid: 39c9d11e94e20d54297645ee29e2dddc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
