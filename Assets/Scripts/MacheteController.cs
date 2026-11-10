@@ -3,6 +3,19 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+[System.Serializable]
+public class MacheteAnimSetup
+{
+    public string nombre;
+    [Tooltip("Animator de este machete. Si lo dejas vacio se busca en los hijos del modelo.")]
+    public Animator animator;
+    [Tooltip("Opcional: estado del golpe de ESTE machete. Vacio = usa 'Swing State Name' global.")]
+    public string swingStateName = "";
+    [Tooltip("Opcional: nombre del clip. Vacio = usa el nombre del estado.")]
+    public string swingClipName = "";
+    [Tooltip("Opcional: duracion del clip en segundos. 0 = detectar automaticamente.")]
+    public float swingClipLengthOverride = 0f;
+}
 public class MacheteController : MonoBehaviour
 {
     public static MacheteController Instance;
@@ -42,6 +55,11 @@ public class MacheteController : MonoBehaviour
     [Tooltip("En que punto del clip ocurre el golpe (0 = inicio, 1 = final). Ej: 0.45")]
     [Range(0f, 1f)] public float impactNormalizedTime = 0.45f;
     public GameObject[] macheteModels;
+    [Tooltip("Mismo orden que 'Machete Models': el elemento 0 es el Animator del machete 0, etc.")]
+    public MacheteAnimSetup[] macheteAnimSetups;
+    private string activeStateName;
+    private string activeClipName;
+    private float activeClipOverride;
     [Header("Sonido de golpe (opcional)")]
     public AudioClip[] swingSounds;
     [Range(0f, 0.3f)] public float swingPitchVariation = 0.08f;
@@ -61,6 +79,7 @@ public class MacheteController : MonoBehaviour
 
     [Header("Feedback de fallo (vineta roja cuando el golpe no conecta)")]
     public Image missVignetteImage;
+    public Image missVignetteImage2;
     public float missFlashInDuration = 0.05f;
     public float missFlashOutDuration = 0.35f;
     [Range(0f, 1f)] public float missFlashMaxAlpha = 0.55f;
@@ -95,7 +114,9 @@ public class MacheteController : MonoBehaviour
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
         if (animator != null) animator.applyRootMotion = false;
-
+        activeStateName = swingStateName;
+        activeClipName = swingClipName;
+        activeClipOverride = swingClipLengthOverride;
         cachedClipLength = ResolveClipLength();
     }
 
@@ -111,22 +132,28 @@ public class MacheteController : MonoBehaviour
             smoothedCameraFollowPos = cameraBasePosition;
         }
 
-        if (missVignetteImage != null)
-        {
-            Color c = missVignetteImage.color;
-            c.a = 0f;
-            missVignetteImage.color = c;
-            if (!missVignetteImage.gameObject.activeSelf) missVignetteImage.gameObject.SetActive(true);
-        }
+        SetMissAlpha(0f);
+        if (missVignetteImage != null && !missVignetteImage.gameObject.activeSelf) missVignetteImage.gameObject.SetActive(true);
+        if (missVignetteImage2 != null && !missVignetteImage2.gameObject.activeSelf) missVignetteImage2.gameObject.SetActive(true);
         initialized = true;
     }
-
+    void SetMissAlpha(float a)
+    {
+        if (missVignetteImage != null)
+        {
+            Color c = missVignetteImage.color; c.a = a; missVignetteImage.color = c;
+        }
+        if (missVignetteImage2 != null)
+        {
+            Color c = missVignetteImage2.color; c.a = a; missVignetteImage2.color = c;
+        }
+    }
     float ResolveClipLength()
     {
-        if (swingClipLengthOverride > 0f) return swingClipLengthOverride;
+        if (activeClipOverride > 0f) return activeClipOverride;
         if (animator == null || animator.runtimeAnimatorController == null) return 0f;
 
-        string clipName = string.IsNullOrEmpty(swingClipName) ? swingStateName : swingClipName;
+        string clipName = string.IsNullOrEmpty(activeClipName) ? activeStateName : activeClipName;
         foreach (var clip in animator.runtimeAnimatorController.animationClips)
         {
             if (clip != null && clip.name == clipName) return clip.length;
@@ -135,6 +162,55 @@ public class MacheteController : MonoBehaviour
         Debug.LogWarning("[MacheteController] No encontre el clip '" + clipName +
                          "'. Escribe el nombre correcto en 'Swing Clip Name' o pon la duracion en 'Swing Clip Length Override'.");
         return 0f;
+    }
+
+    public void EquipModel(int index)
+    {
+        if (macheteModels == null || macheteModels.Length == 0) return;
+
+        index = Mathf.Clamp(index, 0, macheteModels.Length - 1);
+
+        for (int i = 0; i < macheteModels.Length; i++)
+        {
+            if (macheteModels[i] != null)
+                macheteModels[i].SetActive(i == index);
+        }
+        activeStateName = swingStateName;
+        activeClipName = swingClipName;
+        activeClipOverride = swingClipLengthOverride;
+
+        Animator chosen = null;
+
+        if (macheteAnimSetups != null && index < macheteAnimSetups.Length && macheteAnimSetups[index] != null)
+        {
+            var setup = macheteAnimSetups[index];
+            chosen = setup.animator;
+
+            if (!string.IsNullOrEmpty(setup.swingStateName))
+            {
+                activeStateName = setup.swingStateName;
+                activeClipName = setup.swingClipName;
+            }
+            else if (!string.IsNullOrEmpty(setup.swingClipName))
+            {
+                activeClipName = setup.swingClipName;
+            }
+            if (setup.swingClipLengthOverride > 0f) activeClipOverride = setup.swingClipLengthOverride;
+        }
+
+        GameObject model = macheteModels[index];
+        if (chosen == null && model != null)
+            chosen = model.GetComponentInChildren<Animator>(true);
+
+        if (chosen != null) animator = chosen;
+
+        if (animator != null)
+        {
+            animator.applyRootMotion = false;
+            SetAnimSpeed(1f);
+        }
+
+        cachedClipLength = ResolveClipLength();
     }
 
     void Update()
@@ -218,28 +294,7 @@ public class MacheteController : MonoBehaviour
 
         if (animator != null) SetAnimSpeed(1f);
     }
-    public void EquipModel(int index)
-    {
-        if (macheteModels == null || macheteModels.Length == 0) return;
-
-        index = Mathf.Clamp(index, 0, macheteModels.Length - 1);
-
-        for (int i = 0; i < macheteModels.Length; i++)
-        {
-            if (macheteModels[i] != null)
-                macheteModels[i].SetActive(i == index);
-        }
-
-        GameObject model = macheteModels[index];
-        if (model != null)
-        {
-            Animator a = model.GetComponentInChildren<Animator>(true);
-            if (a != null) animator = a;
-        }
-
-        if (animator != null) animator.applyRootMotion = false;
-        cachedClipLength = ResolveClipLength();
-    }
+    
     void SetAnimSpeed(float s)
     {
         if (!string.IsNullOrEmpty(speedParameterName)) animator.SetFloat(speedParameterName, s);
@@ -264,8 +319,7 @@ public class MacheteController : MonoBehaviour
                 SetAnimSpeed(speed);
                 targetDuration = cachedClipLength / speed;
             }
-
-            animator.Play(swingStateName, 0, 0f);
+            animator.Play(activeStateName, 0, 0f);
             animator.Update(0f);
         }
 
@@ -361,7 +415,7 @@ public class MacheteController : MonoBehaviour
 
     void TriggerMissFlash()
     {
-        if (missVignetteImage == null) return;
+        if (missVignetteImage == null && missVignetteImage2 == null) return;
 
         if (missFlashCoroutine != null) StopCoroutine(missFlashCoroutine);
         missFlashCoroutine = StartCoroutine(FlashMissVignette());
@@ -369,14 +423,11 @@ public class MacheteController : MonoBehaviour
 
     IEnumerator FlashMissVignette()
     {
-        Color c = missVignetteImage.color;
-
         float t = 0f;
         while (t < missFlashInDuration)
         {
             t += Time.deltaTime;
-            c.a = Mathf.Lerp(0f, missFlashMaxAlpha, t / missFlashInDuration);
-            missVignetteImage.color = c;
+            SetMissAlpha(Mathf.Lerp(0f, missFlashMaxAlpha, t / missFlashInDuration));
             yield return null;
         }
 
@@ -384,13 +435,11 @@ public class MacheteController : MonoBehaviour
         while (t < missFlashOutDuration)
         {
             t += Time.deltaTime;
-            c.a = Mathf.Lerp(missFlashMaxAlpha, 0f, t / missFlashOutDuration);
-            missVignetteImage.color = c;
+            SetMissAlpha(Mathf.Lerp(missFlashMaxAlpha, 0f, t / missFlashOutDuration));
             yield return null;
         }
 
-        c.a = 0f;
-        missVignetteImage.color = c;
+        SetMissAlpha(0f);
     }
 
     void PlaySwingSound()
