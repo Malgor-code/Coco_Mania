@@ -14,7 +14,6 @@ Material:
   m_ValidKeywords:
   - _MASKS_OFF
   - _NORMAL_OFF
-  - _SPECULAR
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -62,7 +61,7 @@ Material:
     m_Floats:
     - _AOStrength: 1
     - _AmbientInfluence: 1
-    - _BloomBoost: 1.5
+    - _BloomBoost: 0.5
     - _Masks: 0
     - _Metallic: 0
     - _MidThreshold: 0.731
@@ -71,17 +70,17 @@ Material:
     - _OutlineWidth: 0
     - _RimLightInfluence: 0.6
     - _RimSoftness: 0.2
-    - _RimThreshold: 0.873
+    - _RimThreshold: 0.81
     - _Roughness: 0.5
     - _ShadeSoftness: 0
     - _ShadeThreshold: 0.35
     - _ShadowSaturation: 0
-    - _SpecSize: 0.01
+    - _SpecSize: 0.1
     - _SpecSoftness: 0
     - _UseEmission: 0
     - _UseRamp: 0
     - _UseRim: 0
-    - _UseSpec: 1
+    - _UseSpec: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
