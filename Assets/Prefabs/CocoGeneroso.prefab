@@ -739,6 +739,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 647359988313350105}
     m_Modifications:
+    - target: {fileID: 378492134201477086, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 107f04fd9a841634ab1122aa8a2620e4, type: 2}
+    - target: {fileID: 1217394608508454439, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d4882fdac4ad13e468c737ae8099e75d, type: 2}
+    - target: {fileID: 1444901173919513268, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 2679994891453932418, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 2769335495917608062, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d805cfa1229bb494b937d0af40081453, type: 2}
+    - target: {fileID: 3789404413349688076, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f7e83ee6e0e97b946bddf39ac9a2434b, type: 2}
     - target: {fileID: 5531401779504160730, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.0950547
@@ -791,10 +815,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5678154793092399703, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 6557880085754447948, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d4882fdac4ad13e468c737ae8099e75d, type: 2}
     - target: {fileID: 7129571698199278248, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
       propertyPath: m_Name
       value: coco_verde (Arreglado)
       objectReference: {fileID: 0}
+    - target: {fileID: 7474335838637442619, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 7811549471948833750, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f7e83ee6e0e97b946bddf39ac9a2434b, type: 2}
+    - target: {fileID: 7878099272166041344, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
+    - target: {fileID: 8490563092069834571, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 20259a140955a0d43833be0b096a513c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1845167994840955923, guid: 9aedd5ecf91064d42bbbedececb436a3, type: 3}

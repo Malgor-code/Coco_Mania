@@ -661,6 +661,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 647359988313350105}
     m_Modifications:
+    - target: {fileID: 432794878428859493, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
+    - target: {fileID: 726999984170425199, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d299b7d5c90b1aa47b69a361b424cc3c, type: 2}
+    - target: {fileID: 828647859549697214, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d299b7d5c90b1aa47b69a361b424cc3c, type: 2}
     - target: {fileID: 1135117213577204421, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2017497
@@ -713,6 +725,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1324497650075057492, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 1986997393874881815, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
+    - target: {fileID: 2007360818014941754, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b5ff14cdad695504bafada63f4a26eab, type: 2}
     - target: {fileID: 2050691568345023588, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
       propertyPath: m_Name
       value: coco_maduro (Arreglado)
@@ -721,6 +745,30 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2315686471477606297, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
+    - target: {fileID: 3077447014080638305, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 4165211124147803922, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 5755550687657602359, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ea63ec2191ff8ca4a87683f1120cb5e7, type: 2}
+    - target: {fileID: 6921502705286543877, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: a874da0b3a92c064eb10170c0a02dbc6, type: 2}
+    - target: {fileID: 8980411955931993677, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ee34f4265beb57f4bbd9b32047d9d1b5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 102633429098628464, guid: c50cf0580d9c6604bb5c463de7f15817, type: 3}

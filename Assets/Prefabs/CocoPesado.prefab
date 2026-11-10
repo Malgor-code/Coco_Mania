@@ -824,10 +824,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 675057897477032662, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bec05f86456710d44a0a82d665b7b149, type: 2}
+    - target: {fileID: 2015122201948497605, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f9094ef7f8486994599bc40fd364f4ca, type: 2}
+    - target: {fileID: 2704047669924372713, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bec05f86456710d44a0a82d665b7b149, type: 2}
+    - target: {fileID: 4240667363672326720, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4622bd2bfe8332846be9d11ac8d28661, type: 2}
+    - target: {fileID: 4357727888973612010, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bde6c079c45e16649bd4decf339c1e4a, type: 2}
     - target: {fileID: 4358828840418700930, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
       propertyPath: m_Name
       value: sandia (Reparada)
       objectReference: {fileID: 0}
+    - target: {fileID: 6929994888151004928, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f9094ef7f8486994599bc40fd364f4ca, type: 2}
+    - target: {fileID: 7928284445222659434, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bde6c079c45e16649bd4decf339c1e4a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2427171271063074477, guid: 60f76770bf1c4f34c8ceb114e1c776eb, type: 3}
