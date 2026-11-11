@@ -15619,7 +15619,7 @@ MonoBehaviour:
   tiendaPanel: {fileID: 682314497}
   macheteStatusText: {fileID: 231041579}
   macheteUpgradeCostText: {fileID: 272285696}
-  macheteUpgradeButton: {fileID: 1364557073}
+  macheteUpgradeButton: {fileID: 591034051}
   coinCountText: {fileID: 0}
   deudaPanel: {fileID: 1567960681}
   deudaMoneyText: {fileID: 1650531120}
@@ -38743,7 +38743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &835882969
 RectTransform:
   m_ObjectHideFlags: 0

@@ -199,6 +199,16 @@ public class CoconutTarget : MonoBehaviour
     private int[] cachedTris;
     private Vector3 cachedSphereCenter;
     private float cachedSphereRadius;
+    [Header("Salpicadura de jugo (generada por codigo, estilo Topo-Coco)")]
+    public bool juiceBurstEnabled = true;
+    public Color juiceColor = new Color(0.92f, 0.97f, 1f);
+    public int juiceHitCount = 10;
+    public int juiceDeathCount = 22;
+    public float juiceSpeed = 4f;
+    public float juiceSize = 0.14f;
+    public float juiceLifetime = 0.65f;
+    [Range(0f, 3f)] public float juiceGravity = 1.5f;
+    private static Material juiceMat;
     void Awake()
     {
         HideChildFragments();
@@ -575,6 +585,7 @@ public class CoconutTarget : MonoBehaviour
             AutoDestroyFx(hitFx);
         }
         PlaySound(hitSounds);
+        SpawnJuiceBurst(HitPoint, juiceHitCount);
         PlayHitAnimation();
         ShowNextDecal();
         if (JuiceManager.Instance != null)
@@ -671,7 +682,7 @@ public class CoconutTarget : MonoBehaviour
         }
 
         OnSpecialAbilityTrigger();
-
+        SpawnJuiceBurst(HitPoint, juiceDeathCount, 1.4f);   
         float loot = currentType != null ? currentType.lootMultiplier : 1f;
         int earned = 0;
         float waterGained = 0f;
@@ -1201,5 +1212,57 @@ public class CoconutTarget : MonoBehaviour
         Vector3 normal = flipDecalFacing ? -hit.normal : hit.normal;
         decal.position = hit.point + hit.normal * decalSurfaceOffset;
         decal.rotation = Quaternion.LookRotation(-normal) * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+    }
+    void SpawnJuiceBurst(Vector3 pos, int count, float speedMul = 1f)
+    {
+        if (!juiceBurstEnabled || count <= 0) return;
+
+        var go = new GameObject("CocoJuiceBurst");
+        go.transform.position = pos;
+        go.transform.rotation = Quaternion.LookRotation(Vector3.up);
+
+        var ps = go.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        var main = ps.main;
+        main.duration = 1f;
+        main.loop = false;
+        main.playOnAwake = false;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.startLifetime = new ParticleSystem.MinMaxCurve(juiceLifetime * 0.7f, juiceLifetime);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(juiceSpeed * 0.5f * speedMul, juiceSpeed * speedMul);
+        main.startSize = new ParticleSystem.MinMaxCurve(juiceSize * 0.6f, juiceSize);
+        main.startColor = juiceColor;
+        main.gravityModifier = juiceGravity;
+        main.stopAction = ParticleSystemStopAction.Destroy;
+
+        var emission = ps.emission;
+        emission.rateOverTime = 0f;
+        emission.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)count) });
+
+        var shape = ps.shape;
+        shape.shapeType = ParticleSystemShapeType.Cone;
+        shape.angle = 55f;
+        shape.radius = 0.05f;
+
+        var col = ps.colorOverLifetime;
+        col.enabled = true;
+        var grad = new Gradient();
+        grad.SetKeys(
+            new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+            new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.6f), new GradientAlphaKey(0f, 1f) });
+        col.color = grad;
+
+        var size = ps.sizeOverLifetime;
+        size.enabled = true;
+        size.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0.2f));
+
+        var psr = go.GetComponent<ParticleSystemRenderer>();
+        if (juiceMat == null) juiceMat = new Material(Shader.Find("Sprites/Default"));
+        psr.sharedMaterial = juiceMat;
+        psr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        psr.receiveShadows = false;
+
+        ps.Play();
     }
 }
