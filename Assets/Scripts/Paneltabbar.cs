@@ -29,6 +29,7 @@ public class PanelTabBar : MonoBehaviour
     [Header("Pestañas")]
     public List<Tab> tabs = new List<Tab>
     {
+        new Tab { label = "Recaudación" },
         new Tab { label = "Árbol" },
         new Tab { label = "Galería de tienda" },
         new Tab { label = "Gacha" },

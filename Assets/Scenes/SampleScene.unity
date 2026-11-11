@@ -17863,14 +17863,14 @@ RectTransform:
   m_GameObject: {fileID: 283251737}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.27646667, y: 0.25630334, z: 0.15702}
+  m_LocalScale: {x: 0.26494905, y: 0.25630334, z: 0.15702}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 852483440}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 57.81136, y: 6.822937}
+  m_AnchoredPosition: {x: 67.16, y: 13.74}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &283251739
@@ -17886,14 +17886,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b98954d6cb35c4428bed6024e95c205, type: 3}
+  m_Sprite: {fileID: -1255408425, guid: cf5a6be253f72024a90dc67d927b8721, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -38743,7 +38743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &835882969
 RectTransform:
   m_ObjectHideFlags: 0
@@ -47930,14 +47930,14 @@ RectTransform:
   m_GameObject: {fileID: 1041737264}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.296793, y: 0.21784621, z: 0.15702}
+  m_LocalScale: {x: 0.23033513, y: 0.16906609, z: 0.12186009}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 105287173}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 40, y: 12.6}
+  m_AnchoredPosition: {x: 40, y: 9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1041737266
@@ -47953,14 +47953,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7201257, b: 0.7201257, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b98954d6cb35c4428bed6024e95c205, type: 3}
+  m_Sprite: {fileID: -1255408425, guid: cf5a6be253f72024a90dc67d927b8721, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -52911,19 +52911,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1191457211}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 252746835}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleUpgradeTreePanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1191457211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73708,19 +73696,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1617860424}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 252746835}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ToggleTiendaPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1617860424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75827,7 +75803,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656352518}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -81592,16 +81568,15 @@ MonoBehaviour:
   priceObject: {fileID: 859407501}
   hintObject: {fileID: 1653371544}
   hintMessage: "A / D  o  \u2190 / \u2192  para moverte"
-  galleryOrigin: {x: 0, y: -500, z: 0}
-  spacing: 3
+  galleryWorldPosition: {x: -67.3, y: 8.3, z: -6.01}
+  galleryWorldEuler: {x: 62.2, y: 0, z: 0}
+  carouselStartPosition: {x: 67.14532, y: 0, z: 0}
+  slotOffset: {x: 0, y: -1.83, z: -3.86}
   displaySize: 1.6
+  spacing: 3
   slideSmoothTime: 0.25
   spinSpeed: 25
-  cameraOffset: {x: 0, y: 2, z: -3.5}
-  cameraLookHeight: 0.7
-  cameraFov: 40
-  backgroundColor: {r: 0.05, g: 0.05, b: 0.08, a: 1}
-  tableColor: {r: 0.35, g: 0.22, b: 0.12, a: 1}
+  sideScale: 0.55
   silhouetteMaterial: {fileID: 0}
 --- !u!114 &1802044347
 MonoBehaviour:
@@ -81654,16 +81629,14 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: 4794c24a3cedbd34c84d2802e3f1bee1, type: 3}
   - {fileID: 4798213181384825317, guid: 0e7df65dd13732c4aba1b38d07c0f7ce, type: 3}
   modelEuler: {x: 0, y: 0, z: 0}
-  galleryOrigin: {x: 0, y: -500, z: 0}
-  spacing: 3
+  galleryWorldPosition: {x: -67.3, y: 11.7, z: -6.61}
+  galleryWorldEuler: {x: 62.2, y: 0, z: 0}
+  carouselStartPosition: {x: 67.14532, y: 0, z: 0}
+  slotOffset: {x: 0, y: -1.83, z: -3.86}
   displaySize: 2
+  spacing: 3
   slideSmoothTime: 0.25
   spinSpeed: 25
-  cameraOffset: {x: 0, y: 1.2, z: -3.5}
-  cameraLookHeight: 0.9
-  cameraFov: 40
-  backgroundColor: {r: 0.05, g: 0.05, b: 0.08, a: 1}
-  tableColor: {r: 0.35, g: 0.22, b: 0.12, a: 1}
   freePriceText: Gratis
   pricePrefix: 'Precio: '
   priceSuffix: ' mL'
@@ -81720,6 +81693,18 @@ MonoBehaviour:
     button: {fileID: 2108288975}
     panel: {fileID: 0}
     coconutGallery: {fileID: 1802044346}
+    macheteGallery: {fileID: 0}
+    hotkey: 0
+    onOpened:
+      m_PersistentCalls:
+        m_Calls: []
+    onClosed:
+      m_PersistentCalls:
+        m_Calls: []
+  - label: Regresar al Recaudacion
+    button: {fileID: 1191457210}
+    panel: {fileID: 835882968}
+    coconutGallery: {fileID: 0}
     macheteGallery: {fileID: 0}
     hotkey: 0
     onOpened:
@@ -91347,14 +91332,14 @@ RectTransform:
   m_GameObject: {fileID: 2035015185}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.296793, y: 0.21784621, z: 0.15702}
+  m_LocalScale: {x: 0.23033513, y: 0.16906609, z: 0.12186009}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1979278584}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 51.42857, y: 11.999976}
+  m_AnchoredPosition: {x: 53.2, y: 9}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2035015187
@@ -91370,14 +91355,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7201257, b: 0.7201257, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b98954d6cb35c4428bed6024e95c205, type: 3}
+  m_Sprite: {fileID: -1255408425, guid: cf5a6be253f72024a90dc67d927b8721, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

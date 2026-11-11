@@ -208,6 +208,10 @@ public class CoconutTarget : MonoBehaviour
     public float juiceSize = 0.14f;
     public float juiceLifetime = 0.65f;
     [Range(0f, 3f)] public float juiceGravity = 1.5f;
+    [Tooltip("Sube/baja el punto de salida (en unidades de mundo, se escala con el tamaño del coco).")]
+    public float juiceYOffset = 0.3f;
+    [Tooltip("Opcional: un Transform hijo (ej. un empty en la parte de arriba del coco). Si lo asignas, ignora el offset y sale desde ahi.")]
+    public Transform juiceAnchor;
     private static Material juiceMat;
     void Awake()
     {
@@ -584,8 +588,8 @@ public class CoconutTarget : MonoBehaviour
             GameObject hitFx = Instantiate(hitParticles, transform.position, Quaternion.identity);
             AutoDestroyFx(hitFx);
         }
-        PlaySound(hitSounds);
-        SpawnJuiceBurst(HitPoint, juiceHitCount);
+        PlaySound(hitSounds); 
+        SpawnJuiceBurst(JuiceOrigin(), juiceHitCount);
         PlayHitAnimation();
         ShowNextDecal();
         if (JuiceManager.Instance != null)
@@ -681,8 +685,8 @@ public class CoconutTarget : MonoBehaviour
             AudioSource.PlayClipAtPoint(clip, transform.position);
         }
 
-        OnSpecialAbilityTrigger();
-        SpawnJuiceBurst(HitPoint, juiceDeathCount, 1.4f);   
+        OnSpecialAbilityTrigger(); 
+        SpawnJuiceBurst(JuiceOrigin(), juiceDeathCount, 1.4f);
         float loot = currentType != null ? currentType.lootMultiplier : 1f;
         int earned = 0;
         float waterGained = 0f;
@@ -1196,7 +1200,12 @@ public class CoconutTarget : MonoBehaviour
         if (hit) point = ray.origin + ray.direction * bestT;
         return hit;
     }
-
+    Vector3 JuiceOrigin()
+    {
+        if (juiceAnchor != null) return juiceAnchor.position;
+        Vector3 basePos = rend != null ? rend.bounds.center : HitPoint;
+        return basePos + Vector3.up * (juiceYOffset * transform.localScale.y);
+    }
     void PlaceDecal(Transform decal)
     {
         if (hitCollider == null) return;

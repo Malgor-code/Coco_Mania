@@ -62,18 +62,20 @@ public class MacheteGallery3D : MonoBehaviour
     [Tooltip("Rotación aplicada a cada modelo (útil si tu machete viene acostado).")]
     public Vector3 modelEuler = Vector3.zero;
 
-    [Header("Escena 3D")]
-    public Vector3 galleryOrigin = new Vector3(0f, -500f, 0f);
-    public float spacing = 3f;
-    [Tooltip("Tamaño (dimensión mayor) al que se escala cada machete en la mesa.")]
+    [Header("Escena 3D (posicion fija en el mapa)")]
+    [Tooltip("Posicion MUNDIAL de la galeria (el primer slot queda aqui). Copia aqui el valor que te guste de Transform > Position.")]
+    public Vector3 galleryWorldPosition = new Vector3(0.0453186f, 13.7f, -9.7f);
+    [Tooltip("Rotacion MUNDIAL de la galeria (la fila se desliza hacia el -X local de esta rotacion).")]
+    public Vector3 galleryWorldEuler = new Vector3(62.2f, 0f, 0f);
+    [Tooltip("Desplazamiento local del carrusel (normalmente 0,0,0).")]
+    public Vector3 carouselStartPosition = Vector3.zero;
+    [Tooltip("Offset local de cada slot respecto al carrusel (normalmente 0,0,0).")]
+    public Vector3 slotOffset = Vector3.zero;
+    [Tooltip("Tamaño (dimension mayor) al que se escala cada machete.")]
     public float displaySize = 2f;
+    public float spacing = 3f;
     public float slideSmoothTime = 0.25f;
     public float spinSpeed = 25f;
-    public Vector3 cameraOffset = new Vector3(0f, 1.2f, -3.5f);
-    public float cameraLookHeight = 0.9f;
-    public float cameraFov = 40f;
-    public Color backgroundColor = new Color(0.05f, 0.05f, 0.08f);
-    public Color tableColor = new Color(0.35f, 0.22f, 0.12f);
 
     [Header("Textos")]
     public string freePriceText = "Gratis";
@@ -100,10 +102,8 @@ public class MacheteGallery3D : MonoBehaviour
     int index;
     float slideVel;
     int shownIndex = -1;
-    Camera prevMainCamera;
     GameObject galleryRoot;
     Transform carousel;
-    Camera galleryCamera;
     readonly List<GalleryItem> items = new List<GalleryItem>();
     bool infoPanelWasActive;
     bool hintWasActive;
@@ -116,18 +116,16 @@ public class MacheteGallery3D : MonoBehaviour
     bool[] hiddenWasActive;
     readonly List<GameObject> disabledObjects = new List<GameObject>();
     readonly List<Transform> keepList = new List<Transform>();
-    readonly List<Canvas> reboundCanvases = new List<Canvas>();
-    readonly List<Camera> reboundCameras = new List<Camera>();
 
     void Update()
     {
         if (!isOpen) return;
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || GameInput.NavLeftDown) Move(-1);
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || GameInput.NavRightDown) Move(1);
-        float targetX = -index * spacing;
+        float targetX = carouselStartPosition.x - index * spacing;
         float x = Mathf.SmoothDamp(carousel.localPosition.x, targetX, ref slideVel,
                                    slideSmoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
-        carousel.localPosition = new Vector3(x, 0f, 0f);
+        carousel.localPosition = new Vector3(x, carouselStartPosition.y, carouselStartPosition.z);
 
         for (int i = 0; i < items.Count; i++)
             items[i].spinner.Rotate(0f, spinSpeed * Time.unscaledDeltaTime, 0f);
@@ -154,11 +152,8 @@ public class MacheteGallery3D : MonoBehaviour
         isOpen = true;
         index = 0;
         slideVel = 0f;
-        carousel.localPosition = Vector3.zero;
+        carousel.localPosition = carouselStartPosition;
         shownIndex = -1;
-
-        prevMainCamera = Camera.main;
-        if (prevMainCamera != null) prevMainCamera.enabled = false;
 
         ResolveInfoObjects();
         if (infoPanel != null)
@@ -189,8 +184,8 @@ public class MacheteGallery3D : MonoBehaviour
         if (hideForWholeGallery) SetHidden(true);
 
         DisableOtherUI();
-        RebindCanvasCameras();
 
+        ApplyRootTransform();
         galleryRoot.SetActive(true);
     }
 
@@ -205,8 +200,6 @@ public class MacheteGallery3D : MonoBehaviour
         isOpen = false;
 
         galleryRoot.SetActive(false);
-        RestoreCanvasCameras();
-        if (prevMainCamera != null) prevMainCamera.enabled = true;
 
         RestoreUI();
         if (infoPanel != null) infoPanel.SetActive(infoPanelWasActive);
@@ -227,6 +220,11 @@ public class MacheteGallery3D : MonoBehaviour
             StartCoroutine(RefreshUINextFrame());
         }
         RestoreHidden();
+    }
+
+    void OnDestroy()
+    {
+        if (galleryRoot != null) Destroy(galleryRoot);
     }
 
     public void Move(int dir)
@@ -352,6 +350,8 @@ public class MacheteGallery3D : MonoBehaviour
     {
         if (!isOpen) return;
 
+        ApplyRootTransform();
+
         foreach (var k in keepList)
         {
             if (k == null) continue;
@@ -364,6 +364,11 @@ public class MacheteGallery3D : MonoBehaviour
                 t = t.parent;
             }
         }
+    }
+    void ApplyRootTransform()
+    {
+        if (galleryRoot == null) return;
+        galleryRoot.transform.SetPositionAndRotation(galleryWorldPosition, Quaternion.Euler(galleryWorldEuler));
     }
 
     void DisableOtherUI()
@@ -405,7 +410,6 @@ public class MacheteGallery3D : MonoBehaviour
                 node = parent;
             }
         }
-
     }
 
     void BuildKeepList()
@@ -441,39 +445,11 @@ public class MacheteGallery3D : MonoBehaviour
         return false;
     }
 
-    void RebindCanvasCameras()
-    {
-        reboundCanvases.Clear();
-        reboundCameras.Clear();
-        if (galleryCamera == null || prevMainCamera == null) return;
-
-        foreach (var c in FindObjectsOfType<Canvas>())
-        {
-            if (c == null || c.rootCanvas != c) continue;
-            if (c.renderMode == RenderMode.ScreenSpaceOverlay) continue;
-            if (c.worldCamera != prevMainCamera) continue;
-            if (!IsProtected(c.transform)) continue;
-
-            reboundCanvases.Add(c);
-            reboundCameras.Add(c.worldCamera);
-            c.worldCamera = galleryCamera;
-        }
-    }
-
-    void RestoreCanvasCameras()
-    {
-        for (int i = 0; i < reboundCanvases.Count; i++)
-            if (reboundCanvases[i] != null) reboundCanvases[i].worldCamera = reboundCameras[i];
-        reboundCanvases.Clear();
-        reboundCameras.Clear();
-    }
-
     void RestoreUI()
     {
         foreach (var go in disabledObjects)
             if (go != null) go.SetActive(true);
         disabledObjects.Clear();
-
     }
 
     void UpdateInfo()
@@ -575,41 +551,12 @@ public class MacheteGallery3D : MonoBehaviour
     {
         var list = GameManager.Instance.macheteOptions;
         int count = list.Count;
-
         galleryRoot = new GameObject("MacheteGalleryScene");
-        galleryRoot.transform.SetParent(transform, false);
-        galleryRoot.transform.position = galleryOrigin;
-
-        var camGO = new GameObject("GalleryCamera");
-        camGO.transform.SetParent(galleryRoot.transform, false);
-        galleryCamera = camGO.AddComponent<Camera>();
-        galleryCamera.clearFlags = CameraClearFlags.SolidColor;
-        galleryCamera.backgroundColor = backgroundColor;
-        galleryCamera.fieldOfView = cameraFov;
-        galleryCamera.nearClipPlane = 0.1f;
-        galleryCamera.depth = 100f;
-        camGO.transform.position = galleryOrigin + cameraOffset;
-        camGO.transform.LookAt(galleryOrigin + Vector3.up * cameraLookHeight);
-
-        var lightGO = new GameObject("GalleryLight");
-        lightGO.transform.SetParent(galleryRoot.transform, false);
-        lightGO.transform.rotation = Quaternion.Euler(45f, -30f, 0f);
-        var light = lightGO.AddComponent<Light>();
-        light.type = LightType.Directional;
-        light.intensity = 1.2f;
-        light.shadows = LightShadows.Soft;
-
-        var table = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        table.name = "Mesa";
-        Destroy(table.GetComponent<Collider>());
-        table.transform.SetParent(galleryRoot.transform, false);
-        float tableLength = count * spacing + 30f;
-        table.transform.localScale = new Vector3(tableLength, 0.2f, 3.5f);
-        table.transform.localPosition = new Vector3(0f, -0.1f, 0f);
-        table.GetComponent<Renderer>().material.color = tableColor;
+        galleryRoot.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         carousel = new GameObject("Carrusel").transform;
         carousel.SetParent(galleryRoot.transform, false);
+        carousel.localPosition = carouselStartPosition;
 
         var holder = new GameObject("TempHolder");
         holder.SetActive(false);
@@ -618,7 +565,7 @@ public class MacheteGallery3D : MonoBehaviour
         {
             var slot = new GameObject("Slot_" + i).transform;
             slot.SetParent(carousel, false);
-            slot.localPosition = new Vector3(i * spacing, 0f, 0f);
+            slot.localPosition = new Vector3(i * spacing, 0f, 0f) + slotOffset;
 
             var spinner = new GameObject("Giro").transform;
             spinner.SetParent(slot, false);
@@ -712,6 +659,7 @@ public class MacheteGallery3D : MonoBehaviour
         for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
         return b;
     }
+
     System.Collections.IEnumerator RefreshUINextFrame()
     {
         yield return null;

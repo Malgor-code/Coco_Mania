@@ -881,12 +881,14 @@ MonoBehaviour:
   decalCurveResolution: 12
   juiceBurstEnabled: 1
   juiceColor: {r: 0.7232111, g: 0.8666429, b: 0.9622642, a: 1}
-  juiceHitCount: 10
-  juiceDeathCount: 22
+  juiceHitCount: 22
+  juiceDeathCount: 50
   juiceSpeed: 4
   juiceSize: 0.14
   juiceLifetime: 0.65
   juiceGravity: 1.5
+  juiceYOffset: 5
+  juiceAnchor: {fileID: 647359988313350105}
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
