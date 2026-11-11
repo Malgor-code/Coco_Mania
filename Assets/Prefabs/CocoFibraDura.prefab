@@ -576,6 +576,16 @@ MonoBehaviour:
   decalSizeStep: 0.2
   keepSameDecalPlace: 1
   decalCurveResolution: 12
+  juiceBurstEnabled: 1
+  juiceColor: {r: 0.92, g: 0.97, b: 1, a: 1}
+  juiceHitCount: 10
+  juiceDeathCount: 22
+  juiceSpeed: 4
+  juiceSize: 0.14
+  juiceLifetime: 0.65
+  juiceGravity: 1.5
+  juiceYOffset: 0.3
+  juiceAnchor: {fileID: 0}
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -650,8 +660,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.2592684
-  m_Center: {x: 0, y: 1.3016495, z: 0}
+  m_Radius: 0.62500095
+  m_Center: {x: 0, y: 0.6441922, z: -0.01623565}
 --- !u!1001 &985855830584306937
 PrefabInstance:
   m_ObjectHideFlags: 0

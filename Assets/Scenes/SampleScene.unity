@@ -81715,6 +81715,7 @@ MonoBehaviour:
         m_Calls: []
   startTab: -1
   allowCloseActive: 1
+  blockActiveButton: 1
   enforceSingleOpen: 1
   refreshGameManagerUI: 1
   overrideGalleryKeepPanel: 1

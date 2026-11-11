@@ -39,6 +39,8 @@ public class PanelTabBar : MonoBehaviour
     public int startTab = -1;
     [Tooltip("Si pulsas la pestaña que ya está abierta, se cierra.")]
     public bool allowCloseActive = true;
+    [Tooltip("Bloquea el botón de la pestaña abierta para no poder volver a pulsarlo (evita que se congele).")]
+    public bool blockActiveButton = true;
     [Tooltip("Si otro script abre un panel por su cuenta, la barra cierra los demás y se actualiza sola.")]
     public bool enforceSingleOpen = true;
     [Tooltip("Llama al RefreshAllUI de tu GameManager cada vez que cambia la pestaña (actualiza el panel de indicaciones).")]
@@ -104,6 +106,7 @@ public class PanelTabBar : MonoBehaviour
 
         if (current == i && isOpen[i])
         {
+            if (blockActiveButton) return;
             if (allowCloseActive) CloseAll();
             return;
         }
@@ -188,12 +191,21 @@ public class PanelTabBar : MonoBehaviour
 
     void UpdateVisuals()
     {
-        if (!tintButtons) return;
         for (int i = 0; i < tabs.Count; i++)
         {
             var b = tabs[i].button;
-            if (b == null || b.targetGraphic == null) continue;
-            b.targetGraphic.color = (i == current) ? selectedColor : normalColor;
+            if (b == null) continue;
+            if (blockActiveButton)
+            {
+                b.interactable = (i != current);
+                var cb = b.colors;
+                cb.disabledColor = Color.white;
+                b.colors = cb;
+            }
+            else b.interactable = true;
+
+            if (tintButtons && b.targetGraphic != null)
+                b.targetGraphic.color = (i == current) ? selectedColor : normalColor;
         }
     }
 

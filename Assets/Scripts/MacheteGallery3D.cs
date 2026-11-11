@@ -76,7 +76,7 @@ public class MacheteGallery3D : MonoBehaviour
     public float spacing = 3f;
     public float slideSmoothTime = 0.25f;
     public float spinSpeed = 25f;
-
+    public Vector3[] extraModelEuler;
     [Header("Textos")]
     public string freePriceText = "Gratis";
     public string pricePrefix = "Precio: ";
@@ -573,7 +573,8 @@ public class MacheteGallery3D : MonoBehaviour
             GameObject model = CreateModel(list[i], i, holder.transform);
             StripGameplayComponents(model);
             model.transform.SetParent(spinner, false);
-            model.transform.localRotation = Quaternion.Euler(modelEuler);
+            Vector3 extra = (extraModelEuler != null && i < extraModelEuler.Length) ? extraModelEuler[i] : Vector3.zero;
+            model.transform.localRotation = Quaternion.Euler(modelEuler) * Quaternion.Euler(extra);
             FitModel(model.transform, spinner, slot);
 
             items.Add(new GalleryItem { slot = slot, spinner = spinner });
