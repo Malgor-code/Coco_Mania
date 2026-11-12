@@ -15,8 +15,7 @@ public class SettingsManager : MonoBehaviour
     public TMP_Dropdown languageDropdown;
 
     private static readonly string[] LanguageNames = { "Español", "English" };
-
-    private Resolution[] resolutions;
+    private List<Resolution> filteredResolutions = new List<Resolution>();
 
     void Start()
     {
@@ -49,17 +48,28 @@ public class SettingsManager : MonoBehaviour
     {
         if (resolutionDropdown == null) return;
 
-        resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
+        filteredResolutions.Clear();
 
+        Resolution[] all = Screen.resolutions;
+        HashSet<string> seen = new HashSet<string>();
         List<string> options = new List<string>();
-        int currentIndex = 0;
-
-        for (int i = 0; i < resolutions.Length; i++)
+        for (int i = all.Length - 1; i >= 0; i--)
         {
-            options.Add(resolutions[i].width + " x " + resolutions[i].height);
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
+            string key = all[i].width + "x" + all[i].height;
+            if (seen.Contains(key)) continue;
+
+            seen.Add(key);
+            filteredResolutions.Insert(0, all[i]);
+        }
+
+        int currentIndex = 0;
+        for (int i = 0; i < filteredResolutions.Count; i++)
+        {
+            Resolution r = filteredResolutions[i];
+            options.Add(r.width + " x " + r.height);
+
+            if (r.width == Screen.width && r.height == Screen.height)
             {
                 currentIndex = i;
             }
@@ -73,8 +83,8 @@ public class SettingsManager : MonoBehaviour
 
     public void SetResolution(int index)
     {
-        if (resolutions == null || index < 0 || index >= resolutions.Length) return;
-        Resolution r = resolutions[index];
+        if (index < 0 || index >= filteredResolutions.Count) return;
+        Resolution r = filteredResolutions[index];
         Screen.SetResolution(r.width, r.height, Screen.fullScreen);
     }
 
