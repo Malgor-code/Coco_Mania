@@ -620,6 +620,11 @@ GameObject:
   - component: {fileID: 1209790877807115462}
   - component: {fileID: 2097344187949809292}
   - component: {fileID: 6825808383350700548}
+  - component: {fileID: 5578572141397921480}
+  - component: {fileID: 3344508642976099743}
+  - component: {fileID: 5304614356215186066}
+  - component: {fileID: 2569188096022789803}
+  - component: {fileID: 5602405566203694553}
   m_Layer: 0
   m_Name: CocoNormal
   m_TagString: Untagged
@@ -755,140 +760,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stunOnHit: 0
-  hitParticles: {fileID: 5980502239318536123, guid: d6cb673a25662df409ba2177ec06df6e, type: 3}
-  deathParticles: {fileID: 1378310280763612009, guid: 0dd212a7025de2d4f90c4721db94138f, type: 3}
-  hitSounds: []
-  deathSounds: []
-  pitchVariation: 0.1
-  hitFeedbackDuration: 0.18
-  squashAmount: 0.2
-  lowHpBlinkThreshold: 0.25
-  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
-  lowHpBlinksPerSecond: 4
-  fragmentPrefabs:
-  - {fileID: 3478681970165476057}
-  - {fileID: 1542314557022796451}
-  - {fileID: 3058174104119642922}
-  - {fileID: 2611240844224109061}
-  - {fileID: 1466612215693920433}
-  - {fileID: 8226478690724288575}
-  - {fileID: 2042851454731339960}
-  - {fileID: 4471596179138898321}
-  - {fileID: 2843823217124401140}
-  - {fileID: 985656250717028016}
-  - {fileID: 1455131060702028069}
-  - {fileID: 6798569861340654106}
-  - {fileID: 6889654881731564745}
-  - {fileID: 1782211948196129846}
-  - {fileID: 3797172284464819791}
-  - {fileID: 733176464803452529}
-  - {fileID: 7921152634769503250}
-  - {fileID: 5487521047992104647}
-  - {fileID: 1933667894258973440}
-  - {fileID: 5936020767090106744}
-  - {fileID: 8385554072271556074}
-  - {fileID: 7300730543845963478}
-  - {fileID: 4284905385635707368}
-  - {fileID: 7249937325377309168}
-  - {fileID: 4319291559335891628}
-  - {fileID: 1552635439022562355}
-  - {fileID: 6132149624206277820}
-  - {fileID: 3691370913722623438}
-  - {fileID: 5928527668230130474}
-  - {fileID: 7654796682894702817}
-  fragmentSeparationForce: 1.5
-  fragmentFollowThroughForce: 1
-  fragmentUpForce: 0.8
-  fragmentDrag: 1
-  fragmentAngularDrag: 1
-  fragmentExtraGravity: 20
-  fragmentTorque: 3
-  fragmentRandomness: 0.2
-  fragmentLifetime: 4
-  ability: 0
-  fragmentFadeDuration: 1.2
-  fragmentShrinkTo: 0.6
-  resistenteDamageReduction: 0.3
-  armaduraDamageReduction: 0.5
-  diamanteDamageReduction: 0.9
-  diamanteCritMultiplier: 4
-  fibraDuraStackPerHit: 0.05
-  fibraDuraMaxStack: 0.25
-  fibraDuraResetTime: 1.5
-  tenazHpThreshold: 0.3
-  tenazDamageReduction: 0.25
-  reboteHitsPerTrigger: 5
-  reboteStaminaPenalty: 2
-  fortificadoNormalDuration: 4
-  fortificadoBuffDuration: 3
-  fortificadoDamageReduction: 0.4
-  implacableHitsToTrigger: 4
-  implacableWindowSeconds: 2
-  implacableBuffDuration: 2
-  implacableDamageReduction: 0.3
-  hitAnimator: {fileID: 1747711446717148761}
-  spawnStateName: Spawn_Coco
-  spawnStunDuration: 0
-  hitStateName: Hit_Coco
-  regeneracionDelayAfterHit: 2
-  regeneracionPercentPerSecond: 0.03
-  supremoFase2RegenPercentPerSecond: 0.015
-  hitClipName: 
-  hitAnimStartNormalized: 0
-  hitSpeedParameter: HitSpeed
-  maxHitAnimSpeed: 4
-  lastDamageTaken: 0
-  camuflajeVisibleDuration: 3
-  camuflajeHiddenDuration: 2
-  camuflajeHiddenAlpha: 0.2
   colorRenderer: {fileID: 7615688705278271982}
-  maldicionDuration: 6
   hitCollider: {fileID: 2458891533752787744}
-  supremoFase2HpThreshold: 0.7
-  supremoFase3HpThreshold: 0.3
-  supremoFase1DamageReduction: 0.2
-  supremoFase3DamageReduction: 0.35
-  hp: 0
-  hpMax: 0
-  coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
-  coinLifetime: 10
-  coinPopForce: 3
   baseScale: 1
   scaleGrowth: 0.08
   maxScale: 1.5
-  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  hitFlashEmission: 1.5
-  hitFlashTintBoost: 3
-  damageDecals: []
-  autoPlaceDecals: 1
-  decalSurfaceOffset: 0.01
-  decalSpread: 0.4
-  flipDecalFacing: 0
-  damageDecalSprites:
-  - {fileID: 21300000, guid: e6891cd9f0cb1094da2567db63cdf3b7, type: 3}
-  - {fileID: 21300000, guid: c0fff7225fbeae848acd5273e5cf0dcb, type: 3}
-  - {fileID: 21300000, guid: c5c2d6350a985784c9d05dcf2d3f3c1f, type: 3}
-  decalSize: 3
-  damageDecalPrefabs: []
-  decalScale: 1
-  decalRotationOffset: {x: 0, y: 0, z: 0}
-  randomSpin: 1
-  decalColor: {r: 1, g: 1, b: 1, a: 1}
-  decalSortingOrder: 100
-  decalTarget: {fileID: 7615688705278271982}
-  decalSizeStep: 3
-  keepSameDecalPlace: 1
-  decalCurveResolution: 12
-  juiceBurstEnabled: 1
-  juiceColor: {r: 0.7232111, g: 0.8666429, b: 0.9622642, a: 1}
-  juiceHitCount: 22
-  juiceDeathCount: 50
-  juiceSpeed: 4
-  juiceSize: 0.14
-  juiceLifetime: 0.65
-  juiceGravity: 1.5
-  juiceYOffset: 5
-  juiceAnchor: {fileID: 647359988313350105}
+  hitParticles: {fileID: 0}
+  deathParticles: {fileID: 0}
+  hitSounds: []
+  deathSounds: []
+  pitchVariation: 0.1
+  coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
+  coinLifetime: 10
+  coinPopForce: 3
+  abilitySettings:
+    resistenteReduction: 0.3
+    armaduraReduction: 0.5
+    diamanteReduction: 0.75
+    diamanteCritMultiplier: 4
+    fibraStackPerHit: 0.05
+    fibraMaxStack: 0.25
+    fibraResetTime: 1.5
+    tenazHpThreshold: 0.3
+    tenazReduction: 0.25
+    reboteHitsPerTrigger: 5
+    reboteStaminaPenalty: 2
+    fortificadoNormalDuration: 4
+    fortificadoBuffDuration: 3
+    fortificadoReduction: 0.4
+    fortificadoDarken: 0.45
+    implacableHitsToTrigger: 4
+    implacableWindow: 2
+    implacableBuffDuration: 2
+    implacableReduction: 0.3
+    regenDelayAfterHit: 2
+    regenPercentPerSecond: 0.03
+    supremoPhase2RegenPercent: 0.015
+    camuflajeVisibleDuration: 3
+    camuflajeHiddenDuration: 2
+    camuflajeHiddenAlpha: 0.2
+    maldicionDuration: 6
+    supremoPhase2Hp: 0.7
+    supremoPhase3Hp: 0.3
+    supremoPhase1Reduction: 0.2
+    supremoPhase3Reduction: 0.35
+  hp: 0
+  hpMax: 0
+  lastDamageTaken: 0
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -987,6 +905,147 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5578572141397921480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d834b923dd09b94484ea0d8ceb54427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitFeedbackDuration: 0.18
+  squashAmount: 0.2
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmission: 1.5
+  hitFlashTintBoost: 3
+  lowHpBlinkThreshold: 0.25
+  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 1}
+  lowHpBlinksPerSecond: 4
+--- !u!114 &3344508642976099743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b172796657211e8428ad234e8ef21749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  burstEnabled: 1
+  juiceColor: {r: 1, g: 1, b: 1, a: 1}
+  hitCount: 20
+  deathCount: 44
+  speed: 4
+  size: 0.14
+  lifetime: 0.65
+  gravity: 1.5
+  scale: 2
+  coneAngle: 60
+  anchor: {fileID: 2234410323087472270}
+--- !u!114 &5304614356215186066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d7e872f0f1b9346837e7e83c105793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragmentPrefabs:
+  - {fileID: 3478681970165476057}
+  - {fileID: 1542314557022796451}
+  - {fileID: 3058174104119642922}
+  - {fileID: 2611240844224109061}
+  - {fileID: 1466612215693920433}
+  - {fileID: 8226478690724288575}
+  - {fileID: 2042851454731339960}
+  - {fileID: 4471596179138898321}
+  - {fileID: 2843823217124401140}
+  - {fileID: 985656250717028016}
+  - {fileID: 1455131060702028069}
+  - {fileID: 6798569861340654106}
+  - {fileID: 6889654881731564745}
+  - {fileID: 1782211948196129846}
+  - {fileID: 3797172284464819791}
+  - {fileID: 733176464803452529}
+  - {fileID: 7921152634769503250}
+  - {fileID: 5487521047992104647}
+  - {fileID: 1933667894258973440}
+  - {fileID: 5936020767090106744}
+  - {fileID: 8385554072271556074}
+  - {fileID: 7300730543845963478}
+  - {fileID: 4284905385635707368}
+  - {fileID: 7249937325377309168}
+  - {fileID: 4319291559335891628}
+  - {fileID: 1552635439022562355}
+  - {fileID: 6132149624206277820}
+  - {fileID: 3691370913722623438}
+  - {fileID: 5928527668230130474}
+  - {fileID: 7654796682894702817}
+  pushForce: 3
+  spreadForce: 0.35
+  upForce: 0.15
+  torque: 1.2
+  gravity: 15
+  randomness: 0.2
+  lifetime: 2
+  fadeDuration: 1.2
+  shrinkTo: 0.6
+--- !u!114 &2569188096022789803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ca6a372fbffdc449ccd96aab1e8582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: 21300000, guid: e6891cd9f0cb1094da2567db63cdf3b7, type: 3}
+  - {fileID: 21300000, guid: c0fff7225fbeae848acd5273e5cf0dcb, type: 3}
+  - {fileID: 21300000, guid: c5c2d6350a985784c9d05dcf2d3f3c1f, type: 3}
+  - {fileID: 21300000, guid: 84c1ecac3181f354fae14b0c9a944115, type: 3}
+  decalTarget: {fileID: 7615688705278271982}
+  size: 0.5
+  sizeStep: 0.2
+  surfaceOffset: 0.01
+  color: {r: 1, g: 1, b: 1, a: 1}
+  sortingOrder: 100
+  spread: 0.4
+  keepSamePlace: 1
+  curveResolution: 12
+--- !u!114 &5602405566203694553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c318e11000a8444b74c5215c27dd2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitAnimator: {fileID: 1747711446717148761}
+  hitStateName: Hit_Coco
+  hitClipName: Hit_Coco
+  hitStartNormalized: 0
+  hitSpeedParameter: 
+  maxHitAnimSpeed: 4
+  spawnStateName: 
+  spawnStunDuration: 0
 --- !u!1001 &213637009904176799
 PrefabInstance:
   m_ObjectHideFlags: 0

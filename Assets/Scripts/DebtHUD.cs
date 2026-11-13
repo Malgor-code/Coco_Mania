@@ -31,7 +31,7 @@ public class DebtHUD : MonoBehaviour
                 ? gm.daysLeft
                 : gm.DaysToPlay;
 
-            daysText.text = L(days == 1 ? "days_left_one" : "days_left_many", days);
+            daysText.text = days.ToString();
             daysText.color = gm.IsOrderUrgent ? urgentColor : normalColor;
         }
     }

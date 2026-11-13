@@ -153,7 +153,7 @@ public class Minigame_Topo : MinigameBase
             }
             holes[i] = h;
         }
-
+        JuiceFX.DefaultLayer = holes[0].spot.gameObject.layer;
         float spacing = holes.Length > 1 ? Vector3.Distance(holes[0].spot.position, holes[1].spot.position) : 1f;
         unit = Mathf.Max(0.05f, spacing * 0.3f);
         groundPlane = new Plane(Vector3.up, holes[0].spot.position);
@@ -237,7 +237,7 @@ public class Minigame_Topo : MinigameBase
                     h.sparkle = 0.1f;
                     Vector3 p = h.variants[1].transform.position + h.spot.up * (h.depth[1] * Random.Range(0.2f, 1f))
                                 + Random.insideUnitSphere * (h.depth[1] * 0.35f);
-                    fx.Burst(p, Gold, 1, h.depth[1], 0.8f, 0.07f, 0.5f, -0.5f);
+                    JuiceFX.Burst(p, Gold, 1, h.spot.up, h.depth[1], 0.8f, 0.07f, 0.5f, -0.3f, 180f);
                 }
             }
         }
@@ -289,7 +289,8 @@ public class Minigame_Topo : MinigameBase
 
     void Miss(Camera cam)
     {
-        fx.Burst(hammerTarget - Vector3.up * hammerLift, Dirt, 5, unit, 2.5f, 0.1f, 0.4f, 8f, Vector3.up, 0.8f);
+        JuiceFX.Burst(hammerTarget - Vector3.up * hammerLift, Dirt, 5, Vector3.up,
+                      unit, 2.5f, 0.1f, 0.4f, 1.5f, 70f);
         MinigameFX.PlaySfx("topo_miss");
     }
 
@@ -307,7 +308,7 @@ public class Minigame_Topo : MinigameBase
         {
             txt = "+3"; tcol = Gold; pcol = Gold; shake = 0.3f; tsize = 72;
             fx.Flash(root, new Color(1f, 0.85f, 0.2f, 0.18f), 0.2f);
-            fx.Burst(c, Color.white, 8, u, 5f, 0.08f, 0.6f, 6f);
+            JuiceFX.Burst(c, Color.white, 8, Vector3.up, u, 5f, 0.08f, 0.6f, 1f, 180f);
             MinigameFX.PlaySfx("topo_gold");
         }
         else
@@ -317,8 +318,10 @@ public class Minigame_Topo : MinigameBase
             MinigameFX.PlaySfx("topo_rotten");
         }
 
-        fx.Burst(c, pcol, type == 1 ? 14 : 10, u, 4f, 0.14f, 0.65f, 9f, h.spot.up * 0.8f);
-        fx.Burst(h.spot.position, Dirt, 6, u, 3f, 0.1f, 0.5f, 10f, h.spot.up);
+        // salpicadura de jugo, igual que CoconutTarget
+        JuiceFX.Burst(c, pcol, type == 1 ? 22 : 10, h.spot.up, u, 4f, 0.14f, 0.65f, 1.5f, 55f, type == 1 ? 1.4f : 1f);
+        // tierra
+        JuiceFX.Burst(h.spot.position, Dirt, 6, h.spot.up, u, 3f, 0.1f, 0.5f, 1.5f, 60f);
         Stage.Shake(shake, 0.2f);
 
         if (MinigameFX.WorldToUI(root, cam, c + h.spot.up * (u * 0.5f), out Vector2 ui))
@@ -352,14 +355,14 @@ public class Minigame_Topo : MinigameBase
 
             Apply(h, h.type, 0f, 0f, 0f);
             h.variants[h.type].SetActive(true);
-            fx.Burst(h.spot.position, Dirt, 4, unit, 2.5f, 0.1f, 0.4f, 9f, h.spot.up, 0.7f);
+            JuiceFX.Burst(h.spot.position, Dirt, 4, h.spot.up, unit, 2.5f, 0.1f, 0.4f, 1.5f, 60f);
             return;
         }
     }
-
     public override void Cleanup()
     {
         fx.Clear();
+        JuiceFX.DefaultLayer = 0;
         if (cursorHidden) { Cursor.visible = prevCursor; cursorHidden = false; }
         base.Cleanup();
     }

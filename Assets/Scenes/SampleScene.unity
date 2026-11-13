@@ -15851,6 +15851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLanguage: 0
+  japaneseFont: {fileID: 11400000, guid: bca78325a9756da4a9799743e21ebe60, type: 2}
 --- !u!114 &252746839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15970,9 +15971,9 @@ MonoBehaviour:
   showIntroEveryRun: 0
   animateText: 1
   waveAmplitude: 0.05
-  waveSpeed: 4
+  waveSpeed: 2
   keywordShake: 0.07
-  keywordShakeSpeed: 22
+  keywordShakeSpeed: 5
   popTime: 0.18
   popOvershoot: 0.6
   punctuationPause: 0.14
@@ -16000,8 +16001,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8540c9156e4969641b5d0cf44978cfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDaysBetweenEvents: 3
-  maxDaysBetweenEvents: 5
+  minDaysBetweenEvents: 1
+  maxDaysBetweenEvents: 1
   everyNDays: 1
   eventsEnabled: 1
   minRewardPercent: 0.1
@@ -38823,7 +38824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &835882969
 RectTransform:
   m_ObjectHideFlags: 0
