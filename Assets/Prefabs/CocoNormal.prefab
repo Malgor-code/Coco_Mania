@@ -767,8 +767,10 @@ MonoBehaviour:
   maxScale: 1.5
   hitParticles: {fileID: 0}
   deathParticles: {fileID: 0}
-  hitSounds: []
-  deathSounds: []
+  hitSounds:
+  - {fileID: 8300000, guid: 8fdb356038ea15048a4862018161013a, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: cd26ed307181b7a45845a45f30896033, type: 3}
   pitchVariation: 0.1
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10

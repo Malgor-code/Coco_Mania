@@ -28,6 +28,11 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
     public AudioClip[] hitSounds;
     public AudioClip[] deathSounds;
     [Range(0f, 0.3f)] public float pitchVariation = 0.1f;
+    [Range(0f, 1f)] public float sfxVolume = 1f;
+    [Tooltip("0 = se escucha igual sin importar la distancia (recomendado). 1 = 3D total.")]
+    [Range(0f, 1f)] public float spatialBlend = 0f;
+
+    bool warnedNoHitSounds;
 
     [Header("Moneda 3D")]
     public GameObject coinPrefab;
@@ -99,7 +104,7 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         wander = GetComponent<CoconutWander>();
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 1f;
+        audioSource.spatialBlend = spatialBlend;
 
         fragments.Init();
         originalScale = typedScale = transform.localScale;
@@ -201,7 +206,7 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
     void PlayHitEffects(int damage, bool killed)
     {
         if (hitParticles != null) SpawnFx(hitParticles, transform.position);
-        PlaySound(hitSounds);
+        PlaySound(hitSounds, killed);
         juice.BurstHit();
         anim.PlayHit();
         decals.ShowNext();
@@ -267,18 +272,46 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         Destroy(coin, coinLifetime);
     }
 
-    void PlaySound(AudioClip[] clips)
+    void PlaySound(AudioClip[] clips, bool detached = false)
     {
-        if (clips == null || clips.Length == 0 || audioSource == null) return;
-        audioSource.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
-        audioSource.PlayOneShot(clips[Random.Range(0, clips.Length)]);
+        if (clips == null || clips.Length == 0)
+        {
+            if (!warnedNoHitSounds)
+            {
+                warnedNoHitSounds = true;
+                Debug.LogWarning("[CoconutTarget] 'Hit Sounds' está vacío en " + name + ". Arrastra clips en el Inspector.", this);
+            }
+            return;
+        }
+
+        AudioClip clip = clips[Random.Range(0, clips.Length)];
+        if (clip == null) return;
+        float pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
+
+        if (detached || audioSource == null) { PlayDetached(clip, pitch); return; }
+
+        audioSource.pitch = pitch;
+        audioSource.PlayOneShot(clip, sfxVolume);
     }
 
-    void PlayDeathSound()
+    void PlayDetached(AudioClip clip, float pitch)
     {
-        if (deathSounds == null || deathSounds.Length == 0) return;
-        AudioSource.PlayClipAtPoint(deathSounds[Random.Range(0, deathSounds.Length)], transform.position);
+        var go = new GameObject("CocoSfx");
+        go.transform.position = transform.position;
+
+        var src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.volume = sfxVolume;
+        src.pitch = pitch;
+        src.spatialBlend = spatialBlend;
+        src.playOnAwake = false;
+        if (audioSource != null) src.outputAudioMixerGroup = audioSource.outputAudioMixerGroup;
+        src.Play();
+
+        Destroy(go, clip.length / Mathf.Max(0.1f, pitch) + 0.1f);
     }
+
+    void PlayDeathSound() => PlaySound(deathSounds, true);
 
     static void SpawnFx(GameObject prefab, Vector3 pos) =>
         AutoDestroyFx(Instantiate(prefab, pos, Quaternion.identity));

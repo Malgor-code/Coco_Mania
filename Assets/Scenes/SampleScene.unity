@@ -15851,7 +15851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLanguage: 0
-  japaneseFont: {fileID: 11400000, guid: bca78325a9756da4a9799743e21ebe60, type: 2}
+  japaneseFont: {fileID: 11400000, guid: d76e9f6ff1a857748ba76a2bfb23e19f, type: 2}
 --- !u!114 &252746839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16001,8 +16001,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8540c9156e4969641b5d0cf44978cfa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDaysBetweenEvents: 1
-  maxDaysBetweenEvents: 1
+  minDaysBetweenEvents: 3
+  maxDaysBetweenEvents: 5
   everyNDays: 1
   eventsEnabled: 1
   minRewardPercent: 0.1
