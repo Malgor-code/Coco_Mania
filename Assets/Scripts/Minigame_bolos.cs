@@ -58,12 +58,16 @@ public class Minigame_Bolos : MinigameBase
     const float CenterTol = 0.06f;
     const float PowerTarget = 0.85f;
     const float PowerTol = 0.06f;
+    const float HopEnd = 0.18f;
 
     static readonly Color BarDark = new Color(0.25f, 0.25f, 0.25f);
     static readonly Color BarLit = new Color(0.4f, 0.4f, 0.4f);
     static readonly Color Locked = new Color(1f, 0.85f, 0.2f);
     static readonly Color Gold = new Color(1f, 0.9f, 0.3f);
     static readonly Color Wood = new Color(0.85f, 0.7f, 0.45f);
+    static readonly Color Good = new Color(0.4f, 1f, 0.5f);
+    static readonly Color Dust = new Color(0.8f, 0.72f, 0.58f);
+    static readonly Color ZoneGreen = new Color(0.3f, 0.7f, 0.3f);
 
     enum Step { Angle, Power, Rolling, Pause }
 
@@ -81,18 +85,23 @@ public class Minigame_Bolos : MinigameBase
     Vector3[] pinStartPos, pinBase, fallDir, pinScale0, wobbleAxis;
     Quaternion[] pinStartRot;
     float[] pinHeight, pinRadius, pinT, pinDelay, pinDur, pinSpin, pinSlide, pinPop;
-    bool[] pinDown, pinStarted;
+    bool[] pinDown, pinStarted, pinLanded;
     float wobble, spawnT = 9f;
+    int sfxPins;
 
     Transform ball;
     Vector3 ballScale0;
     float ballRadius;
-    Vector3 ballStart, ballTarget, exitPos;
+    Vector3 ballStart, ballTarget, exitPos, ballFlat;
     float pitSpeed, exitFade, laneSpan;
     Vector3 laneForward, laneRight;
+    bool landed;
+    float trailT, ballPunch = 1f;
 
-    Image angleMarker, powerMarker, angleBar, powerBar;
+    Image angleMarker, powerMarker, angleBar, powerBar, angleZone, powerZone;
     float anglePunch = 1f, powerPunch = 1f;
+
+    float baseFov, fovKick;
 
     public override string Hud => Tr.T("Tiro ", "Throw ", "Lançamento ", "Lancer ", "Wurf ", "投球 ") + Mathf.Min(throwNumber + 1, Throws) + "/" + Throws + Tr.T("     Pinos: ", "     Pins: ", "     Pinos: ", "     Quilles : ", "     Kegel: ", "     ピン：") + totalPins;
     public override float Score01 => Mathf.Clamp01(totalPins / 24f);
@@ -102,6 +111,8 @@ public class Minigame_Bolos : MinigameBase
         throwNumber = 0;
         totalPins = 0;
         speed = 0.9f + 0.45f * (diff - 1f);
+        fovKick = 0f;
+        ballPunch = 1f;
 
         S = Stage != null ? Stage.bolos : null;
         if (S == null || !S.IsReady)
@@ -112,6 +123,7 @@ public class Minigame_Bolos : MinigameBase
         }
 
         Stage.UseCamera(S.cameraPoint);
+        baseFov = Stage.ActiveCamera != null ? Stage.ActiveCamera.fieldOfView : 0f;
         ballStart = S.ballStart.position;
         Vector3 toPins = S.pinsRoot.position - ballStart;
         toPins.y = 0f;
@@ -125,7 +137,7 @@ public class Minigame_Bolos : MinigameBase
         pinStartRot = new Quaternion[n];
         pinHeight = new float[n]; pinRadius = new float[n]; pinT = new float[n]; pinDelay = new float[n];
         pinDur = new float[n]; pinSpin = new float[n]; pinSlide = new float[n]; pinPop = new float[n];
-        pinDown = new bool[n]; pinStarted = new bool[n];
+        pinDown = new bool[n]; pinStarted = new bool[n]; pinLanded = new bool[n];
         laneSpan = 0f;
         for (int i = 0; i < n; i++)
         {
@@ -152,10 +164,10 @@ public class Minigame_Bolos : MinigameBase
 
         MiniUI.Img("PanelControles", root, new Color(0f, 0f, 0f, 0.55f), new Vector2(0, -225), new Vector2(BarWidth + 260f, 150f));
         angleBar = MiniUI.Img("BarraAngulo", root, BarDark, new Vector2(0, -190), new Vector2(BarWidth, 26));
-        MiniUI.Img("ZonaAngulo", root, new Color(0.3f, 0.7f, 0.3f), new Vector2(0, -190), new Vector2(BarWidth * CenterTol * 2f, 26));
+        angleZone = MiniUI.Img("ZonaAngulo", root, ZoneGreen, new Vector2(0, -190), new Vector2(BarWidth * CenterTol * 2f, 26));
         angleMarker = MiniUI.Img("MarcaAngulo", root, Color.white, new Vector2(0, -190), new Vector2(12, 46));
         powerBar = MiniUI.Img("BarraFuerza", root, BarDark, new Vector2(0, -260), new Vector2(BarWidth, 26));
-        MiniUI.Img("ZonaFuerza", root, new Color(0.3f, 0.7f, 0.3f), new Vector2((PowerTarget - 0.5f) * BarWidth, -260), new Vector2(BarWidth * PowerTol * 2f, 26));
+        powerZone = MiniUI.Img("ZonaFuerza", root, ZoneGreen, new Vector2((PowerTarget - 0.5f) * BarWidth, -260), new Vector2(BarWidth * PowerTol * 2f, 26));
         powerMarker = MiniUI.Img("MarcaFuerza", root, Color.white, new Vector2(0, -260), new Vector2(12, 46));
         MiniUI.Label(root, Tr.T("ÁNGULO", "ANGLE", "ÂNGULO", "ANGLE", "WINKEL", "角度"), 22, new Vector2(-BarWidth / 2f - 70f, -190), new Vector2(120, 30));
         MiniUI.Label(root, Tr.T("FUERZA", "POWER", "FORÇA", "PUISSANCE", "KRAFT", "パワー"), 22, new Vector2(-BarWidth / 2f - 70f, -260), new Vector2(120, 30));
@@ -169,6 +181,7 @@ public class Minigame_Bolos : MinigameBase
         {
             pinDown[i] = false;
             pinStarted[i] = false;
+            pinLanded[i] = false;
             pins[i].gameObject.SetActive(true);
             pins[i].SetPositionAndRotation(pinStartPos[i], pinStartRot[i]);
             pins[i].localScale = Vector3.zero;
@@ -185,13 +198,24 @@ public class Minigame_Bolos : MinigameBase
         angleMarker.color = Color.white;
         powerMarker.color = Color.white;
         anglePunch = powerPunch = 1f;
+        angleZone.rectTransform.localScale = Vector3.one;
+        powerZone.rectTransform.localScale = Vector3.one;
     }
+
     bool Clicked() => inputCooldown <= 0f && GameInput.ActionDown;
 
     protected override void Tick(float dt)
     {
         if (pins == null) return;
         fx.Tick(dt);
+
+        Camera cam = Stage != null ? Stage.ActiveCamera : null;
+        if (cam != null && !cam.orthographic && baseFov > 0f)
+        {
+            if (step != Step.Rolling) fovKick = Mathf.Lerp(fovKick, 0f, 1f - Mathf.Exp(-6f * dt));
+            cam.fieldOfView = baseFov - fovKick;
+        }
+
         dt = fx.Gate(dt);
         inputCooldown -= dt;
 
@@ -201,60 +225,108 @@ public class Minigame_Bolos : MinigameBase
         switch (step)
         {
             case Step.Angle:
-                t += dt;
-                angleValue = Mathf.PingPong(t * speed, 1f);
-                angleMarker.rectTransform.anchoredPosition = new Vector2((angleValue - 0.5f) * BarWidth, -190f);
-                angleBar.color = Color.Lerp(BarDark, BarLit, 0.5f + 0.5f * Mathf.Sin(Time.time * 8f));
-                if (Clicked())
                 {
-                    angleMarker.color = Locked;
-                    angleBar.color = BarDark;
-                    anglePunch = 0f;
-                    bool centered = Mathf.Abs(angleValue - 0.5f) <= CenterTol;
-                    PopOnBar(-190f, centered ? Tr.T("¡Centro!", "Centered!", "Centro!", "Centré !", "Mittig!", "中央！") : "", centered);
-                    MinigameFX.PlaySfx(centered ? "bolos_lock_good" : "bolos_lock");
-                    step = Step.Power;
-                    t = 0f;
-                    inputCooldown = 0.25f;
+                    t += dt;
+                    angleValue = Mathf.PingPong(t * speed, 1f);
+                    angleMarker.rectTransform.anchoredPosition = new Vector2((angleValue - 0.5f) * BarWidth, -190f);
+                    angleBar.color = Color.Lerp(BarDark, BarLit, 0.5f + 0.5f * Mathf.Sin(Time.time * 8f));
+                    bool inA = Mathf.Abs(angleValue - 0.5f) <= CenterTol;
+                    angleMarker.color = inA ? Good : Color.white;
+                    angleZone.rectTransform.localScale = new Vector3(1f, inA ? 1.5f : 1f, 1f);
+                    DrawAimPreview(angleValue);
+                    if (Clicked())
+                    {
+                        angleMarker.color = Locked;
+                        angleBar.color = BarDark;
+                        angleZone.rectTransform.localScale = Vector3.one;
+                        anglePunch = 0f;
+                        bool centered = inA;
+                        PopOnBar(-190f, centered ? Tr.T("¡Centro!", "Centered!", "Centro!", "Centré !", "Mittig!", "中央！") : "", centered);
+                        MinigameFX.PlaySfx(centered ? "bolos_lock_good" : "bolos_lock");
+                        if (centered) fx.Flash(root, new Color(0.4f, 1f, 0.5f, 0.12f), 0.15f);
+                        Stage.Shake(centered ? 0.15f : 0.08f, 0.1f);
+                        step = Step.Power;
+                        t = 0f;
+                        inputCooldown = 0.25f;
+                    }
+                    break;
                 }
-                break;
 
             case Step.Power:
-                t += dt;
-                powerValue = Mathf.PingPong(t * speed * 1.15f, 1f);
-                powerMarker.rectTransform.anchoredPosition = new Vector2((powerValue - 0.5f) * BarWidth, -260f);
-                powerBar.color = Color.Lerp(BarDark, BarLit, 0.5f + 0.5f * Mathf.Sin(Time.time * 8f));
-                if (Clicked())
                 {
-                    powerMarker.color = Locked;
-                    powerBar.color = BarDark;
-                    powerPunch = 0f;
-                    bool good = Mathf.Abs(powerValue - PowerTarget) <= PowerTol;
-                    PopOnBar(-260f, good ? Tr.T("¡Fuerza!", "Power!", "Força!", "Puissance !", "Kraft!", "パワー！") : "", good);
-                    Launch();
+                    t += dt;
+                    powerValue = Mathf.PingPong(t * speed * 1.15f, 1f);
+                    powerMarker.rectTransform.anchoredPosition = new Vector2((powerValue - 0.5f) * BarWidth, -260f);
+                    powerBar.color = Color.Lerp(BarDark, BarLit, 0.5f + 0.5f * Mathf.Sin(Time.time * 8f));
+                    bool inP = Mathf.Abs(powerValue - PowerTarget) <= PowerTol;
+                    powerMarker.color = inP ? Good : Color.white;
+                    powerZone.rectTransform.localScale = new Vector3(1f, inP ? 1.5f : 1f, 1f);
+                    DrawAimPreview(angleValue);
+                    if (Clicked())
+                    {
+                        powerMarker.color = Locked;
+                        powerBar.color = BarDark;
+                        powerZone.rectTransform.localScale = Vector3.one;
+                        powerPunch = 0f;
+                        bool good = inP;
+                        PopOnBar(-260f, good ? Tr.T("¡Fuerza!", "Power!", "Força!", "Puissance !", "Kraft!", "パワー！") : "", good);
+                        if (good) fx.Flash(root, new Color(0.4f, 1f, 0.5f, 0.12f), 0.15f);
+                        Stage.Shake(good ? 0.2f : 0.1f, 0.1f);
+                        Launch();
+                    }
+                    break;
                 }
-                break;
 
             case Step.Rolling:
-                stepTimer += dt;
-                float k = Mathf.Clamp01(stepTimer / rollTime);
-                Vector3 prev = ball.position;
-                ball.position = Vector3.Lerp(ballStart, ballTarget, k);
-                Roll(ball.position - prev);
-                if (k >= 1f) Knock();
-                break;
+                {
+                    stepTimer += dt;
+                    float k = Mathf.Clamp01(stepTimer / rollTime);
+                    float ke = Mathf.Lerp(k, k * k, 0.35f);
+                    Vector3 flat = Vector3.Lerp(ballStart, ballTarget, ke);
+                    Roll(flat - ballFlat);
+                    ballFlat = flat;
+
+                    float lift = k < HopEnd ? (1f - k / HopEnd) * ballRadius * 1.6f : 0f;
+                    ball.position = flat + Vector3.up * lift;
+
+                    if (!landed && k >= HopEnd)
+                    {
+                        landed = true;
+                        ballPunch = 0f;
+                        fx.Burst(flat - Vector3.up * (ballRadius * 0.8f), Dust, 8, ballRadius * 2f, 2.5f, 0.12f, 0.45f, 6f, Vector3.up, 0.8f);
+                        Stage.Shake(0.2f, 0.12f);
+                        MinigameFX.PlaySfx("bolos_land");
+                    }
+                    if (landed)
+                    {
+                        trailT -= dt;
+                        if (trailT <= 0f)
+                        {
+                            trailT = 0.035f;
+                            fx.Burst(flat - Vector3.up * (ballRadius * 0.85f), Dust, 1, ballRadius * 2f, 0.6f, 0.14f, 0.4f, 1f, Vector3.up, 0.5f);
+                        }
+                    }
+                    if (k > 0.7f) wobble = Mathf.Max(wobble, (k - 0.7f) / 0.3f * 0.35f);
+                    ApplyStandingWobble();
+                    fovKick = Mathf.Lerp(fovKick, 4f * k, 1f - Mathf.Exp(-8f * dt));
+
+                    if (k >= 1f) Knock();
+                    break;
+                }
 
             case Step.Pause:
-                AnimatePins(dt);
-                MoveBallOut(dt);
-                stepTimer -= dt;
-                if (stepTimer <= 0f)
                 {
-                    throwNumber++;
-                    if (throwNumber >= Throws) Finished = true;
-                    else StartThrow();
+                    AnimatePins(dt);
+                    MoveBallOut(dt);
+                    stepTimer -= dt;
+                    if (stepTimer <= 0f)
+                    {
+                        throwNumber++;
+                        if (throwNumber >= Throws) Finished = true;
+                        else StartThrow();
+                    }
+                    break;
                 }
-                break;
         }
     }
 
@@ -268,10 +340,14 @@ public class Minigame_Bolos : MinigameBase
     {
         if (spawnT >= 1.5f) return;
         spawnT += dt;
+        bool dropping = spawnT < 0.6f && (step == Step.Angle || step == Step.Power);
         for (int i = 0; i < pins.Length; i++)
         {
             if (pinDown[i]) continue;
-            pins[i].localScale = pinScale0[i] * MinigameFX.EaseOutBack((spawnT - i * 0.035f) / 0.22f);
+            float e = (spawnT - i * 0.035f) / 0.22f;
+            pins[i].localScale = pinScale0[i] * MinigameFX.EaseOutBack(e);
+            if (dropping)
+                pins[i].position = pinStartPos[i] + Vector3.up * (pinHeight[i] * 0.6f * (1f - MinigameFX.EaseOutCubic(e)));
         }
         if (step == Step.Angle || step == Step.Power)
             ball.localScale = ballScale0 * MinigameFX.EaseOutBack(spawnT / 0.25f);
@@ -281,6 +357,13 @@ public class Minigame_Bolos : MinigameBase
     {
         if (anglePunch < 1f) anglePunch = Mathf.Min(1f, anglePunch + dt / 0.4f);
         if (powerPunch < 1f) powerPunch = Mathf.Min(1f, powerPunch + dt / 0.4f);
+        if (ballPunch < 1f)
+        {
+            ballPunch = Mathf.Min(1f, ballPunch + dt / 0.3f);
+            float sq = MinigameFX.Punch(ballPunch);
+            if (step == Step.Rolling)
+                ball.localScale = new Vector3(ballScale0.x * (1f + 0.25f * sq), ballScale0.y * (1f - 0.3f * sq), ballScale0.z * (1f + 0.25f * sq));
+        }
         angleMarker.rectTransform.localScale = Vector3.one * (1f + 0.7f * MinigameFX.Punch(anglePunch));
         powerMarker.rectTransform.localScale = Vector3.one * (1f + 0.7f * MinigameFX.Punch(powerPunch));
     }
@@ -309,12 +392,21 @@ public class Minigame_Bolos : MinigameBase
         rollTime = Mathf.Lerp(1.15f, 0.6f, Mathf.Clamp01(powerValue));
         ball.localScale = ballScale0;
         stepTimer = 0f;
+
+        ballFlat = ballStart;
+        landed = false;
+        trailT = 0f;
+        fx.Burst(ballStart, Dust, 6, ballRadius * 2f, 2f, 0.1f, 0.4f, 6f, Vector3.up, 0.8f);
+
         step = Step.Rolling;
         MinigameFX.PlaySfx("bolos_roll");
     }
 
     void Knock()
     {
+        sfxPins = 0;
+        fovKick = -5f;
+
         int n = pins.Length;
         float[] score = new float[n];
         var order = new List<int>();
@@ -338,6 +430,7 @@ public class Minigame_Bolos : MinigameBase
 
             pinDown[pi] = true;
             pinStarted[pi] = false;
+            pinLanded[pi] = false;
             pinT[pi] = 0f;
             pinDelay[pi] = Mathf.Min(0.4f, dist / (pinHeight[pi] * 12f));
             pinDur[pi] = Random.Range(0.5f, 0.75f);
@@ -363,9 +456,10 @@ public class Minigame_Bolos : MinigameBase
         Vector3 impact = ballTarget + Vector3.up * (u * 0.4f);
         if (pendingPins > 0)
         {
-            fx.Burst(impact, Wood, 6 + pendingPins * 2, u, 4f, 0.1f, 0.6f, 8f, Vector3.up, 1f);
-            Stage.Shake(0.2f + 0.8f * strength, 0.3f);
-            fx.HitStop(pendingStrike ? 0.1f : 0.05f);
+            fx.Burst(impact, Wood, 8 + pendingPins * 3, u, 5f, 0.1f, 0.7f, 8f, Vector3.up, 1f);
+            fx.Burst(impact, Color.white, 6, u, 6f, 0.06f, 0.25f, 0f, Vector3.up, 1f); 
+            Stage.Shake(0.3f + 1.0f * strength, 0.35f);
+            fx.HitStop(pendingStrike ? 0.18f : 0.05f + 0.05f * strength);
             if (pendingPins < n) wobble = 1f;
         }
 
@@ -374,13 +468,18 @@ public class Minigame_Bolos : MinigameBase
         if (pendingStrike)
         {
             txt = Tr.T("¡CHUZA!", "STRIKE!", "STRIKE!", "STRIKE !", "STRIKE!", "ストライク！"); col = Gold; size = 96;
-            fx.Confetti(S.pinsRoot.position + Vector3.up * (u * 1.5f), u, 50);
+            fx.Confetti(S.pinsRoot.position + Vector3.up * (u * 1.5f), u, 70);
+            fx.Confetti(S.pinsRoot.position + laneRight * (u * 2f) + Vector3.up * u, u, 25);
+            fx.Confetti(S.pinsRoot.position - laneRight * (u * 2f) + Vector3.up * u, u, 25);
             fx.Flash(root, new Color(1f, 0.9f, 0.3f, 0.3f), 0.3f);
+            fx.Pop(root, new Vector2(0, 150), "★", Gold, 70, 80f, 1.2f);
             MinigameFX.PlaySfx("bolos_strike");
         }
         else if (pendingPins == 0)
         {
             txt = Tr.T("¡Canaleta!", "Gutter ball!", "Canaleta!", "Gouttière !", "Rinne!", "ガター！"); col = new Color(1f, 0.4f, 0.4f); size = 72;
+            fx.Flash(root, new Color(0.5f, 0.5f, 0.55f, 0.2f), 0.25f);
+            fx.Burst(ball.position, Dust, 6, ballRadius * 2f, 2f, 0.12f, 0.5f, 5f, Vector3.up, 0.8f);
             MinigameFX.PlaySfx("bolos_gutter");
         }
         else
@@ -405,22 +504,27 @@ public class Minigame_Bolos : MinigameBase
         if (remaining < 0.01f) ball.gameObject.SetActive(false);
     }
 
+    void ApplyStandingWobble()
+    {
+        if (wobble <= 0f) return;
+        for (int i = 0; i < pins.Length; i++)
+        {
+            if (pinDown[i]) continue;
+            float ang = Mathf.Sin(Time.time * 38f + i) * 7f * wobble;
+            Quaternion w = Quaternion.AngleAxis(ang, wobbleAxis[i]);
+            pins[i].rotation = w * pinStartRot[i];
+            pins[i].position = pinBase[i] + w * (pinStartPos[i] - pinBase[i]);
+        }
+    }
+
     void AnimatePins(float dt)
     {
         wobble = Mathf.Max(0f, wobble - dt * 1.6f);
+        ApplyStandingWobble();
+
         for (int i = 0; i < pins.Length; i++)
         {
-            if (!pinDown[i])
-            {
-                if (wobble > 0f)
-                {
-                    float ang = Mathf.Sin(Time.time * 38f + i) * 7f * wobble;
-                    Quaternion w = Quaternion.AngleAxis(ang, wobbleAxis[i]);
-                    pins[i].rotation = w * pinStartRot[i];
-                    pins[i].position = pinBase[i] + w * (pinStartPos[i] - pinBase[i]);
-                }
-                continue;
-            }
+            if (!pinDown[i]) continue;
 
             pinT[i] += dt;
             float tt = pinT[i] - pinDelay[i];
@@ -430,6 +534,7 @@ public class Minigame_Bolos : MinigameBase
             {
                 pinStarted[i] = true;
                 fx.Burst(pinBase[i] + Vector3.up * (pinHeight[i] * 0.5f), Wood, 3, pinHeight[i], 3f, 0.1f, 0.5f, 8f, Vector3.up, 1f);
+                if (sfxPins++ < 4) MinigameFX.PlaySfx("bolos_pin");
             }
 
             float k = Mathf.Clamp01(tt / pinDur[i]);
@@ -441,11 +546,41 @@ public class Minigame_Bolos : MinigameBase
             pins[i].position = pinBase[i] + q * (pinStartPos[i] - pinBase[i])
                                + fallDir[i] * (pinHeight[i] * pinSlide[i] * e)
                                + Vector3.up * (pinRadius[i] * e + lift);
+            float tb = tt - pinDur[i];
+            if (tb >= 0f)
+            {
+                if (!pinLanded[i])
+                {
+                    pinLanded[i] = true;
+                    fx.Burst(pins[i].position, Dust, 3, pinHeight[i], 2f, 0.1f, 0.4f, 6f, Vector3.up, 0.8f);
+                    if (sfxPins < 8) { sfxPins++; MinigameFX.PlaySfx("bolos_pin_land"); }
+                }
+                if (tb < 0.25f)
+                    pins[i].position += Vector3.up * (Mathf.Abs(Mathf.Sin(tb / 0.25f * Mathf.PI)) * pinHeight[i] * 0.1f * (1f - tb / 0.25f));
+            }
+        }
+    }
+
+    void DrawAimPreview(float u)
+    {
+        Vector3 target = Vector3.Lerp(S.aimLeft.position, S.aimRight.position, u);
+        target.y = ballStart.y;
+        float len = Vector3.Distance(ballStart, target);
+        int dots = Mathf.Clamp(Mathf.RoundToInt(len / (pinHeight[0] * 0.5f)), 3, 14);
+        bool centered = Mathf.Abs(u - 0.5f) <= CenterTol;
+        Color c = centered ? Good : new Color(1f, 1f, 1f, 0.9f);
+        float pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 10f);
+        for (int i = 1; i <= dots; i++)
+        {
+            Vector3 p = Vector3.Lerp(ballStart, target, i / (float)(dots + 1)) + Vector3.up * (ballRadius * 0.2f);
+            fx.Burst(p, c, 1, pinHeight[0], 0f, 0.09f + 0.03f * pulse, 0.12f, 0f);
         }
     }
 
     public override void Cleanup()
     {
+        if (Stage != null && Stage.ActiveCamera != null && baseFov > 0f)
+            Stage.ActiveCamera.fieldOfView = baseFov;
         fx.Clear();
         base.Cleanup();
     }

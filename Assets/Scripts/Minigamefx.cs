@@ -232,7 +232,19 @@ public class MinigameFX
         if (root == null) return;
         if (flashImg == null)
         {
-            flashImg = MiniUI.Img("Flash", root, c, Vector2.zero, new Vector2(4000f, 4000f));
+            var go = new GameObject("Flash", typeof(RectTransform), typeof(Image));
+            var rt = (RectTransform)go.transform;
+            var canvas = root.GetComponentInParent<Canvas>();
+            Transform parent = canvas != null ? canvas.rootCanvas.transform : root;
+            rt.SetParent(parent, false);
+
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.localScale = Vector3.one;
+
+            flashImg = go.GetComponent<Image>();
             flashImg.raycastTarget = false;
         }
         flashImg.transform.SetAsLastSibling();

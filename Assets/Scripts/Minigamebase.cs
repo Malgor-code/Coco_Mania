@@ -10,7 +10,7 @@ public abstract class MinigameBase
     public virtual string Hud => "";
     public abstract float Score01 { get; }
     public virtual bool Is3D => false;
-
+    public virtual bool HideCursor => Is3D;
     public bool Finished { get; protected set; }
     public float TimeLeft => timeLeft;
 
@@ -27,6 +27,7 @@ public abstract class MinigameBase
         diff = Mathf.Max(1f, difficulty);
         timeLeft = Duration;
         Finished = false;
+        if (HideCursor) Cursor.visible = false;
         Setup();
     }
 
@@ -53,6 +54,7 @@ public abstract class MinigameBase
 
     public virtual void Cleanup()
     {
+        if (HideCursor) Cursor.visible = true;
         for (int i = spawned.Count - 1; i >= 0; i--)
             if (spawned[i] != null) Object.Destroy(spawned[i]);
         spawned.Clear();

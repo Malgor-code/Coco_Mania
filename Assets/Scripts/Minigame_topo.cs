@@ -5,7 +5,8 @@ public class Minigame_Topo : MinigameBase
     public override string Name => Tr.T("¡Topo-Coco!", "Coco-Mole!", "Toupeira-Coco!", "Taupe-Coco !", "Kokos-Maulwurf!", "ココナッツもぐらたたき！");
     public override float Duration => 20f;
     public override string Controls => Tr.T("Clic en los cocos que asoman. Dorado = x3. ¡No le pegues al podrido (morado)!", "Click the coconuts as they pop up. Golden = x3. Don't hit the rotten one (purple)!", "Clique nos cocos que aparecem. Dourado = x3. Não bata no podre (roxo)!", "Clique sur les noix de coco qui sortent. Doré = x3. Ne tape pas la pourrie (violette) !", "Klicke auf die Kokosnüsse, die auftauchen. Golden = x3. Schlage nicht auf die faule (lila)!", "出てくるココナッツをクリック。金色は3倍！腐ったもの（紫）は叩かないで！");
-
+    readonly System.Collections.Generic.List<GameObject> holeDiscs = new System.Collections.Generic.List<GameObject>();
+    Material discMat;
     public override string[] Intros => new[] { IntrosES, IntrosEN, IntrosPT, IntrosFR, IntrosDE, IntrosJA }[Tr.Index];
 
     static readonly string[] IntrosEN =
@@ -57,7 +58,6 @@ public class Minigame_Topo : MinigameBase
     const float SwingTime = 0.22f;
     const float SwingAngle = -60f;
     const float StrikeFrac = 0.35f;
-    const float MinHitRadiusPx = 48f;
     const float HitForgiveness = 1.25f;
 
     static readonly Color Gold = new Color(1f, 0.85f, 0.2f);
@@ -146,7 +146,11 @@ public class Minigame_Topo : MinigameBase
                 h.shownOff[k] = (S.alignBaseToHole && sane) ? -mn : 0f;
                 if (S.alignBaseToHole && !sane)
                     Debug.LogWarning("Minigame_Topo: la base del coco esta muy lejos de su pivote (hoyo " + i + "). Se usa el pivote del prefab.");
-
+                if (k == 0)
+                {
+                    float diameter = Mathf.Max(b.extents.x, b.extents.z) * 2f * 1.25f;
+                    CreateHoleDisc(h, diameter);
+                }
                 h.variants[k] = go;
                 h.scale0[k] = go.transform.localScale;
                 go.SetActive(false);
@@ -265,22 +269,25 @@ public class Minigame_Topo : MinigameBase
 
     bool TryHit(Camera cam)
     {
-        Vector2 mouse = GameInput.PointerPosition;
+        Vector3 ground = hammerTarget - Vector3.up * hammerLift;
+        Ray downRay = new Ray(ground + Vector3.up * (hammerLift * 4f), Vector3.down);
+        Ray camRay = cam.ScreenPointToRay(GameInput.PointerPosition);
+
         int best = -1;
-        float bestD = float.MaxValue;
+        float bestScore = float.MaxValue;
         for (int i = 0; i < holes.Length; i++)
         {
             Hole h = holes[i];
             if (!h.active) continue;
 
             Bounds b = MinigameFX.GetBounds(h.variants[h.type]);
-            Vector3 sp = cam.WorldToScreenPoint(b.center);
-            if (sp.z <= 0f) continue;
-            float worldR = Mathf.Max(b.extents.x, b.extents.z, b.extents.y * 0.5f);
-            Vector3 spEdge = cam.WorldToScreenPoint(b.center + cam.transform.right * worldR);
-            float r = Mathf.Max(Mathf.Abs(spEdge.x - sp.x) * HitForgiveness, MinHitRadiusPx);
-            float d = Vector2.Distance(mouse, new Vector2(sp.x, sp.y));
-            if (d <= r && d < bestD) { best = i; bestD = d; }
+            b.Expand(b.size * (HitForgiveness - 1f) + Vector3.one * (unit * 0.3f));
+
+            float score = float.MaxValue;
+            if (b.IntersectRay(downRay, out float dDown)) score = dDown;
+            else if (b.IntersectRay(camRay, out float dCam)) score = 1000f + dCam;
+
+            if (score < bestScore) { bestScore = score; best = i; }
         }
         if (best < 0) return false;
         Hit(holes[best], cam);
@@ -364,6 +371,34 @@ public class Minigame_Topo : MinigameBase
         fx.Clear();
         JuiceFX.DefaultLayer = 0;
         if (cursorHidden) { Cursor.visible = prevCursor; cursorHidden = false; }
+        foreach (var d in holeDiscs) if (d != null) Object.Destroy(d);
+        holeDiscs.Clear();
+        if (discMat != null) { Object.Destroy(discMat); discMat = null; }
         base.Cleanup();
+    }
+    void CreateHoleDisc(Hole h, float diameter)
+    {
+        var disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        disc.name = "Topo: hoyo";
+        Object.Destroy(disc.GetComponent<Collider>());
+
+        if (discMat == null)
+        {
+            Shader sh = Shader.Find("Universal Render Pipeline/Unlit");
+            if (sh == null) sh = Shader.Find("Unlit/Color");
+            if (sh == null) sh = Shader.Find("Sprites/Default");
+            discMat = new Material(sh);
+            discMat.color = Color.black;
+            if (discMat.HasProperty("_BaseColor")) discMat.SetColor("_BaseColor", Color.black);
+        }
+        var mr = disc.GetComponent<MeshRenderer>();
+        mr.sharedMaterial = discMat;
+        mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        mr.receiveShadows = false;
+
+        disc.layer = h.spot.gameObject.layer;
+        disc.transform.SetPositionAndRotation(h.spot.position + h.spot.up * (diameter * 0.01f), h.spot.rotation);
+        disc.transform.localScale = new Vector3(diameter, diameter * 0.005f, diameter);
+        holeDiscs.Add(disc);
     }
 }
