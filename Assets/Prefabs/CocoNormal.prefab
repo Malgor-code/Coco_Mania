@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 4451327983864805884}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04165366, y: 0.7058789, z: -0.7058789, w: 0.04165366}
-  m_LocalPosition: {x: -0.021, y: 1.353, z: -0.132}
+  m_LocalPosition: {x: -0.021, y: 1.472, z: -0.132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,7 +278,7 @@ Transform:
   m_GameObject: {fileID: 5488443151086400318}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04165366, y: 0.7058789, z: -0.7058789, w: 0.04165366}
-  m_LocalPosition: {x: -0.004, y: 1.356, z: -0.125}
+  m_LocalPosition: {x: -0.004, y: 1.475, z: -0.125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -575,7 +575,7 @@ Transform:
   m_GameObject: {fileID: 6278262210870191600}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04165366, y: 0.7058789, z: -0.7058789, w: 0.04165366}
-  m_LocalPosition: {x: -0.004, y: 1.365, z: -0.121}
+  m_LocalPosition: {x: -0.004, y: 1.484, z: -0.121}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1022,7 +1022,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c5c2d6350a985784c9d05dcf2d3f3c1f, type: 3}
   - {fileID: 21300000, guid: 84c1ecac3181f354fae14b0c9a944115, type: 3}
   decalTarget: {fileID: 7615688705278271982}
-  size: 0.5
+  size: 1
   sizeStep: 0.2
   surfaceOffset: 0.01
   color: {r: 1, g: 1, b: 1, a: 1}
