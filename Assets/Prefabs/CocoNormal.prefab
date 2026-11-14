@@ -772,6 +772,8 @@ MonoBehaviour:
   deathSounds:
   - {fileID: 8300000, guid: cd26ed307181b7a45845a45f30896033, type: 3}
   pitchVariation: 0.1
+  sfxVolume: 1
+  spatialBlend: 0
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10
   coinPopForce: 3
@@ -925,7 +927,7 @@ MonoBehaviour:
   hitFlashEmission: 1.5
   hitFlashTintBoost: 3
   lowHpBlinkThreshold: 0.25
-  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 1}
+  lowHpBlinkColor: {r: 0.8773585, g: 0.36832502, b: 0.36832502, a: 1}
   lowHpBlinksPerSecond: 4
 --- !u!114 &3344508642976099743
 MonoBehaviour:
@@ -994,12 +996,12 @@ MonoBehaviour:
   - {fileID: 5928527668230130474}
   - {fileID: 7654796682894702817}
   pushForce: 3
-  spreadForce: 0.35
-  upForce: 0.15
+  spreadForce: 1.5
+  upForce: 1
   torque: 1.2
   gravity: 15
-  randomness: 0.2
-  lifetime: 2
+  randomness: 1
+  lifetime: 3
   fadeDuration: 1.2
   shrinkTo: 0.6
 --- !u!114 &2569188096022789803
