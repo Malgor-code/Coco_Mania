@@ -514,7 +514,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Para desbloquear el siguiente
+  m_text: Para desbloquear el siguiente coco
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d3aa134bf7a12394dbf138fca6163b8e, type: 2}
   m_sharedMaterial: {fileID: -5580033761004635376, guid: d3aa134bf7a12394dbf138fca6163b8e, type: 2}
@@ -25976,6 +25976,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 112737390}
     m_Modifications:
+    - target: {fileID: 2646096681081303160, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646096681081303160, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646096681081303160, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6253157222755337077, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6253157222755337077, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6253157222755337077, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291227574192172380, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291227574192172380, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291227574192172380, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6523585894159995226, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -26016,6 +26052,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6679430832885292903, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679430832885292903, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679430832885292903, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6825808383350700548, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7661746383814953141, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
       propertyPath: m_Name
       value: CocoNormal (1)
@@ -26028,6 +26080,9 @@ PrefabInstance:
     - {fileID: 5304614356215186066, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
     - {fileID: 2569188096022789803, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
     - {fileID: 5602405566203694553, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+    - {fileID: 6825808383350700548, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+    - {fileID: 5578572141397921480, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
+    - {fileID: 2174603408750539535, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
     m_RemovedGameObjects:
     - {fileID: 3700902359521904953, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
     m_AddedGameObjects: []
