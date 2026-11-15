@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: OddDuckInteractive
   productName: Coco Mania
-  defaultCursor: {fileID: 10912, guid: 0000000000000000f000000000000000, type: 0}
+  defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13207549, g: 0.12397652, b: 0.12600127, a: 1}
   m_ShowUnitySplashScreen: 1
