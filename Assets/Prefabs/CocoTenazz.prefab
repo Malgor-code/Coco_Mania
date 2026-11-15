@@ -113,13 +113,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2562181136585157165}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.27094352, y: -0.15161844, z: 0.456}
-  m_LocalScale: {x: 0.979873, y: 0.979873, z: 0.979873}
+  m_LocalRotation: {x: -0.2789787, y: -0, z: -0, w: 0.96029735}
+  m_LocalPosition: {x: -0.292, y: 0, z: 0.501}
+  m_LocalScale: {x: 0.7266959, y: 1.1440066, z: 1.1440066}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5668534700152069103}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -32.399, y: 0, z: 0}
 --- !u!33 &2986685564816051635
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 057f8f1d13d9bd24ebdb7f2cf1be4932, type: 2}
+  - {fileID: 2100000, guid: e5e7e9011bf93654aa3a903e1ce73953, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -351,6 +351,11 @@ GameObject:
   - component: {fileID: 2400966598480240970}
   - component: {fileID: 1209790877807115462}
   - component: {fileID: 2097344187949809292}
+  - component: {fileID: 5578572141397921480}
+  - component: {fileID: 3344508642976099743}
+  - component: {fileID: 5304614356215186066}
+  - component: {fileID: 2569188096022789803}
+  - component: {fileID: 5602405566203694553}
   m_Layer: 0
   m_Name: CocoTenazz
   m_TagString: Untagged
@@ -485,107 +490,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stunOnHit: 0
+  colorRenderer: {fileID: 7486250031024547161}
+  hitCollider: {fileID: 51560618024542775}
+  baseScale: 1
+  scaleGrowth: 0.08
+  maxScale: 1.5
   hitParticles: {fileID: 5980502239318536123, guid: d6cb673a25662df409ba2177ec06df6e, type: 3}
   deathParticles: {fileID: 1378310280763612009, guid: 0dd212a7025de2d4f90c4721db94138f, type: 3}
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1
-  hitFeedbackDuration: 0.18
-  squashAmount: 0.2
-  lowHpBlinkThreshold: 0.25
-  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 0.68235296}
-  lowHpBlinksPerSecond: 4
-  fragmentPrefabs: []
-  fragmentSeparationForce: 0.5
-  fragmentFollowThroughForce: 0.7
-  fragmentUpForce: 0.25
-  fragmentDrag: 4
-  fragmentAngularDrag: 5
-  fragmentExtraGravity: 15
-  fragmentTorque: 8
-  fragmentRandomness: 0.25
-  fragmentLifetime: 3
-  ability: 5
-  fragmentFadeDuration: 1.2
-  fragmentShrinkTo: 0.6
-  resistenteDamageReduction: 0.3
-  armaduraDamageReduction: 0.5
-  diamanteDamageReduction: 0.9
-  diamanteCritMultiplier: 4
-  fibraDuraStackPerHit: 0.05
-  fibraDuraMaxStack: 0.25
-  fibraDuraResetTime: 1.5
-  tenazHpThreshold: 0.3
-  tenazDamageReduction: 0.25
-  reboteHitsPerTrigger: 5
-  reboteStaminaPenalty: 2
-  fortificadoNormalDuration: 4
-  fortificadoBuffDuration: 3
-  fortificadoDamageReduction: 0.4
-  implacableHitsToTrigger: 4
-  implacableWindowSeconds: 2
-  implacableBuffDuration: 2
-  implacableDamageReduction: 0.3
-  hitAnimator: {fileID: 1747711446717148761}
-  spawnStateName: 
-  spawnStunDuration: 0
-  hitStateName: Hit_Coco
-  regeneracionDelayAfterHit: 2
-  regeneracionPercentPerSecond: 0.03
-  supremoFase2RegenPercentPerSecond: 0.015
-  hitClipName: 
-  hitAnimStartNormalized: 0
-  hitSpeedParameter: 
-  maxHitAnimSpeed: 4
-  lastDamageTaken: 0
-  camuflajeVisibleDuration: 3
-  camuflajeHiddenDuration: 2
-  camuflajeHiddenAlpha: 0.2
-  colorRenderer: {fileID: 7486250031024547161}
-  maldicionDuration: 6
-  hitCollider: {fileID: 51560618024542775}
-  supremoFase2HpThreshold: 0.7
-  supremoFase3HpThreshold: 0.3
-  supremoFase1DamageReduction: 0.2
-  supremoFase3DamageReduction: 0.35
-  hp: 0
-  hpMax: 0
+  sfxVolume: 1
+  spatialBlend: 0
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10
   coinPopForce: 3
-  baseScale: 1
-  scaleGrowth: 0.08
-  maxScale: 1.5
-  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
-  hitFlashEmission: 1.5
-  hitFlashTintBoost: 3
-  damageDecals: []
-  autoPlaceDecals: 1
-  decalSurfaceOffset: 0.01
-  decalSpread: 0.4
-  flipDecalFacing: 0
-  damageDecalSprites: []
-  decalSize: 0.5
-  damageDecalPrefabs: []
-  decalScale: 1
-  decalRotationOffset: {x: 0, y: 0, z: 0}
-  randomSpin: 1
-  decalColor: {r: 1, g: 1, b: 1, a: 1}
-  decalSortingOrder: 100
-  decalTarget: {fileID: 0}
-  decalSizeStep: 0.2
-  keepSameDecalPlace: 1
-  decalCurveResolution: 12
-  juiceBurstEnabled: 1
-  juiceColor: {r: 0.92, g: 0.97, b: 1, a: 1}
-  juiceHitCount: 10
-  juiceDeathCount: 22
-  juiceSpeed: 4
-  juiceSize: 0.14
-  juiceLifetime: 0.65
-  juiceGravity: 1.5
-  juiceYOffset: 0.3
-  juiceAnchor: {fileID: 0}
+  abilitySettings:
+    resistenteReduction: 0.3
+    armaduraReduction: 0.5
+    diamanteReduction: 0.75
+    diamanteCritMultiplier: 4
+    fibraStackPerHit: 0.05
+    fibraMaxStack: 0.25
+    fibraResetTime: 1.5
+    tenazHpThreshold: 0.3
+    tenazReduction: 0.25
+    reboteHitsPerTrigger: 5
+    reboteStaminaPenalty: 2
+    fortificadoNormalDuration: 4
+    fortificadoBuffDuration: 3
+    fortificadoReduction: 0.4
+    fortificadoDarken: 0.45
+    implacableHitsToTrigger: 4
+    implacableWindow: 2
+    implacableBuffDuration: 2
+    implacableReduction: 0.3
+    regenDelayAfterHit: 2
+    regenPercentPerSecond: 0.03
+    supremoPhase2RegenPercent: 0.015
+    camuflajeVisibleDuration: 3
+    camuflajeHiddenDuration: 2
+    camuflajeHiddenAlpha: 0.2
+    maldicionDuration: 6
+    supremoPhase2Hp: 0.7
+    supremoPhase3Hp: 0.3
+    supremoPhase1Reduction: 0.2
+    supremoPhase3Reduction: 0.35
+  hp: 0
+  hpMax: 0
+  lastDamageTaken: 0
 --- !u!54 &2400966598480240970
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -662,6 +615,113 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.6668999
   m_Center: {x: 0, y: 0.70928097, z: 0}
+--- !u!114 &5578572141397921480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d834b923dd09b94484ea0d8ceb54427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitFeedbackDuration: 0.18
+  squashAmount: 0.2
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashEmission: 1.5
+  hitFlashTintBoost: 3
+  lowHpBlinkThreshold: 0.25
+  lowHpBlinkColor: {r: 1, g: 0, b: 0, a: 1}
+  lowHpBlinksPerSecond: 4
+--- !u!114 &3344508642976099743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b172796657211e8428ad234e8ef21749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  burstEnabled: 1
+  juiceColor: {r: 0.92, g: 0.97, b: 1, a: 1}
+  hitCount: 10
+  deathCount: 22
+  speed: 4
+  size: 0.14
+  lifetime: 0.65
+  gravity: 1.5
+  scale: 1
+  coneAngle: 60
+  anchor: {fileID: 0}
+--- !u!114 &5304614356215186066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d7e872f0f1b9346837e7e83c105793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragmentPrefabs: []
+  pushForce: 0.9
+  spreadForce: 0.35
+  upForce: 0.15
+  torque: 1.2
+  gravity: 12
+  randomness: 0.2
+  lifetime: 3
+  fadeDuration: 1.2
+  shrinkTo: 0.6
+--- !u!114 &2569188096022789803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ca6a372fbffdc449ccd96aab1e8582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites: []
+  decalTarget: {fileID: 0}
+  size: 0.5
+  sizeStep: 0.2
+  surfaceOffset: 0.01
+  color: {r: 1, g: 1, b: 1, a: 1}
+  sortingOrder: 100
+  spread: 0.4
+  keepSamePlace: 1
+  curveResolution: 12
+--- !u!114 &5602405566203694553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661746383814953141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c318e11000a8444b74c5215c27dd2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitAnimator: {fileID: 0}
+  hitStateName: Hit
+  hitClipName: 
+  hitStartNormalized: 0
+  hitSpeedParameter: 
+  maxHitAnimSpeed: 4
+  spawnStateName: 
+  spawnStunDuration: 0
 --- !u!1001 &1684784688070619023
 PrefabInstance:
   m_ObjectHideFlags: 0
