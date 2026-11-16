@@ -19,7 +19,7 @@ public class StoryManager : MonoBehaviour
 
     public static StoryManager Instance;
     public static bool BlocksPause => Instance != null && Instance.isShowing;
-
+    public RewardMachinePanel gachaPanel;
     [Header("UI del dialogo (crear en el Canvas)")]
     [Tooltip("Raiz del dialogo. Debe empezar DESACTIVADO. El script va en OTRO objeto siempre activo.")]
     public GameObject dialoguePanel;
@@ -73,7 +73,7 @@ public class StoryManager : MonoBehaviour
     const string IntroKey = "story_intro_done";
     const string TutorialKey = "story_tutorial_done";
     const string ChapterKey = "story_cap_";
-
+    const string GachaKey = "story_gacha_done";
     GameManager gm;
     bool isShowing, running, nextPressed, skipRequested, lineDone;
     int lastChapterShown = 0;
@@ -186,24 +186,36 @@ public class StoryManager : MonoBehaviour
     void HandleRecaudacion()
     {
         if (running || gm == null) return;
-
+        IEnumerator chapter = null;
         int c = gm.billCycle;
-        if (c <= lastChapterShown) return;
-        if (c > finalCycle + 1) return;
-
-        lastChapterShown = c;
-
-        if (c == 1 && PlayerPrefs.GetInt(TutorialKey, 0) == 0)
+        if (c > lastChapterShown && c <= finalCycle + 1)
         {
-            StartCoroutine(Guard(TutorialRoutine()));
-            return;
+            lastChapterShown = c;
+
+            if (c == 1 && PlayerPrefs.GetInt(TutorialKey, 0) == 0)
+            {
+                chapter = TutorialRoutine();
+            }
+            else
+            {
+                string key = ChapterKey + c;
+                if (repeatStoryEachRun || PlayerPrefs.GetInt(key, 0) == 0)
+                    chapter = ChapterRoutine(c, key);
+            }
         }
 
-        string key = ChapterKey + c;
-        if (!repeatStoryEachRun && PlayerPrefs.GetInt(key, 0) == 1) return;
-        StartCoroutine(Guard(ChapterRoutine(c, key)));
-    }
+        bool gachaIntro = gachaPanel != null
+                          && PlayerPrefs.GetInt(GachaKey, 0) == 0
+                          && gm.coconutCoins > 0;
 
+        if (chapter == null && !gachaIntro) return;
+        StartCoroutine(Guard(RecaudacionFlow(chapter, gachaIntro)));
+    }
+    IEnumerator RecaudacionFlow(IEnumerator chapter, bool gachaIntro)
+    {
+        if (chapter != null) yield return StartCoroutine(chapter);
+        if (gachaIntro) yield return GachaIntroRoutine();
+    }
     IEnumerator Guard(IEnumerator routine)
     {
         running = true;
@@ -462,7 +474,18 @@ public class StoryManager : MonoBehaviour
     {
         PlayerPrefs.DeleteKey(IntroKey);
         PlayerPrefs.DeleteKey(TutorialKey);
+        PlayerPrefs.DeleteKey(GachaKey);
         for (int i = 0; i <= 20; i++) PlayerPrefs.DeleteKey(ChapterKey + i);
         PlayerPrefs.Save();
+    }
+    IEnumerator GachaIntroRoutine()
+    {
+        yield return WaitForFree();
+        PlayerPrefs.SetInt(GachaKey, 1);
+        PlayerPrefs.Save();
+        yield return Say(GachaStoryTexts.Intro, dimStrong, false);
+        if (gachaPanel != null && !gachaPanel.IsOpen) gachaPanel.OpenPanel();
+        yield return new WaitForSecondsRealtime(0.5f);
+        yield return Say(GachaStoryTexts.Explain, dimLight, false);
     }
 }

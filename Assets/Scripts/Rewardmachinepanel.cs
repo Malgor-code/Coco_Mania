@@ -7,33 +7,38 @@ public class RewardMachinePanel : MonoBehaviour
 {
     [Header("Referencias")]
     public RewardMachineManager machine;
-    [Tooltip("El GameObject raiz que se activa/desactiva con OpenPanel/ClosePanel/TogglePanel.")]
+    [Tooltip("Escena 3D del gacha (camara + palmera). Es la que cambia de camara y agita.")]
+    public GachaMachineScene scene;
+    [Tooltip("El GameObject raiz de la UI que se activa/desactiva con OpenPanel/ClosePanel/TogglePanel.")]
     public GameObject panelRoot;
 
     [Header("UI - Cabecera")]
     public TMP_Text titleText;
     public TMP_Text coinsText;
-    public TMP_Text pullCostText;
 
-    [Header("UI - Botones principales")]
-    public Button pullButton;
+    [Header("UI - Tiradas (cada boton elige el tipo y arma la palmera)")]
+    public Button normalPullButton;
+    public Button boostedPullButton;
+    public Button premiumPullButton;
+    [Tooltip("(Opcional) Textos dentro de cada boton, para mostrar el costo.")]
+    public TMP_Text normalPullLabel;
+    public TMP_Text boostedPullLabel;
+    public TMP_Text premiumPullLabel;
+    [Tooltip("Indicaciones: 'Elige una tirada' / '¡Agita el mouse!'.")]
+    public TMP_Text hintText;
+
+    [Header("UI - Otros botones")]
     public Button collectionButton;
     public Button closeButton;
 
     [Header("UI - Probabilidades")]
     public TMP_Text probabilitiesText;
 
-    [Header("UI - Pity / garantia")]
-    public TMP_Text pityEpicText;
-    public TMP_Text pityLegendaryText;
-
     [Header("UI - Resultado de la ultima tirada")]
     public GameObject resultPanel;
     [Tooltip("Opcional. Si lo asignas, el resultado se desvanece suavemente en vez de desaparecer de golpe.")]
     public CanvasGroup resultCanvasGroup;
-    [Tooltip("Segundos que el resultado queda visible antes de empezar a desvanecerse.")]
     public float resultAutoHideDelay = 5f;
-    [Tooltip("Duracion del desvanecimiento (solo se usa si 'Result Canvas Group' esta asignado).")]
     public float resultFadeOutDuration = 0.6f;
     public Image resultIcon;
     public TMP_Text resultNameText;
@@ -43,15 +48,10 @@ public class RewardMachinePanel : MonoBehaviour
     [Header("Sub-panel: Coleccion")]
     public RewardCollectionUI collectionUI;
 
-    [Header("Animacion / sonido (opcionales, todo funciona igual si se dejan vacios)")]
-    public Animator pullAnimator;
-    public string pullAnimTrigger = "Pull";
+    [Header("Sonido del resultado (opcional)")]
     public AudioSource audioSource;
-    public AudioClip pullSound;
     [Tooltip("Opcional: un sonido distinto por rareza, en orden Common, Uncommon, Rare, Epic, Legendary.")]
     public AudioClip[] raritySounds;
-    [Tooltip("Cuanto se espera (en segundos) despues de disparar la animacion antes de mostrar el resultado.")]
-    public float pullAnimDuration = 1.2f;
 
     [Header("Colores de rareza (para el texto de resultado)")]
     public Color commonColor = Color.white;
@@ -60,16 +60,26 @@ public class RewardMachinePanel : MonoBehaviour
     public Color epicColor = new Color(0.65f, 0.25f, 0.85f);
     public Color legendaryColor = new Color(1f, 0.65f, 0f);
 
-    private bool isPulling = false;
+    static readonly string[] RarityNames = { "Comun", "Poco comun", "Raro", "Epico", "Legendario" };
+
     private Coroutine resultHideRoutine;
+
+    public bool IsOpen => panelRoot != null && panelRoot.activeSelf;
 
     void Start()
     {
-        if (pullButton != null) pullButton.onClick.AddListener(OnPullPressed);
+        if (normalPullButton != null) normalPullButton.onClick.AddListener(() => OnTierPressed(PullTier.Normal));
+        if (boostedPullButton != null) boostedPullButton.onClick.AddListener(() => OnTierPressed(PullTier.Boosted));
+        if (premiumPullButton != null) premiumPullButton.onClick.AddListener(() => OnTierPressed(PullTier.Premium));
         if (closeButton != null) closeButton.onClick.AddListener(ClosePanel);
         if (collectionButton != null) collectionButton.onClick.AddListener(OpenCollectionTab);
 
         if (machine != null) machine.OnStateChanged += RefreshUI;
+        if (scene != null)
+        {
+            scene.OnPullFinished += HandlePullFinished;
+            scene.OnArmedChanged += RefreshUI;
+        }
 
         if (resultPanel != null) resultPanel.SetActive(false);
         RefreshUI();
@@ -83,18 +93,27 @@ public class RewardMachinePanel : MonoBehaviour
     void OnDestroy()
     {
         if (machine != null) machine.OnStateChanged -= RefreshUI;
+        if (scene != null)
+        {
+            scene.OnPullFinished -= HandlePullFinished;
+            scene.OnArmedChanged -= RefreshUI;
+        }
     }
 
     public void OpenPanel()
     {
         if (panelRoot != null) panelRoot.SetActive(true);
+        if (scene != null) scene.Enter();
+        else Debug.LogWarning("[RewardMachinePanel] Falta asignar 'Scene' (GachaMachineScene).");
         RefreshUI();
     }
 
     public void ClosePanel()
     {
+        if (scene != null) scene.Exit();
         if (panelRoot != null) panelRoot.SetActive(false);
         if (resultHideRoutine != null) { StopCoroutine(resultHideRoutine); resultHideRoutine = null; }
+        if (resultPanel != null) resultPanel.SetActive(false);
     }
 
     public void TogglePanel()
@@ -106,37 +125,33 @@ public class RewardMachinePanel : MonoBehaviour
     public void OpenCollectionTab()
     {
         if (collectionUI == null) return;
-        if (collectionUI.IsOpen) collectionUI.Hide(); else collectionUI.Show();
-    }
-
-    void OnPullPressed()
-    {
-        if (isPulling || machine == null) return;
-        StartCoroutine(PullRoutine());
-    }
-
-    IEnumerator PullRoutine()
-    {
-        isPulling = true;
-        if (pullButton != null) pullButton.interactable = false;
-
-        if (audioSource != null && pullSound != null) audioSource.PlayOneShot(pullSound);
-        if (pullAnimator != null && !string.IsNullOrEmpty(pullAnimTrigger)) pullAnimator.SetTrigger(pullAnimTrigger);
-
-        RewardData lastResult = null;
-        bool lastWasDuplicate = false;
-        void Handler(RewardData d, bool dup) { lastResult = d; lastWasDuplicate = dup; }
-
-        machine.OnPullResult += Handler;
-        machine.Pull();
-        machine.OnPullResult -= Handler;
-
-        if (pullAnimDuration > 0f) yield return new WaitForSeconds(pullAnimDuration);
-
-        ShowResult(lastResult, lastWasDuplicate);
+        if (collectionUI.IsOpen) collectionUI.Hide();
+        else
+        {
+            if (scene != null) scene.Disarm();
+            collectionUI.Show();
+        }
         RefreshUI();
+    }
 
-        isPulling = false;
+    void OnTierPressed(PullTier tier)
+    {
+        if (scene == null || machine == null || scene.IsPulling) return;
+        if (scene.IsArmed && scene.CurrentTier == tier) { scene.Disarm(); return; }
+
+        if (resultPanel != null && resultPanel.activeSelf)
+        {
+            if (resultHideRoutine != null) { StopCoroutine(resultHideRoutine); resultHideRoutine = null; }
+            resultPanel.SetActive(false);
+        }
+
+        scene.Arm(tier);
+        RefreshUI();
+    }
+
+    void HandlePullFinished(RewardData data, bool wasDuplicate)
+    {
+        ShowResult(data, wasDuplicate);
         RefreshUI();
     }
 
@@ -155,7 +170,7 @@ public class RewardMachinePanel : MonoBehaviour
         if (resultDescriptionText != null)
         {
             resultDescriptionText.text = wasDuplicate
-                ? data.description + "\n\n(Duplicado -> se te devolvio la moneda)"
+                ? data.description + "\n\n(Duplicado -> se te devolvieron las monedas)"
                 : data.description;
         }
 
@@ -174,7 +189,7 @@ public class RewardMachinePanel : MonoBehaviour
 
     IEnumerator AutoHideResultAfterDelay()
     {
-        yield return new WaitForSeconds(Mathf.Max(0f, resultAutoHideDelay));
+        yield return new WaitForSecondsRealtime(Mathf.Max(0f, resultAutoHideDelay));
 
         if (resultCanvasGroup != null)
         {
@@ -182,7 +197,7 @@ public class RewardMachinePanel : MonoBehaviour
             float t = 0f;
             while (t < resultFadeOutDuration)
             {
-                t += Time.deltaTime;
+                t += Time.unscaledDeltaTime;
                 resultCanvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, resultFadeOutDuration > 0f ? t / resultFadeOutDuration : 1f);
                 yield return null;
             }
@@ -204,26 +219,55 @@ public class RewardMachinePanel : MonoBehaviour
         }
     }
 
+    string FormatOdds(PullTier tier, string name)
+    {
+        float[] o = machine.GetOdds(tier);
+        float total = 0f;
+        foreach (float f in o) total += f;
+        if (total <= 0f) return name;
+
+        var parts = new System.Text.StringBuilder();
+        for (int i = 0; i < o.Length; i++)
+        {
+            if (o[i] <= 0f) continue;
+            if (parts.Length > 0) parts.Append("   ");
+            parts.Append(RarityNames[i]).Append(' ').Append((o[i] / total * 100f).ToString("0.#")).Append('%');
+        }
+        return name + " (" + machine.GetCost(tier) + "): " + parts;
+    }
+
     void RefreshUI()
     {
         if (machine == null) return;
 
         int coins = GameManager.Instance != null ? GameManager.Instance.coconutCoins : 0;
+        bool busy = scene != null && scene.IsPulling;
 
         if (coinsText != null) coinsText.text = "Monedas: " + coins;
-        if (pullCostText != null) pullCostText.text = "Costo por tirada: " + machine.pullCost;
-        if (pullButton != null) pullButton.interactable = !isPulling && machine.CanPull();
+
+        SetTierButton(normalPullButton, normalPullLabel, PullTier.Normal, "Normal", busy);
+        SetTierButton(boostedPullButton, boostedPullLabel, PullTier.Boosted, "Mejorada", busy);
+        SetTierButton(premiumPullButton, premiumPullLabel, PullTier.Premium, "Premium", busy);
 
         if (probabilitiesText != null)
         {
             probabilitiesText.text =
-                $"Comun {machine.commonChance:0}%    Poco comun {machine.uncommonChance:0}%      Raro {machine.rareChance:0}%     Epico {machine.epicChance:0}%    Legendario {machine.legendaryChance:0}%";
+                FormatOdds(PullTier.Normal, "Normal") + "\n" +
+                FormatOdds(PullTier.Boosted, "Mejorada") + "\n" +
+                FormatOdds(PullTier.Premium, "Premium");
         }
 
-        if (pityEpicText != null)
-            pityEpicText.text = $"Garantia Epica: {machine.currentRun.pullsSinceEpic} / {machine.pityEpicThreshold}";
+        if (hintText != null)
+        {
+            if (busy) hintText.text = "";
+            else if (scene != null && scene.IsArmed) hintText.text = "¡Agita el mouse de lado a lado!";
+            else hintText.text = "Elige una tirada";
+        }
+    }
 
-        if (pityLegendaryText != null)
-            pityLegendaryText.text = $"Garantia Legendaria: {machine.currentRun.pullsSinceLegendary} / {machine.pityLegendaryThreshold}";
+    void SetTierButton(Button b, TMP_Text label, PullTier tier, string name, bool busy)
+    {
+        if (b != null) b.interactable = !busy && machine.CanPull(tier);
+        if (label != null) label.text = name + "\n" + machine.GetCost(tier);
     }
 }

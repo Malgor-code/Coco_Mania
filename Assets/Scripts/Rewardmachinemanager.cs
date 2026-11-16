@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PullTier { Normal, Boosted, Premium }
+
 public class RewardMachineManager : MonoBehaviour
 {
     public static RewardMachineManager Instance;
@@ -9,22 +11,27 @@ public class RewardMachineManager : MonoBehaviour
     [Header("Base de datos de recompensas")]
     public RewardDatabase database;
 
-    [Header("Costo de tirada")]
-    public int pullCost = 100;
-
     [Header("Ranuras activas (cuantos objetos puedes tener activos a la vez)")]
     public int slotCount = 3;
+    [Header("Tirada NORMAL")]
+    public int pullCost = 1;
+    [Tooltip("Probabilidades base (deberian sumar 100).")]
+    [Range(0f, 100f)] public float commonChance = 60f;
+    [Range(0f, 100f)] public float uncommonChance = 25f;
+    [Range(0f, 100f)] public float rareChance = 10f;
+    [Range(0f, 100f)] public float epicChance = 4f;
+    [Range(0f, 100f)] public float legendaryChance = 1f;
 
-    [Header("Probabilidades base (deberian sumar 100)")]
-    [Range(0f, 100f)] public float commonChance = 0f;
-    [Range(0f, 100f)] public float uncommonChance = 0f;
-    [Range(0f, 100f)] public float rareChance = 0f;
-    [Range(0f, 100f)] public float epicChance = 0f;
-    [Range(0f, 100f)] public float legendaryChance = 100f;
+    [Header("Tirada MEJORADA (Raro / Epico / Legendario)")]
+    public int boostedCost = 5;
+    [Range(0f, 100f)] public float boostedRare = 55f;
+    [Range(0f, 100f)] public float boostedEpic = 35f;
+    [Range(0f, 100f)] public float boostedLegendary = 10f;
 
-    [Header("Pity / garantia")]
-    public int pityEpicThreshold = 20;
-    public int pityLegendaryThreshold = 50;
+    [Header("Tirada PREMIUM (solo Epico / Legendario)")]
+    public int premiumCost = 15;
+    [Range(0f, 100f)] public float premiumEpic = 70f;
+    [Range(0f, 100f)] public float premiumLegendary = 30f;
 
     [Header("Datos en tiempo de ejecucion (visibles para depurar)")]
     public CurrentRunData currentRun = new CurrentRunData();
@@ -76,7 +83,6 @@ public class RewardMachineManager : MonoBehaviour
         slotCount = Mathf.Max(1, slotCount);
         while (currentRun.slots.Count < slotCount) currentRun.slots.Add(new EquippedSlot());
     }
-
     public int GetBagCount(string rewardId)
     {
         foreach (var e in currentRun.bag)
@@ -90,6 +96,7 @@ public class RewardMachineManager : MonoBehaviour
             if (!s.IsEmpty && s.rewardId == rewardId) return true;
         return false;
     }
+
     public bool IsRelicOwned(string rewardId)
     {
         return GetBagCount(rewardId) > 0 || IsEquipped(rewardId);
@@ -101,105 +108,107 @@ public class RewardMachineManager : MonoBehaviour
             if (s.IsEmpty) return true;
         return false;
     }
-    public bool CanPull()
+
+    public int GetCost(PullTier tier)
     {
-        return GameManager.Instance != null && database != null && GameManager.Instance.coconutCoins >= pullCost;
+        switch (tier)
+        {
+            case PullTier.Boosted: return boostedCost;
+            case PullTier.Premium: return premiumCost;
+            default: return pullCost;
+        }
+    }
+    public float[] GetOdds(PullTier tier)
+    {
+        switch (tier)
+        {
+            case PullTier.Boosted: return new float[] { 0f, 0f, boostedRare, boostedEpic, boostedLegendary };
+            case PullTier.Premium: return new float[] { 0f, 0f, 0f, premiumEpic, premiumLegendary };
+            default: return new float[] { commonChance, uncommonChance, rareChance, epicChance, legendaryChance };
+        }
     }
 
-    public RewardData Pull()
+    RewardRarity MinRarity(PullTier tier)
     {
-        if (!CanPull())
+        switch (tier)
+        {
+            case PullTier.Boosted: return RewardRarity.Rare;
+            case PullTier.Premium: return RewardRarity.Epic;
+            default: return RewardRarity.Common;
+        }
+    }
+
+    public bool CanPull(PullTier tier = PullTier.Normal)
+    {
+        return GameManager.Instance != null && database != null && GameManager.Instance.coconutCoins >= GetCost(tier);
+    }
+    public RewardData Pull(PullTier tier = PullTier.Normal)
+    {
+        if (!CanPull(tier))
         {
             OnPullResult?.Invoke(null, false);
             return null;
         }
 
-        GameManager.Instance.coconutCoins -= pullCost;
+        int cost = GetCost(tier);
+        GameManager.Instance.coconutCoins -= cost;
 
-        currentRun.pullsSinceEpic++;
-        currentRun.pullsSinceLegendary++;
-
-        RewardRarity rarity = RollRarity();
-        RewardData data = PickRewardOfRarity(rarity);
+        RewardRarity rarity = RollRarity(GetOdds(tier));
+        RewardData data = PickRewardOfRarity(rarity, MinRarity(tier));
 
         if (data == null)
         {
-            Debug.LogWarning($"[RewardMachineManager] No hay ninguna RewardData de rareza {rarity} (ni de una rareza menor) en la base de datos. Se devolvio la moneda gastada.");
-            GameManager.Instance.coconutCoins += pullCost;
-            currentRun.pullsSinceEpic--;
-            currentRun.pullsSinceLegendary--;
+            Debug.LogWarning($"[RewardMachineManager] No hay ninguna RewardData de rareza {rarity} (ni cercana) en la base de datos. Se devolvieron las monedas.");
+            GameManager.Instance.coconutCoins += cost;
             OnStateChanged?.Invoke();
             OnPullResult?.Invoke(null, false);
             return null;
         }
 
         bool wasDuplicate = GrantReward(data);
-        if (wasDuplicate) GameManager.Instance.coconutCoins += pullCost;
+        if (wasDuplicate) GameManager.Instance.coconutCoins += cost;
 
         OnPullResult?.Invoke(data, wasDuplicate);
         OnStateChanged?.Invoke();
         return data;
     }
 
-    RewardRarity RollRarity()
+    static RewardRarity RollRarity(float[] odds)
     {
-        bool forceLegendary = currentRun.pullsSinceLegendary >= pityLegendaryThreshold;
-        bool forceEpicOrBetter = !forceLegendary && currentRun.pullsSinceEpic >= pityEpicThreshold;
-
-        RewardRarity result;
-
-        if (forceLegendary)
-        {
-            result = RewardRarity.Legendary;
-        }
-        else if (forceEpicOrBetter)
-        {
-            float epicW = Mathf.Max(0.0001f, epicChance);
-            float legW = Mathf.Max(0.0001f, legendaryChance);
-            result = UnityEngine.Random.value < (legW / (epicW + legW)) ? RewardRarity.Legendary : RewardRarity.Epic;
-        }
-        else
-        {
-            result = RollNormalRarity();
-        }
-
-        if (result == RewardRarity.Legendary)
-        {
-            currentRun.pullsSinceEpic = 0;
-            currentRun.pullsSinceLegendary = 0;
-        }
-        else if (result == RewardRarity.Epic)
-        {
-            currentRun.pullsSinceEpic = 0;
-        }
-
-        return result;
-    }
-
-    RewardRarity RollNormalRarity()
-    {
-        float total = commonChance + uncommonChance + rareChance + epicChance + legendaryChance;
+        float total = 0f;
+        for (int i = 0; i < odds.Length; i++) total += odds[i];
         if (total <= 0f) return RewardRarity.Common;
 
         float roll = UnityEngine.Random.value * total;
-
-        if ((roll -= commonChance) < 0f) return RewardRarity.Common;
-        if ((roll -= uncommonChance) < 0f) return RewardRarity.Uncommon;
-        if ((roll -= rareChance) < 0f) return RewardRarity.Rare;
-        if ((roll -= epicChance) < 0f) return RewardRarity.Epic;
+        for (int i = 0; i < odds.Length; i++)
+        {
+            if ((roll -= odds[i]) < 0f) return (RewardRarity)i;
+        }
         return RewardRarity.Legendary;
     }
 
-    RewardData PickRewardOfRarity(RewardRarity rarity)
+    RewardData PickRewardOfRarity(RewardRarity rarity, RewardRarity floor)
     {
-        for (int r = (int)rarity; r >= 0; r--)
+        for (int r = (int)rarity; r >= (int)floor; r--)
         {
-            var pool = database.GetByRarity((RewardRarity)r);
-            pool.RemoveAll(x => x.category != RewardCategory.Temporary && x.category != RewardCategory.PermanentRelic);
-            if (pool.Count > 0) return pool[UnityEngine.Random.Range(0, pool.Count)];
+            var data = PickFromPool((RewardRarity)r);
+            if (data != null) return data;
+        }
+        for (int r = (int)rarity + 1; r <= (int)RewardRarity.Legendary; r++)
+        {
+            var data = PickFromPool((RewardRarity)r);
+            if (data != null) return data;
         }
         return null;
     }
+
+    RewardData PickFromPool(RewardRarity rarity)
+    {
+        var pool = database.GetByRarity(rarity);
+        pool.RemoveAll(x => x.category != RewardCategory.Temporary && x.category != RewardCategory.PermanentRelic);
+        return pool.Count > 0 ? pool[UnityEngine.Random.Range(0, pool.Count)] : null;
+    }
+
     bool GrantReward(RewardData data)
     {
         if (data.IsWorldObject)
@@ -263,6 +272,7 @@ public class RewardMachineManager : MonoBehaviour
         OnStateChanged?.Invoke();
         return true;
     }
+
     public bool CanUnequip(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= currentRun.slots.Count) return false;
@@ -322,11 +332,41 @@ public class RewardMachineManager : MonoBehaviour
 
     void HandleRunReset()
     {
-        currentRun.pullsSinceEpic = 0;
-        currentRun.pullsSinceLegendary = 0;
         currentRun.bag.Clear();
         foreach (var slot in currentRun.slots) slot.Clear();
         if (LegendaryWorldSpawner.Instance != null) LegendaryWorldSpawner.Instance.ClearAll();
         OnStateChanged?.Invoke();
+    }
+
+    [ContextMenu("Balance: comparar tiradas especiales vs normales")]
+    void LogBalance()
+    {
+        float[] n = GetOdds(PullTier.Normal);
+        float nTotal = 0f; foreach (float f in n) nTotal += f;
+        if (nTotal <= 0f || pullCost <= 0) { Debug.Log("[Balance] Revisa las probabilidades/costo normales."); return; }
+
+        float nRareUp = (n[2] + n[3] + n[4]) / nTotal;
+        float nEpicUp = (n[3] + n[4]) / nTotal;
+        float nLeg = n[4] / nTotal;
+
+        LogTier(PullTier.Boosted, boostedCost, nRareUp, nEpicUp, nLeg);
+        LogTier(PullTier.Premium, premiumCost, nRareUp, nEpicUp, nLeg);
+    }
+
+    void LogTier(PullTier tier, int cost, float nRareUp, float nEpicUp, float nLeg)
+    {
+        float[] o = GetOdds(tier);
+        float total = 0f; foreach (float f in o) total += f;
+        if (total <= 0f) return;
+
+        int pulls = Mathf.Max(1, cost / Mathf.Max(1, pullCost));
+        float tRareUp = (o[2] + o[3] + o[4]) / total;
+        float tEpicUp = (o[3] + o[4]) / total;
+        float tLeg = o[4] / total;
+
+        Debug.Log($"[Balance] {tier} ({cost} monedas) vs {pulls} tiradas normales:\n" +
+                  $"  Raro o mejor  -> 1 tirada {tRareUp:P0} | {pulls} normales (al menos una) {1f - Mathf.Pow(1f - nRareUp, pulls):P0}\n" +
+                  $"  Epico o mejor -> 1 tirada {tEpicUp:P0} | {pulls} normales (al menos una) {1f - Mathf.Pow(1f - nEpicUp, pulls):P0}\n" +
+                  $"  Legendario    -> 1 tirada {tLeg:P0} | {pulls} normales (al menos una) {1f - Mathf.Pow(1f - nLeg, pulls):P0}");
     }
 }
