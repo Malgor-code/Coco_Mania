@@ -53,6 +53,8 @@ public class MacheteShopManager : MonoBehaviour
 
     public void RecalculateStats() => StatsManager.Instance.Recalculate(Current);
 
+    public void BuyNextMachete() => TryBuyNext(out _);
+
     public bool TryBuyNext(out MacheteData bought)
     {
         bought = Next;

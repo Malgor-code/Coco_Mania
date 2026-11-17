@@ -9,16 +9,10 @@ public static class DefaultGameData
     public static List<PerkOption> perkPool;
     public static List<LegacyItem> legacyShop;
     public static bool forceDefaultData = true;
-    [Header("Costos del arbol (exponenciales por profundidad)")]
-    [Tooltip("Si esta activo, el costo de cada mejora se calcula solo: treeCostBase * treeCostGrowth ^ profundidad. Desactivalo para usar costos manuales.")]
     public static bool autoTreeCosts = true;
-    [Tooltip("Costo de las mejoras raiz. Aprox. 35-40% del ingreso del primer dia.")]
     public static float treeCostBase = 100f;
-    [Tooltip("Crecimiento por nivel en el INICIO del arbol (hasta treeCostLateStartDepth). Bajo = inicio facil.")]
     public static float treeCostGrowth = 3f;
-    [Tooltip("Crecimiento por nivel despues de treeCostLateStartDepth. Alto = el late game no se vuelve barato.")]
     public static float treeCostGrowthLate = 2.5f;
-    [Tooltip("Profundidad donde el crecimiento cambia de treeCostGrowth a treeCostGrowthLate.")]
     public static int treeCostLateStartDepth = 4;
 
     public static void Build()
@@ -306,7 +300,7 @@ public static class DefaultGameData
         int Depth(SkillNode n)
         {
             if (depth.TryGetValue(n.id, out int d)) return d;
-            depth[n.id] = 0; 
+            depth[n.id] = 0;
             int best = 0;
             if (n.prerequisiteIds != null)
             {

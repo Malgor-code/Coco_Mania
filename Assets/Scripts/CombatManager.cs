@@ -33,7 +33,8 @@ public class CombatManager : MonoBehaviour
 
     [Header("Otros")]
     public float executeHpThreshold = 0.5f;
-    public float earlyDayDuration = 5;
+    public float earlyDayDuration = 5f;
+
     public int CurrentHitStreak { get; set; }
     public int StreakForgivesLeft { get; set; }
     bool isApplyingSplash;
@@ -49,9 +50,32 @@ public class CombatManager : MonoBehaviour
     public int daySwings;
     public int dayHits;
     public int dayCoinsFound;
+    public int killsAtDayStart;
+
+    [Header("Vida base de los cocos")]
+    public int coconutHpMax = 20;
 
     [HideInInspector] public bool lastKillFoundCoin;
     [HideInInspector] public bool lastKillHadJackpot;
+
+    public void ResetDay()
+    {
+        dayCoconutsKilled = 0;
+        dayMoneyEarned = 0;
+        daySwings = 0;
+        dayHits = 0;
+        dayCoinsFound = 0;
+        CurrentHitStreak = 0;
+        killsAtDayStart = totalCoconutsKilled;
+    }
+
+    public void ResetRun()
+    {
+        totalCoconutsKilled = 0;
+        killsAtDayStart = 0;
+        CurrentHitStreak = 0;
+        StreakForgivesLeft = 0;
+    }
 
     void Awake()
     {
@@ -66,10 +90,9 @@ public class CombatManager : MonoBehaviour
 
     static string Loc(string key, params object[] args) =>
         LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key, args) : key;
-    static bool IsHitting
-    {
-        get { var gm = GameManager.Instance; return gm != null && gm.IsHittingPhase(); }
-    }
+
+    static bool IsHitting => RunManager.Instance.IsHitting;
+
     public void RegisterSwingResult(bool hit)
     {
         daySwings++;
@@ -90,8 +113,7 @@ public class CombatManager : MonoBehaviour
 
     int CurrentStreakStacks()
     {
-        var gm = GameManager.Instance;          
-        if (gm == null || !gm.StreakUnlocked) return 0;
+        if (!SkillTreeManager.Instance.StreakUnlocked) return 0;
 
         int stacks = CurrentHitStreak - streakThreshold + 1;
         int max = Mathf.Min(StreakHardCap, Mathf.RoundToInt(StatsManager.Instance.Get(StatType.StreakStacks)));
@@ -130,6 +152,7 @@ public class CombatManager : MonoBehaviour
         float bonus = StatsManager.Instance.Get(StatType.EarlyDayWater);
         return (bonus > 0f && IsHitting && StaminaManager.Instance.DayElapsed < earlyDayDuration) ? 1f + bonus : 1f;
     }
+
     public int OnCoconutDestroyed(float lootMultiplier, out float waterGained)
     {
         StatsManager stats = StatsManager.Instance;
@@ -145,8 +168,7 @@ public class CombatManager : MonoBehaviour
         float waterExtraMult = Mathf.Max(0.1f, 1f + stats.Get(StatType.WaterMult)
             + stats.Passive(MachetePassive.WaterBonus) - stats.CurseWaterPenalty + streakBonus + earlyBonus);
 
-        var gm = GameManager.Instance;   
-        float legacyLootScale = gm != null ? gm.GetLegacyLootScale() : 1f;
+        float legacyLootScale = LegacyManager.Instance.GetLootScale(DebtManager.Instance.BillCycle);
 
         waterGained = (baseWaterPerKill + Random.Range(0f, waterVariance)) * lootMultiplier * waterExtraMult
                     * stats.legacyMultiplier * GetLastBreathMultiplier() * stats.perkWaterMultiplicative

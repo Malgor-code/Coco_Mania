@@ -3,7 +3,6 @@ using UnityEngine;
 using static MacheteData;
 using SS = StatSource;
 using ST = StatType;
-        
 public class SkillTreeManager : MonoBehaviour
 {
     static SkillTreeManager instance;
@@ -34,6 +33,11 @@ public class SkillTreeManager : MonoBehaviour
     public bool IsUnlocked(string id) => Unlocked.Contains(id);
 
     public void ResetRun() => Unlocked.Clear();
+
+    public bool TimedSpawnUnlocked => Unlocked.Contains("aparicion_1");
+    public bool StreakUnlocked => Unlocked.Contains("racha_1");
+
+    public void UnlockSkill(string id) => TryUnlock(id, out _);
 
     public bool CanUnlock(string id)
     {

@@ -22,6 +22,9 @@ public class PerkManager : MonoBehaviour
     public List<PerkOption> Pool => GameData.Perks;
     public Dictionary<string, int> Copies { get; } = new Dictionary<string, int>();
 
+    public PerkOption[] CurrentChoices { get; set; } = new PerkOption[3];
+    public int PendingOffers { get; set; }
+
     static readonly Dictionary<string, int> PerkMinCycle = new Dictionary<string, int>
     {
         { "Madrugador", 2 }, { "Buen Regateo", 3 }, { "Racha Viva", 3 },
@@ -51,7 +54,11 @@ public class PerkManager : MonoBehaviour
         if (instance == this) instance = null;
     }
 
-    public void ResetRun() => Copies.Clear();
+    public void ResetRun()
+    {
+        Copies.Clear();
+        PendingOffers = 0;
+    }
 
     public void RegisterChosen(string perkName)
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class GameTime
 {
-    public static bool IsPaused => GameStateManager.IsPaused;
+    public static bool IsPaused => GameManager.IsPaused;
     public static float DeltaTime => IsPaused ? 0f : Time.deltaTime;
 }
 

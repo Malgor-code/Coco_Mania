@@ -61,6 +61,15 @@ public class LegacyManager : MonoBehaviour
         return basePart;
     }
 
+    public float CurrentHpScale => GetHpScale(DebtManager.Instance.BillCycle);
+
+    public void BuyLegacyItem(string itemName)
+    {
+        if (RunManager.Instance.Phase != RunPhase.BetweenRuns) return;
+        BuyResult result = TryBuy(itemName, out _, out string missing);
+        if (result == BuyResult.NeedsPrevious) GameLog.Say("Primero necesitas: " + missing);
+    }
+
     public BuyResult TryBuy(string itemName, out LegacyItem item, out string missingPrevious)
     {
         missingPrevious = null;

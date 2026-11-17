@@ -30,12 +30,12 @@ public static class AchievementTracker
             if (all) am.Unlock(AchievementManager.ACH_LEGACY);
         }
 
-        var gm = GameManager.Instance; 
-        if (gm != null && gm.coconutUnlocks != null && gm.coconutUnlocks.Count > 0)
+        var ui = GameUI.Instance; 
+        if (ui != null && ui.coconutUnlocks != null && ui.coconutUnlocks.Count > 0)
         {
             int needed = 0;
-            foreach (var c in gm.coconutUnlocks) needed = Mathf.Max(needed, c.cycleRequired);
-            if (gm.billCycle >= needed) am.Unlock(AchievementManager.ACH_COCONUTS);
+            foreach (var c in ui.coconutUnlocks) needed = Mathf.Max(needed, c.cycleRequired);
+            if (DebtManager.Instance.BillCycle >= needed) am.Unlock(AchievementManager.ACH_COCONUTS);
         }
     }
 }

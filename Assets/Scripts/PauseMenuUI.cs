@@ -17,7 +17,7 @@ public class PauseMenuUI : MonoBehaviour
         if (!GameInput.PauseDown) return;
         if (CoconutUnlockPanel.BlocksPause || StoryManager.BlocksPause) return;
 
-        GameStateManager gsm = GameStateManager.Instance;
+        GameManager gsm = GameManager.Instance;
         if (gsm == null) return;
 
         if (gsm.Current == GameState.OnPause) gsm.Resume();
