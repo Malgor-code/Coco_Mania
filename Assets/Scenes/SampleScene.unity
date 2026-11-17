@@ -64311,7 +64311,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8407703409599218683, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1915345528}
+    - targetCorrespondingSourceObject: {fileID: 8407703409599218683, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1915345532}
   m_SourcePrefab: {fileID: 100100000, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
+--- !u!23 &1283445798 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8047604624979337774, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
+  m_PrefabInstance: {fileID: 1283445797}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1286876849
 GameObject:
   m_ObjectHideFlags: 0
@@ -92301,6 +92309,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9216046094372362561, guid: 94d71842a1dbfd745a987bafd012918d, type: 3}
   m_PrefabInstance: {fileID: 1283445797}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1915345532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915345524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5039e98fe9351da46aae139b1ab81623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterRenderer: {fileID: 1283445798}
+  levelOffset: -9.16
 --- !u!1 &1916346583
 GameObject:
   m_ObjectHideFlags: 0
