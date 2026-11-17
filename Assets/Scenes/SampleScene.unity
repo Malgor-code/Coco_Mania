@@ -15982,18 +15982,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f3daac6c1a046428a3969ebcde67c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runDayCount: 0
-  currentPhase: 0
   machete: {fileID: 134951792}
-  money: 0
   rewardMachinePanel: {fileID: 973557516}
-  coconutHpMaxBase: 20
-  skipNextDayDecrement: 0
-  bankruptcyButton: {fileID: 558954715}
   unlockPanel: {fileID: 252746841}
   showUnlockOnlyFirstTime: 1
-  killsAtDayStart: 0
-  panelSwitchBreak: 0.12
   coconutUnlocks:
   - coconutName: 
     cycleRequired: 0
@@ -16070,6 +16062,7 @@ MonoBehaviour:
     ability: 0
     icon: {fileID: 0}
     prefab: {fileID: 0}
+  panelSwitchBreak: 0.12
   indicacionesPanel: {fileID: 1749301704}
   gameplayUIPanel: {fileID: 1141519674}
   staminaSlider: {fileID: 1029852769}
@@ -16082,7 +16075,6 @@ MonoBehaviour:
   accuracyText: {fileID: 1003855450}
   dayCoinsText: {fileID: 216132081}
   continueButton: {fileID: 338703443}
-  maxStaminaRecoveryPerDay: 12
   nextUnlockImage: {fileID: 1408509095}
   nextUnlockPercentText: {fileID: 1472868865}
   lockedImageMinAlpha: 0.15
@@ -16095,6 +16087,8 @@ MonoBehaviour:
   zoomSpeed: 0.1
   minZoom: 1.5
   maxZoom: 3
+  gamepadPanPixelsPerSecond: 900
+  gamepadZoomPerSecond: 1.2
   tiendaPanel: {fileID: 682314497}
   macheteStatusText: {fileID: 231041579}
   macheteUpgradeCostText: {fileID: 272285696}
@@ -16107,6 +16101,7 @@ MonoBehaviour:
   payDebtButton: {fileID: 1560519747}
   urgentColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   normalDaysColor: {r: 1, g: 1, b: 1, a: 1}
+  bankruptcyButton: {fileID: 558954715}
   perkChoiceUIPanel: {fileID: 1665184472}
   perkOption1Name: {fileID: 665704962}
   perkOption1Desc: {fileID: 949002350}
@@ -16157,8 +16152,6 @@ MonoBehaviour:
     icon: {fileID: 0}
   - perkName: "Manos de Tit\xE1n"
     icon: {fileID: 0}
-  gamepadPanPixelsPerSecond: 900
-  gamepadZoomPerSecond: 1.2
 --- !u!224 &252746836
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16434,7 +16427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de9315148c68c094283cf7fdfa13f53e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gachaPanel: {fileID: 0}
+  gachaPanel: {fileID: 973557521}
   dialoguePanel: {fileID: 1309664150}
   backdrop: {fileID: 0}
   speakerText: {fileID: 1543575416}
@@ -16442,6 +16435,8 @@ MonoBehaviour:
   nextButton: {fileID: 815577162}
   skipButton: {fileID: 410225710}
   dialogueBox: {fileID: 0}
+  deudaPanel: {fileID: 1567960681}
+  upgradeTreePanel: {fileID: 1656352518}
   speakerName: El Tilin
   charsPerSecond: 45
   dimStrong: 0.236
@@ -51455,7 +51450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &973557518
 RectTransform:
   m_ObjectHideFlags: 0

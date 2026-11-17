@@ -31,7 +31,10 @@ public class StoryManager : MonoBehaviour
     public Button skipButton;
     [Tooltip("(Opcional) La cajita del dialogo. Entra con un rebote al aparecer.")]
     public RectTransform dialogueBox;
-
+    [Tooltip("Panel de la deuda/recaudacion que se abre en el tutorial.")]
+    public GameObject deudaPanel;
+    [Tooltip("Panel del arbol de mejoras que se abre en el tutorial.")]
+    public GameObject upgradeTreePanel;
     [Header("Ajustes")]
     [Tooltip("Ya no se usa: el nombre sale de LocalizationManager (clave story_speaker).")]
     public string speakerName = "El Emprendedor";
@@ -246,13 +249,16 @@ public class StoryManager : MonoBehaviour
     {
         yield return WaitForFree();
         yield return Say(StoryTexts.TutorialOrder, dimStrong, false);
-        if (gm.deudaPanel != null && !gm.deudaPanel.activeSelf) gm.ToggleDeudaPanel();
+
+        if (deudaPanel != null && !deudaPanel.activeSelf) deudaPanel.SetActive(true);
         yield return new WaitForSecondsRealtime(0.35f);
         yield return Say(StoryTexts.TutorialDeuda, dimLight, false);
-        while (gm.deudaPanel != null && gm.deudaPanel.activeSelf) yield return null;
+        while (deudaPanel != null && deudaPanel.activeSelf) yield return null;
+
         yield return new WaitForSecondsRealtime(0.25f);
         yield return Say(StoryTexts.TutorialUpgradeIntro, dimStrong, false);
-        if (gm.upgradeTreePanel != null && !gm.upgradeTreePanel.activeSelf) gm.ToggleUpgradeTreePanel();
+
+        if (upgradeTreePanel != null && !upgradeTreePanel.activeSelf) upgradeTreePanel.SetActive(true);
         yield return new WaitForSecondsRealtime(0.4f);
         yield return Say(StoryTexts.TutorialTree, dimLight, false);
 
