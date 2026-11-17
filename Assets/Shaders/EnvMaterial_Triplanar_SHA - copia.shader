@@ -114,6 +114,22 @@ Shader "Env/Universal environment Material (UV + Triplanar)"
         [KeywordEnum(Texture, AlbedoAlpha, ARMAlpha)] _EmissionSrc("Emission Source (mask)", Float) = 0
         [NoScaleOffset] _EmissionTex("Emission Map", 2D) = "black" {}
         [HDR] _EmissionColor("Emission Color", Color) = (1,1,1,1)
+
+        [Header(Water Wetness  requiere WaterWetnessDriver en la escena)]
+        [Toggle(_WETNESS)] _UseWetness("Water Wetness", Float) = 0
+        _WetHeight("Wet Height above water (m)", Range(0, 3)) = 0.5
+        _WetSoftness("Wet Edge Softness (m)", Range(0.001, 1)) = 0.2
+        _WetFalloff("Gradient Falloff (0 = hard, 1 = gradual)", Range(0, 1)) = 0.8
+        _WetGrain("Edge Grain (damp sand patches)", Range(0, 1)) = 0.5
+        _WetNoiseAmount("Edge Wobble", Range(0, 1)) = 0.5
+        _WetNoiseScale("Noise Scale", Range(0.1, 20)) = 3
+        _WetLapHeight("Lapping Height (m)", Range(0, 0.5)) = 0.08
+        _WetDryLag("Dry-down Lag (s) - mas alto = baja mas lento", Range(0, 1.5)) = 0.5
+        _WetDarken("Darken (albedo power)", Range(0, 2)) = 0.6
+        _WetTint("Wet Tint", Color) = (0.85, 0.95, 1, 1)
+        _WetGloss("Wet Gloss", Range(0, 1)) = 0.7
+        _WetEdgeColor("Tide Line Color (A = strength)", Color) = (0.55, 0.5, 0.4, 0.5)
+        _WetEdgeWidth("Tide Line Width (m)", Range(0.001, 0.5)) = 0.06
     }
 
     SubShader
@@ -240,6 +256,10 @@ Shader "Env/Universal environment Material (UV + Triplanar)"
             float  _VertexDispScale;
             float  _UseEmission, _EmissionSrc;
             float4 _EmissionColor;
+            float  _UseWetness, _WetHeight, _WetSoftness, _WetNoiseAmount, _WetNoiseScale;
+            float  _WetLapHeight, _WetDryLag, _WetDarken, _WetGloss, _WetEdgeWidth;
+            float  _WetFalloff, _WetGrain;
+            float4 _WetTint, _WetEdgeColor;
         CBUFFER_END
 
         struct EnvSurface
@@ -996,6 +1016,7 @@ Shader "Env/Universal environment Material (UV + Triplanar)"
             #pragma shader_feature_local _HEIGHT_IN_ARM_A
             #pragma shader_feature_local _EMISSION
             #pragma shader_feature_local _EMISSIONSRC_TEXTURE _EMISSIONSRC_ALBEDOALPHA _EMISSIONSRC_ARMALPHA
+            #pragma shader_feature_local _WETNESS
 
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
@@ -1008,6 +1029,119 @@ Shader "Env/Universal environment Material (UV + Triplanar)"
             #pragma multi_compile_instancing
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+            // ---------------------------------------------------------------
+            //  HUMEDAD DEL AGUA
+            //  Globales que fija WaterWetnessDriver.cs (no van en el CBUFFER):
+            //    _EnvWaterEnabled : 1 si hay agua activa
+            //    _EnvWaterLevel   : Y del agua en mundo
+            //    _EnvWaterWave    : x amplitud, y frecuencia, z velocidad
+            //    _EnvWaterDir     : xy direccion 1, zw direccion 2 (mismas que el shader de agua)
+            // ---------------------------------------------------------------
+            #if defined(_WETNESS)
+            float  _EnvWaterEnabled;
+            float  _EnvWaterLevel;
+            float4 _EnvWaterWave;
+            float4 _EnvWaterDir;
+
+            // Misma formula que el vertex del shader de agua
+            float WaterHeightAt(float2 xz, float time)
+            {
+                float t  = time * _EnvWaterWave.z;
+                float p1 = dot(xz, _EnvWaterDir.xy) * _EnvWaterWave.y + t;
+                float p2 = dot(xz, _EnvWaterDir.zw) * (_EnvWaterWave.y * 1.7) + t * 1.3;
+                return (sin(p1) + 0.5 * sin(p2)) * _EnvWaterWave.x;
+            }
+
+            float WetHash(float2 p)
+            {
+                p = frac(p * float2(123.34, 456.21));
+                p += dot(p, p + 45.32);
+                return frac(p.x * p.y);
+            }
+
+            float WetValueNoise(float2 p)
+            {
+                float2 i = floor(p);
+                float2 f = frac(p);
+                f = f * f * (3.0 - 2.0 * f);
+                float a = WetHash(i);
+                float b = WetHash(i + float2(1, 0));
+                float c = WetHash(i + float2(0, 1));
+                float d = WetHash(i + float2(1, 1));
+                return lerp(lerp(a, b, f.x), lerp(c, d, f.x), f.y);
+            }
+
+            // fBm 3 octavas con rotacion por octava (evita el aspecto de cuadricula / manchas redondas)
+            float WetFbm(float2 p)
+            {
+                const float2x2 rot = float2x2(0.8, -0.6, 0.6, 0.8);
+                float a = 0.5, sum = 0.0, norm = 0.0;
+                [unroll] for (int i = 0; i < 3; i++)
+                {
+                    sum  += WetValueNoise(p) * a;
+                    norm += a;
+                    p = mul(rot, p) * 2.03 + 11.7;
+                    a *= 0.5;
+                }
+                return sum / norm;
+            }
+
+            // Ruido 0..1 en mundo: suelos usan XZ, paredes usan (X+Z, Y)
+            float WetNoise(float3 p, float upFactor, float freq)
+            {
+                float nh = WetFbm(p.xz * freq);
+                float nv = WetFbm(float2(p.x + p.z, p.y) * freq);
+                return lerp(nv, nh, saturate(upFactor));
+            }
+
+            void ApplyWaterWetness(float3 posWS, inout EnvSurface s)
+            {
+                if (_EnvWaterEnabled < 0.5) return;
+
+                // Altura de la ola en este punto (misma formula que el vertex del agua) con memoria:
+                // sube a la vez que el agua, pero baja despacio (maximo de los ultimos instantes,
+                // restando un poco por cada paso atras en el tiempo = secado).
+                float amp  = _EnvWaterWave.x;
+                float ampN = max(amp * 1.5, 1e-4);
+                float envH = -1e5;
+                [unroll] for (int k = 0; k < 4; k++)
+                {
+                    float hk = WaterHeightAt(posWS.xz, _Time.y - k * _WetDryLag) - k * 0.2 * ampN;
+                    envH = max(envH, hk);
+                }
+                float lap = saturate(envH / ampN * 0.5 + 0.5) * _WetLapHeight;
+
+                float up   = abs(s.normalWS.y);
+                // n: ondulacion grande y suave del frente; g: grano fino del borde
+                float n    = WetNoise(posWS, up, _WetNoiseScale * 0.25);
+                float g    = WetNoise(posWS, up, _WetNoiseScale * 3.0);
+
+                float rel = posWS.y - (_EnvWaterLevel + envH);
+                float top = _WetHeight * (1.0 + (n - 0.5) * 2.0 * _WetNoiseAmount) + lap;
+                top = max(top, 1e-3);
+
+                // Duro: corte con suavizado. Gradual: mas mojado junto al agua, se seca hacia arriba.
+                float hardWet = 1.0 - smoothstep(top - _WetSoftness, top, rel);
+                float gradWet = 1.0 - smoothstep(0.0, 1.0, saturate(rel / top));
+                float wet     = lerp(hardWet, gradWet, _WetFalloff);
+
+                // El borde se deshace en parches finos (arena humeda)
+                wet = saturate((wet - g * _WetGrain) / max(1.0 - _WetGrain, 1e-3));
+                wet = smoothstep(0.0, 1.0, wet);
+
+                // Linea de marea justo encima del frente mojado
+                float edge = saturate(1.0 - (rel - top) / max(_WetEdgeWidth, 1e-4)) * step(top, rel);
+                edge *= saturate(1.0 - wet);
+
+                float3 alb = s.albedo;
+                alb = lerp(alb, alb * _WetEdgeColor.rgb, edge * _WetEdgeColor.a);
+
+                float3 wetAlb = pow(max(alb, 1e-4), 1.0 + _WetDarken) * _WetTint.rgb;
+                s.albedo    = lerp(alb, wetAlb, wet);
+                s.roughness = s.roughness * lerp(1.0, 1.0 - _WetGloss, wet);
+            }
+            #endif
 
             // La tangente solo hace falta en modo Mesh con normal map o parallax
             #if defined(ENV_UV_MESH) && (defined(USE_NORMAL_MAP) || defined(ENV_PARALLAX))
@@ -1123,6 +1257,10 @@ Shader "Env/Universal environment Material (UV + Triplanar)"
 
                 EnvSurface s = EvaluateEnvMaterial(uv, posP, nPIn, input.normalWS,
                                                    tangentWS, viewVectorWS, input.sinCos);
+
+            #if defined(_WETNESS)
+                ApplyWaterWetness(input.positionWS, s);
+            #endif
 
                 InputData inputData = (InputData)0;
                 inputData.positionWS      = input.positionWS;
