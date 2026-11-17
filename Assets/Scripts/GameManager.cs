@@ -1,11 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using System.Collections;
 using UnityEngine.SceneManagement;
-using static MacheteData;
-using Unity.VisualScripting;
 
 public partial class GameManager : MonoBehaviour
 {
@@ -53,7 +47,20 @@ public partial class GameManager : MonoBehaviour
     {
         Instance = this;
         earlyDayDuration = 5f;
-        EnsureDefaultData();
+        StampCoconutUnlocks();
+    }
+
+    void OnEnable()
+    {
+        EventBus.Subscribe<GameStateChanged>(HandleGameStateChanged);
+        EventBus.Subscribe<LogMessage>(HandleLogMessage);
+    }
+
+    void OnDisable()
+    {
+        EventBus.Unsubscribe<GameStateChanged>(HandleGameStateChanged);
+        EventBus.Unsubscribe<LogMessage>(HandleLogMessage);
+        UnsubscribeLanguage();
     }
 
     void Start()
@@ -68,22 +75,17 @@ public partial class GameManager : MonoBehaviour
         if (betweenRunsPanel != null) betweenRunsPanel.SetActive(false);
         if (machete != null) machete.SetActive(false);
         if (indicacionesPanel != null) indicacionesPanel.SetActive(false);
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
         SetCursorVisible(true);
         LoadGame();
         RecalculateAllStats();
         UpdateMoneyUI();
+        SubscribeLanguage();
         if (bankruptcyButton != null) bankruptcyButton.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (GameInput.PauseDown && currentPhase != Phase.MainMenu && !CoconutUnlockPanel.BlocksPause && !StoryManager.BlocksPause)
-        {
-            if (isPaused) ResumeGame(); else PauseGame();
-        }
-
-        if (currentPhase == Phase.Hitting)
+        if (GameStateManager.IsOnGame && currentPhase == Phase.Hitting)
         {
             if (dayElapsed >= staminaStartDelay)
             {
@@ -114,6 +116,16 @@ public partial class GameManager : MonoBehaviour
         HandleUpgradeTreePanZoom();
         UpdateAudioContext();
     }
+    void HandleGameStateChanged(GameStateChanged e)
+    {
+        if (e.Current == GameState.OnPause) SetCursorVisible(true);
+        else if (e.Previous == GameState.OnPause) SetCursorVisible(currentPhase != Phase.Hitting);
+    }
+    void HandleLogMessage(LogMessage e) => Log(e.Text);
+    void RaiseRunStarted() { OnRunStarted?.Invoke(); EventBus.Publish(new RunStarted()); }
+    void RaiseRunReset() { OnRunReset?.Invoke(); EventBus.Publish(new RunReset()); }
+    void RaiseDayStarted() { OnDayStarted?.Invoke(); EventBus.Publish(new DayStarted(runDayCount)); }
+    void RaiseRecaudacionShown() { OnRecaudacionShown?.Invoke(); EventBus.Publish(new RecaudacionShown()); }
 
     void SetCursorVisible(bool visible)
     {
@@ -124,8 +136,7 @@ public partial class GameManager : MonoBehaviour
     public bool StreakUnlocked => unlockedSkillIds.Contains("racha_1");
     public int DaysToPlay => Mathf.Max(0, skipNextDayDecrement ? daysLeft : daysLeft - 1);
     public bool IsOrderUrgent => waterCurrentML < waterTargetML && DaysToPlay <= 1;
-
-    int GetDayLimitBase() => dayLimitBase + legacyExtraDays;
+    int GetDayLimitBase() => Debt.DaysForCycle(Debt.BillCycle);
 
     public int GetCoconutHpMax()
     {
@@ -169,24 +180,17 @@ public partial class GameManager : MonoBehaviour
     }
     public void PauseGame()
     {
-        isPaused = true;
-        Time.timeScale = 0f;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(true);
-        SetCursorVisible(true);
+        if (GameStateManager.Instance != null) GameStateManager.Instance.Pause();
     }
 
     public void ResumeGame()
     {
-        isPaused = false;
-        Time.timeScale = 1f;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
-        SetCursorVisible(currentPhase != Phase.Hitting);
+        if (GameStateManager.Instance != null) GameStateManager.Instance.Resume();
     }
 
     public void GoToMainMenu()
     {
-        isPaused = false;
-        Time.timeScale = 1f;
+        GameStateManager.Force(GameState.MainMenu);
         SaveGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

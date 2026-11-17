@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9445557c070bc65429cc071d0dc96b34, type: 3}
+  m_Name: DebtTable
+  m_EditorClassIdentifier: 
+  entries:
+  - days: 6
+    waterTarget: 250
+  - days: 6
+    waterTarget: 450
+  - days: 5
+    waterTarget: 810
+  - days: 5
+    waterTarget: 1458
+  - days: 4
+    waterTarget: 2624
+  - days: 4
+    waterTarget: 4724
+  - days: 3
+    waterTarget: 8503
+  - days: 3
+    waterTarget: 15306
+  - days: 3
+    waterTarget: 22193
+  - days: 3
+    waterTarget: 32180
+  - days: 3
+    waterTarget: 46661
+  - days: 3
+    waterTarget: 67658
+  - days: 3
+    waterTarget: 98104
+  - days: 3
+    waterTarget: 142251
+  - days: 3
+    waterTarget: 206264
+  - days: 3
+    waterTarget: 299083
+  endlessGrowth: 1.45
+  endlessDays: 3

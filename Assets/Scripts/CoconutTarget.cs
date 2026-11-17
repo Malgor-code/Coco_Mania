@@ -23,7 +23,8 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
     [Header("FX opcionales")]
     public GameObject hitParticles;
     public GameObject deathParticles;
-
+    [Range(0f, 1f)] public float hitShake = 0.25f;
+    [Range(0f, 1f)] public float killShake = 0.5f;
     [Header("Sonido")]
     public AudioClip[] hitSounds;
     public AudioClip[] deathSounds;
@@ -212,6 +213,8 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         decals.ShowNext();
         FloatText("-" + damage, 0.5f, false);
         if (!killed) visuals.PlayHit(HpPercent);
+        if (CameraShake.Instance != null)
+            CameraShake.Instance.Shake(killed ? killShake : hitShake);
     }
 
     void Die()

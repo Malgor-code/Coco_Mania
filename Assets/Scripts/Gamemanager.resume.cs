@@ -16,9 +16,7 @@ public partial class GameManager
     {
         phaseBeforeMenu = currentPhase;
 
-        Time.timeScale = 1f;
-        isPaused = false;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        GameStateManager.Force(GameState.MainMenu);
 
         if (CoconutSpawner.Instance != null)
         {
@@ -39,9 +37,7 @@ public partial class GameManager
         Phase target = phaseBeforeMenu;
         phaseBeforeMenu = Phase.MainMenu;
 
-        Time.timeScale = 1f;
-        isPaused = false;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        GameStateManager.Request(target == Phase.BetweenRuns ? GameState.OnGameOver : GameState.OnGame);
         HideAllGamePanels();
 
         switch (target)
@@ -72,7 +68,7 @@ public partial class GameManager
                 {
                     if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
                     RefreshAllUI();
-                    OnRecaudacionShown?.Invoke();
+                    RaiseRecaudacionShown();
                 }
                 break;
         }
@@ -81,8 +77,6 @@ public partial class GameManager
     public void StartFreshRun()
     {
         phaseBeforeMenu = Phase.MainMenu;
-        Time.timeScale = 1f;
-        isPaused = false;
         HideAllGamePanels();
         ResetRunState();
         BeginNewGame();

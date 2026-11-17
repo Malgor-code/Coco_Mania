@@ -11,6 +11,7 @@ public partial class GameManager
     }
     void BeginEventPhase()
     {
+        GameStateManager.Request(GameState.OnMinigame);
         currentPhase = Phase.Shop;
         if (machete != null) machete.SetActive(false);
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
@@ -24,6 +25,7 @@ public partial class GameManager
     }
     void StartDayAfterEvent()
     {
+        GameStateManager.Request(GameState.OnGame);
         stamina = GetStaminaMax();
         ShowHittingUI();
         RefreshAllUI();

@@ -7,12 +7,12 @@ public partial class GameManager
 {
     public void BeginNewGame()
     {
+        GameStateManager.Request(GameState.OnGame);
         recordAtRunStart = bestCycleReached;
         stamina = GetStaminaMax();
         daysLeft = GetDayLimitBase();
         waterCurrentML = Mathf.Max(waterCurrentML, legacyStartingWater);
         equippedMacheteIndex = Mathf.Max(equippedMacheteIndex, legacyStartingMachete);
-        if (billCycle == 1) waterTargetML = waterTargetStart * (1f - legacyOrderDiscount);
         runCoconutsKilled = 0;
         runMoneyEarned = 0;
         RecalculateAllStats();
@@ -21,8 +21,9 @@ public partial class GameManager
         RefreshAllUI();
         runStartTime = Time.time;
         BetaLog("run_start");
-        OnRunStarted?.Invoke();
+        RaiseRunStarted();
     }
+
     void EnterRecaudacionPhase()
     {
         currentPhase = Phase.Shop;
@@ -43,7 +44,7 @@ public partial class GameManager
             if (recaudacionPanel != null) recaudacionPanel.SetActive(true);
             if (deudaPanel != null) deudaPanel.SetActive(false);
             RefreshAllUI();
-            OnRecaudacionShown?.Invoke();
+            RaiseRecaudacionShown();
         }
         AnnounceNewUnlocks();
         SaveGame();
@@ -99,7 +100,7 @@ public partial class GameManager
         currentPhase = Phase.Hitting;
         if (machete != null) machete.SetActive(true);
         RecalculateAllStats();
-        OnDayStarted?.Invoke();
+        RaiseDayStarted();
     }
 
     public void ContinueToNextDay()
@@ -125,6 +126,7 @@ public partial class GameManager
         }
         StartDayAfterEvent();
     }
+
     public void ToggleUpgradeTreePanel()
     {
         if (forcedOrderDecision) return;
@@ -190,19 +192,10 @@ public partial class GameManager
     public void PayDebt()
     {
         if (currentPhase != Phase.Shop) return;
-        if (waterCurrentML < waterTargetML) return;
+        if (!Debt.TryPay(out float delivered, out float refund, out int deliveredCycle)) return;
+
         forcedOrderDecision = false;
         if (deudaPanel != null) deudaPanel.SetActive(false);
-        float delivered = waterTargetML;
-        waterCurrentML -= delivered;
-        float refund = delivered * skillOrderRefund;
-        waterCurrentML += refund;
-        int deliveredCycle = billCycle;
-        billCycle++;
-        bestCycleReached = Mathf.Max(bestCycleReached, billCycle);
-        float growth = billCycle > lateGrowthFromCycle ? waterTargetGrowthLate : waterTargetGrowth;
-        waterTargetML *= growth;
-        daysLeft = Mathf.Max(3 + legacyExtraDays, GetDayLimitBase() - ((billCycle - 1) / 2));
         RecalculateAllStats();
         Log("Pedido entregado. Nuevo pedido: " + FormatWater(waterTargetML)
             + (refund > 0f ? " (reembolso +" + FormatWater(refund) + ")" : ""));
@@ -264,11 +257,12 @@ public partial class GameManager
         ResetRunState();
         EnterBetweenRunsPhase();
         SaveGame();
-        OnRunReset?.Invoke();
+        RaiseRunReset();
     }
 
     void EnterBetweenRunsPhase()
     {
+        GameStateManager.Request(GameState.OnGameOver);
         currentPhase = Phase.BetweenRuns;
         if (machete != null) machete.SetActive(false);
         if (gameplayUIPanel != null) gameplayUIPanel.SetActive(false);
@@ -289,15 +283,15 @@ public partial class GameManager
 
     void CheckVictory(int deliveredCycle)
     {
-        if (runVictoryAwarded || deliveredCycle < victoryCycle) return;
-        runVictoryAwarded = true;
-        legacyPoints += victoryLegacyBonus;
-        totalLegacyPointsEarned += victoryLegacyBonus;
+        if (!Debt.TryAwardVictory(deliveredCycle)) return;
+        legacyPoints += Debt.victoryLegacyBonus;
+        totalLegacyPointsEarned += Debt.victoryLegacyBonus;
         RecalcLegacyMultiplier();
-        Log("¡COMPLETASTE EL CICLO " + victoryCycle + "! +" + victoryLegacyBonus + " puntos de legado. Sigue en modo infinito.");
+        Log("¡COMPLETASTE EL CICLO " + Debt.victoryCycle + "! +" + Debt.victoryLegacyBonus + " puntos de legado. Sigue en modo infinito.");
         BetaLog("VICTORY");
         SaveGame();
     }
+
     public void RestartRun()
     {
         phaseBeforeMenu = Phase.MainMenu;
@@ -305,9 +299,7 @@ public partial class GameManager
         currentPhase = Phase.MainMenu;
         isChoosingPerk = false;
         pendingPerkOffers = 0;
-        Time.timeScale = 1f;
-        isPaused = false;
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        GameStateManager.Force(GameState.MainMenu);
         skipNextDayDecrement = false;
         ClearCurse();
 
@@ -332,7 +324,7 @@ public partial class GameManager
         displayedMoney = 0f;
 
         SaveGame();
-        OnRunReset?.Invoke();
+        RaiseRunReset();
         forcedOrderDecision = false;
         GoToMainMenu();
     }
@@ -340,56 +332,21 @@ public partial class GameManager
     void ResetRunState()
     {
         money = 0;
-        billCycle = 1;
+        Debt.ResetRun();
         waterCurrentML = legacyStartingWater;
-        waterTargetML = waterTargetStart * (1f - legacyOrderDiscount);
-        daysLeft = GetDayLimitBase();
         totalCoconutsKilled = 0;
-        unlockedSkillIds.Clear();
         killsAtDayStart = 0;
         announcedUnlocks.Clear();
-        skillDamageBonus = 0f;
-        skillStaminaBonus = 0f;
-        skillSwingIntervalReduction = 0f;
-        skillHitRadiusBonus = 0f;
-        skillWaterMultiplierBonus = 0f;
-        skillStaminaRecoveryChance = 0f;
-        skillStaminaRecoveryAmount = 0f;
-        skillStaminaRecoveryLevel = 0;
-        skillJackpotChance = 0f;
-        skillJackpotMultBonus = 0f;
-        skillCritDamageBonus = 0f;
-        skillCritChanceBonus = 0f;
-        skillExtraCoconutChance = 0f;
-        skillStreakForgives = 0;
-        streakForgivesLeft = 0;
-        skillStreakStackBonus = 0;
-        skillStreakPowerBonus = 0f;
-        skillLastBreathBonus = 0f;
-        skillLastBreathSwingReduction = 0f;
-        skillExecuteBonus = 0f;
-        skillMultiHitBonus = 0f;
-        skillOrderRefund = 0f;
-        skillEarlyDayBonus = 0f;
-        skillChainSplashPercent = 0f;
+
+        Skills.ResetRun();
+        Perks.ResetRun();
+        Stats.ResetRunSources();
+
         runDayCount = 0;
         equippedMacheteIndex = legacyStartingMachete;
         currentHitStreak = 0;
-        perkWaterMultiplicative = 1f;
-        perkDamageBonus = 0f;
-        perkStaminaMaxBonus = 0f;
-        perkWaterMultiplierBonus = 0f;
-        perkSwingIntervalReduction = 0f;
-        perkCritChanceBonus = 0f;
-        perkCopies.Clear();
-        relicDamageBonus = 0f;
-        relicStaminaMaxBonus = 0f;
-        relicWaterMultiplierBonus = 0f;
-        relicSwingIntervalReduction = 0f;
-        relicHitRadiusBonus = 0f;
-        relicCritChanceBonus = 0f;
+        streakForgivesLeft = 0;
         coinDropChance = 0.005f + legacyCoinChanceBonus;
-        runVictoryAwarded = false;
 
         if (CoconutSpawner.Instance != null)
         {
@@ -399,6 +356,7 @@ public partial class GameManager
         forcedOrderDecision = false;
         RecalculateAllStats();
     }
+
     void SaveGame()
     {
         SaveData d = new SaveData

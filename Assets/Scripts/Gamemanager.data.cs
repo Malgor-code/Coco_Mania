@@ -2,21 +2,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using static MacheteData;
 
-public partial class GameManager
+public static class DefaultGameData
 {
+    public static List<MacheteData> macheteOptions;
+    public static List<SkillNode> skillTree;
+    public static List<PerkOption> perkPool;
+    public static List<LegacyItem> legacyShop;
+    public static bool forceDefaultData = true;
     [Header("Costos del arbol (exponenciales por profundidad)")]
     [Tooltip("Si esta activo, el costo de cada mejora se calcula solo: treeCostBase * treeCostGrowth ^ profundidad. Desactivalo para usar costos manuales.")]
-    public bool autoTreeCosts = true;
+    public static bool autoTreeCosts = true;
     [Tooltip("Costo de las mejoras raiz. Aprox. 35-40% del ingreso del primer dia.")]
-    public float treeCostBase = 100f;
+    public static float treeCostBase = 100f;
     [Tooltip("Crecimiento por nivel en el INICIO del arbol (hasta treeCostLateStartDepth). Bajo = inicio facil.")]
-    public float treeCostGrowth = 3f;
+    public static float treeCostGrowth = 3f;
     [Tooltip("Crecimiento por nivel despues de treeCostLateStartDepth. Alto = el late game no se vuelve barato.")]
-    public float treeCostGrowthLate = 2.5f;
+    public static float treeCostGrowthLate = 2.5f;
     [Tooltip("Profundidad donde el crecimiento cambia de treeCostGrowth a treeCostGrowthLate.")]
-    public int treeCostLateStartDepth = 4;
+    public static int treeCostLateStartDepth = 4;
 
-    void EnsureDefaultData()
+    public static void Build()
     {
         static SkillNode N(string id, string name, string desc, int cost, SkillEffect effect, float value, params string[] pre)
         {
@@ -288,10 +293,9 @@ public partial class GameManager
             new LegacyItem { itemName = "Herencia del Herrero II",description = "Empiezas con el Machete de Acero.",          cost = 50, effect = LegacyEffect.PermanentStartingMachete, value = 1f },
         };
         }
-        StampCoconutUnlocks();
     }
 
-    void ApplyExponentialTreeCosts()
+    static void ApplyExponentialTreeCosts()
     {
         if (skillTree == null || skillTree.Count == 0) return;
 
@@ -324,44 +328,6 @@ public partial class GameManager
             float raw = treeCostBase * Mathf.Pow(treeCostGrowth, early) * Mathf.Pow(treeCostGrowthLate, late);
             float mag = Mathf.Pow(10f, Mathf.Floor(Mathf.Log10(Mathf.Max(raw, 1f))) - 1f);
             n.cost = Mathf.Max(1, Mathf.RoundToInt(Mathf.Round(raw / mag) * mag));
-        }
-    }
-
-    private static readonly CoconutUnlockThreshold[] CanonicalUnlocks = new CoconutUnlockThreshold[]
-    {
-        new CoconutUnlockThreshold { coconutName = "Coco Verde",       cycleRequired = 1,  ability = CoconutAbility.Ninguna },
-        new CoconutUnlockThreshold { coconutName = "Coco Maduro",      cycleRequired = 2,  ability = CoconutAbility.Generoso },
-        new CoconutUnlockThreshold { coconutName = "Coco Correoso",    cycleRequired = 3,  ability = CoconutAbility.Resistente },
-        new CoconutUnlockThreshold { coconutName = "Coco Fibroso",     cycleRequired = 4,  ability = CoconutAbility.FibraDura },
-        new CoconutUnlockThreshold { coconutName = "Coco Petreo",      cycleRequired = 5,  ability = CoconutAbility.Pesado },
-        new CoconutUnlockThreshold { coconutName = "Coco Curtido",     cycleRequired = 6,  ability = CoconutAbility.Tenaz },
-        new CoconutUnlockThreshold { coconutName = "Coco Blindado",    cycleRequired = 7,  ability = CoconutAbility.Armadura },
-        new CoconutUnlockThreshold { coconutName = "Coco de Hierro",   cycleRequired = 8,  ability = CoconutAbility.Rebote },
-        new CoconutUnlockThreshold { coconutName = "Coco de Acero",    cycleRequired = 9,  ability = CoconutAbility.Fortificado },
-        new CoconutUnlockThreshold { coconutName = "Coco de Titanio",  cycleRequired = 10, ability = CoconutAbility.Implacable },
-        new CoconutUnlockThreshold { coconutName = "Coco de Diamante", cycleRequired = 11, ability = CoconutAbility.FragilValioso },
-        new CoconutUnlockThreshold { coconutName = "Coco Legendario",  cycleRequired = 12, ability = CoconutAbility.Regeneracion },
-        new CoconutUnlockThreshold { coconutName = "Coco Mitico",      cycleRequired = 13, ability = CoconutAbility.Camuflaje },
-        new CoconutUnlockThreshold { coconutName = "Coco Ancestral",   cycleRequired = 14, ability = CoconutAbility.Maldicion },
-        new CoconutUnlockThreshold { coconutName = "Coco Supremo",     cycleRequired = 16, ability = CoconutAbility.Supremo },
-    };
-
-    void StampCoconutUnlocks()
-    {
-        if (coconutUnlocks == null) coconutUnlocks = new List<CoconutUnlockThreshold>();
-
-        while (coconutUnlocks.Count < CanonicalUnlocks.Length)
-            coconutUnlocks.Add(new CoconutUnlockThreshold());
-
-        for (int i = 0; i < CanonicalUnlocks.Length; i++)
-        {
-            Sprite keepIcon = coconutUnlocks[i].icon;
-            GameObject keepPrefab = coconutUnlocks[i].prefab;
-            coconutUnlocks[i].coconutName = CanonicalUnlocks[i].coconutName;
-            coconutUnlocks[i].cycleRequired = CanonicalUnlocks[i].cycleRequired;
-            coconutUnlocks[i].ability = CanonicalUnlocks[i].ability;
-            coconutUnlocks[i].icon = keepIcon;
-            coconutUnlocks[i].prefab = keepPrefab;
         }
     }
 }
