@@ -61,8 +61,10 @@ public class CoconutFragments : MonoBehaviour
         var list = new List<GameObject>(childPieces.Length);
         foreach (var piece in childPieces)
         {
-            GameObject frag = piece.gameObject;
-            frag.transform.SetParent(null, true);
+            if (piece == null) continue;
+
+            GameObject frag = Instantiate(piece.gameObject, piece.transform.position, piece.transform.rotation);
+            frag.transform.localScale = piece.transform.lossyScale;
             frag.SetActive(true);
             EnableRenderers(frag);
 

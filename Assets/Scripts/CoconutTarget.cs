@@ -40,15 +40,11 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
     public float coinLifetime = 300f;
     public float coinPopForce = 3f;
 
-    [Header("Habilidades")]
-    public CoconutAbilitySettings abilitySettings = new CoconutAbilitySettings();
-
     [Header("Estado")]
     public int hp;
     public int hpMax;
     [HideInInspector] public int lastDamageTaken;
-
-    public GameManager.CoconutAbility ability { get; private set; } = GameManager.CoconutAbility.Ninguna;
+    public CoconutTypeSO Type => currentType;
 
     const int DefaultBaseHp = 10;
     const float DestroyDelay = 0.05f;
@@ -65,8 +61,9 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
     CoconutWander wander;
     AudioSource audioSource;
     Renderer rend;
-    CoconutTypeData currentType;
-    AbilityBehaviour abilityLogic;
+    CoconutTypeSO currentType;
+    float lootMultiplier = 1f;
+    ICoconutPassive passive = NullPassive.Instance;
 
     Vector3 originalScale, typedScale;
     Vector3 lastHitFrom;
@@ -117,7 +114,6 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         decals.Init(rend);
         anim.Init();
         decals.ResetDecals();
-        abilityLogic = new NoAbility(this, abilitySettings);
     }
 
     Collider FindHitCollider()
@@ -140,26 +136,28 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
 
     void Update()
     {
-        if (!isDead) abilityLogic.Tick(Time.deltaTime);
+        if (!isDead) passive.Tick(GameTime.DeltaTime);
     }
 
-    public void ApplyType(CoconutTypeData type, float hpScale = 1f)
+    public void ApplyType(CoconutTypeSO type, float hpMultiplier, float lootMult, float hpScale = 1f)
     {
         currentType = type;
+        lootMultiplier = lootMult;
         isDead = false;
+        lastDamageTaken = 0;
+        hitFromExplicit = false;
 
-        ability = GameManager.Instance != null
-            ? GameManager.Instance.GetAbilityForCoconutName(type.typeName)
-            : GameManager.CoconutAbility.Ninguna;
-        abilityLogic = AbilityFactory.Create(ability, this, abilitySettings);
+        passive = (type != null && type.passive != null) ? type.passive.Create(this) : NullPassive.Instance;
 
-        int baseHp = GameManager.Instance != null ? GameManager.Instance.GetCoconutHpMax() : DefaultBaseHp;
-        hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * type.hpMultiplier * hpScale));
+        int baseHp = CombatManager.Instance != null ? CombatManager.Instance.coconutHpMax : DefaultBaseHp;
+        hpMax = Mathf.Max(1, Mathf.RoundToInt(baseHp * hpMultiplier * hpScale));
         hp = hpMax;
 
         float globalSize = CoconutSpawner.Instance != null ? CoconutSpawner.Instance.globalSizeMultiplier : 1f;
-        float growth = Mathf.Sqrt(Mathf.Max(0f, type.hpMultiplier - 1f)) * scaleGrowth;
+        float growth = Mathf.Sqrt(Mathf.Max(0f, hpMultiplier - 1f)) * scaleGrowth;
         typedScale = originalScale * (Mathf.Min(baseScale + growth, maxScale) * globalSize);
+        if (hitCollider != null) hitCollider.enabled = true;
+        if (wander != null) wander.enabled = true;
 
         decals.ResetDecals();
         visuals.SetBaseScale(typedScale);
@@ -168,6 +166,7 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         float stun = anim.PlaySpawn();
         if (stun > 0f && wander != null) wander.Stun(stun);
     }
+
     public bool TakeDamage(int amount, bool isCritical, Vector3 hitFrom)
     {
         lastHitFrom = hitFrom;
@@ -182,16 +181,14 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
         if (isDead) return false;
         if (!hitFromExplicit) lastHitFrom = DefaultHitOrigin();
 
-        float executeMult = GameManager.Instance != null
-            ? GameManager.Instance.GetExecuteDamageMultiplier(HpPercent)
-            : 1f;
-        float modified = abilityLogic.ModifyDamage(amount, isCritical) * executeMult;
+        float executeMult = CombatManager.Instance.GetExecuteDamageMultiplier(HpPercent);
+        float modified = passive.ModifyDamage(amount, isCritical) * executeMult;
         int finalDamage = Mathf.Max(1, Mathf.RoundToInt(modified));
         lastDamageTaken = finalDamage;
         hp -= finalDamage;
 
         if (executeMult > 1f) FloatText("¡REMATE!", ExecuteTextOffset);
-        abilityLogic.OnHit();
+        passive.OnHit();
         if (wander != null) wander.Stun(stunOnHit);
 
         bool killed = hp <= 0;
@@ -228,34 +225,37 @@ public class CoconutTarget : MonoBehaviour, ICoconutHost
 
         GameObject deathFx = deathParticles != null ? Instantiate(deathParticles, transform.position, Quaternion.identity) : null;
         PlayDeathSound();
-        abilityLogic.OnDeath();
+        passive.OnDeath();
         juice.BurstDeath();
 
         GrantRewards(deathFx);
 
-        if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.RemoveCoconut(this);
-        Destroy(gameObject, DestroyDelay);
+        CoconutSpawner spawner = CoconutSpawner.Instance;
+        if (spawner != null)
+        {
+            spawner.RemoveCoconut(this);
+            spawner.ReleaseDelayed(this, DestroyDelay); 
+        }
+        else
+        {
+            Destroy(gameObject, DestroyDelay);
+        }
     }
 
     void GrantRewards(GameObject deathFx)
     {
-        float waterGained = 0f;
-        bool foundCoin = false;
-        bool jarTookFx = false;
-        var gm = GameManager.Instance;
+        CombatManager combat = CombatManager.Instance;
+        combat.OnCoconutDestroyed(lootMultiplier, out float waterGained);
+        combat.ApplyChainSplash(transform.position, lastDamageTaken, gameObject);
 
-        if (gm != null)
-        {
-            float loot = currentType != null ? currentType.lootMultiplier : 1f;
-            gm.OnCoconutDestroyed(loot, out waterGained);
-            gm.ApplyChainSplash(transform.position, lastDamageTaken, gameObject);
-            foundCoin = gm.lastKillFoundCoin;
-            if (foundCoin) SpawnCoin();
-            jarTookFx = gm.PlayWaterDropEffect(transform.position, waterGained, deathFx);
+        bool foundCoin = combat.lastKillFoundCoin;
+        if (foundCoin) SpawnCoin();
 
-            if (JuiceManager.Instance != null)
-                JuiceManager.Instance.SpawnKillRewards(transform.position + Vector3.up * CoinSpawnLift, waterGained, foundCoin);
-        }
+        bool jarTookFx = WaterJarGroup.Instance != null
+            && WaterJarGroup.Instance.HandleCoconutWater(transform.position, waterGained, deathFx);
+
+        if (JuiceManager.Instance != null)
+            JuiceManager.Instance.SpawnKillRewards(transform.position + Vector3.up * CoinSpawnLift, waterGained, foundCoin);
 
         if (!jarTookFx && deathFx != null) AutoDestroyFx(deathFx);
     }

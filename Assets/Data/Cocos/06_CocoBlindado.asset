@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 06_CocoBlindado
+  m_EditorClassIdentifier: 
+  typeName: Coco Blindado
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: efc534b20f3168848a101a8b53fabe76, type: 3}
+  phrase: Su cascara ha desafiado mas filos que un herrero.
+  unlockCycle: 7
+  baseHpMultiplier: 34
+  passive: {fileID: 11400000, guid: 8eb6766750ca4314cb682f032b3f9cf6, type: 2}
+  abilityName: Armadura
+  abilityDescription: "Recibe 50% menos de da\xF1o de los golpes normales. Los criticos
+    lo ignoran."
+  moveStyle: 6

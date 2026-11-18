@@ -299,7 +299,7 @@ public class StoryManager : MonoBehaviour
         skipRequested = false;
         nextPressed = false;
         lineDone = false;
-        if (freezeGame) Time.timeScale = 0f;
+        if (freezeGame && GameManager.Instance != null) GameManager.Instance.PauseSilent();
         Cursor.visible = true;
 
         dialoguePanel.SetActive(true);
@@ -366,7 +366,7 @@ public class StoryManager : MonoBehaviour
         isShowing = false;
         lineDone = false;
         if (nextButton != null) nextButton.transform.localScale = Vector3.one;
-        if (freezeGame) Time.timeScale = (gm != null && gm.isPaused) ? 0f : 1f;
+        if (freezeGame && GameManager.Instance != null) GameManager.Instance.ResumeSilent();
     }
 
     void PlayBlip(char c, int count)

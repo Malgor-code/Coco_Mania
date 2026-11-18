@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 12_CocoMitico
+  m_EditorClassIdentifier: 
+  typeName: Coco Mitico
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: 259be04c3bbf2c04abe99793a5d9a441, type: 3}
+  phrase: Ahora lo ves, ahora no.
+  unlockCycle: 13
+  baseHpMultiplier: 118
+  passive: {fileID: 11400000, guid: 8545f7d96be73a042b3fce4d527c9f92, type: 2}
+  abilityName: Camuflaje
+  abilityDescription: Se vuelve casi invisible durante 2 s de cada 5.
+  moveStyle: 12

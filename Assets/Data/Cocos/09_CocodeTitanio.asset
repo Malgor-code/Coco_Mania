@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 09_CocodeTitanio
+  m_EditorClassIdentifier: 
+  typeName: Coco de Titanio
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
+  phrase: Nadie lo golpea dos veces sin que se ponga serio.
+  unlockCycle: 10
+  baseHpMultiplier: 70
+  passive: {fileID: 11400000, guid: 587f77a98b5b8674cbe73c7f3fac6047, type: 2}
+  abilityName: Implacable
+  abilityDescription: "Si lo golpeas 4 veces en 2 s, se protege 2 s y recibe 30%
+    menos de da\xF1o."
+  moveStyle: 9

@@ -5,12 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using static MacheteData;
 
-/// <summary>
-/// Toda la UI del juego (paneles, textos, eleccion de perks, pan/zoom del arbol, contexto de audio).
-/// No decide logica: reacciona a eventos del EventBus y lee los managers.
-/// IMPORTANTE: este script ocupa el lugar del GameManager viejo en la escena (mismos nombres de campos
-/// para conservar las referencias del Inspector).
-/// </summary>
 public class GameUI : MonoBehaviour
 {
     public static GameUI Instance { get; private set; }
@@ -40,8 +34,6 @@ public class GameUI : MonoBehaviour
     [Header("Desbloqueo de cocos")]
     public CoconutUnlockPanel unlockPanel;
     public bool showUnlockOnlyFirstTime = true;
-    [Header("Umbrales de desbloqueo de tipos de coco (se reemplaza por ScriptableObjects en la Fase 3)")]
-    public List<GameManager.CoconutUnlockThreshold> coconutUnlocks = new List<GameManager.CoconutUnlockThreshold>();
 
     [Header("Transicion entre Mejoras/Tienda")]
     public float panelSwitchBreak = 0.12f;
@@ -139,14 +131,9 @@ public class GameUI : MonoBehaviour
     Vector2 lastPanMousePos;
     HashSet<int> announcedUnlocks = new HashSet<int>();
     AudioContext lastAudioContext = AudioContext.None;
-
-    // ------------------------------------------------------------------
-    // Ciclo de vida
-    // ------------------------------------------------------------------
     void Awake()
     {
         Instance = this;
-        StampCoconutUnlocks();
     }
 
     void OnEnable()
@@ -228,9 +215,6 @@ public class GameUI : MonoBehaviour
         if (logText != null) logText.text = msg;
     }
 
-    // ------------------------------------------------------------------
-    // Reacciones a eventos
-    // ------------------------------------------------------------------
     void HandleLog(LogMessage e) => Log(e.Text);
 
     void HandleRunStarted(RunStarted e) => announcedUnlocks.Clear();
@@ -270,10 +254,6 @@ public class GameUI : MonoBehaviour
         Log(Loc("log_legacy_bought", e.ItemName));
         RefreshAllUI();
     }
-
-    // ------------------------------------------------------------------
-    // Pantallas
-    // ------------------------------------------------------------------
     void HandleScreen(ScreenRequested e)
     {
         switch (e.Screen)
@@ -374,7 +354,6 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    // ---- Botones de paneles (los llaman los botones de la escena) ----
     public void ToggleUpgradeTreePanel()
     {
         if (Run.ForcedDecision) return;
@@ -435,9 +414,6 @@ public class GameUI : MonoBehaviour
         RefreshAllUI();
     }
 
-    // ------------------------------------------------------------------
-    // Eleccion de perk
-    // ------------------------------------------------------------------
     void ShowPerkChoices()
     {
         isChoosingPerk = false;
@@ -515,9 +491,6 @@ public class GameUI : MonoBehaviour
         foreach (var n in names) perkIcons.Add(new PerkIconEntry { perkName = n });
     }
 
-    // ------------------------------------------------------------------
-    // Textos y contadores
-    // ------------------------------------------------------------------
     static string Signed(float v) => (v >= 0f ? "+" : "") + v.ToString("0.##");
 
     string PassiveLine(MacheteData m)
@@ -588,7 +561,7 @@ public class GameUI : MonoBehaviour
                 dayCoinsText.text = Loc(combat.dayCoinsFound == 1 ? "coins_found_one" : "coins_found_many", combat.dayCoinsFound);
         }
 
-        GameManager.CoconutUnlockThreshold nextUnlock = GetNextLockedCoconut();
+        CoconutTypeSO nextUnlock = GetNextLockedCoconut();
         float unlockProgress = GetNextUnlockProgress01();
 
         if (nextUnlockImage != null)
@@ -607,7 +580,7 @@ public class GameUI : MonoBehaviour
         {
             bool showText = nextUnlock != null;
             nextUnlockPercentText.gameObject.SetActive(showText);
-            if (showText) nextUnlockPercentText.text = Loc("unlock_order", nextUnlock.cycleRequired);
+            if (showText) nextUnlockPercentText.text = Loc("unlock_order", nextUnlock.unlockCycle);
         }
 
         float water = Res.Water;
@@ -668,9 +641,6 @@ public class GameUI : MonoBehaviour
         if (legacyPointsText != null) legacyPointsText.text = Loc("betweenruns_legacy_points", Legacy.Points);
     }
 
-    // ------------------------------------------------------------------
-    // Idioma
-    // ------------------------------------------------------------------
     void SubscribeLanguage()
     {
         var loc = LocalizationManager.Instance;
@@ -683,81 +653,32 @@ public class GameUI : MonoBehaviour
         if (loc != null) loc.OnLanguageChanged -= RefreshAllUI;
     }
 
-    // ------------------------------------------------------------------
-    // Desbloqueo de cocos (se reemplaza por ScriptableObjects en la Fase 3)
-    // ------------------------------------------------------------------
-    static readonly GameManager.CoconutUnlockThreshold[] CanonicalUnlocks = new GameManager.CoconutUnlockThreshold[]
+    static List<CoconutTypeSO> CoconutTypes =>
+        CoconutSpawner.Instance != null ? CoconutSpawner.Instance.coconutTypes : null;
+
+    public CoconutTypeSO GetNextLockedCoconut()
     {
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Verde",       cycleRequired = 1,  ability = GameManager.CoconutAbility.Ninguna },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Maduro",      cycleRequired = 2,  ability = GameManager.CoconutAbility.Generoso },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Correoso",    cycleRequired = 3,  ability = GameManager.CoconutAbility.Resistente },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Fibroso",     cycleRequired = 4,  ability = GameManager.CoconutAbility.FibraDura },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Petreo",      cycleRequired = 5,  ability = GameManager.CoconutAbility.Pesado },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Curtido",     cycleRequired = 6,  ability = GameManager.CoconutAbility.Tenaz },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Blindado",    cycleRequired = 7,  ability = GameManager.CoconutAbility.Armadura },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco de Hierro",   cycleRequired = 8,  ability = GameManager.CoconutAbility.Rebote },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco de Acero",    cycleRequired = 9,  ability = GameManager.CoconutAbility.Fortificado },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco de Titanio",  cycleRequired = 10, ability = GameManager.CoconutAbility.Implacable },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco de Diamante", cycleRequired = 11, ability = GameManager.CoconutAbility.FragilValioso },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Legendario",  cycleRequired = 12, ability = GameManager.CoconutAbility.Regeneracion },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Mitico",      cycleRequired = 13, ability = GameManager.CoconutAbility.Camuflaje },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Ancestral",   cycleRequired = 14, ability = GameManager.CoconutAbility.Maldicion },
-        new GameManager.CoconutUnlockThreshold { coconutName = "Coco Supremo",     cycleRequired = 16, ability = GameManager.CoconutAbility.Supremo },
-    };
-
-    void StampCoconutUnlocks()
-    {
-        if (coconutUnlocks == null) coconutUnlocks = new List<GameManager.CoconutUnlockThreshold>();
-
-        while (coconutUnlocks.Count < CanonicalUnlocks.Length)
-            coconutUnlocks.Add(new GameManager.CoconutUnlockThreshold());
-
-        for (int i = 0; i < CanonicalUnlocks.Length; i++)
-        {
-            Sprite keepIcon = coconutUnlocks[i].icon;
-            GameObject keepPrefab = coconutUnlocks[i].prefab;
-            coconutUnlocks[i].coconutName = CanonicalUnlocks[i].coconutName;
-            coconutUnlocks[i].cycleRequired = CanonicalUnlocks[i].cycleRequired;
-            coconutUnlocks[i].ability = CanonicalUnlocks[i].ability;
-            coconutUnlocks[i].icon = keepIcon;
-            coconutUnlocks[i].prefab = keepPrefab;
-        }
-    }
-
-    public GameManager.CoconutAbility GetAbilityForCoconutName(string name)
-    {
-        if (coconutUnlocks == null || string.IsNullOrEmpty(name)) return GameManager.CoconutAbility.Ninguna;
-        foreach (var u in coconutUnlocks)
-        {
-            if (u != null && u.coconutName == name) return u.ability;
-        }
-        return GameManager.CoconutAbility.Ninguna;
-    }
-
-    public GameManager.CoconutUnlockThreshold GetNextLockedCoconut()
-    {
-        GameManager.CoconutUnlockThreshold next = null;
-        if (coconutUnlocks == null) return null;
+        List<CoconutTypeSO> types = CoconutTypes;
+        if (types == null) return null;
         int cycle = Debt.BillCycle;
-        foreach (var u in coconutUnlocks)
+        CoconutTypeSO next = null;
+        foreach (var t in types)
         {
-            if (u == null) continue;
-            if (cycle < u.cycleRequired)
-            {
-                if (next == null || u.cycleRequired < next.cycleRequired) next = u;
-            }
+            if (t == null || cycle >= t.unlockCycle) continue;
+            if (next == null || t.unlockCycle < next.unlockCycle) next = t;
         }
         return next;
     }
 
     void AnnounceNewUnlocks()
     {
-        if (unlockPanel == null || coconutUnlocks == null) return;
+        List<CoconutTypeSO> types = CoconutTypes;
+        if (unlockPanel == null || types == null) return;
         int cycle = Debt.BillCycle;
-        for (int i = 1; i < coconutUnlocks.Count; i++)
+        for (int i = 1; i < types.Count; i++)
         {
-            GameManager.CoconutUnlockThreshold u = coconutUnlocks[i];
-            if (u == null || cycle < u.cycleRequired) continue;
+            CoconutTypeSO t = types[i];
+            if (t == null || cycle < t.unlockCycle) continue;
             if (!announcedUnlocks.Add(i)) continue;
             if (showUnlockOnlyFirstTime)
             {
@@ -772,12 +693,13 @@ public class GameUI : MonoBehaviour
 
     public float GetNextUnlockProgress01()
     {
-        GameManager.CoconutUnlockThreshold next = GetNextLockedCoconut();
-        if (next == null) return 1f;
+        CoconutTypeSO next = GetNextLockedCoconut();
+        List<CoconutTypeSO> types = CoconutTypes;
+        if (next == null || types == null) return 1f;
         int prev = 1;
-        foreach (var u in coconutUnlocks)
-            if (u != null && u.cycleRequired < next.cycleRequired && u.cycleRequired > prev) prev = u.cycleRequired;
-        int span = next.cycleRequired - prev;
+        foreach (var t in types)
+            if (t != null && t.unlockCycle < next.unlockCycle && t.unlockCycle > prev) prev = t.unlockCycle;
+        int span = next.unlockCycle - prev;
         if (span <= 0) return 1f;
         return Mathf.Clamp01((float)(Debt.BillCycle - prev) / span);
     }
@@ -789,9 +711,6 @@ public class GameUI : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    // ------------------------------------------------------------------
-    // Contexto de audio (pasa al AudioManager en la Fase 5)
-    // ------------------------------------------------------------------
     AudioContext ResolveAudioContext()
     {
         if (GameManager.IsPaused) return AudioContext.Pause;
@@ -819,9 +738,6 @@ public class GameUI : MonoBehaviour
         AudioManager.Instance.SetContext(ctx);
     }
 
-    // ------------------------------------------------------------------
-    // Pan y zoom del arbol de mejoras
-    // ------------------------------------------------------------------
     void HandleUpgradeTreePanZoom()
     {
         if (upgradeTreeContent == null) return;

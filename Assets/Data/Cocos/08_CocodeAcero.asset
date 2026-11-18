@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 08_CocodeAcero
+  m_EditorClassIdentifier: 
+  typeName: Coco de Acero
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: ab1def44d29e9874aab569c5eb2812b3, type: 3}
+  phrase: Se endurece justo cuando crees que ya ganaste.
+  unlockCycle: 9
+  baseHpMultiplier: 58
+  passive: {fileID: 11400000, guid: fa16f67cbac798947a7007fced5e2635, type: 2}
+  abilityName: Fortificado
+  abilityDescription: "Cada 4 segundos se blinda durante 3 s y recibe 40% menos de
+    da\xF1o."
+  moveStyle: 8

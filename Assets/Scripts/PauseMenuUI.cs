@@ -26,6 +26,6 @@ public class PauseMenuUI : MonoBehaviour
 
     void OnStateChanged(GameStateChanged e)
     {
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(e.Current == GameState.OnPause);
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(e.Current == GameState.OnPause && !GameManager.IsSilentPause);
     }
 }

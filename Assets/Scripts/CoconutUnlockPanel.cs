@@ -189,34 +189,32 @@ public class CoconutUnlockPanel : MonoBehaviour
         IsOpen = false;
         showing = false;
     }
-
     void BuildContent(int tier)
     {
-        GameManager gm = GameManager.Instance;
         CoconutSpawner sp = CoconutSpawner.Instance;
-        if (gm == null || sp == null) return;
+        if (sp == null || tier < 0 || tier >= sp.coconutTypes.Count || sp.coconutTypes[tier] == null) return;
 
-        string coconutName = tier < gm.coconutUnlocks.Count ? gm.coconutUnlocks[tier].coconutName : "Coco";
-        CoconutTypeData type = tier < sp.coconutTypes.Count ? sp.coconutTypes[tier] : null;
-        float loot = type != null ? type.lootMultiplier : 1f;
+        CoconutTypeSO type = sp.coconutTypes[tier];
+        CombatManager combat = CombatManager.Instance;
+        float loot = type.LootMultiplier(sp.lootBase, sp.lootExponent);
 
         if (titleText != null) titleText.text = "¡NUEVO COCO DESBLOQUEADO!";
-        if (nameText != null) nameText.text = coconutName;
-        if (abilityNameText != null) abilityNameText.text = tier < AbilityNames.Length ? AbilityNames[tier] : "-";
-        if (abilityDescText != null) abilityDescText.text = tier < AbilityDescs.Length ? AbilityDescs[tier] : "";
-        if (phraseText != null) phraseText.text = tier < Phrases.Length ? "\"" + Phrases[tier] + "\"" : "";
+        if (nameText != null) nameText.text = type.typeName;
+        if (abilityNameText != null) abilityNameText.text = type.abilityName;
+        if (abilityDescText != null) abilityDescText.text = type.abilityDescription;
+        if (phraseText != null) phraseText.text = string.IsNullOrEmpty(type.phrase) ? "" : "\"" + type.phrase + "\"";
         if (hintText != null) hintText.text = "Presiona cualquier tecla para continuar";
 
         if (waterText != null)
         {
-            float min = gm.baseWaterPerKill * loot;
-            float max = (gm.baseWaterPerKill + gm.waterVariance) * loot;
-            float avg = (gm.baseWaterPerKill + gm.waterVariance * 0.5f) * loot;
-            waterText.text = "Agua por coco: " + GameManager.FormatWater(min) + " - " + GameManager.FormatWater(max)
-                           + "\nPromedio: " + GameManager.FormatWater(avg) + "  (x" + loot.ToString("0.##") + " de botin, sin bonos)";
+            float min = combat.baseWaterPerKill * loot;
+            float max = (combat.baseWaterPerKill + combat.waterVariance) * loot;
+            float avg = (combat.baseWaterPerKill + combat.waterVariance * 0.5f) * loot;
+            waterText.text = "Agua por coco: " + ResourcesManager.FormatWater(min) + " - " + ResourcesManager.FormatWater(max)
+                           + "\nPromedio: " + ResourcesManager.FormatWater(avg) + "  (x" + loot.ToString("0.##") + " de botin, sin bonos)";
         }
 
-        GameObject prefab = (type != null && type.prefab != null) ? type.prefab : sp.coconutPrefab;
+        GameObject prefab = type.prefab != null ? type.prefab : sp.coconutPrefab;
         BuildPreview(prefab);
     }
 

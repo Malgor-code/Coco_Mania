@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 2562181136585157165}
   serializedVersion: 2
   m_LocalRotation: {x: -0.2789787, y: -0, z: -0, w: 0.96029735}
-  m_LocalPosition: {x: -0.292, y: 0, z: 0.501}
+  m_LocalPosition: {x: -0.308, y: 0.009, z: 0.433}
   m_LocalScale: {x: 0.7266959, y: 1.1440066, z: 1.1440066}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -497,6 +497,8 @@ MonoBehaviour:
   maxScale: 1.5
   hitParticles: {fileID: 5980502239318536123, guid: d6cb673a25662df409ba2177ec06df6e, type: 3}
   deathParticles: {fileID: 1378310280763612009, guid: 0dd212a7025de2d4f90c4721db94138f, type: 3}
+  hitShake: 0.25
+  killShake: 0.5
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1
@@ -505,37 +507,6 @@ MonoBehaviour:
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10
   coinPopForce: 3
-  abilitySettings:
-    resistenteReduction: 0.3
-    armaduraReduction: 0.5
-    diamanteReduction: 0.75
-    diamanteCritMultiplier: 4
-    fibraStackPerHit: 0.05
-    fibraMaxStack: 0.25
-    fibraResetTime: 1.5
-    tenazHpThreshold: 0.3
-    tenazReduction: 0.25
-    reboteHitsPerTrigger: 5
-    reboteStaminaPenalty: 2
-    fortificadoNormalDuration: 4
-    fortificadoBuffDuration: 3
-    fortificadoReduction: 0.4
-    fortificadoDarken: 0.45
-    implacableHitsToTrigger: 4
-    implacableWindow: 2
-    implacableBuffDuration: 2
-    implacableReduction: 0.3
-    regenDelayAfterHit: 2
-    regenPercentPerSecond: 0.03
-    supremoPhase2RegenPercent: 0.015
-    camuflajeVisibleDuration: 3
-    camuflajeHiddenDuration: 2
-    camuflajeHiddenAlpha: 0.2
-    maldicionDuration: 6
-    supremoPhase2Hp: 0.7
-    supremoPhase3Hp: 0.3
-    supremoPhase1Reduction: 0.2
-    supremoPhase3Reduction: 0.35
   hp: 0
   hpMax: 0
   lastDamageTaken: 0
@@ -1049,7 +1020,12 @@ PrefabInstance:
     - {fileID: 704204481458553677, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
     - {fileID: 853628309523988849, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
     - {fileID: 6359792054151030455, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 845200043176614844, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+    - {fileID: 5961622111361189523, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+    - {fileID: 3789858695164534753, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+    - {fileID: 1502954300602927469, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
+    - {fileID: 8119404970426376825, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7277193812552927785, guid: b82f9449b1725c74ba51c6b9a097b309, type: 3}
       insertIndex: -1

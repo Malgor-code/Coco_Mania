@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 02_CocoCorreoso
+  m_EditorClassIdentifier: 
+  typeName: Coco Correoso
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
+  phrase: Mas duro de roer que una suela vieja.
+  unlockCycle: 3
+  baseHpMultiplier: 6
+  passive: {fileID: 11400000, guid: 4885555f00e5c5b41becb334b5c059b9, type: 2}
+  abilityName: Resistente
+  abilityDescription: "Recibe 30% menos de da\xF1o de los golpes normales. Los criticos
+    lo ignoran."
+  moveStyle: 2

@@ -261,9 +261,9 @@ public class CoconutGallery3D : MonoBehaviour
         RestoreUI();
         if (infoPanel != null) infoPanel.SetActive(infoPanelWasActive);
         if (hintObject != null) hintObject.SetActive(hintWasActive);
-        if (GameManager.Instance != null)
+        if (GameUI.Instance != null)
         {
-            GameManager.Instance.RefreshAllUI();
+            GameUI.Instance.RefreshAllUI();
             StartCoroutine(RefreshUINextFrame());
         }
     }
@@ -284,8 +284,7 @@ public class CoconutGallery3D : MonoBehaviour
 
     void TrackMaxCycle()
     {
-        if (GameManager.Instance == null) return;
-        int cycle = GameManager.Instance.billCycle;
+        int cycle = DebtManager.Instance.BillCycle;
         if (cycle > maxCycleReached)
         {
             maxCycleReached = cycle;
@@ -293,14 +292,13 @@ public class CoconutGallery3D : MonoBehaviour
             if (isOpen) { RefreshLockState(); shownIndex = -1; }
         }
     }
-
     int GetRequiredCycle(int i)
     {
-        var gm = GameManager.Instance;
-        bool hasThreshold = gm != null && i < gm.coconutUnlocks.Count;
-        return hasThreshold ? gm.coconutUnlocks[i].cycleRequired : (i == 0 ? 1 : int.MaxValue);
+        var sp = CoconutSpawner.Instance;
+        if (sp != null && i >= 0 && i < sp.coconutTypes.Count && sp.coconutTypes[i] != null)
+            return sp.coconutTypes[i].unlockCycle;
+        return i == 0 ? 1 : int.MaxValue;
     }
-
     bool IsUnlocked(int i)
     {
         return maxCycleReached >= GetRequiredCycle(i);
@@ -325,7 +323,7 @@ public class CoconutGallery3D : MonoBehaviour
         shownIndex = index;
         if (infoPanel == null) return;
 
-        CoconutTypeData type = CoconutSpawner.Instance.coconutTypes[index];
+        CoconutTypeSO type = CoconutSpawner.Instance.coconutTypes[index];
         bool unlocked = IsUnlocked(index);
 
         SetText(titleObject, unlocked ? type.typeName : "???");
@@ -339,18 +337,18 @@ public class CoconutGallery3D : MonoBehaviour
         }
     }
 
-    string GetDescriptionText(CoconutTypeData type)
+    string GetDescriptionText(CoconutTypeSO type)
     {
-        return "Vida: x" + type.hpMultiplier.ToString("0.##") +
+        return "Vida: x" + type.HpMultiplier(CoconutSpawner.Instance.hpBoost).ToString("0.##") +
                "\nAparece desde el ciclo " + GetRequiredCycle(index);
     }
-
-    string GetPriceText(CoconutTypeData type)
+    string GetPriceText(CoconutTypeSO type)
     {
-        return "Botín: x" + type.lootMultiplier.ToString("0.##");
+        var sp = CoconutSpawner.Instance;
+        return "Botín: x" + type.LootMultiplier(sp.lootBase, sp.lootExponent).ToString("0.##");
     }
 
-    void ResolveInfoObjects()
+        void ResolveInfoObjects()
     {
         if (infoResolved || infoPanel == null) return;
         infoResolved = true;
@@ -456,7 +454,7 @@ public class CoconutGallery3D : MonoBehaviour
 
     GameObject CreateModel(CoconutSpawner spawner, int i, Transform parent)
     {
-        CoconutTypeData type = spawner.coconutTypes[i];
+        CoconutTypeSO type = spawner.coconutTypes[i];
         GameObject prefab = (type != null && type.prefab != null) ? type.prefab : spawner.coconutPrefab;
 
         if (prefab != null) return Instantiate(prefab, parent);
@@ -519,6 +517,6 @@ public class CoconutGallery3D : MonoBehaviour
     System.Collections.IEnumerator RefreshUINextFrame()
     {
         yield return null;
-        if (GameManager.Instance != null) GameManager.Instance.RefreshAllUI();
+        if (GameUI.Instance != null) GameUI.Instance.RefreshAllUI();
     }
 }

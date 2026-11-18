@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 01_CocoMaduro
+  m_EditorClassIdentifier: 
+  typeName: Coco Maduro
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
+  phrase: Ya probo el sol. Dicen que su agua sabe a gloria.
+  unlockCycle: 2
+  baseHpMultiplier: 2.2
+  passive: {fileID: 0}
+  abilityName: Generoso
+  abilityDescription: Suelta mas agua que los cocos comunes.
+  moveStyle: 1

@@ -215,8 +215,11 @@ public class MacheteController : MonoBehaviour
 
     void Update()
     {
-        bool hitting = GameManager.Instance != null && GameManager.Instance.IsHittingPhase();
-        bool gameStarted = GameManager.Instance != null && GameManager.Instance.currentPhase != GameManager.Phase.MainMenu;
+        if (GameManager.IsPaused) return;
+
+        RunManager run = RunManager.Instance;
+        bool hitting = run.IsHitting;
+        bool gameStarted = run.Phase != RunPhase.MainMenu;
 
         if (gameStarted)
         {
@@ -288,10 +291,7 @@ public class MacheteController : MonoBehaviour
         timer = 0f;
         impactPending = false;
         if (impactRoutine != null) { StopCoroutine(impactRoutine); impactRoutine = null; }
-
-        if (GameManager.Instance != null)
-            EquipModel(GameManager.Instance.equippedMacheteIndex);
-
+        EquipModel(MacheteShopManager.Instance.EquippedIndex);
         if (animator != null) SetAnimSpeed(1f);
     }
     
@@ -330,7 +330,7 @@ public class MacheteController : MonoBehaviour
 
     IEnumerator ImpactAfterDelay(float delay)
     {
-        if (delay > 0f) yield return new WaitForSeconds(delay);
+        if (delay > 0f) yield return new WaitForGameSeconds(delay);
         impactRoutine = null;
         if (impactPending)
         {
@@ -366,30 +366,20 @@ public class MacheteController : MonoBehaviour
                 Vector3 b = coco.GetClosestHitPoint(transform.position); b.y = 0f;
                 if ((a - b).sqrMagnitude <= radiusSqr) targets.Add(coco);
             }
-
-            if (GameManager.Instance != null)
-                multiHitMult = GameManager.Instance.GetMultiHitMultiplier(targets.Count);
-
+            multiHitMult = CombatManager.Instance.GetMultiHitMultiplier(targets.Count);
             foreach (var coco in targets)
             {
                 if (coco == null) continue;
 
                 int finalDamage = damageOverride;
                 bool isCritical = false;
-
-                if (GameManager.Instance != null)
-                {
-                    isCritical = Random.value < GameManager.Instance.GetCritChance();
-                    float dmg = finalDamage;
-                    if (isCritical)
-                    {
-                        dmg *= GameManager.Instance.GetCritMultiplier();
-                    }
-                    dmg *= GameManager.Instance.GetStreakDamageMultiplier();
-                    dmg *= multiHitMult;
-                    finalDamage = Mathf.Max(1, Mathf.RoundToInt(dmg));
-                }
-
+                StatsManager stats = StatsManager.Instance;
+                isCritical = Random.value < stats.CritChance;
+                float dmg = finalDamage;
+                if (isCritical) dmg *= stats.CritMultiplier;
+                dmg *= CombatManager.Instance.GetStreakDamageMultiplier();
+                dmg *= multiHitMult;
+                finalDamage = Mathf.Max(1, Mathf.RoundToInt(dmg));
                 bool killed = coco.TakeDamage(finalDamage, isCritical);
                 hitSomething = true;
                 if (killed) killedSomething = true;
@@ -398,10 +388,7 @@ public class MacheteController : MonoBehaviour
             if (multiHitMult > 1f && JuiceManager.Instance != null)
                 JuiceManager.Instance.SpawnDamageNumber(transform.position + Vector3.up * 1.5f, "¡MULTIPLE!", true);
         }
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.RegisterSwingResult(hitSomething);
-
+        CombatManager.Instance.RegisterSwingResult(hitSomething);
         shakeTrauma = Mathf.Clamp01(shakeTrauma + shakeTraumaPerSwing);
 
         if (!hitSomething) TriggerMissFlash();

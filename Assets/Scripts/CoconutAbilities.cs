@@ -270,26 +270,3 @@ public sealed class SupremoAbility : AbilityBehaviour
 
     public override void OnDeath() => host.FloatText("¡DERROTADO!", 1.2f);
 }
-
-public static class AbilityFactory
-{
-    public static AbilityBehaviour Create(GameManager.CoconutAbility type, ICoconutHost h, CoconutAbilitySettings s)
-    {
-        switch (type)
-        {
-            case GameManager.CoconutAbility.Resistente: return new FlatReduction(h, s, s.resistenteReduction);
-            case GameManager.CoconutAbility.Armadura: return new FlatReduction(h, s, s.armaduraReduction);
-            case GameManager.CoconutAbility.FragilValioso: return new FragilValiosoAbility(h, s);
-            case GameManager.CoconutAbility.FibraDura: return new FibraDuraAbility(h, s);
-            case GameManager.CoconutAbility.Tenaz: return new TenazAbility(h, s);
-            case GameManager.CoconutAbility.Rebote: return new ReboteAbility(h, s);
-            case GameManager.CoconutAbility.Fortificado: return new FortificadoAbility(h, s);
-            case GameManager.CoconutAbility.Implacable: return new ImplacableAbility(h, s);
-            case GameManager.CoconutAbility.Regeneracion: return new RegeneracionAbility(h, s);
-            case GameManager.CoconutAbility.Camuflaje: return new CamuflajeAbility(h, s);
-            case GameManager.CoconutAbility.Maldicion: return new MaldicionAbility(h, s);
-            case GameManager.CoconutAbility.Supremo: return new SupremoAbility(h, s);
-            default: return new NoAbility(h, s);
-        }
-    }
-}

@@ -9,7 +9,7 @@ public enum GameState
     MainMenu,
     OnGame,
     OnPause,
-    OnGameOver,   
+    OnGameOver,  
     OnMinigame
 }
 
@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
     public static bool IsPaused => Instance != null && Instance.Current == GameState.OnPause;
     public static bool IsOnGame => Instance != null && Instance.Current == GameState.OnGame;
     public bool CanPause => Current != GameState.MainMenu && Current != GameState.OnPause;
+    bool silentPause;
+    public static bool IsSilentPause => Instance != null && Instance.silentPause;
+    public void PauseSilent() { if (!CanPause) return; silentPause = true; Pause(); }
+    public void ResumeSilent() { if (!silentPause) return; Resume(); }
 
     void Awake()
     {
@@ -39,10 +43,8 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == this) Instance = null;
     }
-
     public static void Request(GameState next) { if (Instance != null) Instance.SetState(next); }
     public static void Force(GameState next) { if (Instance != null) Instance.ForceState(next); }
-
     public bool SetState(GameState next)
     {
         if (next == GameState.OnPause) { Pause(); return true; }
@@ -59,7 +61,6 @@ public class GameManager : MonoBehaviour
         Apply(next);
         return true;
     }
-
     public void ForceState(GameState next)
     {
         if (next == Current) return;
@@ -81,9 +82,9 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame() => Pause();
     public void ResumeGame() => Resume();
-
     void Apply(GameState next)
     {
+        if (next != GameState.OnPause) silentPause = false;
         Previous = Current;
         Current = next;
         if (logTransitions) Debug.Log($"[GameState] {Previous} -> {Current}");
@@ -109,23 +110,6 @@ public class GameManager : MonoBehaviour
 
     public enum Phase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
 
-    public enum CoconutAbility
-    {
-        Ninguna, Generoso, Resistente, FibraDura, Pesado, Tenaz, Armadura, Rebote,
-        Fortificado, Implacable, FragilValioso, Regeneracion, Camuflaje, Maldicion, Supremo
-    }
-
-    [System.Serializable]
-    public class CoconutUnlockThreshold
-    {
-        [HideInInspector] public string coconutName;
-        [HideInInspector] public int cycleRequired;
-        [HideInInspector] public CoconutAbility ability = CoconutAbility.Ninguna;
-
-        public Sprite icon;
-        public GameObject prefab;
-    }
-
     static StatsManager Stats => StatsManager.Instance;
     static ResourcesManager Res => ResourcesManager.Instance;
     static StaminaManager Stam => StaminaManager.Instance;
@@ -137,7 +121,6 @@ public class GameManager : MonoBehaviour
     static DebtManager Debt => DebtManager.Instance;
     static RunManager Run => RunManager.Instance;
     static GameUI Ui => GameUI.Instance;
-
     static float Src(SS s, ST t) => Stats.GetSource(s, t);
     static void Src(SS s, ST t, float v) => Stats.Set(s, t, v);
 
@@ -166,7 +149,6 @@ public class GameManager : MonoBehaviour
     void RelayRunReset(RunReset e) => OnRunReset?.Invoke();
     void RelayRunStarted(RunStarted e) => OnRunStarted?.Invoke();
     void RelayRecaudacionShown(RecaudacionShown e) => OnRecaudacionShown?.Invoke();
-
     public Phase currentPhase => (Phase)(int)Run.Phase;
     public bool IsHittingPhase() => Run.IsHitting;
     public int DaysToPlay => Run.DaysToPlay;
@@ -185,7 +167,6 @@ public class GameManager : MonoBehaviour
     public void PayDebt() => Run.PayDebt();
     public void DeclareBankruptcy() => Run.DeclareBankruptcy();
     public void ContinueAfterBankruptcy() => Run.ContinueAfterBankruptcy();
-
     public bool TimedSpawnUnlocked => Skills.TimedSpawnUnlocked;
     public bool StreakUnlocked => Skills.StreakUnlocked;
     public int GetCoconutHpMax() => Combat.coconutHpMax;
@@ -199,6 +180,7 @@ public class GameManager : MonoBehaviour
         if (WaterJarGroup.Instance == null) return false;
         return WaterJarGroup.Instance.HandleCoconutWater(worldPosition, waterAmountML, deathFx);
     }
+
     public void ToggleUpgradeTreePanel() => Ui.ToggleUpgradeTreePanel();
     public void ToggleTiendaPanel() => Ui.ToggleTiendaPanel();
     public void ToggleRewardMachinePanel() => Ui.ToggleRewardMachinePanel();
@@ -206,10 +188,19 @@ public class GameManager : MonoBehaviour
     public void ChoosePerk(int index) => Ui.ChoosePerk(index);
     public void RefreshAllUI() => Ui.RefreshAllUI();
     public void RecenterUpgradeTree() => Ui.RecenterUpgradeTree();
-    public List<CoconutUnlockThreshold> coconutUnlocks => Ui.coconutUnlocks;
-    public CoconutAbility GetAbilityForCoconutName(string name) => Ui.GetAbilityForCoconutName(name);
-    public CoconutUnlockThreshold GetNextLockedCoconut() => Ui.GetNextLockedCoconut();
+    public CoconutTypeSO GetNextLockedCoconut() => Ui.GetNextLockedCoconut();
     public float GetNextUnlockProgress01() => Ui.GetNextUnlockProgress01();
+    public GameObject machete => Ui.machete;
+    public GameObject gameplayUIPanel => Ui.gameplayUIPanel;
+    public GameObject recaudacionPanel => Ui.recaudacionPanel;
+    public GameObject upgradeTreePanel => Ui.upgradeTreePanel;
+    public GameObject tiendaPanel => Ui.tiendaPanel;
+    public GameObject rewardMachinePanel => Ui.rewardMachinePanel;
+    public GameObject deudaPanel => Ui.deudaPanel;
+    public GameObject perkChoiceUIPanel => Ui.perkChoiceUIPanel;
+    public GameObject betweenRunsPanel => Ui.betweenRunsPanel;
+    public GameObject indicacionesPanel => Ui.indicacionesPanel;
+    public CoconutUnlockPanel unlockPanel => Ui.unlockPanel;
     public void BuyNextMachete() => Machetes.BuyNextMachete();
     public void UnlockSkill(string id) => Skills.UnlockSkill(id);
     public void BuyLegacyItem(string itemName) => Legacy.BuyLegacyItem(itemName);
@@ -218,8 +209,7 @@ public class GameManager : MonoBehaviour
     public void RefreshCombatStats() => Machetes.RecalculateStats();
     public float GetSkillMoneyMultiplierBonusPercent() => Src(SS.Skill, ST.WaterMult) * 100f;
     public float GetSkillWaterMultiplierBonusPercent() => Src(SS.Skill, ST.WaterMult) * 100f;
-
-    public float waterTargetML => Debt.TargetWater; 
+    public float waterTargetML => Debt.TargetWater;  
     public int billCycle { get => Debt.BillCycle; set => Debt.BillCycle = value; }
     public int daysLeft { get => Debt.DaysLeft; set => Debt.DaysLeft = value; }
     public int bestCycleReached { get => Debt.BestCycleReached; set => Debt.BestCycleReached = value; }

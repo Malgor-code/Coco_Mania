@@ -15986,82 +15986,6 @@ MonoBehaviour:
   rewardMachinePanel: {fileID: 973557516}
   unlockPanel: {fileID: 252746841}
   showUnlockOnlyFirstTime: 1
-  coconutUnlocks:
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 21300000, guid: ed0b61a37e52a41448397ba014f25fae, type: 3}
-    prefab: {fileID: 7661746383814953141, guid: 5e5368a603b95d748a65e409dc8584e7, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 21300000, guid: 27572bdccf460d9409da141ad65d8389, type: 3}
-    prefab: {fileID: 7661746383814953141, guid: 28ff903501a77574fb250c3be492d09b, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 21300000, guid: 66837bfcbac599748a182979b8dba938, type: 3}
-    prefab: {fileID: 7661746383814953141, guid: 74421eb7f9827d14c9a7dc8e998098b2, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 21300000, guid: c1edbfdb9234ad9428cdcfb9c5012b0f, type: 3}
-    prefab: {fileID: 7661746383814953141, guid: ab4549adeeeda7c4f989c56377c1e5a5, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 21300000, guid: 3164567e370deca49ac8dddd673afc90, type: 3}
-    prefab: {fileID: 7661746383814953141, guid: a579c54f71954054783c9798d25a769d, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: abfcc7325bdac004cac6a23c69724b7e, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: ae128bee2cf42464ba31ae2424079033, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 9b5d5a75d93ead1458e76860e1b8c9e3, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 8b470863114422a418219efc6d29b188, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 1ad102aec5a349142908aa2eae6510d2, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: d78dd950bf3a79d409c0b2c882ef2ad1, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 2e90e3660b2b5764eb16a2be19419f7b, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 7661746383814953141, guid: 3fe7e8455ce1cba4ba46acf68738728f, type: 3}
-  - coconutName: 
-    cycleRequired: 0
-    ability: 0
-    icon: {fileID: 0}
-    prefab: {fileID: 0}
   panelSwitchBreak: 0.12
   indicacionesPanel: {fileID: 1749301704}
   gameplayUIPanel: {fileID: 1141519674}
@@ -16205,111 +16129,21 @@ MonoBehaviour:
   tierWeightBias: 0
   hpGrowthPerCycle: 1.1
   coconutTypes:
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 37179422e5229964a944b3dbf42bfb67, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: b5e4225a0f3e52744bd103abaf8e505e, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: eae3ef4243c4af749b5dfcc2034a674e, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 659e911e5ec1c054c8a9b6043f55ed22, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: af09a86105d8b3a4bbc5f24b9578fc1c, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 4d82d9fc2c539284fb106017e545dd2a, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: efc534b20f3168848a101a8b53fabe76, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 53ecbc6b3621e0747a2f4397d3600b4c, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 4345fdbc1dccf8e46828aa3b5365b689, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: aa4af4d6bbacbc74893fcc5002c0e66d, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 259be04c3bbf2c04abe99793a5d9a441, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: ab1def44d29e9874aab569c5eb2812b3, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 24b254f27b06baf48bd09b20b5ca3fd3, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: 6e54ae3b42f3f68488de8ce6971d3815, type: 3}
-  - typeName: Coco Verde
-    killsToUnlock: 0
-    hpMultiplier: 1
-    lootMultiplier: 1
-    ability: 0
-    specialAbilityId: 
-    prefab: {fileID: 7661746383814953141, guid: c9c9584c1b976a54e81a54b7e90f131b, type: 3}
+  - {fileID: 11400000, guid: 5555f148e98eb1343b53e48e7845947f, type: 2}
+  - {fileID: 11400000, guid: 76e7915312a8ce6419661b3266d8d0e1, type: 2}
+  - {fileID: 11400000, guid: 6c937c3f8ed8da441aeb013fae49b5e3, type: 2}
+  - {fileID: 11400000, guid: 8cfad38d840ffae46944a3042490bd04, type: 2}
+  - {fileID: 11400000, guid: 7809659792b9f164984ceea3dfec7ea2, type: 2}
+  - {fileID: 11400000, guid: 7f5f08c8a0bc602439fba505114e8562, type: 2}
+  - {fileID: 11400000, guid: 97c34fe30f31a1749a3fbdf6c21a3961, type: 2}
+  - {fileID: 11400000, guid: d0e2c26f0b7fb194caaf43532be20bb7, type: 2}
+  - {fileID: 11400000, guid: a334a1836c397804d8fd148c17ec55c7, type: 2}
+  - {fileID: 11400000, guid: b0464a5b083237b47a7a0a182a3bbe9d, type: 2}
+  - {fileID: 11400000, guid: 78e704d5f6608b945b0398d675c00827, type: 2}
+  - {fileID: 11400000, guid: 10734a87cd14e754bb849f589a5bb532, type: 2}
+  - {fileID: 11400000, guid: c04b29e43ef3e1549ab77cdacc5e8ebf, type: 2}
+  - {fileID: 11400000, guid: 9daab19678fa12742ac7dfea426f2905, type: 2}
+  - {fileID: 11400000, guid: e3f498023395349428b37d696cdd2ce2, type: 2}
 --- !u!114 &252746838
 MonoBehaviour:
   m_ObjectHideFlags: 0

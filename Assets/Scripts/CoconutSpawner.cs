@@ -1,13 +1,14 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Pool;
 
 public class CoconutSpawner : MonoBehaviour
 {
     public static CoconutSpawner Instance;
 
     [Header("Prefab de respaldo (fallback) y area de spawn")]
-    [Tooltip("Se usa SOLO si el tipo elegido (en 'Tipos de coco' abajo) no tiene su propio prefab asignado todavia. Cada tier deberia tener el suyo.")]
+    [Tooltip("Se usa SOLO si el tipo elegido no tiene su propio prefab asignado todavia.")]
     public GameObject coconutPrefab;
     public Transform mapCenter;
     public Vector2 mapHalfExtents = new Vector2(8f, 8f);
@@ -30,7 +31,7 @@ public class CoconutSpawner : MonoBehaviour
     [Range(0.3f, 1f)] public float tierWeightDecay = 0.75f;
     [Tooltip("Peso minimo de cualquier tipo, para que los tipos altos nunca desaparezcan del todo.")]
     [Range(0.01f, 0.5f)] public float minTierWeight = 0.08f;
-    [Tooltip("Maximo de cocos del tipo MAS NUEVO vivos al mismo tiempo. Evita que el tablero se llene de cocos que aun no puedes matar. 0 = sin limite.")]
+    [Tooltip("Maximo de cocos del tipo MAS NUEVO vivos al mismo tiempo. 0 = sin limite.")]
     public int maxNewestTierAlive = 2;
 
     [Header("Recompensa por tipo")]
@@ -41,71 +42,101 @@ public class CoconutSpawner : MonoBehaviour
     [HideInInspector] public float tierWeightBias = 0f;
     [HideInInspector] public float hpGrowthPerCycle = 1f;
 
-    float GetCycleHpMultiplier()
-    {
-        return GameManager.Instance != null ? GameManager.Instance.GetLegacyHpScale() : 1f;
-    }
-    public void SpawnExtraCoconut() { StartCoroutine(SpawnExtraDelayed()); }
-    [Header("Tipos de coco (progresion por ciclo)")]
-    public List<CoconutTypeData> coconutTypes = new List<CoconutTypeData>();
+    [Header("Tipos de coco (en orden de desbloqueo)")]
+    [Tooltip("Se llena con CocoMania > Cocos > 2. Asignar los tipos al CoconutSpawner.")]
+    public List<CoconutTypeSO> coconutTypes = new List<CoconutTypeSO>();
 
     public bool DayActive { get; private set; }
-
-    private float spawnTimer;
-    private readonly List<CoconutTarget> activeCoconuts = new List<CoconutTarget>();
-    private readonly Dictionary<CoconutTarget, int> tierOf = new Dictionary<CoconutTarget, int>();
-    private static readonly CoconutTypeData[] CanonicalTypes = new CoconutTypeData[]
-{
-    new CoconutTypeData { typeName = "Coco Verde",       hpMultiplier = 1f },
-    new CoconutTypeData { typeName = "Coco Maduro",      hpMultiplier = 2.2f },
-    new CoconutTypeData { typeName = "Coco Correoso",    hpMultiplier = 6f },
-    new CoconutTypeData { typeName = "Coco Fibroso",     hpMultiplier = 12f },
-    new CoconutTypeData { typeName = "Coco Petreo",      hpMultiplier = 20f },
-    new CoconutTypeData { typeName = "Coco Curtido",     hpMultiplier = 26f },
-    new CoconutTypeData { typeName = "Coco Blindado",    hpMultiplier = 34f },
-    new CoconutTypeData { typeName = "Coco de Hierro",   hpMultiplier = 46f },
-    new CoconutTypeData { typeName = "Coco de Acero",    hpMultiplier = 58f },
-    new CoconutTypeData { typeName = "Coco de Titanio",  hpMultiplier = 70f },
-    new CoconutTypeData { typeName = "Coco de Diamante", hpMultiplier = 80f },
-    new CoconutTypeData { typeName = "Coco Legendario",  hpMultiplier = 98f },
-    new CoconutTypeData { typeName = "Coco Mitico",      hpMultiplier = 118f },
-    new CoconutTypeData { typeName = "Coco Ancestral",   hpMultiplier = 145f },
-    new CoconutTypeData { typeName = "Coco Supremo",     hpMultiplier = 165f },
-};
-
     public const float BaseSpawnInterval = 10f;
+
+    float spawnTimer;
+    Transform poolRoot;
+    readonly List<CoconutTarget> activeCoconuts = new List<CoconutTarget>();
+    readonly Dictionary<CoconutTarget, int> tierOf = new Dictionary<CoconutTarget, int>();
+    readonly Dictionary<GameObject, ObjectPool<CoconutTarget>> pools = new Dictionary<GameObject, ObjectPool<CoconutTarget>>();
+    readonly Dictionary<CoconutTarget, ObjectPool<CoconutTarget>> poolOf = new Dictionary<CoconutTarget, ObjectPool<CoconutTarget>>();
+    readonly HashSet<CoconutTarget> dying = new HashSet<CoconutTarget>();
 
     void Awake()
     {
         Instance = this;
         spawnInterval = BaseSpawnInterval;
-        StampCanonicalData();
+        poolRoot = new GameObject("CoconutPool").transform;
     }
 
-    void StampCanonicalData()
+    void OnDestroy()
     {
-        if (coconutTypes == null) coconutTypes = new List<CoconutTypeData>();
+        if (Instance == this) Instance = null;
+        if (poolRoot != null) Destroy(poolRoot.gameObject);
+    }
 
-        while (coconutTypes.Count < CanonicalTypes.Length)
-            coconutTypes.Add(new CoconutTypeData());
+    ObjectPool<CoconutTarget> GetPool(GameObject prefab)
+    {
+        if (pools.TryGetValue(prefab, out ObjectPool<CoconutTarget> pool)) return pool;
 
-        for (int i = 0; i < CanonicalTypes.Length; i++)
+        pool = new ObjectPool<CoconutTarget>(
+            createFunc: () => CreateInstance(prefab),
+            actionOnGet: c => c.gameObject.SetActive(true),
+            actionOnRelease: c => c.gameObject.SetActive(false),
+            actionOnDestroy: c => { if (c != null) Destroy(c.gameObject); },
+            collectionCheck: false,
+            defaultCapacity: 8,
+            maxSize: 64);
+        pools[prefab] = pool;
+        return pool;
+    }
+
+    CoconutTarget CreateInstance(GameObject prefab)
+    {
+        GameObject go = Instantiate(prefab, poolRoot);
+        return EnsureCoconutComponents(go);
+    }
+
+    CoconutTarget EnsureCoconutComponents(GameObject go)
+    {
+        if (go.GetComponent<CoconutWander>() == null) go.AddComponent<CoconutWander>();
+
+        CoconutTarget target = go.GetComponent<CoconutTarget>();
+        if (target == null) target = go.AddComponent<CoconutTarget>();
+        return target;
+    }
+
+    void ReleaseNow(CoconutTarget c)
+    {
+        if (c == null) return;
+        if (poolOf.TryGetValue(c, out ObjectPool<CoconutTarget> pool))
         {
-            GameObject keepPrefab = coconutTypes[i].prefab;
-            float baseHp = CanonicalTypes[i].hpMultiplier;
-            coconutTypes[i].typeName = CanonicalTypes[i].typeName;
-            coconutTypes[i].hpMultiplier = baseHp * hpBoost;
-            coconutTypes[i].lootMultiplier = lootBase * Mathf.Pow(baseHp, lootExponent);
-            coconutTypes[i].prefab = keepPrefab;
+            poolOf.Remove(c);
+            pool.Release(c);
+        }
+        else
+        {
+            Destroy(c.gameObject);
         }
     }
 
+    public void ReleaseDelayed(CoconutTarget c, float delay)
+    {
+        if (c == null) return;
+        dying.Add(c);
+        StartCoroutine(ReleaseRoutine(c, delay));
+    }
+
+    IEnumerator ReleaseRoutine(CoconutTarget c, float delay)
+    {
+        yield return new WaitForGameSeconds(delay);
+        if (dying.Remove(c)) ReleaseNow(c);
+    }
+
+    void ReleaseDying()
+    {
+        foreach (var c in dying) ReleaseNow(c);
+        dying.Clear();
+    }
     public void StartNewDay()
     {
-        for (int i = activeCoconuts.Count - 1; i >= 0; i--)
-        {
-            if (activeCoconuts[i] != null) Destroy(activeCoconuts[i].gameObject);
-        }
+        ReleaseDying();
+        for (int i = activeCoconuts.Count - 1; i >= 0; i--) ReleaseNow(activeCoconuts[i]);
         activeCoconuts.Clear();
         tierOf.Clear();
         spawnTimer = 0f;
@@ -114,21 +145,33 @@ public class CoconutSpawner : MonoBehaviour
         DayActive = true;
         StartCoroutine(SpawnStartingCoconutsSequenced());
     }
+
+    public void ClearAllCoconuts()
+    {
+        DayActive = false;
+        for (int i = activeCoconuts.Count - 1; i >= 0; i--) ReleaseNow(activeCoconuts[i]);
+        activeCoconuts.Clear();
+        tierOf.Clear();
+    }
+
+    public void SpawnExtraCoconut() { StartCoroutine(SpawnExtraDelayed()); }
+
     IEnumerator SpawnExtraDelayed()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForGameSeconds(0.3f);
         if (!DayActive) yield break;
-        if (GameManager.Instance == null || !GameManager.Instance.IsHittingPhase()) yield break;
+        if (!RunManager.Instance.IsHitting) yield break;
         if (activeCoconuts.Count >= maxCoconuts) yield break;
         SpawnOne();
     }
+
     IEnumerator SpawnStartingCoconutsSequenced()
     {
         for (int i = 0; i < startingCoconuts; i++)
         {
             SpawnOne();
             if (i < startingCoconuts - 1 && startSpawnStagger > 0f)
-                yield return new WaitForSeconds(startSpawnStagger);
+                yield return new WaitForGameSeconds(startSpawnStagger);
         }
 
         OnInitialSpawnComplete?.Invoke();
@@ -136,7 +179,8 @@ public class CoconutSpawner : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance == null || !GameManager.Instance.IsHittingPhase()) return;
+        if (GameManager.IsPaused) return;
+        if (!RunManager.Instance.IsHitting) return;
 
         activeCoconuts.RemoveAll(c => c == null);
         if (tierOf.Count > activeCoconuts.Count + 16) CleanTierMap();
@@ -147,7 +191,7 @@ public class CoconutSpawner : MonoBehaviour
             spawnTimer = 0f;
             return;
         }
-        if (!GameManager.Instance.TimedSpawnUnlocked) return;
+        if (!SkillTreeManager.Instance.TimedSpawnUnlocked) return;
 
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= Mathf.Max(0.3f, spawnInterval) && activeCoconuts.Count < maxCoconuts)
@@ -157,21 +201,9 @@ public class CoconutSpawner : MonoBehaviour
         }
     }
 
-    public void ClearAllCoconuts()
-    {
-        DayActive = false;
-        foreach (var coco in GetActiveCoconuts())
-        {
-            if (coco != null) Destroy(coco.gameObject);
-        }
-        activeCoconuts.Clear();
-        tierOf.Clear();
-    }
-
     void SpawnOne()
     {
-        int tierIndex;
-        CoconutTypeData chosenType = PickTypeToSpawn(out tierIndex);
+        CoconutTypeSO chosenType = PickTypeToSpawn(out int tierIndex);
 
         GameObject prefabToUse = (chosenType != null && chosenType.prefab != null) ? chosenType.prefab : coconutPrefab;
         if (prefabToUse == null) return;
@@ -179,47 +211,40 @@ public class CoconutSpawner : MonoBehaviour
         Vector3 center = mapCenter != null ? mapCenter.position : Vector3.zero;
         Vector3 pos = PickSpawnPosition(center);
         pos.y = prefabToUse.transform.position.y;
-        GameObject go = Instantiate(prefabToUse, pos, Quaternion.identity);
-        CoconutTarget target = EnsureCoconutComponents(go);
-        target.ApplyType(chosenType, GetCycleHpMultiplier());
+
+        ObjectPool<CoconutTarget> pool = GetPool(prefabToUse);
+        CoconutTarget target = pool.Get();
+        poolOf[target] = pool;
+        target.transform.SetPositionAndRotation(pos, Quaternion.identity);
+
+        float hpMult = chosenType != null ? chosenType.HpMultiplier(hpBoost) : hpBoost;
+        float loot = chosenType != null ? chosenType.LootMultiplier(lootBase, lootExponent) : lootBase;
+        target.ApplyType(chosenType, hpMult, loot, LegacyManager.Instance.CurrentHpScale);
+
         activeCoconuts.Add(target);
         tierOf[target] = tierIndex;
 
-        CoconutWander wander = go.GetComponent<CoconutWander>();
+        CoconutWander wander = target.GetComponent<CoconutWander>();
         if (wander != null) wander.SetBounds(center, mapHalfExtents);
     }
 
-    CoconutTarget EnsureCoconutComponents(GameObject go)
+    CoconutTypeSO PickTypeToSpawn(out int chosenIndex)
     {
-        if (go.GetComponent<CoconutWander>() == null)
-        {
-            go.AddComponent<CoconutWander>();
-        }
-
-        CoconutTarget target = go.GetComponent<CoconutTarget>();
-        if (target == null)
-        {
-            target = go.AddComponent<CoconutTarget>();
-        }
-
-        return target;
-    }
-    CoconutTypeData PickTypeToSpawn(out int chosenIndex)
-    {
-        int cycle = GameManager.Instance != null ? GameManager.Instance.billCycle : 1;
+        int cycle = DebtManager.Instance.BillCycle;
         List<int> unlocked = new List<int>();
 
         for (int i = 0; i < coconutTypes.Count; i++)
         {
-            bool hasThreshold = GameManager.Instance != null && i < GameManager.Instance.coconutUnlocks.Count;
-            int required = hasThreshold ? GameManager.Instance.coconutUnlocks[i].cycleRequired : (i == 0 ? 1 : int.MaxValue);
+            CoconutTypeSO t = coconutTypes[i];
+            if (t == null) continue;
+            int required = i == 0 ? 1 : t.unlockCycle;
             if (cycle >= required) unlocked.Add(i);
         }
 
         if (unlocked.Count == 0)
         {
             chosenIndex = coconutTypes.Count > 0 ? 0 : -1;
-            return coconutTypes.Count > 0 ? coconutTypes[0] : new CoconutTypeData();
+            return coconutTypes.Count > 0 ? coconutTypes[0] : null;
         }
 
         if (unlocked.Count == 1)
@@ -285,6 +310,7 @@ public class CoconutSpawner : MonoBehaviour
     {
         return new List<CoconutTarget>(activeCoconuts);
     }
+
     Vector3 PickSpawnPosition(Vector3 center)
     {
         Vector3 best = center;

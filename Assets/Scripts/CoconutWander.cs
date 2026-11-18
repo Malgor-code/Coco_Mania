@@ -179,8 +179,11 @@ public class CoconutWander : MonoBehaviour
         axisX = Random.value < 0.5f;
         zigLegs = 0; bossLegs = 0; patrolIndex = 0;
         if (tgt == null) tgt = GetComponent<CoconutTarget>();
-        GameManager.CoconutAbility ability = tgt != null ? tgt.ability : GameManager.CoconutAbility.Ninguna;
-        style = StyleFromAbility(ability);
+        style = (tgt != null && tgt.Type != null) ? tgt.Type.moveStyle : MoveStyle.Despreocupado;
+        stunUntil = -1f;
+        fleeUntil = -1f;
+        hopping = false;
+        hopOffset = 0f;
         ConfigureStyle();
 
         if (style == MoveStyle.Vigilante)
@@ -191,28 +194,6 @@ public class CoconutWander : MonoBehaviour
 
         state = State.Idle;
         timer = Random.Range(0f, 0.6f);
-    }
-
-    static MoveStyle StyleFromAbility(GameManager.CoconutAbility a)
-    {
-        switch (a)
-        {
-            case GameManager.CoconutAbility.Generoso: return MoveStyle.Perezoso;
-            case GameManager.CoconutAbility.Resistente: return MoveStyle.Terco;
-            case GameManager.CoconutAbility.FibraDura: return MoveStyle.Nervioso;
-            case GameManager.CoconutAbility.Pesado: return MoveStyle.Rodante;
-            case GameManager.CoconutAbility.Tenaz: return MoveStyle.Persistente;
-            case GameManager.CoconutAbility.Armadura: return MoveStyle.Vigilante;
-            case GameManager.CoconutAbility.Rebote: return MoveStyle.Saltarin;
-            case GameManager.CoconutAbility.Fortificado: return MoveStyle.Robotico;
-            case GameManager.CoconutAbility.Implacable: return MoveStyle.Implacable;
-            case GameManager.CoconutAbility.FragilValioso: return MoveStyle.Asustadizo;
-            case GameManager.CoconutAbility.Regeneracion: return MoveStyle.Huidizo;
-            case GameManager.CoconutAbility.Camuflaje: return MoveStyle.Sigiloso;
-            case GameManager.CoconutAbility.Maldicion: return MoveStyle.Embrujado;
-            case GameManager.CoconutAbility.Supremo: return MoveStyle.Jefe;
-            default: return MoveStyle.Despreocupado;
-        }
     }
     void ConfigureStyle()
     {
@@ -251,11 +232,11 @@ public class CoconutWander : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (GameManager.IsPaused) return;
         if (!initialized) Init();
-
         float dt = Time.fixedDeltaTime;
         if (dt <= 0f) return;
-        bool hitting = GameManager.Instance == null || GameManager.Instance.IsHittingPhase();
+        bool hitting = RunManager.Instance.IsHitting;
         bool dayActive = CoconutSpawner.Instance != null && CoconutSpawner.Instance.DayActive;
         bool active = hitting || dayActive;
 

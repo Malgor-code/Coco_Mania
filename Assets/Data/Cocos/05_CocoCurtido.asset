@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b236381a7548a04087d497d7ab713e4, type: 3}
+  m_Name: 05_CocoCurtido
+  m_EditorClassIdentifier: 
+  typeName: Coco Curtido
+  icon: {fileID: 0}
+  prefab: {fileID: 7661746383814953141, guid: aa4af4d6bbacbc74893fcc5002c0e66d, type: 3}
+  phrase: Ha visto mil dias de sol y ningun machete lo asusta.
+  unlockCycle: 6
+  baseHpMultiplier: 26
+  passive: {fileID: 11400000, guid: f13e82f53bf21114b9ad3b7a90e8cbf2, type: 2}
+  abilityName: Tenaz
+  abilityDescription: "Con menos de 30% de vida se aferra y recibe 25% menos de da\xF1o."
+  moveStyle: 5
