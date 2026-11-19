@@ -21,7 +21,7 @@ public class PerkManager : MonoBehaviour
 
     public List<PerkOption> Pool => GameData.Perks;
     public Dictionary<string, int> Copies { get; } = new Dictionary<string, int>();
-
+    public List<string> Chosen { get; } = new List<string>();
     public PerkOption[] CurrentChoices { get; set; } = new PerkOption[3];
     public int PendingOffers { get; set; }
 
@@ -57,12 +57,27 @@ public class PerkManager : MonoBehaviour
     public void ResetRun()
     {
         Copies.Clear();
+        Chosen.Clear();
         PendingOffers = 0;
     }
 
     public void RegisterChosen(string perkName)
     {
         Copies[perkName] = Copies.ContainsKey(perkName) ? Copies[perkName] + 1 : 1;
+        Chosen.Add(perkName);
+    }
+    public void RestoreChosen(IEnumerable<string> names)
+    {
+        Copies.Clear();
+        Chosen.Clear();
+        if (names == null) return;
+        foreach (string n in names)
+        {
+            PerkOption perk = Pool.Find(x => x.perkName == n);
+            if (perk == null) continue;
+            RegisterChosen(n);
+            Apply(perk);
+        }
     }
 
     public PerkOption[] PickRandom(int count, int billCycle)

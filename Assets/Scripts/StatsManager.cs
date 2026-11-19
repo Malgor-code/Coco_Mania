@@ -76,7 +76,18 @@ public class StatsManager : MonoBehaviour
         int si = (int)s;
         for (int t = 0; t < TypeCount; t++) values[si, t] = 0f;
     }
-
+    public float[] ExportSource(StatSource s)
+    {
+        float[] arr = new float[TypeCount];
+        for (int t = 0; t < TypeCount; t++) arr[t] = values[(int)s, t];
+        return arr;
+    }
+    public void ImportSource(StatSource s, float[] arr)
+    {
+        if (arr == null) return;
+        int n = Mathf.Min(arr.Length, TypeCount);
+        for (int t = 0; t < n; t++) values[(int)s, t] = arr[t];
+    }
     public void ResetRunSources()
     {
         ClearSource(StatSource.Skill);
@@ -85,7 +96,6 @@ public class StatsManager : MonoBehaviour
         perkWaterMultiplicative = 1f;
         ClearCurse();
     }
-
     public float Passive(MachetePassive p)
     {
         return (CurrentMachete != null && CurrentMachete.passive == p) ? CurrentMachete.passiveValue : 0f;
@@ -106,7 +116,6 @@ public class StatsManager : MonoBehaviour
         return baseSwing - Get(StatType.SwingReduction) + curseSwingPenalty
              - (includeLastBreath && lastBreathSwingActive ? Get(StatType.LastBreathSwing) : 0f);
     }
-
     public void Recalculate(MacheteData machete)
     {
         CurrentMachete = machete;
@@ -123,6 +132,7 @@ public class StatsManager : MonoBehaviour
             mc.swingInterval = Mathf.Max(SwingFloor, RawSwingInterval(true));
         }
     }
+
     public void ApplyTemporaryCurse(float durationSeconds)
     {
         StartCoroutine(TemporaryCurseRoutine(durationSeconds));

@@ -9,7 +9,7 @@ public static class DefaultGameData
     public static List<PerkOption> perkPool;
     public static List<LegacyItem> legacyShop;
     public static bool forceDefaultData = true;
-    public static bool autoTreeCosts = true;
+    public static bool autoTreeCosts = false;
     public static float treeCostBase = 100f;
     public static float treeCostGrowth = 3f;
     public static float treeCostGrowthLate = 2.5f;

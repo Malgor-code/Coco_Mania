@@ -7,6 +7,10 @@ using static MacheteData;
 
 public enum RunPhase { MainMenu, Hitting, Shop, PerkChoice, BetweenRuns }
 
+/// <summary>
+/// Flujo de la partida: dias, recaudacion, deuda, bancarrota, perks, reanudar/reiniciar y guardado.
+/// No toca paneles: le pide pantallas a la UI con ScreenRequested.
+/// </summary>
 public class RunManager : MonoBehaviour
 {
     static RunManager instance;
@@ -33,6 +37,9 @@ public class RunManager : MonoBehaviour
     public bool ForcedDecision { get; private set; }
     public bool SkipNextDayDecrement { get; set; }
     public int RunDayCount { get; set; }
+    /// <summary>True mientras corre un minijuego/evento entre dos dias.</summary>
+    public bool InEvent { get; private set; }
+    bool dayStarting;
 
     int recordAtRunStart = 1;
     RunPhase phaseBeforeMenu = RunPhase.MainMenu;
@@ -47,6 +54,9 @@ public class RunManager : MonoBehaviour
     static int LegacyStartingMachete => Mathf.RoundToInt(Stats.GetSource(SS.Legacy, ST.StartingMachete));
     static int LegacyStartingCoconuts => Mathf.RoundToInt(Stats.GetSource(SS.Legacy, ST.StartingCoconuts));
 
+    // ------------------------------------------------------------------
+    // Ciclo de vida
+    // ------------------------------------------------------------------
     void Awake()
     {
         if (instance != null && instance != this) { Destroy(this); return; }
@@ -76,7 +86,7 @@ public class RunManager : MonoBehaviour
 
     void Start()
     {
-        LoadGame();
+        SaveManager.LoadAll();
         Machetes.RecalculateStats();
     }
 
@@ -107,11 +117,15 @@ public class RunManager : MonoBehaviour
     void OnApplicationQuit() { SaveGame(); }
     void OnApplicationPause(bool paused) { if (paused) SaveGame(); }
 
+    // ---- Reacciones a compras ----
     void OnSkillUnlocked(SkillUnlocked e) { BetaLogger.Log("skill_" + e.Id); AchievementTracker.Check(); }
     void OnMacheteBought(MacheteBought e) { BetaLogger.Log("machete_" + e.Index); AchievementTracker.Check(); }
     void OnLegacyPurchased(LegacyPurchased e) { SaveGame(); AchievementTracker.Check(); }
     void OnDebtPaid(DebtPaid e) { AchievementTracker.Check(); }
 
+    // ------------------------------------------------------------------
+    // Inicio de partida y del dia
+    // ------------------------------------------------------------------
     public void BeginNewGame()
     {
         GameManager.Request(GameState.OnGame);
@@ -133,6 +147,7 @@ public class RunManager : MonoBehaviour
     void StartDay()
     {
         RunDayCount++;
+        dayStarting = true;
         Combat.ResetDay();
         Combat.StreakForgivesLeft = Mathf.RoundToInt(Stats.GetSource(SS.Skill, ST.StreakForgives));
         Stamina.ResetDay();
@@ -163,9 +178,11 @@ public class RunManager : MonoBehaviour
     void ActivateHittingPhase()
     {
         Phase = RunPhase.Hitting;
+        dayStarting = false;
         EventBus.Publish(new ScreenRequested(UIScreen.HittingActive));
         Machetes.RecalculateStats();
         EventBus.Publish(new DayStarted(RunDayCount));
+        SaveGame();
     }
 
     void EnterRecaudacionPhase()
@@ -215,6 +232,7 @@ public class RunManager : MonoBehaviour
     void BeginEventPhase()
     {
         GameManager.Request(GameState.OnMinigame);
+        InEvent = true;
         Phase = RunPhase.Shop;
         EventBus.Publish(new ScreenRequested(UIScreen.Event));
         GameLog.Say("¡Evento especial!");
@@ -223,6 +241,7 @@ public class RunManager : MonoBehaviour
     void StartDayAfterEvent()
     {
         GameManager.Request(GameState.OnGame);
+        InEvent = false;
         Stamina.Current = Stats.StaminaMax;
         StartDay();
     }
@@ -317,6 +336,7 @@ public class RunManager : MonoBehaviour
         }
         EventBus.Publish(new ScreenRequested(UIScreen.PerkChoice));
     }
+
     public void CompletePerkChoice(int index)
     {
         PerkOption[] choices = Perks.CurrentChoices;
@@ -462,6 +482,7 @@ public class RunManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
     void ResetRunState()
     {
         Debt.ResetRun();
@@ -470,7 +491,7 @@ public class RunManager : MonoBehaviour
 
         Skills.ResetRun();
         Perks.ResetRun();
-        Stats.ResetRunSources();
+        Stats.ResetRunSources(); 
 
         RunDayCount = 0;
         Machetes.EquippedIndex = LegacyStartingMachete;
@@ -484,52 +505,58 @@ public class RunManager : MonoBehaviour
         ForcedDecision = false;
         Machetes.RecalculateStats();
     }
+    void SaveGame() => SaveManager.SaveNow();
 
-    void SaveGame()
+    public void CaptureRun(GameSaveData d)
     {
-        SaveData d = new SaveData
-        {
-            legacyPoints = Legacy.Points,
-            totalLegacyPointsEarned = Legacy.TotalEarned,
-            coconutCoins = Res.Coins,
-            bestRunKills = Combat.bestRunKills,
-            bestCycleReached = Debt.BestCycleReached,
-            purchasedLegacyItems = new List<string>(Legacy.Purchased)
-        };
-        SaveSystem.Save(d);
+        RunPhase effective = dayStarting ? RunPhase.Hitting
+                           : (Phase != RunPhase.MainMenu ? Phase : phaseBeforeMenu);
+        d.hasRun = effective != RunPhase.MainMenu;
+        if (!d.hasRun) return;
+
+        d.runPhase = (int)effective;
+        d.forcedDecision = ForcedDecision;
+        d.skipNextDayDecrement = SkipNextDayDecrement || InEvent; 
+        d.runDayCount = RunDayCount;
+        d.billCycle = Debt.BillCycle;
+        d.daysLeft = Debt.DaysLeft;
+        d.victoryAwarded = Debt.VictoryAwarded;
+        d.water = Res.Water;
+        d.equippedMachete = Machetes.EquippedIndex;
+        d.runCoconutsKilled = Combat.runCoconutsKilled;
+        d.runMoneyEarned = Combat.runMoneyEarned;
+        d.totalCoconutsKilled = Combat.totalCoconutsKilled;
+        d.pendingPerkOffers = Perks.PendingOffers;
+        d.unlockedSkills = new List<string>(Skills.Unlocked);
+        d.chosenPerks = new List<string>(Perks.Chosen);
+        d.relicStats = Stats.ExportSource(SS.Relic);
     }
 
-    void LoadGame()
+    public void RestoreRun(GameSaveData d)
     {
-        SaveData d = SaveSystem.Load();
-        if (d == null) return;
+        if (!d.hasRun) return;
 
-        Legacy.Points = d.legacyPoints;
-        Legacy.TotalEarned = d.totalLegacyPointsEarned;
-        Res.SetCoins(d.coconutCoins);
-        Combat.bestRunKills = d.bestRunKills;
-        Debt.BestCycleReached = Mathf.Max(1, d.bestCycleReached);
-
-        Stats.ClearSource(SS.Legacy);
-        Machetes.EquippedIndex = 0;
-        Stats.coinDropChance = 0.005f;
-        if (CoconutSpawner.Instance != null) CoconutSpawner.Instance.startingCoconuts = 4;
-
-        Legacy.Purchased.Clear();
-        if (d.purchasedLegacyItems != null)
-        {
-            foreach (string name in d.purchasedLegacyItems)
-            {
-                LegacyItem item = Legacy.GetItem(name);
-                if (item == null) continue;
-                Legacy.Purchased.Add(name);
-                Legacy.ApplyEffect(item);
-            }
-        }
-        Legacy.RecalcMultiplier();
+        ResetRunState(); 
+        Debt.BillCycle = Mathf.Max(1, d.billCycle);
+        Debt.DaysLeft = d.daysLeft;
+        Debt.VictoryAwarded = d.victoryAwarded;
+        Res.SetWater(d.water);
+        RunDayCount = d.runDayCount;
+        SkipNextDayDecrement = d.skipNextDayDecrement;
+        ForcedDecision = d.forcedDecision;
+        Machetes.EquippedIndex = d.equippedMachete;
+        Combat.runCoconutsKilled = d.runCoconutsKilled;
+        Combat.runMoneyEarned = d.runMoneyEarned;
+        Combat.totalCoconutsKilled = d.totalCoconutsKilled;
+        Skills.RestoreUnlocked(d.unlockedSkills);
+        Perks.RestoreChosen(d.chosenPerks);
+        Perks.PendingOffers = d.pendingPerkOffers;
+        Stats.ImportSource(SS.Relic, d.relicStats);
         Machetes.RecalculateStats();
+
+        phaseBeforeMenu = (RunPhase)d.runPhase; 
     }
 
     [ContextMenu("Borrar guardado")]
-    void DeleteSave() { SaveSystem.Delete(); }
+    void DeleteSave() { SaveManager.Delete(); }
 }

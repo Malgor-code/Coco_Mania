@@ -31,6 +31,7 @@ public class DebtManager : MonoBehaviour
     public int BestCycleReached { get; set; } = 1;
 
     bool victoryAwarded;
+    public bool VictoryAwarded { get => victoryAwarded; set => victoryAwarded = value; }
     DebtTableSO fallbackTable;
 
     void Awake()
@@ -61,13 +62,10 @@ public class DebtManager : MonoBehaviour
 
     public float DiscountFactor =>
         1f - Mathf.Clamp(StatsManager.Instance.Get(ST.OrderDiscount), 0f, maxOrderDiscount);
-
     public float BaseTarget(int cycle) => Table.Get(cycle).waterTarget;
     public float TargetWater => BaseTarget(BillCycle) * DiscountFactor;
-
     public int DaysForCycle(int cycle) =>
         Mathf.Max(1, Table.Get(cycle).days + Mathf.RoundToInt(StatsManager.Instance.Get(ST.ExtraDays)));
-
     public bool CanPay => ResourcesManager.Instance.CanAffordWater(TargetWater);
 
     public void ResetRun()
@@ -76,7 +74,6 @@ public class DebtManager : MonoBehaviour
         DaysLeft = DaysForCycle(1);
         victoryAwarded = false;
     }
-
     public bool TryPay(out float delivered, out float refund, out int deliveredCycle)
     {
         deliveredCycle = BillCycle;
