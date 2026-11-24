@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{e1fb1bb9-01de-4d1d-acf1-4a4cc874465a}">
+		<property name="assetPath">
+			<value>Música/Menú principal/Menú principal Videojuegos Congas.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>32</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{bf912b57-60e1-4ae0-8d50-1226af776948}</destination>
+		</relationship>
+	</object>
+</objects>
