@@ -543,6 +543,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &6578726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,6 +1157,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &18362355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1691,6 +1695,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &32379029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1878,6 +1884,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &32389376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2729,6 +2737,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &53825600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3011,6 +3021,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &64601062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3161,6 +3173,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &74096902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3541,6 +3555,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &80364194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3800,6 +3816,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &91617059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4586,6 +4604,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &105287175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4798,6 +4818,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &111368449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5297,6 +5319,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &121755069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5602,6 +5626,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &124049649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5939,6 +5965,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &134893850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6735,6 +6763,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &152314733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7592,6 +7622,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &168295740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7758,6 +7790,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &168852633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7854,6 +7888,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &169295582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13090,6 +13126,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &173790939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13778,6 +13816,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &205625000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14177,6 +14217,8 @@ MonoBehaviour:
   hoverScale: 1.2
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &217898367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14868,6 +14910,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &229742042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16262,6 +16306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gachaPanel: {fileID: 973557521}
+  storyCatalog: {fileID: 11400000, guid: b1d0172e51013c8419c3cb76c368e85e, type: 2}
   dialoguePanel: {fileID: 1309664150}
   backdrop: {fileID: 0}
   speakerText: {fileID: 1543575416}
@@ -16506,6 +16551,8 @@ MonoBehaviour:
     ambientVolume: 0.7
     ambientPitchVariation: 0.08
     ambientPanSpread: 0.6
+  library: {fileID: 0}
+  playGameEventSfx: 1
   masterVolume: 1
   musicVolume: 1
   sfxVolume: 1
@@ -16862,6 +16909,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &255399579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17254,6 +17303,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &261809293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18173,6 +18224,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &279013085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18657,6 +18710,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &293311934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20089,6 +20144,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &338998086
 GameObject:
   m_ObjectHideFlags: 0
@@ -20942,6 +20999,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &357909561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21205,6 +21264,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &362988696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21418,6 +21479,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &364237872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22285,6 +22348,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &372923047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27785,6 +27850,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &394619895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28366,6 +28433,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &411827658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29794,6 +29863,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &456260326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29981,6 +30052,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &456865592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30567,6 +30640,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &466039156
 GameObject:
   m_ObjectHideFlags: 0
@@ -30788,6 +30863,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &466859483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30884,6 +30961,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &469577594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32377,6 +32456,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &511588074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32866,6 +32947,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &516601643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33110,6 +33193,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &520458531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33836,6 +33921,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &552899645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34253,6 +34340,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!222 &558954718
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -34884,6 +34973,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &571785639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35619,6 +35710,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &590998342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35795,7 +35888,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 252746835}
+      - m_Target: {fileID: 252746848}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BuyNextMachete
         m_Mode: 1
@@ -36000,6 +36093,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &595593091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36890,6 +36985,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &623933876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37209,6 +37306,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &631064153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38453,6 +38552,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &660913016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39251,6 +39352,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &676383587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39480,6 +39583,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &682905500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39861,6 +39966,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &699731356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40123,6 +40230,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &700150988
 GameObject:
   m_ObjectHideFlags: 0
@@ -40344,6 +40453,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &700361045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40440,6 +40551,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &703354582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41239,6 +41352,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &721070432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42408,6 +42523,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &780280269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42592,6 +42709,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &781920772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42746,6 +42865,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &782597479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43545,6 +43666,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &808525445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44201,6 +44324,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &820641414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44689,6 +44814,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &834866371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44897,6 +45024,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &836518850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45506,6 +45635,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &843615735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46128,6 +46259,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &848299958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46298,6 +46431,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &856679566
 GameObject:
   m_ObjectHideFlags: 0
@@ -47439,6 +47574,8 @@ MonoBehaviour:
   hoverScale: 1.2
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &885868827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48019,6 +48156,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &898869908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48801,6 +48940,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &908314144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48988,6 +49129,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &908826054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49063,6 +49206,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &911704058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49934,6 +50079,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &927851546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50779,6 +50926,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &961919657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50907,6 +51056,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &967925682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51243,6 +51394,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &972671198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51494,6 +51647,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &975160971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52127,6 +52282,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &989040883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52718,6 +52875,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1007341679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53385,6 +53544,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1031625719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53569,6 +53730,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1034898469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53737,6 +53900,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1035598649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54379,6 +54544,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1049948503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55477,6 +55644,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1099346681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55806,6 +55975,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1104755071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55946,6 +56117,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1108454972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56261,6 +56434,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1112341602
 GameObject:
   m_ObjectHideFlags: 0
@@ -56352,6 +56527,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1117189690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56904,6 +57081,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1129567183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57748,6 +57927,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1155900735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57980,6 +58161,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1164170081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58952,6 +59135,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1191457210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59985,6 +60170,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1220065057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60084,6 +60271,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1220851272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60380,6 +60569,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1221584009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60905,6 +61096,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1227836244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61071,6 +61264,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1229158477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61207,6 +61402,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1230827384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61377,6 +61574,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1240815430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61577,6 +61776,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1243379911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62120,6 +62321,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1246853437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62395,6 +62598,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1247449892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62718,6 +62923,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1261255706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62851,6 +63058,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1264101318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63169,6 +63378,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1271198867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63449,6 +63660,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1273036105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63527,6 +63740,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1274775951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64182,6 +64397,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1286876852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64615,6 +64832,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1293551410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65213,6 +65432,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1316790327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65421,6 +65642,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1316896852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65683,6 +65906,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1321533517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65986,6 +66211,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1324421180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66081,6 +66308,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1327623898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66436,6 +66665,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1329015225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68203,6 +68434,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1370697043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68299,6 +68532,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1370875367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68695,6 +68930,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1375630219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69084,6 +69321,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1378501466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69442,6 +69681,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1390162358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69999,6 +70240,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1393524735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70546,6 +70789,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1400436027
 GameObject:
   m_ObjectHideFlags: 0
@@ -70713,6 +70958,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1400436033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71202,6 +71449,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1418057588
 GameObject:
   m_ObjectHideFlags: 0
@@ -71348,6 +71597,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1418057593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71598,6 +71849,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1418740873
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72041,6 +72294,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1434030989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73012,6 +73267,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1453466352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73352,6 +73609,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1463639916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73539,6 +73798,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1465646678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74314,6 +74575,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1484914582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74645,6 +74908,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1492379642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74941,6 +75206,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1493635015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75228,6 +75495,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1499438042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75562,6 +75831,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1503222092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76036,6 +76307,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1514551960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76328,6 +76601,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1521204045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76548,6 +76823,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1532430157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76716,6 +76993,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1539376900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76884,6 +77163,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1542073740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77365,6 +77646,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1546920278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77762,6 +78045,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1555794456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77952,6 +78237,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1560814932
 GameObject:
   m_ObjectHideFlags: 0
@@ -78631,6 +78918,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1587289884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78911,6 +79200,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1587400064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79538,6 +79829,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1600851584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80044,6 +80337,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1618140049
 GameObject:
   m_ObjectHideFlags: 0
@@ -80231,6 +80526,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1621045803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80589,6 +80886,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1629854327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81101,6 +81400,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1641098282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81360,6 +81661,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1642598443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81458,6 +81761,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1643861469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82007,6 +82312,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1655599970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83705,6 +84012,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1700798044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84788,6 +85097,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1738026491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84975,6 +85286,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1738851169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85074,6 +85387,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1741312293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85561,6 +85876,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1745640436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85814,6 +86131,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1752063101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87441,6 +87760,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1785243070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88312,6 +88633,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1808556330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89031,6 +89354,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1822235073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89433,6 +89758,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1838709563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89652,6 +89979,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1844531996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90110,6 +90439,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1854659605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91156,6 +91487,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1891244266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92307,6 +92640,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1916346588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92670,6 +93005,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1920561307
 GameObject:
   m_ObjectHideFlags: 0
@@ -93226,6 +93563,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1944811924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94454,6 +94793,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1972781368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94895,6 +95236,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1 &1982627171
 GameObject:
   m_ObjectHideFlags: 0
@@ -95178,6 +95521,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1983790459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95574,6 +95919,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &1996004086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -95879,6 +96226,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2002744398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96195,6 +96544,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2003450119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96417,6 +96768,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2007253025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96800,6 +97153,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2014244495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96885,6 +97240,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2019046132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97262,6 +97619,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2024609367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97430,6 +97789,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2025598250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97689,6 +98050,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2034497408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98243,6 +98606,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2047799654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98502,6 +98867,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2048335052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98738,6 +99105,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2049275614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99482,6 +99851,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2072979621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99578,6 +99949,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2073994983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99837,6 +100210,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2077539779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100045,6 +100420,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2079431887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100826,6 +101203,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2096455926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100922,6 +101301,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2097397584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101687,6 +102068,8 @@ MonoBehaviour:
   hoverScale: 1.2
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2107053665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101824,6 +102207,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2108288975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102436,6 +102821,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2126749128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102949,6 +103336,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!114 &2140226768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103119,6 +103508,8 @@ MonoBehaviour:
   hoverScale: 1.06
   pressScale: 0.92
   speed: 12
+  hoverSfxId: ui_hover
+  clickSfxId: ui_click
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

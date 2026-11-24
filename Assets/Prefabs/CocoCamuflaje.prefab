@@ -120,7 +120,6 @@ GameObject:
   - component: {fileID: 6853041896135390501}
   - component: {fileID: 6655573633176381901}
   - component: {fileID: 7914997757418919364}
-  - component: {fileID: 6222773841335570833}
   m_Layer: 0
   m_Name: Boca
   m_TagString: Untagged
@@ -196,28 +195,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6222773841335570833
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5410977122363734355}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &6125134894909680719
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +410,8 @@ MonoBehaviour:
   maxScale: 1.5
   hitParticles: {fileID: 5980502239318536123, guid: d6cb673a25662df409ba2177ec06df6e, type: 3}
   deathParticles: {fileID: 1378310280763612009, guid: 0dd212a7025de2d4f90c4721db94138f, type: 3}
+  hitShake: 0.25
+  killShake: 0.5
   hitSounds: []
   deathSounds: []
   pitchVariation: 0.1
@@ -441,37 +420,6 @@ MonoBehaviour:
   coinPrefab: {fileID: 919132149155446097, guid: 029397fb4e38cec4d85631955137420c, type: 3}
   coinLifetime: 10
   coinPopForce: 3
-  abilitySettings:
-    resistenteReduction: 0.3
-    armaduraReduction: 0.5
-    diamanteReduction: 0.75
-    diamanteCritMultiplier: 4
-    fibraStackPerHit: 0.05
-    fibraMaxStack: 0.25
-    fibraResetTime: 1.5
-    tenazHpThreshold: 0.3
-    tenazReduction: 0.25
-    reboteHitsPerTrigger: 5
-    reboteStaminaPenalty: 2
-    fortificadoNormalDuration: 4
-    fortificadoBuffDuration: 3
-    fortificadoReduction: 0.4
-    fortificadoDarken: 0.45
-    implacableHitsToTrigger: 4
-    implacableWindow: 2
-    implacableBuffDuration: 2
-    implacableReduction: 0.3
-    regenDelayAfterHit: 2
-    regenPercentPerSecond: 0.03
-    supremoPhase2RegenPercent: 0.015
-    camuflajeVisibleDuration: 3
-    camuflajeHiddenDuration: 2
-    camuflajeHiddenAlpha: 0.2
-    maldicionDuration: 6
-    supremoPhase2Hp: 0.7
-    supremoPhase3Hp: 0.3
-    supremoPhase1Reduction: 0.2
-    supremoPhase3Reduction: 0.35
   hp: 0
   hpMax: 0
   lastDamageTaken: 0

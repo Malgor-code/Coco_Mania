@@ -9,7 +9,7 @@ public class LocalizationManager : MonoBehaviour
 {
     const string LangKey = "game_language";
     const int LangCount = 6;
-    const string CsvPath = "Localization/localization";
+    const string CsvFolder = "Localization";
 
     public static readonly string[] NativeNames =
     {
@@ -21,7 +21,7 @@ public class LocalizationManager : MonoBehaviour
     {
         get
         {
-            if (_instance == null) _instance = FindObjectOfType<LocalizationManager>();
+            if (_instance == null) _instance = FindFirstObjectByType<LocalizationManager>();
             return _instance;
         }
     }
@@ -42,7 +42,7 @@ public class LocalizationManager : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
         _instance = this;
@@ -60,6 +60,8 @@ public class LocalizationManager : MonoBehaviour
     {
         if (_instance == this) _instance = null;
     }
+
+    public bool Has(string key) => table.ContainsKey(key);
 
     public string Get(string key)
     {
@@ -104,14 +106,20 @@ public class LocalizationManager : MonoBehaviour
     void BuildTable()
     {
         table.Clear();
-        var asset = Resources.Load<TextAsset>(CsvPath);
-        if (asset == null)
+        TextAsset[] assets = Resources.LoadAll<TextAsset>(CsvFolder);
+        if (assets == null || assets.Length == 0)
         {
-            Debug.LogError("No se encontró Resources/" + CsvPath + ".csv");
+            Debug.LogError("No se encontró ningún .csv en Resources/" + CsvFolder);
             return;
         }
 
-        var rows = ParseCsv(asset.text);
+        foreach (TextAsset asset in assets)
+            LoadCsv(asset.text);
+    }
+
+    void LoadCsv(string text)
+    {
+        var rows = ParseCsv(text);
         for (int i = 1; i < rows.Count; i++)
         {
             var row = rows[i];
@@ -123,8 +131,6 @@ public class LocalizationManager : MonoBehaviour
 
             table[row[0].Trim()] = values;
         }
-        if (table.TryGetValue("menu_play", out var t))
-            Debug.Log("JA = " + t[(int)Language.Japanese]);
     }
 
     static List<List<string>> ParseCsv(string text)

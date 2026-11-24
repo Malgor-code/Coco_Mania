@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
     const string MasterKey = "master_volume";
+    const string MusicKey = "music_volume";
+    const string SfxKey = "sfx_volume";
 
     [System.Serializable]
     public class ContextAudio
@@ -54,7 +56,13 @@ public class AudioManager : MonoBehaviour
     [Header("Audio por panel")]
     public List<ContextAudio> contexts = new List<ContextAudio>();
 
-    [Header("Volúmenes")]
+    [Header("Efectos por id")]
+    [Tooltip("Biblioteca de efectos (Create > CocoMania > Audio Library).")]
+    public AudioLibrarySO library;
+    [Tooltip("Si esta activo, el juego dispara sonidos solos: compra, pago de pedido, monedas y bancarrota.")]
+    public bool playGameEventSfx = true;
+
+    [Header("Volúmenes (se guardan solos)")]
     [Range(0f, 1f)] public float masterVolume = 1f;
     [Range(0f, 1f)] public float musicVolume = 1f;
     [Range(0f, 1f)] public float sfxVolume = 1f;
@@ -69,7 +77,7 @@ public class AudioManager : MonoBehaviour
     AudioSource ambient;
     int active = 0;
 
-    float[] target = new float[2];  
+    float[] target = new float[2];
     float[] speed = new float[2];
     float duck = 1f, duckTarget = 1f;
 
@@ -80,12 +88,14 @@ public class AudioManager : MonoBehaviour
     int lastAmbientIndex = -1;
 
     public float MasterVolume => masterVolume;
+    public float MusicVolume => musicVolume;
+    public float SfxVolume => sfxVolume;
 
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
         Instance = this;
@@ -103,8 +113,42 @@ public class AudioManager : MonoBehaviour
         ambient.playOnAwake = false;
 
         masterVolume = PlayerPrefs.GetFloat(MasterKey, masterVolume);
+        musicVolume = PlayerPrefs.GetFloat(MusicKey, musicVolume);
+        sfxVolume = PlayerPrefs.GetFloat(SfxKey, sfxVolume);
 
         RebuildMap();
+    }
+
+    void OnEnable()
+    {
+        EventBus.Subscribe<AudioContextChanged>(OnContextChanged);
+        EventBus.Subscribe<SkillUnlocked>(OnSkillUnlocked);
+        EventBus.Subscribe<MacheteBought>(OnMacheteBought);
+        EventBus.Subscribe<LegacyPurchased>(OnLegacyPurchased);
+        EventBus.Subscribe<DebtPaid>(OnDebtPaid);
+        EventBus.Subscribe<CoinsChanged>(OnCoinsChanged);
+        EventBus.Subscribe<BankruptcyDeclared>(OnBankruptcy);
+    }
+
+    void OnDisable()
+    {
+        EventBus.Unsubscribe<AudioContextChanged>(OnContextChanged);
+        EventBus.Unsubscribe<SkillUnlocked>(OnSkillUnlocked);
+        EventBus.Unsubscribe<MacheteBought>(OnMacheteBought);
+        EventBus.Unsubscribe<LegacyPurchased>(OnLegacyPurchased);
+        EventBus.Unsubscribe<DebtPaid>(OnDebtPaid);
+        EventBus.Unsubscribe<CoinsChanged>(OnCoinsChanged);
+        EventBus.Unsubscribe<BankruptcyDeclared>(OnBankruptcy);
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
+    void OnValidate()
+    {
+        if (Application.isPlaying) RebuildMap();
     }
 
     void RebuildMap()
@@ -114,6 +158,19 @@ public class AudioManager : MonoBehaviour
             if (c != null) map[c.context] = c;
     }
 
+    // ---- Eventos del juego ----
+    void OnContextChanged(AudioContextChanged e) => SetContext(e.Context);
+    void OnSkillUnlocked(SkillUnlocked e) => GameSfx(SfxIds.Purchase);
+    void OnMacheteBought(MacheteBought e) => GameSfx(SfxIds.Purchase);
+    void OnLegacyPurchased(LegacyPurchased e) => GameSfx(SfxIds.Purchase);
+    void OnDebtPaid(DebtPaid e) => GameSfx(SfxIds.DebtPaid);
+    void OnCoinsChanged(CoinsChanged e) { if (e.Delta > 0) GameSfx(SfxIds.Coin); }
+    void OnBankruptcy(BankruptcyDeclared e) => GameSfx(SfxIds.Bankruptcy);
+
+    void GameSfx(string id)
+    {
+        if (playGameEventSfx) PlaySfx(id);
+    }
     void Update()
     {
         float dt = Time.unscaledDeltaTime;
@@ -213,11 +270,23 @@ public class AudioManager : MonoBehaviour
     void PlayEnterSfx(ContextAudio entry)
     {
         if (entry != null && entry.enterSfx != null)
-            sfx.PlayOneShot(entry.enterSfx, sfxVolume * masterVolume);
+            PlaySfx(entry.enterSfx);
     }
+
     public void PlaySfx(AudioClip clip, float volume = 1f)
     {
-        if (clip != null) sfx.PlayOneShot(clip, volume * sfxVolume * masterVolume);
+        if (clip == null) return;
+        sfx.pitch = 1f;
+        sfx.PlayOneShot(clip, volume * sfxVolume * masterVolume);
+    }
+    public void PlaySfx(string id, float volume = 1f)
+    {
+        if (library == null || string.IsNullOrEmpty(id) || !library.TryGet(id, out AudioLibrarySO.SfxEntry entry)) return;
+        AudioClip clip = entry.RandomClip();
+        if (clip == null) return;
+
+        sfx.pitch = 1f + Random.Range(-entry.pitchVariation, entry.pitchVariation);
+        sfx.PlayOneShot(clip, entry.volume * volume * sfxVolume * masterVolume);
     }
 
     public void SetMasterVolume(float v)
@@ -226,6 +295,15 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat(MasterKey, masterVolume);
     }
 
-    public void SetMusicVolume(float v) { musicVolume = Mathf.Clamp01(v); }
-    public void SetSfxVolume(float v) { sfxVolume = Mathf.Clamp01(v); }
+    public void SetMusicVolume(float v)
+    {
+        musicVolume = Mathf.Clamp01(v);
+        PlayerPrefs.SetFloat(MusicKey, musicVolume);
+    }
+
+    public void SetSfxVolume(float v)
+    {
+        sfxVolume = Mathf.Clamp01(v);
+        PlayerPrefs.SetFloat(SfxKey, sfxVolume);
+    }
 }

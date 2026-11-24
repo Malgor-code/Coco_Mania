@@ -353,7 +353,6 @@ public class GameUI : MonoBehaviour
                 break;
         }
     }
-
     public void ToggleUpgradeTreePanel()
     {
         if (Run.ForcedDecision) return;
@@ -413,7 +412,6 @@ public class GameUI : MonoBehaviour
 
         RefreshAllUI();
     }
-
     void ShowPerkChoices()
     {
         isChoosingPerk = false;
@@ -490,7 +488,6 @@ public class GameUI : MonoBehaviour
         perkIcons.Clear();
         foreach (var n in names) perkIcons.Add(new PerkIconEntry { perkName = n });
     }
-
     static string Signed(float v) => (v >= 0f ? "+" : "") + v.ToString("0.##");
 
     string PassiveLine(MacheteData m)
@@ -652,7 +649,6 @@ public class GameUI : MonoBehaviour
         var loc = LocalizationManager.Instance;
         if (loc != null) loc.OnLanguageChanged -= RefreshAllUI;
     }
-
     static List<CoconutTypeSO> CoconutTypes =>
         CoconutSpawner.Instance != null ? CoconutSpawner.Instance.coconutTypes : null;
 
@@ -713,7 +709,7 @@ public class GameUI : MonoBehaviour
 
     AudioContext ResolveAudioContext()
     {
-        if (GameManager.IsPaused) return AudioContext.Pause;
+        if (GameManager.IsPaused && !GameManager.IsSilentPause) return AudioContext.Pause;
         if (Run.Phase == RunPhase.MainMenu) return AudioContext.MainMenu;
         if (deudaPanel != null && deudaPanel.activeSelf) return AudioContext.Deuda;
         if (upgradeTreePanel != null && upgradeTreePanel.activeSelf) return AudioContext.UpgradeTree;
@@ -729,15 +725,12 @@ public class GameUI : MonoBehaviour
 
     void UpdateAudioContext()
     {
-        if (AudioManager.Instance == null) return;
-
         AudioContext ctx = ResolveAudioContext();
         if (ctx == AudioContext.None || ctx == lastAudioContext) return;
 
         lastAudioContext = ctx;
-        AudioManager.Instance.SetContext(ctx);
+        EventBus.Publish(new AudioContextChanged(ctx));
     }
-
     void HandleUpgradeTreePanZoom()
     {
         if (upgradeTreeContent == null) return;

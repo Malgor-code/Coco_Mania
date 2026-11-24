@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c9f0a5400e78c4da78ab1ff9252bbe, type: 3}
+  m_Name: StoryCatalog
+  m_EditorClassIdentifier: 
+  intro: {fileID: 11400000, guid: 9c838921276f4864bb6d420dfe75de5f, type: 2}
+  tutorialOrder: {fileID: 11400000, guid: a800583d37d601546a29fb0c4b0ae4d0, type: 2}
+  tutorialDeuda: {fileID: 11400000, guid: e7dd39b748478494c9726fecd1b80640, type: 2}
+  tutorialUpgradeIntro: {fileID: 11400000, guid: 59cae79868c49cf409d799ad6d885fb2, type: 2}
+  tutorialTree: {fileID: 11400000, guid: ad211746711547e458fcd5edbbebd1ea, type: 2}
+  chapters:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: bac5b4bef63206e49af559da64255f28, type: 2}
+  - {fileID: 11400000, guid: fcdd87c22e9b86342b618199641d75aa, type: 2}
+  - {fileID: 11400000, guid: deeff2c9f5ae49847811adb7a599f781, type: 2}
+  - {fileID: 11400000, guid: 1e6948ad66c5fa643823c3230559e8e5, type: 2}
+  - {fileID: 11400000, guid: a4668d91ff118814a9105d3366a6b31c, type: 2}
+  - {fileID: 11400000, guid: 0ef7fad58ee13e240ace4e05df03cd59, type: 2}
+  - {fileID: 11400000, guid: 469adbddd269ad347980e0173101665c, type: 2}
+  - {fileID: 11400000, guid: e19e007018a70af4fbc051717004b051, type: 2}
+  - {fileID: 11400000, guid: 4c06cb7143a1e4f4fb6796aa310e02ab, type: 2}
+  - {fileID: 11400000, guid: 7d41df7b81cef014cb5ad21cc9f488ae, type: 2}
+  - {fileID: 11400000, guid: ba1e7922bdfcf794c9d25de282341837, type: 2}
+  - {fileID: 11400000, guid: f67d785389244064f90b26884485f19a, type: 2}
+  - {fileID: 11400000, guid: 7f3714967f6bae44cbebc1be1581480e, type: 2}
+  - {fileID: 11400000, guid: 88ee71e898813aa4398f4d7e89a24582, type: 2}
+  - {fileID: 11400000, guid: 03b36af4ff66ef94fa44c8eba485d24d, type: 2}
+  - {fileID: 11400000, guid: 3cbab87e3db8c704fac116277fcd11d0, type: 2}
+  - {fileID: 11400000, guid: 397ab176ead668849bbbb91f8089a3e5, type: 2}
+  gachaIntro: {fileID: 11400000, guid: f8575b8729eadea45ae14811cfcc7bf3, type: 2}
+  gachaExplain: {fileID: 11400000, guid: c75f382c157a73f48ba74676cfa70f3b, type: 2}
